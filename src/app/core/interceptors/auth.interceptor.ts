@@ -1,7 +1,7 @@
-﻿import { HttpInterceptorFn, HttpErrorResponse, HttpRequest, HttpHandlerFn } from ''@angular/common/http'';
-import { inject } from ''@angular/core'';
-import { throwError, catchError, switchMap } from ''rxjs'';
-import { AuthService } from ''../services/auth.service'';
+import { HttpInterceptorFn, HttpErrorResponse, HttpRequest, HttpHandlerFn } from '@angular/common/http';
+import { inject } from '@angular/core';
+import { throwError, catchError, switchMap } from 'rxjs';
+import { AuthService } from '../services/auth.service';
 
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
   const auth  = inject(AuthService);
@@ -14,7 +14,7 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
   return next(authReq).pipe(
     catchError((err: HttpErrorResponse) => {
       // Auto-refresh on 401 (except for auth endpoints to avoid loops)
-      if (err.status === 401 && !req.url.includes(''/auth/refresh'') && !req.url.includes(''/auth/login'')) {
+      if (err.status === 401 && !req.url.includes('/auth/refresh') && !req.url.includes('/auth/login')) {
         return auth.refreshToken().pipe(
           switchMap((res) => {
             const newToken = res?.data?.accessToken || res?.data?.token;

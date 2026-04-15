@@ -1,9 +1,9 @@
-﻿import { Injectable } from ''@angular/core'';
-import { HttpClient, HttpEventType, HttpRequest } from ''@angular/common/http'';
-import { Observable, map, catchError, throwError } from ''rxjs'';
-import { environment } from ''../../../environments/environment'';
+import { Injectable } from '@angular/core';
+import { HttpClient, HttpEventType, HttpRequest } from '@angular/common/http';
+import { Observable, map, catchError, throwError } from 'rxjs';
+import { environment } from '../../../environments/environment';
 
-@Injectable({ providedIn: ''root'' })
+@Injectable({ providedIn: 'root' })
 export class ApiService {
   private readonly base = environment.apiUrl;
 
@@ -30,7 +30,7 @@ export class ApiService {
   }
 
   uploadWithProgress<T>(path: string, formData: FormData): Observable<{ progress: number; result?: T }> {
-    const req = new HttpRequest(''POST'', `${this.base}/${path}`, formData, { reportProgress: true });
+    const req = new HttpRequest('POST', `${this.base}/${path}`, formData, { reportProgress: true });
     return this.http.request<T>(req).pipe(
       map((event) => {
         if (event.type === HttpEventType.UploadProgress && event.total)

@@ -77,9 +77,9 @@
             </td>
 
             <td class="px-6 py-3.5 text-slate-500 dark:text-slate-400">
-              {{ entry.inputFiles?.[0]?.originalName || '—' }}
-              <span *ngIf="(entry.inputFiles?.length ?? 0) > 1" class="text-xs text-slate-400">
-                +{{ (entry.inputFiles?.length ?? 0) - 1 }} more
+              {{ entry.inputFiles[0].originalName || '—' }}
+              <span *ngIf="entry.inputFiles.length > 1" class="text-xs text-slate-400">
+                +{{ entry.inputFiles.length - 1 }} more
               </span>
             </td>
 

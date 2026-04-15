@@ -1,8 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, computed, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { ToolCardComponent } from '../../shared/components/tool-card/tool-card.component';
-import { TOOLS, Tool } from '../../core/models/tool.model';
+import { TOOLS, Tool, ToolCategory } from '../../core/models/tool.model';
 
 @Component({
   selector: 'app-home',
@@ -11,19 +11,36 @@ import { TOOLS, Tool } from '../../core/models/tool.model';
   templateUrl: './home.component.html',
 })
 export class HomeComponent {
-  readonly tools: Tool[] = TOOLS;
+  readonly allTools: Tool[] = TOOLS;
+
+  activeCategory: string = 'all';
+
+  readonly categories = [
+    { id: 'all',      label: 'All Tools' },
+    { id: 'pdf',      label: '📄 PDF' },
+    { id: 'image',    label: '🖼️ Image' },
+    { id: 'document', label: '📝 Document' },
+    { id: 'archive',  label: '🗜️ Archive' },
+    { id: 'ai',       label: '🤖 AI' },
+  ];
+
+  get filteredTools(): Tool[] {
+    if (this.activeCategory === 'all') return this.allTools;
+    return this.allTools.filter(t => t.category === this.activeCategory);
+  }
 
   readonly stats = [
-    { value: '10M+', label: 'Files Converted' },
-    { value: '50MB',  label: 'Max File Size' },
-    { value: '100%',  label: 'Free to Use' },
+    { value: '10M+',  label: 'Files Converted' },
+    { value: '35+',   label: 'Tools Available' },
+    { value: '100MB', label: 'Max File Size' },
     { value: 'SSL',   label: 'Secure & Private' },
   ];
 
   readonly features = [
-    { icon: '⚡', title: 'Lightning Fast',   desc: 'Optimised processing pipeline — results in seconds.' },
-    { icon: '🔒', title: 'Secure & Private', desc: 'Files are deleted automatically after 2 hours.' },
-    { icon: '📱', title: 'Works Everywhere', desc: 'Fully responsive — desktop, tablet, and mobile.' },
-    { icon: '🎯', title: 'Easy to Use',      desc: 'Drag, drop, convert, download. That\'s it.' },
+    { icon: '⚡', title: 'Lightning Fast',     desc: 'Optimised processing pipeline — results in seconds.' },
+    { icon: '🔒', title: 'Secure & Private',   desc: 'Files are auto-deleted. Zero data retention.' },
+    { icon: '🤖', title: 'AI-Powered',         desc: 'Ask questions, summarize, and extract insights from PDFs.' },
+    { icon: '🎯', title: 'Easy to Use',        desc: 'Drag, drop, convert, download. No sign-up needed.' },
   ];
 }
+

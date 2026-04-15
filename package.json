@@ -1,6 +1,6 @@
-{
+﻿{
   "name": "converter-hub-frontend",
-  "version": "0.0.0",
+  "version": "2.0.0",
   "scripts": {
     "ng": "ng",
     "start": "ng serve --port 4200",
@@ -20,6 +20,7 @@
     "@angular/platform-browser-dynamic": "^16.2.0",
     "@angular/router": "^16.2.0",
     "rxjs": "~7.8.0",
+    "socket.io-client": "^4.7.2",
     "tslib": "^2.6.2",
     "zone.js": "~0.13.3"
   },
@@ -28,6 +29,7 @@
     "@angular/cli": "^16.2.0",
     "@angular/compiler-cli": "^16.2.0",
     "@types/jasmine": "~4.3.6",
+    "@types/socket.io-client": "^3.0.0",
     "autoprefixer": "^10.4.19",
     "jasmine-core": "~4.6.0",
     "karma": "~6.4.3",

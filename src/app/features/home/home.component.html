@@ -1,0 +1,90 @@
+<!-- ─── Hero ─────────────────────────────────────────────────── -->
+<section class="relative overflow-hidden bg-gradient-to-br from-primary-600 via-primary-700 to-indigo-800 text-white">
+  <!-- Decorative blobs -->
+  <div class="absolute -top-40 -right-40 w-96 h-96 bg-white/5 rounded-full blur-3xl pointer-events-none"></div>
+  <div class="absolute -bottom-20 -left-20 w-80 h-80 bg-indigo-500/20 rounded-full blur-3xl pointer-events-none"></div>
+
+  <div class="container-app py-24 md:py-32 relative">
+    <div class="max-w-3xl mx-auto text-center animate-slide-up">
+      <span class="inline-block mb-4 px-4 py-1.5 bg-white/10 backdrop-blur rounded-full text-sm font-medium">
+        🎉 100% Free · No Sign-up Required
+      </span>
+      <h1 class="text-4xl sm:text-5xl md:text-6xl font-extrabold leading-tight tracking-tight mb-6">
+        Convert Any File<br>
+        <span class="text-primary-200">In Seconds</span>
+      </h1>
+      <p class="text-lg sm:text-xl text-primary-100 max-w-xl mx-auto mb-10 leading-relaxed">
+        Powerful online tools for images, PDFs and documents — fast, secure and beautifully simple.
+      </p>
+      <div class="flex flex-col sm:flex-row gap-3 justify-center">
+        <a routerLink="/image-to-pdf" class="btn btn-lg bg-white text-primary-700 hover:bg-primary-50 shadow-xl">
+          🖼️ Start Converting
+        </a>
+        <a href="#tools" class="btn btn-lg border-2 border-white/40 text-white hover:bg-white/10">
+          Browse All Tools
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── Stats ─────────────────────────────────────────────────── -->
+<section class="bg-slate-50 dark:bg-slate-800/50 border-y border-slate-200 dark:border-slate-700">
+  <div class="container-app py-10">
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+      <div *ngFor="let stat of stats" class="animate-fade-in">
+        <p class="text-3xl font-extrabold text-primary-600 dark:text-primary-400">{{ stat.value }}</p>
+        <p class="text-sm text-slate-500 dark:text-slate-400 mt-1">{{ stat.label }}</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── Tools Grid ────────────────────────────────────────────── -->
+<section id="tools" class="container-app py-20">
+  <div class="text-center mb-14">
+    <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900 dark:text-white mb-4">
+      All Conversion Tools
+    </h2>
+    <p class="text-slate-500 dark:text-slate-400 text-lg max-w-xl mx-auto">
+      Pick a tool and start converting — no registration needed.
+    </p>
+  </div>
+
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
+    <app-tool-card *ngFor="let tool of tools" [tool]="tool" />
+  </div>
+</section>
+
+<!-- ─── Features ─────────────────────────────────────────────── -->
+<section class="bg-slate-50 dark:bg-slate-800/30 py-20">
+  <div class="container-app">
+    <div class="text-center mb-14">
+      <h2 class="text-3xl font-extrabold text-slate-900 dark:text-white mb-4">Why ConverterHub?</h2>
+      <p class="text-slate-500 dark:text-slate-400 text-lg">Built for speed, simplicity, and security.</p>
+    </div>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+      <div *ngFor="let f of features" class="text-center animate-slide-up">
+        <div class="w-14 h-14 bg-primary-100 dark:bg-primary-950/50 rounded-2xl text-2xl flex items-center justify-center mx-auto mb-4">
+          {{ f.icon }}
+        </div>
+        <h3 class="font-semibold text-slate-800 dark:text-white mb-2">{{ f.title }}</h3>
+        <p class="text-sm text-slate-500 dark:text-slate-400 leading-relaxed">{{ f.desc }}</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── CTA ───────────────────────────────────────────────────── -->
+<section class="container-app py-20 text-center">
+  <div class="max-w-2xl mx-auto">
+    <h2 class="text-3xl font-extrabold text-slate-900 dark:text-white mb-4">
+      Ready to convert your files?
+    </h2>
+    <p class="text-slate-500 dark:text-slate-400 mb-8 text-lg">Free, fast, and no account required.</p>
+    <a routerLink="/image-to-pdf" class="btn btn-primary btn-lg">
+      Get Started — It's Free
+    </a>
+  </div>
+</section>

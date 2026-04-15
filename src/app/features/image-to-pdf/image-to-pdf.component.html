@@ -1,0 +1,118 @@
+<!-- Page Header -->
+<div class="bg-gradient-to-r from-blue-600 to-cyan-500 text-white py-14">
+  <div class="container-app text-center">
+    <div class="w-16 h-16 mx-auto mb-5 bg-white/20 rounded-2xl flex items-center justify-center text-3xl">🖼️</div>
+    <h1 class="text-3xl md:text-4xl font-extrabold mb-3">Image to PDF</h1>
+    <p class="text-blue-100 text-lg max-w-md mx-auto">
+      Convert JPG, PNG, or WebP images into a single, polished PDF document.
+    </p>
+  </div>
+</div>
+
+<div class="container-app py-12 max-w-3xl">
+
+  <!-- ─── Step 1: Upload ────────────────────────────── -->
+  <ng-container *ngIf="step() === 'upload' || step() === 'options'">
+
+    <div class="card p-6 md:p-8 mb-6">
+      <h2 class="font-semibold text-slate-700 dark:text-slate-200 mb-4">1. Select Images</h2>
+      <app-file-upload
+        accept="image/jpeg,image/png,image/webp,image/gif,image/bmp"
+        [multiple]="true"
+        [maxSizeMB]="50"
+        label="Drop images here or click to browse"
+        sublabel="JPG, PNG, WebP, GIF, BMP supported"
+        (filesSelected)="onFilesSelected($event)"
+        (fileRemoved)="onFileRemoved()" />
+    </div>
+
+    <!-- ─── Step 2: Options ──────────────────────────── -->
+    <div *ngIf="step() === 'options'" class="card p-6 md:p-8 mb-6 animate-slide-up">
+      <h2 class="font-semibold text-slate-700 dark:text-slate-200 mb-5">2. PDF Options</h2>
+
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+
+        <!-- Page Size -->
+        <div>
+          <label class="block text-sm font-medium text-slate-600 dark:text-slate-300 mb-1.5">Page Size</label>
+          <select [(ngModel)]="pageSize" class="input">
+            <option *ngFor="let s of pageSizes" [value]="s">{{ s }}</option>
+          </select>
+        </div>
+
+        <!-- Orientation -->
+        <div>
+          <label class="block text-sm font-medium text-slate-600 dark:text-slate-300 mb-1.5">Orientation</label>
+          <select [(ngModel)]="orientation" class="input">
+            <option *ngFor="let o of orientations" [value]="o.value">{{ o.label }}</option>
+          </select>
+        </div>
+
+        <!-- Margin -->
+        <div>
+          <label class="block text-sm font-medium text-slate-600 dark:text-slate-300 mb-1.5">
+            Margin (px) — {{ margin }}
+          </label>
+          <input type="range" [(ngModel)]="margin" min="0" max="80" step="5"
+            class="w-full accent-primary-600">
+        </div>
+
+      </div>
+
+      <!-- Convert Button -->
+      <div class="mt-8 flex justify-center">
+        <button (click)="convert()" [disabled]="converter.isConverting()"
+          class="btn btn-primary btn-lg gap-3 min-w-[200px]">
+
+          <span *ngIf="!converter.isConverting()">⚡ Convert to PDF</span>
+
+          <span *ngIf="converter.isConverting()" class="flex items-center gap-2">
+            <svg class="w-5 h-5 animate-spin" fill="none" viewBox="0 0 24 24">
+              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/>
+              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"/>
+            </svg>
+            Converting…
+          </span>
+
+        </button>
+      </div>
+
+      <!-- Progress -->
+      <div *ngIf="converter.isConverting()" class="mt-6">
+        <app-progress-bar
+          [value]="converter.uploadProgress()"
+          label="Uploading and converting…" />
+      </div>
+    </div>
+
+  </ng-container>
+
+  <!-- ─── Step 3: Done ─────────────────────────────── -->
+  <div *ngIf="step() === 'done' && result()" class="card p-8 text-center animate-bounce-in">
+
+    <div class="w-20 h-20 bg-emerald-100 dark:bg-emerald-900/40 rounded-full flex items-center justify-center mx-auto mb-5 text-4xl">
+      ✅
+    </div>
+
+    <h2 class="text-2xl font-bold text-slate-800 dark:text-white mb-2">Your PDF is ready!</h2>
+    <p class="text-slate-500 dark:text-slate-400 mb-2">
+      {{ files().length }} image{{ files().length > 1 ? 's' : '' }} converted successfully
+    </p>
+    <p class="text-sm text-slate-400 mb-8">File size: {{ formatSize(result()!.size) }}</p>
+
+    <div class="flex flex-col sm:flex-row gap-3 justify-center">
+      <button (click)="downloadFile()" class="btn btn-primary btn-lg">
+        ⬇️ Download PDF
+      </button>
+      <button (click)="reset()" class="btn btn-secondary btn-lg">
+        🔄 Convert More
+      </button>
+    </div>
+
+    <p class="text-xs text-slate-400 mt-6">
+      ⏰ This file will be deleted automatically after 2 hours.
+    </p>
+
+  </div>
+
+</div>

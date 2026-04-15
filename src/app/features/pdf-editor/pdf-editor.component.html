@@ -1,0 +1,52 @@
+<div class="bg-gradient-to-r from-orange-500 to-red-500 text-white py-14">
+  <div class="container-app text-center">
+    <div class="w-16 h-16 mx-auto mb-5 bg-white/20 rounded-2xl flex items-center justify-center text-3xl">🔧</div>
+    <h1 class="text-3xl md:text-4xl font-extrabold mb-3">PDF Editor</h1>
+    <p class="text-orange-100 text-lg max-w-md mx-auto">Merge, split, and compress your PDF files.</p>
+  </div>
+</div>
+
+<div class="container-app py-12 max-w-2xl">
+
+  <!-- Action Selector -->
+  <div class="grid grid-cols-3 gap-3 mb-8">
+    <button *ngFor="let a of actions" (click)="setAction(a.id)"
+      [class]="action() === a.id
+        ? 'card p-4 text-center border-2 border-primary-500 bg-primary-50 dark:bg-primary-950/30'
+        : 'card p-4 text-center hover:border-slate-300 dark:hover:border-slate-500'">
+      <div class="text-2xl mb-1">{{ a.icon }}</div>
+      <div class="text-sm font-semibold text-slate-700 dark:text-slate-200">{{ a.label }}</div>
+      <div class="text-xs text-slate-400 mt-0.5">{{ a.desc }}</div>
+    </button>
+  </div>
+
+  <!-- Upload -->
+  <div class="card p-6 md:p-8">
+    <app-file-upload accept="application/pdf"
+      [multiple]="action() === 'merge'"
+      [maxSizeMB]="50"
+      [label]="action() === 'merge' ? 'Drop PDF files to merge' : 'Drop a PDF file'"
+      (filesSelected)="onFiles($event)" />
+
+    <div *ngIf="files().length" class="mt-6 flex justify-center">
+      <button (click)="convert()" [disabled]="converter.isConverting()" class="btn btn-primary btn-lg min-w-[200px]">
+        <span *ngIf="!converter.isConverting()">⚡ Process PDF</span>
+        <span *ngIf="converter.isConverting()">Processing…</span>
+      </button>
+    </div>
+
+    <div *ngIf="converter.isConverting()" class="mt-4">
+      <app-progress-bar [value]="converter.uploadProgress()" />
+    </div>
+  </div>
+
+  <!-- Result -->
+  <div *ngIf="result()" class="card p-8 text-center mt-6 animate-bounce-in">
+    <div class="text-5xl mb-4">✅</div>
+    <h2 class="text-xl font-bold mb-4 text-slate-800 dark:text-white">Done!</h2>
+    <div class="flex gap-3 justify-center">
+      <a [href]="result()!.downloadUrl" [download]="result()!.fileName" class="btn btn-primary">⬇️ Download</a>
+      <button (click)="reset()" class="btn btn-secondary">🔄 Process Another</button>
+    </div>
+  </div>
+</div>

@@ -1,13 +1,13 @@
 import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
-import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-progress-bar',
   standalone: true,
-  imports: [CommonModule],
+  imports: [],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <div *ngIf="visible" class="w-full animate-fade-in">
+    @if (visible) {
+    <div class="w-full animate-fade-in">
       <div class="flex justify-between text-xs text-slate-500 dark:text-slate-400 mb-1.5">
         <span>{{ label }}</span>
         <span>{{ value }}%</span>
@@ -18,6 +18,7 @@ import { CommonModule } from '@angular/common';
         </div>
       </div>
     </div>
+    }
   `,
 })
 export class ProgressBarComponent {

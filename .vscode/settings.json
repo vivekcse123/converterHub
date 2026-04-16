@@ -1,0 +1,11 @@
+{
+  "typescript.tsdk": "node_modules/typescript/lib",
+  "typescript.enablePromptUseWorkspaceTsdk": true,
+  "angular.experimental-ivy": true,
+  "[typescript]": {
+    "editor.defaultFormatter": "angular.ng-template"
+  },
+  "[html]": {
+    "editor.defaultFormatter": "angular.ng-template"
+  }
+}

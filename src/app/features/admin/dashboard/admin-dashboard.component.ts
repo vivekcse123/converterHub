@@ -1,5 +1,4 @@
 import { Component, OnInit, signal } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { AdminService }  from '../../../core/services/admin.service';
 import { AdminStats, ToolStat, QueueStats } from '../../../core/models/admin.model';
@@ -7,18 +6,20 @@ import { AdminStats, ToolStat, QueueStats } from '../../../core/models/admin.mod
 @Component({
   selector: 'app-admin-dashboard',
   standalone: true,
-  imports: [CommonModule, RouterLink],
+  imports: [RouterLink],
   template: `
     <div>
       <h1 class="text-2xl font-bold text-slate-800 dark:text-white mb-6">Dashboard Overview</h1>
 
       <!-- Stats Cards -->
       <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-        <div *ngFor="let card of statCards()" class="bg-white dark:bg-slate-800 rounded-xl p-5 shadow-sm border border-slate-100 dark:border-slate-700">
+        @for (card of statCards(); track $index) {
+        <div class="bg-white dark:bg-slate-800 rounded-xl p-5 shadow-sm border border-slate-100 dark:border-slate-700">
           <div class="text-3xl mb-1">{{ card.icon }}</div>
           <div class="text-2xl font-bold text-slate-800 dark:text-white">{{ card.value }}</div>
           <div class="text-sm text-slate-500">{{ card.label }}</div>
         </div>
+        }
       </div>
 
       <!-- Queue Status & Tool Stats -->
@@ -26,26 +27,34 @@ import { AdminStats, ToolStat, QueueStats } from '../../../core/models/admin.mod
         <!-- Queue Stats -->
         <div class="bg-white dark:bg-slate-800 rounded-xl p-5 shadow-sm border border-slate-100 dark:border-slate-700">
           <h2 class="font-semibold text-slate-700 dark:text-slate-200 mb-4">Queue Status</h2>
-          <div *ngIf="queueStats() as q" class="space-y-3">
-            <div *ngFor="let item of queueItems(q)" class="flex justify-between items-center">
+          @if (queueStats(); as q) {
+          <div class="space-y-3">
+            @for (item of queueItems(q); track $index) {
+            <div class="flex justify-between items-center">
               <span class="text-sm text-slate-600 dark:text-slate-400">{{ item.label }}</span>
               <span class="font-medium text-slate-800 dark:text-white">{{ item.value }}</span>
             </div>
+            }
           </div>
-          <div *ngIf="!queueStats()" class="text-sm text-slate-400">Redis not available — running in sync mode</div>
+          }
+          @if (!queueStats()) {
+          <div class="text-sm text-slate-400">Redis not available — running in sync mode</div>
+          }
         </div>
 
         <!-- Top Tools -->
         <div class="bg-white dark:bg-slate-800 rounded-xl p-5 shadow-sm border border-slate-100 dark:border-slate-700">
           <h2 class="font-semibold text-slate-700 dark:text-slate-200 mb-4">Top Tools (30 days)</h2>
           <div class="space-y-2">
-            <div *ngFor="let tool of topTools()" class="flex justify-between items-center">
+            @for (tool of topTools(); track $index) {
+            <div class="flex justify-between items-center">
               <span class="text-sm font-mono text-indigo-600 dark:text-indigo-400">{{ tool._id }}</span>
               <div class="flex gap-3 text-sm">
                 <span class="text-slate-700 dark:text-slate-200">{{ tool.count }}</span>
                 <span class="text-red-500">{{ tool.failed }} fail</span>
               </div>
             </div>
+            }
           </div>
         </div>
       </div>

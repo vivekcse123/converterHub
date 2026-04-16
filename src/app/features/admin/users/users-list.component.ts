@@ -1,5 +1,4 @@
 import { Component, OnInit, signal } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AdminService } from '../../../core/services/admin.service';
 import { NotificationService } from '../../../core/services/notification.service';
@@ -9,7 +8,7 @@ import { PaginatedApiResponse } from '../../../core/models/user.model';
 @Component({
   selector:  'app-users-list',
   standalone: true,
-  imports:   [CommonModule, FormsModule],
+  imports:   [FormsModule],
   template: `
     <div>
       <div class="flex items-center justify-between mb-6">
@@ -50,8 +49,11 @@ import { PaginatedApiResponse } from '../../../core/models/user.model';
 
       <!-- Table -->
       <div class="bg-white dark:bg-slate-800 rounded-xl shadow-sm border border-slate-100 dark:border-slate-700 overflow-hidden">
-        <div *ngIf="loading()" class="p-8 text-center text-slate-400">Loading users...</div>
-        <table *ngIf="!loading()" class="w-full text-sm">
+        @if (loading()) {
+        <div class="p-8 text-center text-slate-400">Loading users...</div>
+        }
+        @if (!loading()) {
+        <table class="w-full text-sm">
           <thead class="bg-slate-50 dark:bg-slate-900/50 border-b border-slate-100 dark:border-slate-700">
             <tr>
               <th class="text-left px-4 py-3 text-xs font-medium text-slate-500 uppercase tracking-wider">User</th>
@@ -64,7 +66,8 @@ import { PaginatedApiResponse } from '../../../core/models/user.model';
             </tr>
           </thead>
           <tbody class="divide-y divide-slate-100 dark:divide-slate-700">
-            <tr *ngFor="let user of users()" class="hover:bg-slate-50 dark:hover:bg-slate-700/50 transition-colors">
+            @for (user of users(); track user._id) {
+            <tr class="hover:bg-slate-50 dark:hover:bg-slate-700/50 transition-colors">
               <td class="px-4 py-3">
                 <div class="font-medium text-slate-800 dark:text-white">{{ user.name }}</div>
                 <div class="text-xs text-slate-500">{{ user.email }}</div>
@@ -76,10 +79,10 @@ import { PaginatedApiResponse } from '../../../core/models/user.model';
                 <span [class]="planBadge(user.subscription?.plan)">{{ user.subscription?.plan || 'free' }}</span>
               </td>
               <td class="px-4 py-3">
-                <span *ngIf="user.isBanned" class="inline-flex px-2 py-0.5 rounded-full text-xs bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400">Banned</span>
-                <span *ngIf="user.isSuspended && !user.isBanned" class="inline-flex px-2 py-0.5 rounded-full text-xs bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400">Suspended</span>
-                <span *ngIf="!user.isBanned && !user.isSuspended && user.isActive" class="inline-flex px-2 py-0.5 rounded-full text-xs bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400">Active</span>
-                <span *ngIf="!user.isActive && !user.isBanned" class="inline-flex px-2 py-0.5 rounded-full text-xs bg-slate-100 text-slate-600 dark:bg-slate-700 dark:text-slate-400">Inactive</span>
+                @if (user.isBanned) { <span class="inline-flex px-2 py-0.5 rounded-full text-xs bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400">Banned</span> }
+                @if (user.isSuspended && !user.isBanned) { <span class="inline-flex px-2 py-0.5 rounded-full text-xs bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400">Suspended</span> }
+                @if (!user.isBanned && !user.isSuspended && user.isActive) { <span class="inline-flex px-2 py-0.5 rounded-full text-xs bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400">Active</span> }
+                @if (!user.isActive && !user.isBanned) { <span class="inline-flex px-2 py-0.5 rounded-full text-xs bg-slate-100 text-slate-600 dark:bg-slate-700 dark:text-slate-400">Inactive</span> }
               </td>
               <td class="px-4 py-3 text-slate-600 dark:text-slate-400">
                 {{ user.usage?.totalConversions ?? 0 }}
@@ -90,14 +93,16 @@ import { PaginatedApiResponse } from '../../../core/models/user.model';
               <td class="px-4 py-3">
                 <div class="flex gap-2">
                   <button (click)="editUser(user)" class="text-xs text-indigo-600 hover:text-indigo-800 dark:text-indigo-400">Edit</button>
-                  <button *ngIf="!user.isBanned" (click)="banUser(user)" class="text-xs text-red-500 hover:text-red-700">Ban</button>
-                  <button *ngIf="user.isBanned" (click)="unbanUser(user)" class="text-xs text-emerald-500 hover:text-emerald-700">Unban</button>
+                  @if (!user.isBanned) { <button (click)="banUser(user)" class="text-xs text-red-500 hover:text-red-700">Ban</button> }
+                  @if (user.isBanned) { <button (click)="unbanUser(user)" class="text-xs text-emerald-500 hover:text-emerald-700">Unban</button> }
                   <button (click)="deleteUser(user)" class="text-xs text-slate-400 hover:text-red-500">Delete</button>
                 </div>
               </td>
             </tr>
+            }
           </tbody>
         </table>
+        }
 
         <!-- Pagination -->
         <div class="px-4 py-3 flex items-center justify-between border-t border-slate-100 dark:border-slate-700">
@@ -114,7 +119,8 @@ import { PaginatedApiResponse } from '../../../core/models/user.model';
     </div>
 
     <!-- Edit Modal -->
-    <div *ngIf="selectedUser" class="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4" (click.self)="selectedUser = null">
+    @if (selectedUser) {
+    <div class="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4" (click.self)="selectedUser = null">
       <div class="bg-white dark:bg-slate-800 rounded-2xl p-6 w-full max-w-md shadow-2xl">
         <h2 class="text-lg font-bold text-slate-800 dark:text-white mb-4">Edit User</h2>
         <div class="space-y-3">
@@ -154,6 +160,7 @@ import { PaginatedApiResponse } from '../../../core/models/user.model';
         </div>
       </div>
     </div>
+    }
   `,
 })
 export class UsersListComponent implements OnInit {

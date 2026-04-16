@@ -10,12 +10,14 @@
 
   <!-- Action Tabs -->
   <div class="flex gap-2 mb-8 p-1 bg-slate-100 dark:bg-slate-800 rounded-2xl">
-    <button *ngFor="let a of actions" (click)="setAction(a.id)"
+    @for (a of actions; track a.id) {
+    <button (click)="setAction(a.id)"
       [class]="action() === a.id
         ? 'flex-1 py-2.5 px-4 rounded-xl bg-white dark:bg-slate-700 shadow text-sm font-semibold text-primary-600 transition-all'
         : 'flex-1 py-2.5 px-4 rounded-xl text-sm font-medium text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors'">
       {{ a.icon }} {{ a.label }}
     </button>
+    }
   </div>
 
   <div class="card p-6 md:p-8">
@@ -25,10 +27,12 @@
       (filesSelected)="onFile($event)" />
 
     <!-- Options depending on action -->
-    <div *ngIf="file()" class="mt-6 space-y-4 animate-fade-in">
+    @if (file()) {
+    <div class="mt-6 space-y-4 animate-fade-in">
 
       <!-- Resize Options -->
-      <div *ngIf="action() === 'resize'" class="grid grid-cols-2 gap-4">
+      @if (action() === 'resize') {
+      <div class="grid grid-cols-2 gap-4">
         <div>
           <label class="block text-sm font-medium text-slate-600 dark:text-slate-300 mb-1">Width (px)</label>
           <input [(ngModel)]="width" type="number" min="1" placeholder="e.g. 1920" class="input">
@@ -46,38 +50,50 @@
           </select>
         </div>
       </div>
+      }
 
       <!-- Compress Options -->
-      <div *ngIf="action() === 'compress'">
+      @if (action() === 'compress') {
+      <div>
         <label class="block text-sm font-medium text-slate-600 dark:text-slate-300 mb-1">
           Quality: {{ quality }}%
         </label>
         <input type="range" [(ngModel)]="quality" min="10" max="100" class="w-full accent-primary-600 mb-4">
         <label class="block text-sm font-medium text-slate-600 dark:text-slate-300 mb-1">Output Format</label>
         <select [(ngModel)]="format" class="input">
-          <option *ngFor="let f of formats" [value]="f">{{ f.toUpperCase() }}</option>
+          @for (f of formats; track f) {
+          <option [value]="f">{{ f.toUpperCase() }}</option>
+          }
         </select>
       </div>
+      }
 
       <!-- Convert Options -->
-      <div *ngIf="action() === 'convert'">
+      @if (action() === 'convert') {
+      <div>
         <label class="block text-sm font-medium text-slate-600 dark:text-slate-300 mb-1">Convert to</label>
         <select [(ngModel)]="targetFormat" class="input">
-          <option *ngFor="let f of formats" [value]="f">{{ f.toUpperCase() }}</option>
+          @for (f of formats; track f) {
+          <option [value]="f">{{ f.toUpperCase() }}</option>
+          }
         </select>
       </div>
+      }
 
       <button (click)="convert()" [disabled]="converter.isConverting()" class="btn btn-primary btn-lg w-full mt-2">
-        <span *ngIf="!converter.isConverting()">⚡ Apply</span>
-        <span *ngIf="converter.isConverting()">Processing…</span>
+        @if (!converter.isConverting()) { <span>⚡ Apply</span> } @else { <span>Processing…</span> }
       </button>
 
-      <app-progress-bar *ngIf="converter.isConverting()" [value]="converter.uploadProgress()" />
+      @if (converter.isConverting()) {
+      <app-progress-bar [value]="converter.uploadProgress()" />
+      }
     </div>
+    }
   </div>
 
   <!-- Result -->
-  <div *ngIf="result()" class="card p-8 text-center mt-6 animate-bounce-in">
+  @if (result()) {
+  <div class="card p-8 text-center mt-6 animate-bounce-in">
     <div class="text-5xl mb-4">✅</div>
     <h2 class="text-xl font-bold mb-4 text-slate-800 dark:text-white">Image processed!</h2>
     <div class="flex gap-3 justify-center">
@@ -85,4 +101,5 @@
       <button (click)="reset()" class="btn btn-secondary">🔄 Edit Another</button>
     </div>
   </div>
+  }
 </div>

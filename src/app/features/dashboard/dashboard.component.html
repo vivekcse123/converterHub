@@ -45,19 +45,26 @@
     </div>
 
     <!-- Loading Skeleton -->
-    <div *ngIf="loading()" class="p-6 space-y-3">
-      <div *ngFor="let i of [1,2,3,4,5]" class="skeleton h-12 rounded-xl"></div>
+    @if (loading()) {
+    <div class="p-6 space-y-3">
+      @for (i of [1,2,3,4,5]; track i) {
+      <div class="skeleton h-12 rounded-xl"></div>
+      }
     </div>
+    }
 
     <!-- Empty -->
-    <div *ngIf="!loading() && !history().length" class="py-16 text-center text-slate-400">
+    @if (!loading() && !history().length) {
+    <div class="py-16 text-center text-slate-400">
       <p class="text-4xl mb-3">📭</p>
       <p class="font-medium">No conversions yet</p>
       <a routerLink="/" class="btn btn-primary mt-4">Start Converting</a>
     </div>
+    }
 
     <!-- Table -->
-    <div *ngIf="!loading() && history().length" class="overflow-x-auto">
+    @if (!loading() && history().length) {
+    <div class="overflow-x-auto">
       <table class="w-full text-sm">
         <thead class="bg-slate-50 dark:bg-slate-800 text-xs uppercase text-slate-500 dark:text-slate-400">
           <tr>
@@ -69,8 +76,8 @@
           </tr>
         </thead>
         <tbody class="divide-y divide-slate-100 dark:divide-slate-700">
-          <tr *ngFor="let entry of history()"
-            class="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
+          @for (entry of history(); track entry._id) {
+          <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors">
 
             <td class="px-6 py-3.5 font-medium text-slate-700 dark:text-slate-200">
               {{ toolLabel(entry.tool) }}
@@ -78,9 +85,11 @@
 
             <td class="px-6 py-3.5 text-slate-500 dark:text-slate-400">
               {{ entry.inputFiles[0].originalName || '—' }}
-              <span *ngIf="entry.inputFiles.length > 1" class="text-xs text-slate-400">
+              @if (entry.inputFiles.length > 1) {
+              <span class="text-xs text-slate-400">
                 +{{ entry.inputFiles.length - 1 }} more
               </span>
+              }
             </td>
 
             <td class="px-6 py-3.5">
@@ -102,9 +111,11 @@
             </td>
 
           </tr>
+          }
         </tbody>
       </table>
     </div>
+    }
   </div>
 
 </div>

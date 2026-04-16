@@ -1,28 +1,28 @@
 import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { CommonModule } from '@angular/common';
 import { Tool } from '../../../core/models/tool.model';
 
 @Component({
   selector: 'app-tool-card',
   standalone: true,
-  imports: [CommonModule, RouterLink],
+  imports: [RouterLink],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  host: { class: 'flex' },
   template: `
     <a [routerLink]="tool.route"
-      class="card-hover flex flex-col p-6 group animate-fade-in">
+      class="card-hover flex flex-col p-6 group animate-fade-in h-full">
 
       <!-- Icon gradient bubble -->
-      <div class="w-14 h-14 rounded-2xl bg-gradient-to-br {{ tool.color }} flex items-center justify-center text-2xl mb-4 shadow-md
-                  group-hover:scale-110 transition-transform duration-200">
+      <div [class]="'w-14 h-14 rounded-2xl bg-gradient-to-br ' + tool.color + ' flex items-center justify-center text-2xl mb-4 shadow-md group-hover:scale-110 transition-transform duration-200'">
         {{ tool.icon }}
       </div>
 
       <!-- Badge -->
-      <span *ngIf="tool.badge"
-        class="inline-block mb-2 badge bg-primary-100 dark:bg-primary-900 text-primary-700 dark:text-primary-300 w-fit">
+      @if (tool.badge) {
+      <span class="inline-block mb-2 badge bg-primary-100 dark:bg-primary-900 text-primary-700 dark:text-primary-300 w-fit">
         {{ tool.badge }}
       </span>
+      }
 
       <h3 class="font-semibold text-slate-800 dark:text-white text-base mb-1.5 group-hover:text-primary-600 transition-colors">
         {{ tool.title }}

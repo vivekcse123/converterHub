@@ -1,5 +1,4 @@
 import { Component, signal } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { FileUploadComponent } from '../../shared/components/file-upload/file-upload.component';
 import { ProgressBarComponent } from '../../shared/components/progress-bar/progress-bar.component';
@@ -10,7 +9,7 @@ import { ConversionResult } from '../../core/models/conversion.model';
 @Component({
   selector: 'app-compress',
   standalone: true,
-  imports: [CommonModule, FormsModule, FileUploadComponent, ProgressBarComponent],
+  imports: [FormsModule, FileUploadComponent, ProgressBarComponent],
   template: `
     <div class="bg-gradient-to-r from-emerald-500 to-teal-500 text-white py-14">
       <div class="container-app text-center">
@@ -26,16 +25,25 @@ import { ConversionResult } from '../../core/models/conversion.model';
           [multiple]="true" [maxSizeMB]="50" label="Drop files to compress / bundle"
           (filesSelected)="onFiles($event)" />
 
-        <div *ngIf="files().length" class="mt-6 flex justify-center">
+        @if (files().length) {
+        <div class="mt-6 flex justify-center">
           <button (click)="convert()" [disabled]="converter.isConverting()" class="btn btn-primary btn-lg min-w-[200px]">
-            <span *ngIf="!converter.isConverting()">⚡ Create ZIP</span>
-            <span *ngIf="converter.isConverting()">Packing…</span>
+            @if (!converter.isConverting()) {
+            <span>⚡ Create ZIP</span>
+            }
+            @if (converter.isConverting()) {
+            <span>Packing…</span>
+            }
           </button>
         </div>
-        <app-progress-bar *ngIf="converter.isConverting()" class="mt-4" [value]="converter.uploadProgress()" />
+        }
+        @if (converter.isConverting()) {
+        <app-progress-bar class="mt-4" [value]="converter.uploadProgress()"  />
+        }
       </div>
 
-      <div *ngIf="result()" class="card p-8 text-center mt-6 animate-bounce-in">
+      @if (result()) {
+      <div class="card p-8 text-center mt-6 animate-bounce-in">
         <div class="text-5xl mb-4">✅</div>
         <h2 class="text-xl font-bold mb-4 text-slate-800 dark:text-white">ZIP created!</h2>
         <div class="flex gap-3 justify-center">
@@ -43,6 +51,7 @@ import { ConversionResult } from '../../core/models/conversion.model';
           <button (click)="reset()" class="btn btn-secondary">🔄 Create Another</button>
         </div>
       </div>
+      }
     </div>
   `,
 })

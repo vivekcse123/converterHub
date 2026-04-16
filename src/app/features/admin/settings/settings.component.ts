@@ -1,6 +1,6 @@
 import { Component, OnInit, signal } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { DatePipe } from '@angular/common';
 import { AdminService } from '../../../core/services/admin.service';
 import { NotificationService } from '../../../core/services/notification.service';
 import { Plan } from '../../../core/models/admin.model';
@@ -10,7 +10,7 @@ interface LogEntry { timestamp: string; level: string; message: string; meta?: a
 @Component({
   selector: 'app-settings',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [FormsModule, DatePipe],
   template: `
     <div>
       <h1 class="text-2xl font-bold text-slate-800 dark:text-white mb-6">Settings</h1>
@@ -18,14 +18,18 @@ interface LogEntry { timestamp: string; level: string; message: string; meta?: a
       <!-- Plans -->
       <div class="mb-6">
         <h2 class="text-sm font-semibold text-slate-700 dark:text-slate-300 mb-3">Subscription Plans</h2>
-        <div *ngIf="loadingPlans()" class="text-slate-400 text-sm">Loading...</div>
-        <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4" *ngIf="!loadingPlans()">
-          <div *ngFor="let plan of plans()" class="bg-white dark:bg-slate-800 rounded-xl p-5 shadow-sm border border-slate-100 dark:border-slate-700">
+        @if (loadingPlans()) {
+        <div class="text-slate-400 text-sm">Loading...</div>
+        }
+        @if (!loadingPlans()) {
+        <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
+          @for (plan of plans(); track plan.id) {
+          <div class="bg-white dark:bg-slate-800 rounded-xl p-5 shadow-sm border border-slate-100 dark:border-slate-700">
             <div class="flex items-center justify-between mb-3">
               <span class="text-sm font-bold text-slate-800 dark:text-white capitalize">{{ plan.id }}</span>
-              <span class="text-lg font-semibold text-indigo-600">\${{ plan.price }}/mo</span>
+              <span class="text-lg font-semibold text-indigo-600">{{ plan.price }}/mo</span>
             </div>
-            <ng-container *ngIf="editingPlan !== plan.id; else editingTpl">
+            @if (editingPlan !== plan.id) {
               <ul class="space-y-1 text-xs text-slate-600 dark:text-slate-400 mb-3">
                 <li>Conversions/day: <strong>{{ plan.limits.conversionsPerDay ?? '∞' }}</strong></li>
                 <li>Max file size: <strong>{{ plan.limits.maxFileSizeMb ?? '–' }} MB</strong></li>
@@ -33,8 +37,7 @@ interface LogEntry { timestamp: string; level: string; message: string; meta?: a
                 <li>Max files/batch: <strong>{{ plan.limits.maxBatchFiles ?? 1 }}</strong></li>
               </ul>
               <button (click)="startEditPlan(plan)" class="text-xs text-indigo-500 hover:text-indigo-700">Edit limits</button>
-            </ng-container>
-            <ng-template #editingTpl>
+            } @else {
               <div class="space-y-2 mb-3">
                 <div>
                   <label class="text-xs text-slate-500">Conversions/day (0=∞)</label>
@@ -57,9 +60,11 @@ interface LogEntry { timestamp: string; level: string; message: string; meta?: a
                 <button (click)="savePlan(plan.id)" class="flex-1 py-1 text-xs bg-indigo-600 text-white rounded hover:bg-indigo-700">Save</button>
                 <button (click)="editingPlan = null" class="flex-1 py-1 text-xs bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 rounded">Cancel</button>
               </div>
-            </ng-template>
+            }
           </div>
+          }
         </div>
+        }
       </div>
 
       <!-- Error Logs -->
@@ -68,24 +73,32 @@ interface LogEntry { timestamp: string; level: string; message: string; meta?: a
           <h2 class="text-sm font-semibold text-slate-700 dark:text-slate-300">Recent Error Logs</h2>
           <button (click)="loadLogs()" class="text-xs text-indigo-500 hover:text-indigo-700">Refresh</button>
         </div>
-        <div *ngIf="loadingLogs()" class="p-6 text-center text-slate-400 text-sm">Loading...</div>
-        <div *ngIf="!loadingLogs() && !logs().length" class="p-6 text-center text-slate-400 text-sm">No error logs found</div>
-        <div *ngIf="!loadingLogs() && logs().length" class="divide-y divide-slate-100 dark:divide-slate-700 max-h-96 overflow-y-auto">
-          <div *ngFor="let log of logs()" class="px-4 py-3 font-mono text-xs">
+        @if (loadingLogs()) {
+        <div class="p-6 text-center text-slate-400 text-sm">Loading...</div>
+        }
+        @if (!loadingLogs() && !logs().length) {
+        <div class="p-6 text-center text-slate-400 text-sm">No error logs found</div>
+        }
+        @if (!loadingLogs() && logs().length) {
+        <div class="divide-y divide-slate-100 dark:divide-slate-700 max-h-96 overflow-y-auto">
+          @for (log of logs(); track $index) {
+          <div class="px-4 py-3 font-mono text-xs">
             <div class="flex gap-3 items-start">
               <span class="text-slate-400 shrink-0">{{ log.timestamp | date:'short' }}</span>
               <span [class]="levelColor(log.level)" class="shrink-0 font-semibold uppercase">{{ log.level }}</span>
               <span class="text-slate-700 dark:text-slate-300 break-all">{{ log.message }}</span>
             </div>
           </div>
+          }
         </div>
+        }
       </div>
     </div>
   `,
 })
 export class SettingsComponent implements OnInit {
-  readonly plans       = signal<Plan[]>([]);
-  readonly logs        = signal<LogEntry[]>([]);
+  readonly plans        = signal<Plan[]>([]);
+  readonly logs         = signal<LogEntry[]>([]);
   readonly loadingPlans = signal(true);
   readonly loadingLogs  = signal(true);
 
@@ -115,9 +128,9 @@ export class SettingsComponent implements OnInit {
     this.editingPlan = plan.id;
     this.planForm = {
       conversionsPerDay: plan.limits.conversionsPerDay ?? 0,
-        maxFileSizeMb: plan.limits.maxFileSizeMb ?? 10,
-        aiRequestsPerDay: plan.limits.aiRequestsPerDay ?? 0,
-        maxFilesPerBatch: plan.limits.maxBatchFiles ?? 1,
+      maxFileSizeMb:     plan.limits.maxFileSizeMb ?? 10,
+      aiRequestsPerDay:  plan.limits.aiRequestsPerDay ?? 0,
+      maxFilesPerBatch:  plan.limits.maxBatchFiles ?? 1,
     };
   }
 

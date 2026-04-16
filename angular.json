@@ -19,14 +19,24 @@
       "prefix": "app",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-angular:browser",
+          "builder": "@angular-devkit/build-angular:application",
           "options": {
             "outputPath": "dist/converter-hub",
             "index":      "src/index.html",
-            "main":       "src/main.ts",
+            "browser":    "src/main.ts",
+            "server":     "src/main.server.ts",
+            "ssr": {
+              "entry": "server.ts"
+            },
+            "prerender": false,
             "polyfills":  ["zone.js"],
             "tsConfig":   "tsconfig.app.json",
-            "assets": ["src/favicon.ico", "src/assets"],
+            "assets": [
+              "src/favicon.ico",
+              "src/assets",
+              "src/sitemap.xml",
+              "src/robots.txt"
+            ],
             "styles": ["src/styles.css"],
             "scripts": []
           },
@@ -50,14 +60,20 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
-            "production":  { "browserTarget": "converter-hub:build:production" },
-            "development": { "browserTarget": "converter-hub:build:development" }
+            "production": {
+              "buildTarget": "converter-hub:build:production"
+            },
+            "development": {
+              "buildTarget": "converter-hub:build:development"
+            }
           },
           "defaultConfiguration": "development"
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
-          "options": { "browserTarget": "converter-hub:build" }
+          "options": {
+            "buildTarget": "converter-hub:build"
+          }
         },
         "test": {
           "builder": "@angular-devkit/build-angular:karma",

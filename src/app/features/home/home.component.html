@@ -6,21 +6,21 @@
   <div class="container-app py-24 md:py-32 relative">
     <div class="max-w-3xl mx-auto text-center animate-slide-up">
       <span class="inline-block mb-4 px-4 py-1.5 bg-white/10 backdrop-blur rounded-full text-sm font-medium">
-        🎉 100% Free · No Sign-up Required · 35+ Tools
+        🎉 100% Free · No Sign-up Required · 30+ Tools
       </span>
       <h1 class="text-4xl sm:text-5xl md:text-6xl font-extrabold leading-tight tracking-tight mb-6">
         Convert Any File<br>
         <span class="text-primary-200">In Seconds</span>
       </h1>
       <p class="text-lg sm:text-xl text-primary-100 max-w-xl mx-auto mb-10 leading-relaxed">
-        Enterprise-grade document processing — PDFs, images, AI tools and more. Fast, secure and beautifully simple.
+        Enterprise-grade document processing — PDFs, images, documents and more. Fast, secure and beautifully simple.
       </p>
       <div class="flex flex-col sm:flex-row gap-3 justify-center">
         <a routerLink="/image-to-pdf" class="btn btn-lg bg-white text-primary-700 hover:bg-primary-50 shadow-xl">
           🖼️ Start Converting
         </a>
         <a href="#tools" class="btn btn-lg border-2 border-white/40 text-white hover:bg-white/10">
-          Browse All 35+ Tools
+          Browse All 30+ Tools
         </a>
       </div>
     </div>
@@ -31,10 +31,12 @@
 <section class="bg-slate-50 dark:bg-slate-800/50 border-y border-slate-200 dark:border-slate-700">
   <div class="container-app py-10">
     <div class="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
-      <div *ngFor="let stat of stats" class="animate-fade-in">
+      @for (stat of stats; track $index) {
+      <div class="animate-fade-in">
         <p class="text-3xl font-extrabold text-primary-600 dark:text-primary-400">{{ stat.value }}</p>
         <p class="text-sm text-slate-500 dark:text-slate-400 mt-1">{{ stat.label }}</p>
       </div>
+      }
     </div>
   </div>
 </section>
@@ -43,35 +45,25 @@
 <section id="tools" class="container-app py-20">
   <div class="text-center mb-14">
     <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900 dark:text-white mb-4">All Tools</h2>
-    <p class="text-slate-500 dark:text-slate-400 text-lg max-w-xl mx-auto mb-8">35+ powerful tools — no registration needed.</p>
+    <p class="text-slate-500 dark:text-slate-400 text-lg max-w-xl mx-auto mb-8">30+ powerful tools — no registration needed.</p>
 
     <!-- Category Filter -->
     <div class="flex flex-wrap justify-center gap-2">
-      <button *ngFor="let cat of categories" (click)="activeCategory = cat.id"
+      @for (cat of categories; track cat.id) {
+      <button (click)="activeCategory = cat.id"
               [class]="activeCategory === cat.id
                 ? 'px-4 py-1.5 rounded-full text-sm font-medium bg-indigo-600 text-white'
                 : 'px-4 py-1.5 rounded-full text-sm font-medium bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-600 transition-colors'">
         {{ cat.label }}
       </button>
+      }
     </div>
   </div>
 
   <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
-    <app-tool-card *ngFor="let tool of filteredTools" [tool]="tool" />
-  </div>
-</section>
-
-<!-- ─── AI Feature Banner ─────────────────────────────────────── -->
-<section class="bg-gradient-to-r from-violet-600 to-indigo-700 py-16 text-white">
-  <div class="container-app text-center max-w-3xl mx-auto">
-    <span class="inline-block mb-3 px-3 py-1 bg-white/20 rounded-full text-xs font-semibold uppercase tracking-wider">Powered by GPT-4</span>
-    <h2 class="text-3xl font-extrabold mb-4">AI-Powered Document Tools</h2>
-    <p class="text-violet-100 text-lg mb-8">Chat with your PDFs, generate summaries, extract keywords — all using the latest AI models.</p>
-    <div class="flex flex-wrap justify-center gap-3">
-      <a routerLink="/ai/chat"      class="px-5 py-2.5 bg-white text-indigo-700 rounded-xl font-semibold text-sm hover:bg-violet-50 transition-colors">🤖 Chat with PDF</a>
-      <a routerLink="/ai/summarize" class="px-5 py-2.5 bg-white/20 text-white rounded-xl font-semibold text-sm hover:bg-white/30 transition-colors">✨ Summarize</a>
-      <a routerLink="/ai/keywords"  class="px-5 py-2.5 bg-white/20 text-white rounded-xl font-semibold text-sm hover:bg-white/30 transition-colors">🏷️ Keywords</a>
-    </div>
+    @for (tool of filteredTools; track $index) {
+    <app-tool-card [tool]="tool"  />
+    }
   </div>
 </section>
 
@@ -83,11 +75,13 @@
       <p class="text-slate-500 dark:text-slate-400 text-lg">Enterprise-grade processing with a simple interface.</p>
     </div>
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-      <div *ngFor="let f of features" class="text-center animate-slide-up">
+      @for (f of features; track $index) {
+      <div class="text-center animate-slide-up">
         <div class="w-14 h-14 bg-primary-100 dark:bg-primary-950/50 rounded-2xl text-2xl flex items-center justify-center mx-auto mb-4">{{ f.icon }}</div>
         <h3 class="font-semibold text-slate-800 dark:text-white mb-2">{{ f.title }}</h3>
         <p class="text-sm text-slate-500 dark:text-slate-400 leading-relaxed">{{ f.desc }}</p>
       </div>
+      }
     </div>
   </div>
 </section>

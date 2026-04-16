@@ -1,12 +1,11 @@
 import { Component, signal } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { AiService } from '../../core/services/ai.service';
 import { NotificationService } from '../../core/services/notification.service';
 
 @Component({
   selector: 'app-ai-keywords',
   standalone: true,
-  imports: [CommonModule],
+  imports: [],
   template: `
     <div class="max-w-2xl mx-auto px-4 py-10">
       <h1 class="text-2xl font-bold text-slate-800 dark:text-white mb-1">AI Keyword Extraction</h1>
@@ -19,25 +18,30 @@ import { NotificationService } from '../../core/services/notification.service';
           <input #fi type="file" accept=".pdf" class="hidden" (change)="onFile($event)" />
         </div>
 
-        <div *ngIf="loading()" class="text-center py-4">
+        @if (loading()) {
+        <div class="text-center py-4">
           <div class="inline-block w-8 h-8 border-4 border-indigo-500 border-t-transparent rounded-full animate-spin"></div>
           <p class="text-xs text-slate-400 mt-2">Extracting keywords...</p>
         </div>
+        }
 
         <button (click)="extract()" [disabled]="!file() || loading()"
                 class="w-full py-3 bg-indigo-600 text-white rounded-xl font-semibold hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors">
           Extract Keywords
         </button>
 
-        <div *ngIf="keywords().length" class="p-4 bg-slate-50 dark:bg-slate-700 rounded-xl">
+        @if (keywords().length) {
+        <div class="p-4 bg-slate-50 dark:bg-slate-700 rounded-xl">
           <h3 class="text-xs font-semibold text-slate-500 dark:text-slate-400 mb-3 uppercase">Extracted Keywords</h3>
           <div class="flex flex-wrap gap-2">
-            <span *ngFor="let kw of keywords()"
-                  class="px-3 py-1 bg-indigo-100 dark:bg-indigo-900/40 text-indigo-700 dark:text-indigo-300 rounded-full text-sm">
+            @for (kw of keywords(); track kw) {
+            <span class="px-3 py-1 bg-indigo-100 dark:bg-indigo-900/40 text-indigo-700 dark:text-indigo-300 rounded-full text-sm">
               {{ kw }}
             </span>
+            }
           </div>
         </div>
+        }
       </div>
     </div>
   `,

@@ -1,5 +1,4 @@
 import { Component, signal } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ConverterService } from '../../core/services/converter.service';
 import { NotificationService } from '../../core/services/notification.service';
@@ -8,7 +7,7 @@ import { ConversionResult } from '../../core/models/conversion.model';
 @Component({
   selector: 'app-text-to-pdf',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [FormsModule],
   template: `
     <div class="bg-gradient-to-r from-amber-400 to-orange-500 text-white py-14">
       <div class="container-app text-center">
@@ -33,17 +32,22 @@ import { ConversionResult } from '../../core/models/conversion.model';
 
         <button (click)="convert()" [disabled]="!text.trim() || converter.isConverting()"
           class="btn btn-primary btn-lg w-full mt-5">
-          <span *ngIf="!converter.isConverting()">⚡ Convert to PDF</span>
-          <span *ngIf="converter.isConverting()">
+          @if (!converter.isConverting()) {
+          <span>⚡ Convert to PDF</span>
+          }
+          @if (converter.isConverting()) {
+          <span>
             <svg class="w-5 h-5 animate-spin inline mr-2" fill="none" viewBox="0 0 24 24">
               <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/>
               <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"/>
             </svg>Converting…
           </span>
+          }
         </button>
       </div>
 
-      <div *ngIf="result()" class="card p-8 text-center mt-6 animate-bounce-in">
+      @if (result()) {
+      <div class="card p-8 text-center mt-6 animate-bounce-in">
         <div class="text-5xl mb-4">✅</div>
         <h2 class="text-xl font-bold mb-4 text-slate-800 dark:text-white">PDF ready!</h2>
         <div class="flex gap-3 justify-center">
@@ -51,6 +55,7 @@ import { ConversionResult } from '../../core/models/conversion.model';
           <button (click)="result.set(null)" class="btn btn-secondary">🔄 New Text</button>
         </div>
       </div>
+      }
     </div>
   `,
 })

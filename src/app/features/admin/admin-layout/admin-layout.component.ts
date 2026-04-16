@@ -1,12 +1,11 @@
 import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { RouterOutlet, RouterLink, RouterLinkActive } from '@angular/router';
 import { AuthService } from '../../../core/services/auth.service';
 
 @Component({
   selector: 'app-admin-layout',
   standalone: true,
-  imports: [CommonModule, RouterOutlet, RouterLink, RouterLinkActive],
+  imports: [RouterOutlet, RouterLink, RouterLinkActive],
   template: `
     <div class="min-h-screen bg-slate-50 dark:bg-slate-900 flex">
       <!-- Sidebar -->
@@ -17,11 +16,13 @@ import { AuthService } from '../../../core/services/auth.service';
           </span>
         </div>
         <nav class="flex-1 p-4 space-y-1">
-          <a *ngFor="let item of navItems" [routerLink]="item.path" routerLinkActive="bg-indigo-600 text-white"
+          @for (item of navItems; track item.path) {
+          <a [routerLink]="item.path" routerLinkActive="bg-indigo-600 text-white"
              class="flex items-center gap-3 px-3 py-2 rounded-lg text-slate-300 hover:bg-slate-700 hover:text-white transition-colors">
             <span class="text-lg">{{ item.icon }}</span>
             <span class="text-sm font-medium">{{ item.label }}</span>
           </a>
+          }
         </nav>
         <div class="p-4 border-t border-slate-700">
           <div class="text-xs text-slate-400 mb-2">{{ auth.user()?.email }}</div>

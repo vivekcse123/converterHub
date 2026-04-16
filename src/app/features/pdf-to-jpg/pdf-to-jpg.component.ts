@@ -1,5 +1,4 @@
 import { Component, signal } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ConverterService } from '../../core/services/converter.service';
 import { NotificationService } from '../../core/services/notification.service';
@@ -8,7 +7,7 @@ import { ConversionResult } from '../../core/models/conversion.model';
 @Component({
   selector: 'app-pdf-to-jpg',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [FormsModule],
   template: `
     <div class="max-w-2xl mx-auto px-4 py-10">
       <h1 class="text-2xl font-bold text-slate-800 dark:text-white mb-1">PDF to JPG</h1>
@@ -42,7 +41,8 @@ import { ConversionResult } from '../../core/models/conversion.model';
           </div>
         </div>
 
-        <div *ngIf="converter.isConverting()">
+        @if (converter.isConverting()) {
+        <div>
           <div class="flex justify-between text-xs text-slate-500 mb-1">
             <span>Converting...</span><span>{{ converter.uploadProgress() }}%</span>
           </div>
@@ -50,19 +50,22 @@ import { ConversionResult } from '../../core/models/conversion.model';
             <div class="bg-indigo-500 h-2 rounded-full transition-all" [style.width.%]="converter.uploadProgress()"></div>
           </div>
         </div>
+        }
 
         <button (click)="convert()" [disabled]="!file() || converter.isConverting()"
                 class="w-full py-3 bg-indigo-600 text-white rounded-xl font-semibold hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors">
           Convert to {{ format.toUpperCase() }}
         </button>
 
-        <div *ngIf="result()" class="p-4 bg-emerald-50 dark:bg-emerald-900/20 rounded-xl text-center">
+        @if (result()) {
+        <div class="p-4 bg-emerald-50 dark:bg-emerald-900/20 rounded-xl text-center">
           <p class="text-emerald-700 dark:text-emerald-400 text-sm font-medium mb-2">Conversion complete!</p>
           <a [href]="result()!.downloadUrl" target="_blank"
              class="inline-flex items-center gap-2 px-4 py-2 bg-emerald-600 text-white rounded-lg text-sm hover:bg-emerald-700">
             ⬇ Download
           </a>
         </div>
+        }
       </div>
     </div>
   `,

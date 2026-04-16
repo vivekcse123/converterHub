@@ -1,5 +1,4 @@
-﻿import { Component, signal } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, signal } from '@angular/core';
 import { ConverterService } from '../../core/services/converter.service';
 import { NotificationService } from '../../core/services/notification.service';
 import { ConversionResult } from '../../core/models/conversion.model';
@@ -7,7 +6,7 @@ import { ConversionResult } from '../../core/models/conversion.model';
 @Component({
   selector: 'app-pdf-to-csv',
   standalone: true,
-  imports: [CommonModule],
+  imports: [],
   template: `
     <div class="max-w-2xl mx-auto px-4 py-10">
       <h1 class="text-2xl font-bold text-slate-800 dark:text-white mb-1">PDF to CSV</h1>
@@ -17,15 +16,19 @@ import { ConversionResult } from '../../core/models/conversion.model';
           <p class="text-slate-500 text-sm">{{ file() ? file()!.name : 'Drop file or click to browse' }}</p>
           <input #fi type="file" accept=".pdf" class="hidden" (change)="onFile($event)" />
         </div>
-        <div *ngIf="c.isConverting()">
+        @if (c.isConverting()) {
+        <div>
           <div class="flex justify-between text-xs text-slate-500 mb-1"><span>Converting...</span><span>{{ c.uploadProgress() }}%</span></div>
           <div class="w-full bg-slate-100 dark:bg-slate-700 rounded-full h-2"><div class="bg-indigo-500 h-2 rounded-full" [style.width.%]="c.uploadProgress()"></div></div>
         </div>
+        }
         <button (click)="go()" [disabled]="!file()||c.isConverting()" class="w-full py-3 bg-indigo-600 text-white rounded-xl font-semibold hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors">Convert</button>
-        <div *ngIf="result()" class="p-4 bg-emerald-50 dark:bg-emerald-900/20 rounded-xl text-center">
+        @if (result()) {
+        <div class="p-4 bg-emerald-50 dark:bg-emerald-900/20 rounded-xl text-center">
           <p class="text-emerald-700 dark:text-emerald-400 text-sm mb-2">Done!</p>
           <a [href]="result()!.downloadUrl" target="_blank" class="inline-flex items-center gap-2 px-4 py-2 bg-emerald-600 text-white rounded-lg text-sm hover:bg-emerald-700">Download CSV</a>
         </div>
+        }
       </div>
     </div>`,
 })

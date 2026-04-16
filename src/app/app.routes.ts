@@ -55,11 +55,6 @@ export const routes: Routes = [
   { path: 'html-to-pdf',     loadComponent: () => import('./features/html-to-pdf/html-to-pdf.component').then(m => m.HtmlToPdfComponent),           title: 'HTML to PDF — Converter Hub' },
   { path: 'svg-to-pdf',      loadComponent: () => import('./features/svg-to-pdf/svg-to-pdf.component').then(m => m.SvgToPdfComponent),             title: 'SVG to PDF — Converter Hub' },
 
-  // ── AI tools ─────────────────────────────────────────────────────────────────
-  { path: 'ai/chat',      loadComponent: () => import('./features/ai-chat/ai-chat.component').then(m => m.AiChatComponent),           title: 'Chat with PDF — Converter Hub' },
-  { path: 'ai/summarize', loadComponent: () => import('./features/ai-summarize/ai-summarize.component').then(m => m.AiSummarizeComponent), title: 'AI Summarize — Converter Hub' },
-  { path: 'ai/keywords',  loadComponent: () => import('./features/ai-keywords/ai-keywords.component').then(m => m.AiKeywordsComponent), title: 'AI Keywords — Converter Hub' },
-
   // ── 404 ──────────────────────────────────────────────────────────────────────
   { path: '**', loadComponent: () => import('./features/not-found/not-found.component').then(m => m.NotFoundComponent), title: 'Page Not Found — Converter Hub' },
 ];

@@ -1,5 +1,4 @@
 import { Component, signal } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../../core/services/auth.service';
@@ -8,7 +7,7 @@ import { NotificationService } from '../../../core/services/notification.service
 @Component({
   selector: 'app-register',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterLink],
+  imports: [FormsModule, RouterLink],
   template: `
     <div class="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-50 to-blue-50 dark:from-slate-900 dark:to-slate-800 px-4 py-12">
       <div class="w-full max-w-md">
@@ -42,10 +41,12 @@ import { NotificationService } from '../../../core/services/notification.service
 
             <button type="submit" [disabled]="loading() || regForm.invalid"
               class="btn btn-primary w-full py-3 text-base font-semibold mt-2">
-              <svg *ngIf="loading()" class="w-5 h-5 animate-spin" fill="none" viewBox="0 0 24 24">
+              @if (loading()) {
+              <svg class="w-5 h-5 animate-spin" fill="none" viewBox="0 0 24 24">
                 <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/>
                 <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"/>
               </svg>
+              }
               {{ loading() ? 'Creating account…' : 'Create account' }}
             </button>
 

@@ -1,5 +1,4 @@
 import { Component, OnInit, signal } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { AdminService } from '../../../core/services/admin.service';
 import { NotificationService } from '../../../core/services/notification.service';
 import { QueueStats } from '../../../core/models/admin.model';
@@ -9,7 +8,7 @@ interface FailedJob { id: string; name: string; data: any; failedReason: string;
 @Component({
   selector: 'app-jobs-monitor',
   standalone: true,
-  imports: [CommonModule],
+  imports: [],
   template: `
     <div>
       <div class="flex items-center justify-between mb-6">
@@ -21,10 +20,12 @@ interface FailedJob { id: string; name: string; data: any; failedReason: string;
 
       <!-- Queue Stats -->
       <div class="grid grid-cols-2 md:grid-cols-5 gap-4 mb-6">
-        <div *ngFor="let stat of statsCards()" class="bg-white dark:bg-slate-800 rounded-xl p-4 shadow-sm border border-slate-100 dark:border-slate-700 text-center">
+        @for (stat of statsCards(); track $index) {
+        <div class="bg-white dark:bg-slate-800 rounded-xl p-4 shadow-sm border border-slate-100 dark:border-slate-700 text-center">
           <div class="text-2xl font-bold" [class]="stat.color">{{ stat.value }}</div>
           <div class="text-xs text-slate-500 mt-0.5">{{ stat.label }}</div>
         </div>
+        }
       </div>
 
       <!-- Failed Jobs -->
@@ -33,12 +34,17 @@ interface FailedJob { id: string; name: string; data: any; failedReason: string;
           <h2 class="text-sm font-semibold text-slate-700 dark:text-slate-300">Failed Jobs</h2>
           <span class="text-xs text-slate-400">{{ failedJobs().length }} jobs</span>
         </div>
-        <div *ngIf="loading()" class="p-8 text-center text-slate-400">Loading...</div>
-        <div *ngIf="!loading() && !failedJobs().length" class="p-8 text-center text-slate-400">
+        @if (loading()) {
+        <div class="p-8 text-center text-slate-400">Loading...</div>
+        }
+        @if (!loading() && !failedJobs().length) {
+        <div class="p-8 text-center text-slate-400">
           <div class="text-3xl mb-2">✓</div>
           <div class="text-sm">No failed jobs</div>
         </div>
-        <table *ngIf="!loading() && failedJobs().length" class="w-full text-sm">
+        }
+        @if (!loading() && failedJobs().length) {
+        <table class="w-full text-sm">
           <thead class="bg-slate-50 dark:bg-slate-900/50">
             <tr>
               <th class="text-left px-4 py-3 text-xs font-medium text-slate-500 uppercase">Job ID</th>
@@ -49,7 +55,8 @@ interface FailedJob { id: string; name: string; data: any; failedReason: string;
             </tr>
           </thead>
           <tbody class="divide-y divide-slate-100 dark:divide-slate-700">
-            <tr *ngFor="let job of failedJobs()" class="hover:bg-slate-50 dark:hover:bg-slate-700/50">
+            @for (job of failedJobs(); track job.id) {
+            <tr class="hover:bg-slate-50 dark:hover:bg-slate-700/50">
               <td class="px-4 py-3 text-xs font-mono text-slate-600 dark:text-slate-400">{{ job.id }}</td>
               <td class="px-4 py-3 text-xs text-slate-700 dark:text-slate-300">{{ formatTool(job.name) }}</td>
               <td class="px-4 py-3 text-xs text-red-500 max-w-xs truncate" [title]="job.failedReason">{{ job.failedReason }}</td>
@@ -61,8 +68,10 @@ interface FailedJob { id: string; name: string; data: any; failedReason: string;
                 </div>
               </td>
             </tr>
+            }
           </tbody>
         </table>
+        }
       </div>
     </div>
   `,

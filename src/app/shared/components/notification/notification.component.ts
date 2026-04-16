@@ -1,26 +1,28 @@
 import { Component, ChangeDetectionStrategy } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { NotificationService, Notification } from '../../../core/services/notification.service';
 
 @Component({
   selector: 'app-notification',
   standalone: true,
-  imports: [CommonModule],
+  imports: [],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div class="fixed top-5 right-5 z-[9999] flex flex-col gap-3 w-80 pointer-events-none">
-      <div *ngFor="let n of ns.notifications()" [attr.data-id]="n.id"
+      @for (n of ns.notifications(); track n.id) {
+      <div [attr.data-id]="n.id"
         class="pointer-events-auto card flex items-start gap-3 p-4 shadow-lg animate-slide-down">
 
         <!-- Icon -->
-        <div [ngClass]="iconClass(n.type)" class="w-8 h-8 rounded-xl flex items-center justify-center flex-shrink-0 text-sm">
+        <div [class]="iconClass(n.type)" class="w-8 h-8 rounded-xl flex items-center justify-center flex-shrink-0 text-sm">
           <span>{{ icon(n.type) }}</span>
         </div>
 
         <!-- Content -->
         <div class="flex-1 min-w-0">
           <p class="font-semibold text-sm text-slate-800 dark:text-slate-100">{{ n.title }}</p>
-          <p *ngIf="n.message" class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">{{ n.message }}</p>
+          @if (n.message) {
+          <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">{{ n.message }}</p>
+          }
         </div>
 
         <!-- Close -->
@@ -31,6 +33,7 @@ import { NotificationService, Notification } from '../../../core/services/notifi
           </svg>
         </button>
       </div>
+      }
     </div>
   `,
 })

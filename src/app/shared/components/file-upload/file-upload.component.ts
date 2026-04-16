@@ -2,7 +2,6 @@ import {
   Component, Input, Output, EventEmitter, signal,
   HostListener, ChangeDetectionStrategy,
 } from '@angular/core';
-import { CommonModule } from '@angular/common';
 
 export interface UploadedFile {
   file:       File;
@@ -13,7 +12,7 @@ export interface UploadedFile {
 @Component({
   selector: 'app-file-upload',
   standalone: true,
-  imports: [CommonModule],
+  imports: [],
   templateUrl: './file-upload.component.html',
   styleUrls: ['./file-upload.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,

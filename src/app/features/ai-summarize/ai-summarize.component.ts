@@ -1,5 +1,4 @@
 import { Component, signal } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AiService } from '../../core/services/ai.service';
 import { NotificationService } from '../../core/services/notification.service';
@@ -7,7 +6,7 @@ import { NotificationService } from '../../core/services/notification.service';
 @Component({
   selector: 'app-ai-summarize',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [FormsModule],
   template: `
     <div class="max-w-2xl mx-auto px-4 py-10">
       <h1 class="text-2xl font-bold text-slate-800 dark:text-white mb-1">AI Summarize PDF</h1>
@@ -42,20 +41,24 @@ import { NotificationService } from '../../core/services/notification.service';
           </div>
         </div>
 
-        <div *ngIf="loading()" class="text-center py-4">
+        @if (loading()) {
+        <div class="text-center py-4">
           <div class="inline-block w-8 h-8 border-4 border-indigo-500 border-t-transparent rounded-full animate-spin"></div>
           <p class="text-xs text-slate-400 mt-2">AI is summarizing...</p>
         </div>
+        }
 
         <button (click)="summarize()" [disabled]="!file() || loading()"
                 class="w-full py-3 bg-indigo-600 text-white rounded-xl font-semibold hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors">
           Summarize with AI
         </button>
 
-        <div *ngIf="summary()" class="p-4 bg-slate-50 dark:bg-slate-700 rounded-xl">
+        @if (summary()) {
+        <div class="p-4 bg-slate-50 dark:bg-slate-700 rounded-xl">
           <h3 class="text-xs font-semibold text-slate-500 dark:text-slate-400 mb-2 uppercase">Summary</h3>
           <p class="text-slate-800 dark:text-white text-sm leading-relaxed whitespace-pre-wrap">{{ summary() }}</p>
         </div>
+        }
       </div>
     </div>
   `,

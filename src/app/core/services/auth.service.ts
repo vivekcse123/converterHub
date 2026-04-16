@@ -1,6 +1,7 @@
-import { Injectable, signal, computed } from '@angular/core';
+import { Injectable, signal, computed, inject, PLATFORM_ID } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 import { Router } from '@angular/router';
-import { Observable, tap, throwError, catchError, switchMap } from 'rxjs';
+import { Observable, tap, throwError, catchError } from 'rxjs';
 import { ApiService } from './api.service';
 import { User, AuthResponse } from '../models/user.model';
 
@@ -10,8 +11,10 @@ export class AuthService {
   private readonly REFRESH_KEY = 'ch_refresh_token';
   private readonly USER_KEY    = 'ch_user';
 
+  private readonly isBrowser = isPlatformBrowser(inject(PLATFORM_ID));
+
   private _user  = signal<User | null>(this.loadStoredUser());
-  private _token = signal<string | null>(localStorage.getItem(this.TOKEN_KEY));
+  private _token = signal<string | null>(this.ls(this.TOKEN_KEY));
 
   readonly user        = this._user.asReadonly();
   readonly token       = this._token.asReadonly();
@@ -24,7 +27,7 @@ export class AuthService {
 
   register(name: string, email: string, password: string): Observable<AuthResponse> {
     return this.api.post<AuthResponse>('auth/register', { name, email, password }).pipe(
-      tap((res:any) => this.persistSession(res)));
+      tap((res: any) => this.persistSession(res)));
   }
 
   login(email: string, password: string): Observable<AuthResponse> {
@@ -33,24 +36,24 @@ export class AuthService {
   }
 
   logout(): void {
-    const refreshToken = localStorage.getItem(this.REFRESH_KEY);
+    const refreshToken = this.ls(this.REFRESH_KEY);
     if (refreshToken) {
       this.api.post('auth/logout', { refreshToken }).subscribe({ error: () => {} });
     }
     this.clearSession();
-    this.router.navigate([ '/' ]);
+    this.router.navigate(['/']);
   }
 
   refreshToken(): Observable<any> {
-    const refreshToken = localStorage.getItem(this.REFRESH_KEY);
+    const refreshToken = this.ls(this.REFRESH_KEY);
     if (!refreshToken) return throwError(() => new Error('No refresh token'));
     return this.api.post<any>('auth/refresh', { refreshToken }).pipe(
       tap((res: any) => {
         const data = res.data || res;
         const at = data.accessToken || data.token;
         const rt = data.refreshToken;
-        if (at) { localStorage.setItem(this.TOKEN_KEY, at); this._token.set(at); }
-        if (rt)   localStorage.setItem(this.REFRESH_KEY, rt);
+        if (at) { this.lsSet(this.TOKEN_KEY, at); this._token.set(at); }
+        if (rt)   this.lsSet(this.REFRESH_KEY, rt);
       }),
       catchError((err) => { this.clearSession(); return throwError(() => err); })
     );
@@ -60,7 +63,7 @@ export class AuthService {
     return this.api.get<{ data: { user: User } }>('auth/me').pipe(
       tap((res: any) => {
         this._user.set(res.data.user);
-        localStorage.setItem(this.USER_KEY, JSON.stringify(res.data.user));
+        this.lsSet(this.USER_KEY, JSON.stringify(res.data.user));
       }));
   }
 
@@ -69,7 +72,7 @@ export class AuthService {
       tap((res: any) => {
         if (res?.data?.user) {
           this._user.set(res.data.user);
-          localStorage.setItem(this.USER_KEY, JSON.stringify(res.data.user));
+          this.lsSet(this.USER_KEY, JSON.stringify(res.data.user));
         }
       })
     );
@@ -78,25 +81,36 @@ export class AuthService {
   private persistSession(res: AuthResponse): void {
     const { user, accessToken, token, refreshToken } = res.data;
     const at = accessToken || token;
-    localStorage.setItem(this.TOKEN_KEY,   at);
-    if (refreshToken) localStorage.setItem(this.REFRESH_KEY, refreshToken);
-    localStorage.setItem(this.USER_KEY, JSON.stringify(user));
+    this.lsSet(this.TOKEN_KEY, at);
+    if (refreshToken) this.lsSet(this.REFRESH_KEY, refreshToken);
+    this.lsSet(this.USER_KEY, JSON.stringify(user));
     this._token.set(at);
     this._user.set(user);
   }
 
   private clearSession(): void {
-    localStorage.removeItem(this.TOKEN_KEY);
-    localStorage.removeItem(this.REFRESH_KEY);
-    localStorage.removeItem(this.USER_KEY);
+    this.lsRemove(this.TOKEN_KEY);
+    this.lsRemove(this.REFRESH_KEY);
+    this.lsRemove(this.USER_KEY);
     this._user.set(null);
     this._token.set(null);
   }
 
   private loadStoredUser(): User | null {
     try {
-      const raw = localStorage.getItem(this.USER_KEY);
+      const raw = this.ls(this.USER_KEY);
       return raw ? JSON.parse(raw) : null;
     } catch { return null; }
+  }
+
+  /** Safe localStorage helpers — no-op on server */
+  private ls(key: string): string | null {
+    return this.isBrowser ? localStorage.getItem(key) : null;
+  }
+  private lsSet(key: string, value: string): void {
+    if (this.isBrowser) localStorage.setItem(key, value);
+  }
+  private lsRemove(key: string): void {
+    if (this.isBrowser) localStorage.removeItem(key);
   }
 }

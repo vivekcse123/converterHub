@@ -1,5 +1,4 @@
 import { Component, signal } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { FileUploadComponent } from '../../shared/components/file-upload/file-upload.component';
 import { ProgressBarComponent } from '../../shared/components/progress-bar/progress-bar.component';
@@ -12,7 +11,7 @@ type ImageAction = 'resize' | 'compress' | 'convert';
 @Component({
   selector: 'app-image-editor',
   standalone: true,
-  imports: [CommonModule, FormsModule, FileUploadComponent, ProgressBarComponent],
+  imports: [FormsModule, FileUploadComponent, ProgressBarComponent],
   templateUrl: './image-editor.component.html',
 })
 export class ImageEditorComponent {

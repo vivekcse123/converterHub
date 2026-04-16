@@ -1,5 +1,4 @@
 import { Component, signal } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AiService } from '../../core/services/ai.service';
 import { NotificationService } from '../../core/services/notification.service';
@@ -9,7 +8,7 @@ interface ChatMessage { role: 'user' | 'assistant'; content: string; }
 @Component({
   selector: 'app-ai-chat',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [FormsModule],
   template: `
     <div class="max-w-3xl mx-auto px-4 py-10">
       <h1 class="text-2xl font-bold text-slate-800 dark:text-white mb-1">Chat with PDF</h1>
@@ -22,22 +21,26 @@ interface ChatMessage { role: 'user' | 'assistant'; content: string; }
             {{ fileName() || 'Upload PDF' }}
           </div>
           <input #fi type="file" accept=".pdf" class="hidden" (change)="onFile($event)" />
-          <span *ngIf="uploading()" class="text-xs text-indigo-500 animate-pulse">Uploading...</span>
-          <span *ngIf="sessionId()" class="text-xs text-emerald-500">Ready to chat</span>
+          @if (uploading()) { <span class="text-xs text-indigo-500 animate-pulse">Uploading...</span> }
+          @if (sessionId()) { <span class="text-xs text-emerald-500">Ready to chat</span> }
         </div>
 
         <!-- Messages -->
         <div #msgBox class="flex-1 overflow-y-auto p-5 space-y-3">
-          <div *ngFor="let m of messages()" [class]="m.role === 'user' ? 'flex justify-end' : 'flex justify-start'">
+          @for (m of messages(); track $index) {
+          <div [class]="m.role === 'user' ? 'flex justify-end' : 'flex justify-start'">
             <div [class]="m.role === 'user'
               ? 'bg-indigo-600 text-white rounded-2xl rounded-tr-sm px-4 py-2 max-w-lg text-sm'
               : 'bg-slate-100 dark:bg-slate-700 text-slate-800 dark:text-white rounded-2xl rounded-tl-sm px-4 py-2 max-w-lg text-sm whitespace-pre-wrap'">
               {{ m.content }}
             </div>
           </div>
-          <div *ngIf="thinking()" class="flex justify-start">
+          }
+          @if (thinking()) {
+          <div class="flex justify-start">
             <div class="bg-slate-100 dark:bg-slate-700 rounded-2xl rounded-tl-sm px-4 py-2 text-sm text-slate-400 animate-pulse">Thinking...</div>
           </div>
+          }
         </div>
 
         <!-- Input -->

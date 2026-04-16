@@ -1,5 +1,5 @@
-import { Component, signal, ChangeDetectionStrategy } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, signal, ChangeDetectionStrategy, inject } from '@angular/core';
+import { DOCUMENT } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { FileUploadComponent } from '../../shared/components/file-upload/file-upload.component';
 import { ProgressBarComponent } from '../../shared/components/progress-bar/progress-bar.component';
@@ -10,7 +10,7 @@ import { ConversionResult } from '../../core/models/conversion.model';
 @Component({
   selector: 'app-image-to-pdf',
   standalone: true,
-  imports: [CommonModule, FormsModule, FileUploadComponent, ProgressBarComponent],
+  imports: [FormsModule, FileUploadComponent, ProgressBarComponent],
   templateUrl: './image-to-pdf.component.html',
   styleUrls: ['./image-to-pdf.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -31,6 +31,8 @@ export class ImageToPdfComponent {
     { value: 'portrait',  label: 'Portrait' },
     { value: 'landscape', label: 'Landscape' },
   ];
+
+  private readonly doc = inject(DOCUMENT);
 
   constructor(
     public converter: ConverterService,
@@ -81,7 +83,7 @@ export class ImageToPdfComponent {
   downloadFile(): void {
     const res = this.result();
     if (!res) return;
-    const a = document.createElement('a');
+    const a = this.doc.createElement('a');
     a.href = res.downloadUrl;
     a.download = res.fileName;
     a.click();

@@ -1,5 +1,4 @@
 import { Component, signal } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { FileUploadComponent } from '../../shared/components/file-upload/file-upload.component';
 import { ProgressBarComponent } from '../../shared/components/progress-bar/progress-bar.component';
 import { ConverterService } from '../../core/services/converter.service';
@@ -9,7 +8,7 @@ import { ConversionResult } from '../../core/models/conversion.model';
 @Component({
   selector: 'app-pdf-to-word',
   standalone: true,
-  imports: [CommonModule, FileUploadComponent, ProgressBarComponent],
+  imports: [FileUploadComponent, ProgressBarComponent],
   template: `
     <div class="bg-gradient-to-r from-violet-600 to-purple-600 text-white py-14">
       <div class="container-app text-center">
@@ -25,20 +24,29 @@ import { ConversionResult } from '../../core/models/conversion.model';
           label="Drop your PDF here" sublabel="PDF files only"
           (filesSelected)="onFile($event)" />
 
-        <div *ngIf="file()" class="mt-6 flex justify-center">
+        @if (file()) {
+        <div class="mt-6 flex justify-center">
           <button (click)="convert()" [disabled]="converter.isConverting()"
             class="btn btn-primary btn-lg min-w-[200px]">
-            <span *ngIf="!converter.isConverting()">⚡ Convert to Word</span>
-            <span *ngIf="converter.isConverting()">Converting…</span>
+            @if (!converter.isConverting()) {
+            <span>⚡ Convert to Word</span>
+            }
+            @if (converter.isConverting()) {
+            <span>Converting…</span>
+            }
           </button>
         </div>
+        }
 
-        <div *ngIf="converter.isConverting()" class="mt-4">
+        @if (converter.isConverting()) {
+        <div class="mt-4">
           <app-progress-bar [value]="converter.uploadProgress()" />
         </div>
+        }
       </div>
 
-      <div *ngIf="result()" class="card p-8 text-center mt-6 animate-bounce-in">
+      @if (result()) {
+      <div class="card p-8 text-center mt-6 animate-bounce-in">
         <div class="text-5xl mb-4">✅</div>
         <h2 class="text-xl font-bold mb-4 text-slate-800 dark:text-white">Word document ready!</h2>
         <div class="flex gap-3 justify-center">
@@ -46,6 +54,7 @@ import { ConversionResult } from '../../core/models/conversion.model';
           <button (click)="reset()" class="btn btn-secondary">🔄 Convert Another</button>
         </div>
       </div>
+      }
     </div>
   `,
 })

@@ -1,6 +1,6 @@
 import { Component, OnInit, signal } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
+import { DatePipe, TitleCasePipe } from '@angular/common';
 import { AuthService } from '../../core/services/auth.service';
 import { ApiService } from '../../core/services/api.service';
 import { ConversionHistory, PaginatedResponse } from '../../core/models/conversion.model';
@@ -9,7 +9,7 @@ import { NotificationService } from '../../core/services/notification.service';
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule, RouterLink],
+  imports: [RouterLink, DatePipe, TitleCasePipe],
   templateUrl: './dashboard.component.html',
 })
 export class DashboardComponent implements OnInit {

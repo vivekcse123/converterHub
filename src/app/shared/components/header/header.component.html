@@ -59,6 +59,12 @@
           <a routerLink="/register" class="btn btn-primary btn-sm">Sign up free</a>
         }
         @else {
+          @if (auth.isAdmin()) {
+            <a routerLink="/admin" class="hidden md:inline-flex btn btn-sm gap-1.5 bg-rose-50 text-rose-600 border border-rose-200 hover:bg-rose-100 dark:bg-rose-950/30 dark:text-rose-400 dark:border-rose-800">
+              <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
+              Admin
+            </a>
+          }
           <a routerLink="/dashboard" class="hidden md:inline-flex btn btn-secondary btn-sm gap-2">
             <span class="w-5 h-5 bg-primary-600 rounded-full text-white text-xs flex items-center justify-center font-semibold">
               {{ auth.user()?.name?.charAt(0)?.toUpperCase() }}
@@ -102,6 +108,9 @@
           <a routerLink="/login"    (click)="closeMobile()" class="px-4 py-2.5 rounded-xl text-sm font-medium text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800">Login</a>
           <a routerLink="/register" (click)="closeMobile()" class="px-4 py-2.5 rounded-xl text-sm font-medium text-primary-600 hover:bg-primary-50 dark:hover:bg-primary-950">Sign up free</a>
         } @else {
+          @if (auth.isAdmin()) {
+            <a routerLink="/admin" (click)="closeMobile()" class="px-4 py-2.5 rounded-xl text-sm font-medium text-rose-600 dark:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/20">⚙ Admin Panel</a>
+          }
           <a routerLink="/dashboard" (click)="closeMobile()" class="px-4 py-2.5 rounded-xl text-sm font-medium text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800">Dashboard</a>
           <button (click)="auth.logout(); closeMobile()" class="text-left px-4 py-2.5 rounded-xl text-sm font-medium text-red-500 hover:bg-red-50 dark:hover:bg-red-950/20">Logout</button>
         }

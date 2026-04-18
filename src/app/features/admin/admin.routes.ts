@@ -11,7 +11,7 @@ export const adminRoutes: Routes = [
       {
         path: 'dashboard',
         loadComponent: () => import('./dashboard/admin-dashboard.component').then(m => m.AdminDashboardComponent),
-        title: 'Admin Dashboard — Converter Hub',
+        title: 'Admin Dashboard — ApnaConverter',
       },
       {
         path: 'users',

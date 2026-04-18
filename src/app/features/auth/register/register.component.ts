@@ -78,7 +78,7 @@ export class RegisterComponent {
     this.loading.set(true);
     this.auth.register(this.name, this.email, this.password).subscribe({
       next: () => {
-        this.notify.success('Account created!', 'Welcome to ConverterHub.');
+        this.notify.success('Account created!', 'Welcome to ApnaConverter.');
         this.router.navigate(['/dashboard']);
       },
       error: (e) => {

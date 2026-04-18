@@ -40,7 +40,7 @@ import { ConversionResult } from '../../core/models/conversion.model';
 
         @if (converter.isConverting()) {
         <div class="mt-4">
-          <app-progress-bar [value]="converter.uploadProgress()" />
+          <app-progress-bar [value]="converter.uploadProgress()" [label]="converter.progressLabel()" [showPhase]="true" />
         </div>
         }
       </div>

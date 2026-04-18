@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { ApiService } from './api.service';
-import { AdminStats, ToolStat, DailyStat, QueueStats, Plan, AdminUser } from '../models/admin.model';
+import { AdminStats, ToolStat, DailyStat, QueueStats, Plan, AdminUser, TrendingTool } from '../models/admin.model';
 import { PaginatedApiResponse, ApiResponse } from '../models/user.model';
 import { User } from '../models/user.model';
 
@@ -67,6 +67,10 @@ export class AdminService {
 
   getSubscriptionStats(): Observable<ApiResponse<Array<{ _id: string; count: number }>>> {
     return this.api.get<ApiResponse<any>>('admin/analytics/subscriptions');
+  }
+
+  getTrending(limit = 10, days = 7): Observable<ApiResponse<{ trending: TrendingTool[]; days: number }>> {
+    return this.api.get<ApiResponse<any>>(`admin/analytics/trending?limit=${limit}&days=${days}`);
   }
 
   // ── Queue ──────────────────────────────────────────────────────────────────

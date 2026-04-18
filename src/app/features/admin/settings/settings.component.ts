@@ -27,7 +27,7 @@ interface LogEntry { timestamp: string; level: string; message: string; meta?: a
           <div class="bg-white dark:bg-slate-800 rounded-xl p-5 shadow-sm border border-slate-100 dark:border-slate-700">
             <div class="flex items-center justify-between mb-3">
               <span class="text-sm font-bold text-slate-800 dark:text-white capitalize">{{ plan.id }}</span>
-              <span class="text-lg font-semibold text-indigo-600">{{ plan.price }}/mo</span>
+              <span class="text-lg font-semibold text-indigo-600">${{ plan.price?.monthly }}/mo</span>
             </div>
             @if (editingPlan !== plan.id) {
               <ul class="space-y-1 text-xs text-slate-600 dark:text-slate-400 mb-3">
@@ -111,7 +111,7 @@ export class SettingsComponent implements OnInit {
 
   loadPlans(): void {
     this.adminService.getPlans().subscribe({
-      next: (r) => { this.plans.set(r.data); this.loadingPlans.set(false); },
+      next: (r) => { this.plans.set((r.data as any)?.plans ?? []); this.loadingPlans.set(false); },
       error: () => this.loadingPlans.set(false),
     });
   }
@@ -119,7 +119,17 @@ export class SettingsComponent implements OnInit {
   loadLogs(): void {
     this.loadingLogs.set(true);
     this.adminService.getErrorLogs(100).subscribe({
-      next: (r) => { this.logs.set(r.data as LogEntry[]); this.loadingLogs.set(false); },
+      next: (r) => {
+        const rawLines: string[] = (r.data as any)?.lines ?? [];
+        const parsed = rawLines.map(line => {
+          const m = line.match(/^(\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}) \[(\w+)\]: (.+)/);
+          return m
+            ? { timestamp: m[1], level: m[2], message: m[3] }
+            : { timestamp: '', level: 'error', message: line };
+        });
+        this.logs.set(parsed);
+        this.loadingLogs.set(false);
+      },
       error: () => this.loadingLogs.set(false),
     });
   }

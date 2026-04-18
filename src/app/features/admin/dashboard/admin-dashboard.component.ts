@@ -90,8 +90,18 @@ export class AdminDashboardComponent implements OnInit {
 
   ngOnInit(): void {
     this.adminService.getOverview().subscribe({ next: (r) => this.stats.set(r.data) });
-    this.adminService.getToolStats().subscribe({ next: (r) => this.topTools.set((r.data as any[]).slice(0, 8)) });
-    this.adminService.getQueueStats().subscribe({ next: (r) => this.queueStats.set(r.data) });
+    this.adminService.getToolStats().subscribe({
+      next: (r) => {
+        const stats = (r.data as any)?.stats ?? [];
+        this.topTools.set(stats.slice(0, 8));
+      }
+    });
+    this.adminService.getQueueStats().subscribe({
+      next: (r) => {
+        const s = (r.data as any)?.stats ?? null;
+        this.queueStats.set(s);
+      }
+    });
   }
 
   statCards() {

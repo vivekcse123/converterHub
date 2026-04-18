@@ -10,9 +10,12 @@ export class ConverterService {
   /** Global loading/progress state */
   readonly uploadProgress = signal<number>(0);
   readonly isConverting   = signal<boolean>(false);
+  /** Phase label shown in the progress bar */
+  readonly progressLabel  = signal<string>('Uploading…');
+
+  private processingTicker?: ReturnType<typeof setInterval>;
 
   constructor(private api: ApiService) {}
-
   imageToPdf(files: File[], options: Record<string, string> = {}): Observable<ConversionResult> {
     return this.doUpload('convert/image-to-pdf', files, options, true);
   }
@@ -51,18 +54,29 @@ export class ConverterService {
 
   textToPdf(text: string): Observable<ConversionResult> {
     this.isConverting.set(true);
-    this.uploadProgress.set(50);
+    this.uploadProgress.set(20);
+    this.progressLabel.set('Processing…');
+    this.stopProcessingTicker();
+    this.processingTicker = setInterval(() => {
+      const cur = this.uploadProgress();
+      if (cur < 90) this.uploadProgress.set(cur + 2);
+    }, 100);
+
     return this.api
       .post<{ data: ConversionResult }>('convert/text-to-pdf', { text })
       .pipe(
         map((r) => {
+          this.stopProcessingTicker();
           this.isConverting.set(false);
           this.uploadProgress.set(100);
+          this.progressLabel.set('Done!');
           return r.data;
         }),
         catchError((err) => {
+          this.stopProcessingTicker();
           this.isConverting.set(false);
           this.uploadProgress.set(0);
+          this.progressLabel.set('Uploading…');
           return throwError(() => err);
         })
       );
@@ -171,6 +185,22 @@ export class ConverterService {
     return this.doUpload('convert/svg-to-pdf', [file], {}, false);
   }
 
+  // ── New PDF Security / Organisation ──────────────────────────────────────────
+
+  unlockPdf(file: File, password = ''): Observable<ConversionResult> {
+    return this.doUpload('convert/unlock-pdf', [file], { password }, false);
+  }
+
+  protectPdf(file: File, userPassword: string, ownerPassword?: string): Observable<ConversionResult> {
+    const opts: Record<string, string> = { userPassword };
+    if (ownerPassword) opts['ownerPassword'] = ownerPassword;
+    return this.doUpload('convert/protect-pdf', [file], opts, false);
+  }
+
+  organizePdf(file: File, pageOrder: number[]): Observable<ConversionResult> {
+    return this.doUpload('convert/organize-pdf', [file], { pageOrder: JSON.stringify(pageOrder) }, false);
+  }
+
   /** Generic upload helper with progress tracking. */
   private doUpload(
     endpoint: string,
@@ -185,26 +215,55 @@ export class ConverterService {
     return this.doUploadFd(endpoint, fd);
   }
 
-  /** Upload a pre-built FormData with progress tracking. */
+  /** Upload a pre-built FormData with progress tracking (two-phase: upload + processing). */
   private doUploadFd(endpoint: string, fd: FormData): Observable<ConversionResult> {
     this.isConverting.set(true);
     this.uploadProgress.set(0);
+    this.progressLabel.set('Uploading…');
+    this.stopProcessingTicker();
 
     return this.api.uploadWithProgress<{ data: ConversionResult }>(endpoint, fd).pipe(
       map((event: UploadEvent) => {
-        this.uploadProgress.set(event.progress);
-        if (event.progress === 100 && event.result) {
+        if (event.result) {
+          // Response received — finalize
+          this.stopProcessingTicker();
+          this.uploadProgress.set(100);
+          this.progressLabel.set('Done!');
           this.isConverting.set(false);
           return event.result.data;
         }
+
+        // Map raw upload progress (0–100) → display range 0–65%
+        const uploadPct = Math.min(event.progress, 100);
+        const displayPct = Math.round(uploadPct * 0.65);
+        this.uploadProgress.set(displayPct);
+
+        // Once upload bytes are fully sent, start processing animation (65→95%)
+        if (uploadPct >= 100 && !this.processingTicker) {
+          this.progressLabel.set('Processing…');
+          this.processingTicker = setInterval(() => {
+            const cur = this.uploadProgress();
+            if (cur < 95) this.uploadProgress.set(cur + 1);
+          }, 120);
+        }
+
         return null as unknown as ConversionResult;
       }),
       filter((v): v is ConversionResult => v !== null),
       catchError((err) => {
+        this.stopProcessingTicker();
         this.isConverting.set(false);
         this.uploadProgress.set(0);
+        this.progressLabel.set('Uploading…');
         return throwError(() => err);
       })
     );
+  }
+
+  private stopProcessingTicker(): void {
+    if (this.processingTicker) {
+      clearInterval(this.processingTicker);
+      this.processingTicker = undefined;
+    }
   }
 }

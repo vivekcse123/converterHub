@@ -1,4 +1,4 @@
-import { Component, OnInit, signal } from '@angular/core';
+import { Component, OnInit, OnDestroy, signal } from '@angular/core';
 import { AdminService } from '../../../core/services/admin.service';
 import { NotificationService } from '../../../core/services/notification.service';
 import { QueueStats } from '../../../core/models/admin.model';
@@ -76,7 +76,7 @@ interface FailedJob { id: string; name: string; data: any; failedReason: string;
     </div>
   `,
 })
-export class JobsMonitorComponent implements OnInit {
+export class JobsMonitorComponent implements OnInit, OnDestroy {
   readonly loading    = signal(true);
   readonly failedJobs = signal<FailedJob[]>([]);
   readonly statsCards = signal<{ label: string; value: number; color: string }[]>([]);
@@ -95,18 +95,23 @@ export class JobsMonitorComponent implements OnInit {
   refresh(): void {
     this.adminService.getQueueStats().subscribe({
       next: (r) => {
-        const s: QueueStats = r.data;
+        const s: QueueStats = (r.data as any)?.stats ?? r.data ?? {};
         this.statsCards.set([
-          { label: 'Waiting',   value: s.waiting,   color: 'text-amber-500' },
-          { label: 'Active',    value: s.active,    color: 'text-blue-500' },
-          { label: 'Completed', value: s.completed, color: 'text-emerald-500' },
-          { label: 'Failed',    value: s.failed,    color: 'text-red-500' },
-          { label: 'Delayed',   value: s.delayed,   color: 'text-purple-500' },
+          { label: 'Waiting',   value: s.waiting   ?? 0, color: 'text-amber-500' },
+          { label: 'Active',    value: s.active    ?? 0, color: 'text-blue-500' },
+          { label: 'Completed', value: s.completed ?? 0, color: 'text-emerald-500' },
+          { label: 'Failed',    value: s.failed    ?? 0, color: 'text-red-500' },
+          { label: 'Delayed',   value: s.delayed   ?? 0, color: 'text-purple-500' },
         ]);
       },
+      error: () => {},
     });
     this.adminService.getFailedJobs().subscribe({
-      next: (r) => { this.failedJobs.set(r.data as FailedJob[]); this.loading.set(false); },
+      next: (r) => {
+        const jobs = (r.data as any)?.jobs ?? (Array.isArray(r.data) ? r.data : []);
+        this.failedJobs.set(jobs as FailedJob[]);
+        this.loading.set(false);
+      },
       error: () => this.loading.set(false),
     });
   }

@@ -6,7 +6,7 @@
   <div class="container-app py-24 md:py-32 relative">
     <div class="max-w-3xl mx-auto text-center animate-slide-up">
       <span class="inline-block mb-4 px-4 py-1.5 bg-white/10 backdrop-blur rounded-full text-sm font-medium">
-        🎉 100% Free · No Sign-up Required · 30+ Tools
+        🎉 100% Free · No Sign-up Required · 37+ Tools
       </span>
       <h1 class="text-4xl sm:text-5xl md:text-6xl font-extrabold leading-tight tracking-tight mb-6">
         Convert Any File<br>
@@ -15,12 +15,20 @@
       <p class="text-lg sm:text-xl text-primary-100 max-w-xl mx-auto mb-10 leading-relaxed">
         Enterprise-grade document processing — PDFs, images, documents and more. Fast, secure and beautifully simple.
       </p>
+
+      <!-- Hero Search (mobile-first, visible on all sizes) -->
+      <div class="max-w-md mx-auto mb-8">
+        <div class="bg-white/10 backdrop-blur-sm rounded-2xl p-1.5">
+          <app-global-search />
+        </div>
+      </div>
+
       <div class="flex flex-col sm:flex-row gap-3 justify-center">
         <a routerLink="/image-to-pdf" class="btn btn-lg bg-white text-primary-700 hover:bg-primary-50 shadow-xl">
           🖼️ Start Converting
         </a>
         <a href="#tools" class="btn btn-lg border-2 border-white/40 text-white hover:bg-white/10">
-          Browse All 30+ Tools
+          Browse All 37+ Tools
         </a>
       </div>
     </div>
@@ -41,11 +49,42 @@
   </div>
 </section>
 
+<!-- ─── Trending section ──────────────────────────────────────── -->
+@if (trendingService.loaded() && trendingService.trending().length > 0) {
+<section class="container-app py-10">
+  <div class="flex items-center gap-2 mb-5">
+    <span class="text-xl">🔥</span>
+    <h2 class="text-lg font-bold text-slate-800 dark:text-white">Trending Now</h2>
+    <span class="ml-auto text-xs text-slate-400">Last 7 days</span>
+  </div>
+  <div class="flex flex-wrap gap-3">
+    @for (entry of trendingService.trending(); track entry.tool) {
+      @for (tool of allTools; track tool.id) {
+        @if (tool.id === entry.tool) {
+          <a [routerLink]="tool.route"
+             class="flex items-center gap-2 px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700
+                    bg-white dark:bg-slate-800/60 hover:border-primary-300 dark:hover:border-primary-600
+                    hover:shadow-md transition-all duration-200 group">
+            <div [class]="'w-8 h-8 rounded-lg bg-gradient-to-br ' + tool.color + ' flex items-center justify-center text-sm'">
+              {{ tool.icon }}
+            </div>
+            <div>
+              <p class="text-sm font-medium text-slate-700 dark:text-slate-200 group-hover:text-primary-600 transition-colors">{{ tool.title }}</p>
+              <p class="text-xs text-slate-400">{{ entry.count }} uses</p>
+            </div>
+          </a>
+        }
+      }
+    }
+  </div>
+</section>
+}
+
 <!-- ─── Tools Grid ────────────────────────────────────────────── -->
 <section id="tools" class="container-app py-20">
   <div class="text-center mb-14">
     <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900 dark:text-white mb-4">All Tools</h2>
-    <p class="text-slate-500 dark:text-slate-400 text-lg max-w-xl mx-auto mb-8">30+ powerful tools — no registration needed.</p>
+    <p class="text-slate-500 dark:text-slate-400 text-lg max-w-xl mx-auto mb-8">37+ powerful tools — no registration needed.</p>
 
     <!-- Category Filter -->
     <div class="flex flex-wrap justify-center gap-2">
@@ -61,7 +100,7 @@
   </div>
 
   <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
-    @for (tool of filteredTools; track $index) {
+    @for (tool of filteredTools; track tool.id) {
     <app-tool-card [tool]="tool"  />
     }
   </div>

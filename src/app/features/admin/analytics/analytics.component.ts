@@ -110,15 +110,34 @@ export class AnalyticsComponent implements OnInit {
 
   ngOnInit(): void {
     this.adminService.getDailyStats(30).subscribe({
-      next: (r) => { const d = r.data; this.maxDaily = Math.max(...d.map((x: DailyStat) => x.count), 1); this.dailyStats.set(d); this.loadingDaily.set(false); },
+      next: (r) => {
+        const payload = r.data as any;
+        // Backend returns { conversions: [...], users: [...] }
+        const d: DailyStat[] = payload?.conversions ?? (Array.isArray(payload) ? payload : []);
+        this.maxDaily = Math.max(...d.map((x) => x.count), 1);
+        this.dailyStats.set(d);
+        this.loadingDaily.set(false);
+      },
       error: () => this.loadingDaily.set(false),
     });
     this.adminService.getToolStats(15).subscribe({
-      next: (r) => { const d = r.data; this.maxTool = d[0].count || 1; this.toolStats.set(d); this.loadingTools.set(false); },
+      next: (r) => {
+        const payload = r.data as any;
+        const d: ToolStat[] = payload?.stats ?? (Array.isArray(payload) ? payload : []);
+        this.maxTool = d.length ? (d[0].count || 1) : 1;
+        this.toolStats.set(d);
+        this.loadingTools.set(false);
+      },
       error: () => this.loadingTools.set(false),
     });
     this.adminService.getSubscriptionStats().subscribe({
-      next: (r) => { const d = r.data; this.totalSubs = d.reduce((a: number, s: SubscriptionStat) => a + s.count, 0) || 1; this.subStats.set(d); this.loadingSubs.set(false); },
+      next: (r) => {
+        const payload = r.data as any;
+        const d: SubscriptionStat[] = payload?.stats ?? (Array.isArray(payload) ? payload : []);
+        this.totalSubs = d.reduce((a, s) => a + s.count, 0) || 1;
+        this.subStats.set(d);
+        this.loadingSubs.set(false);
+      },
       error: () => this.loadingSubs.set(false),
     });
   }

@@ -120,7 +120,7 @@ import { PaginatedApiResponse } from '../../../core/models/user.model';
 
     <!-- Edit Modal -->
     @if (selectedUser) {
-    <div class="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4" (click.self)="selectedUser = null">
+    <div class="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4" (click)="closeOnBackdrop($event)">
       <div class="bg-white dark:bg-slate-800 rounded-2xl p-6 w-full max-w-md shadow-2xl">
         <h2 class="text-lg font-bold text-slate-800 dark:text-white mb-4">Edit User</h2>
         <div class="space-y-3">
@@ -237,6 +237,10 @@ export class UsersListComponent implements OnInit {
 
   prevPage(): void { if (this.page > 1) { this.page--; this.loadUsers(); } }
   nextPage(): void { if (this.page * this.limit < this.total()) { this.page++; this.loadUsers(); } }
+
+  closeOnBackdrop(e: MouseEvent): void {
+    if (e.target === e.currentTarget) this.selectedUser = null;
+  }
 
   formatDate(iso: string): string { return iso ? new Date(iso).toLocaleDateString() : '–'; }
 

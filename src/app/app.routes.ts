@@ -55,6 +55,11 @@ export const routes: Routes = [
   { path: 'html-to-pdf',     loadComponent: () => import('./features/html-to-pdf/html-to-pdf.component').then(m => m.HtmlToPdfComponent),           title: 'HTML to PDF — Converter Hub' },
   { path: 'svg-to-pdf',      loadComponent: () => import('./features/svg-to-pdf/svg-to-pdf.component').then(m => m.SvgToPdfComponent),             title: 'SVG to PDF — Converter Hub' },
 
+  // ── New PDF Security / Organisation tools ───────────────────────────────────
+  { path: 'unlock-pdf',   loadComponent: () => import('./features/unlock-pdf/unlock-pdf.component').then(m => m.UnlockPdfComponent),     title: 'Unlock PDF — Converter Hub' },
+  { path: 'protect-pdf',  loadComponent: () => import('./features/protect-pdf/protect-pdf.component').then(m => m.ProtectPdfComponent),   title: 'Protect PDF — Converter Hub' },
+  { path: 'organize-pdf', loadComponent: () => import('./features/organize-pdf/organize-pdf.component').then(m => m.OrganizePdfComponent), title: 'Organize PDF — Converter Hub' },
+
   // ── 404 ──────────────────────────────────────────────────────────────────────
   { path: '**', loadComponent: () => import('./features/not-found/not-found.component').then(m => m.NotFoundComponent), title: 'Page Not Found — Converter Hub' },
 ];

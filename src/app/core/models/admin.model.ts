@@ -57,3 +57,9 @@ export interface Plan {
 export interface AdminUser extends User {
   totalConversions?: number;
 }
+
+export interface TrendingTool {
+  tool:     string;
+  count:    number;
+  lastUsed: string;
+}

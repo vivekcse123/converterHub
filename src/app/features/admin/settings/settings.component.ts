@@ -1,6 +1,6 @@
 import { Component, OnInit, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { DatePipe } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 import { AdminService } from '../../../core/services/admin.service';
 import { NotificationService } from '../../../core/services/notification.service';
 import { Plan } from '../../../core/models/admin.model';
@@ -10,7 +10,7 @@ interface LogEntry { timestamp: string; level: string; message: string; meta?: a
 @Component({
   selector: 'app-settings',
   standalone: true,
-  imports: [FormsModule, DatePipe],
+  imports: [FormsModule, CommonModule],
   template: `
     <div>
       <h1 class="text-2xl font-bold text-slate-800 dark:text-white mb-6">Settings</h1>
@@ -27,7 +27,7 @@ interface LogEntry { timestamp: string; level: string; message: string; meta?: a
           <div class="bg-white dark:bg-slate-800 rounded-xl p-5 shadow-sm border border-slate-100 dark:border-slate-700">
             <div class="flex items-center justify-between mb-3">
               <span class="text-sm font-bold text-slate-800 dark:text-white capitalize">{{ plan.id }}</span>
-              <span class="text-lg font-semibold text-indigo-600">${{ plan.price?.monthly }}/mo</span>
+              <span class="text-lg font-semibold text-indigo-600">{{ plan.price.monthly | currency : 'USD'}}/mo</span>
             </div>
             @if (editingPlan !== plan.id) {
               <ul class="space-y-1 text-xs text-slate-600 dark:text-slate-400 mb-3">

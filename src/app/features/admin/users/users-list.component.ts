@@ -118,6 +118,55 @@ import { PaginatedApiResponse } from '../../../core/models/user.model';
       </div>
     </div>
 
+    <!-- Create User Modal -->
+    @if (showCreateModal) {
+    <div class="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4" (click)="closeCreateOnBackdrop($event)">
+      <div class="bg-white dark:bg-slate-800 rounded-2xl p-6 w-full max-w-md shadow-2xl">
+        <h2 class="text-lg font-bold text-slate-800 dark:text-white mb-4">Create User</h2>
+        <div class="space-y-3">
+          <div>
+            <label class="text-xs text-slate-500 block mb-1">Name</label>
+            <input type="text" [(ngModel)]="createForm.name" placeholder="Full name"
+                   class="w-full px-3 py-2 rounded-lg border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-700 text-slate-800 dark:text-white text-sm" />
+          </div>
+          <div>
+            <label class="text-xs text-slate-500 block mb-1">Email</label>
+            <input type="email" [(ngModel)]="createForm.email" placeholder="user@example.com"
+                   class="w-full px-3 py-2 rounded-lg border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-700 text-slate-800 dark:text-white text-sm" />
+          </div>
+          <div>
+            <label class="text-xs text-slate-500 block mb-1">Password</label>
+            <input type="password" [(ngModel)]="createForm.password" placeholder="Min 8 characters"
+                   class="w-full px-3 py-2 rounded-lg border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-700 text-slate-800 dark:text-white text-sm" />
+          </div>
+          <div>
+            <label class="text-xs text-slate-500 block mb-1">Role</label>
+            <select [(ngModel)]="createForm.role"
+                   class="w-full px-3 py-2 rounded-lg border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-700 text-slate-800 dark:text-white text-sm">
+              <option value="user">User</option>
+              <option value="premium">Premium</option>
+              <option value="admin">Admin</option>
+            </select>
+          </div>
+          <div>
+            <label class="text-xs text-slate-500 block mb-1">Plan</label>
+            <select [(ngModel)]="createForm.plan"
+                   class="w-full px-3 py-2 rounded-lg border border-slate-200 dark:border-slate-600 bg-white dark:bg-slate-700 text-slate-800 dark:text-white text-sm">
+              <option value="free">Free</option>
+              <option value="pro">Pro</option>
+              <option value="team">Team</option>
+              <option value="enterprise">Enterprise</option>
+            </select>
+          </div>
+        </div>
+        <div class="flex gap-3 mt-5">
+          <button (click)="submitCreateUser()" class="flex-1 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 text-sm font-medium">Create</button>
+          <button (click)="showCreateModal = false" class="flex-1 py-2 bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300 rounded-lg text-sm">Cancel</button>
+        </div>
+      </div>
+    </div>
+    }
+
     <!-- Edit Modal -->
     @if (selectedUser) {
     <div class="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4" (click)="closeOnBackdrop($event)">
@@ -174,6 +223,7 @@ export class UsersListComponent implements OnInit {
   selectedUser:  User | null = null;
   editForm: any  = {};
   showCreateModal = false;
+  createForm: any = { name: '', email: '', password: '', role: 'user', plan: 'free' };
   searchTimeout: any;
 
   constructor(private adminService: AdminService, private notify: NotificationService) {}
@@ -197,6 +247,24 @@ export class UsersListComponent implements OnInit {
   onSearch(): void {
     clearTimeout(this.searchTimeout);
     this.searchTimeout = setTimeout(() => { this.page = 1; this.loadUsers(); }, 300);
+  }
+
+  submitCreateUser(): void {
+    const { name, email, password, role, plan } = this.createForm;
+    if (!name || !email || !password) { this.notify.error('Name, email and password are required'); return; }
+    this.adminService.createUser({ name, email, password, role, subscription: { plan } } as any).subscribe({
+      next: () => {
+        this.notify.success('User created');
+        this.showCreateModal = false;
+        this.createForm = { name: '', email: '', password: '', role: 'user', plan: 'free' };
+        this.loadUsers();
+      },
+      error: (err) => this.notify.error(err?.error?.message || 'Failed to create user'),
+    });
+  }
+
+  closeCreateOnBackdrop(e: MouseEvent): void {
+    if (e.target === e.currentTarget) this.showCreateModal = false;
   }
 
   editUser(user: User): void {

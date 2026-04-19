@@ -82,11 +82,7 @@ export class ImageToPdfComponent {
 
   downloadFile(): void {
     const res = this.result();
-    if (!res) return;
-    const a = this.doc.createElement('a');
-    a.href = res.downloadUrl;
-    a.download = res.fileName;
-    a.click();
+    if (res) this.converter.downloadResult(res);
   }
 
   reset(): void {

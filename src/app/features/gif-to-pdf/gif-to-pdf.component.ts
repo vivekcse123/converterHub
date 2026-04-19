@@ -34,7 +34,7 @@ import { ConversionResult } from '../../core/models/conversion.model';
         @if (result()) {
         <div class="p-4 bg-emerald-50 dark:bg-emerald-900/20 rounded-xl text-center">
           <p class="text-emerald-700 dark:text-emerald-400 text-sm mb-2">Done!</p>
-          <a [href]="result()!.downloadUrl" target="_blank" class="inline-flex items-center gap-2 px-4 py-2 bg-emerald-600 text-white rounded-lg text-sm hover:bg-emerald-700">Download PDF</a>
+          <button type="button" (click)="c.downloadResult(result()!)" class="inline-flex items-center gap-2 px-4 py-2 bg-emerald-600 text-white rounded-lg text-sm hover:bg-emerald-700">Download PDF</button>
         </div>
         }
       </div>

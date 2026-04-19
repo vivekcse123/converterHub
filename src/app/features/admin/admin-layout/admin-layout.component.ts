@@ -12,7 +12,7 @@ import { AuthService } from '../../../core/services/auth.service';
       <!-- Mobile top bar -->
       <header class="lg:hidden flex items-center justify-between bg-slate-900 text-white px-4 py-3 sticky top-0 z-40">
         <span class="flex items-center gap-2 text-lg font-bold">
-          <img src="assets/web-app-manifest-192x192.png" alt="logo" class="w-8 h-8 object-contain">
+          <img src="assets/web-app-manifest-192x192.png" alt="logo" class="w-12 h-12 object-contain">
           Admin Panel
         </span>
         <button (click)="sidebarOpen.set(!sidebarOpen())" class="p-2 rounded-lg hover:bg-slate-700 transition-colors">
@@ -34,7 +34,7 @@ import { AuthService } from '../../../core/services/auth.service';
         <aside [class]="sidebarOpen() ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'"
                class="fixed lg:sticky top-0 lg:top-0 z-40 h-screen w-64 shrink-0 bg-slate-900 text-white flex flex-col transition-transform duration-200 ease-in-out">
           <div class="hidden lg:flex items-center gap-3 px-6 py-5 border-b border-slate-700">
-            <img src="assets/web-app-manifest-192x192.png" alt="ApnaConverter logo" class="w-9 h-9 object-contain">
+            <img src="assets/web-app-manifest-192x192.png" alt="ApnaConverter logo" class="w-12 h-12 object-contain">
             <span class="text-xl font-bold tracking-tight">Admin Panel</span>
           </div>
           <nav class="flex-1 p-4 space-y-1 overflow-y-auto mt-2 lg:mt-0">

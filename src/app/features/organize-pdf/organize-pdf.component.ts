@@ -76,7 +76,7 @@ import { FormsModule } from '@angular/forms';
             <p class="text-sm text-slate-500 dark:text-slate-400 mb-4">Output has {{ result()!.pageCount }} pages.</p>
           }
           <div class="flex gap-3 justify-center">
-            <a [href]="result()!.downloadUrl" [download]="result()!.fileName" class="btn btn-primary">⬇️ Download PDF</a>
+            <button type="button" (click)="converter.downloadResult(result()!)" class="btn btn-primary">⬇️ Download PDF</button>
             <button (click)="reset()" class="btn btn-secondary">🔄 Organize Another</button>
           </div>
         </div>

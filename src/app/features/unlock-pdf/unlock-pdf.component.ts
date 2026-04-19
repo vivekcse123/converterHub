@@ -59,7 +59,7 @@ import { FormsModule } from '@angular/forms';
           <div class="text-5xl mb-4">✅</div>
           <h2 class="text-xl font-bold mb-4 text-slate-800 dark:text-white">PDF unlocked!</h2>
           <div class="flex gap-3 justify-center">
-            <a [href]="result()!.downloadUrl" [download]="result()!.fileName" class="btn btn-primary">⬇️ Download PDF</a>
+            <button type="button" (click)="converter.downloadResult(result()!)" class="btn btn-primary">⬇️ Download PDF</button>
             <button (click)="reset()" class="btn btn-secondary">🔄 Unlock Another</button>
           </div>
         </div>

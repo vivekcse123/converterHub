@@ -68,7 +68,7 @@ import { FormsModule } from '@angular/forms';
           <h2 class="text-xl font-bold mb-4 text-slate-800 dark:text-white">PDF protected!</h2>
           <p class="text-sm text-slate-500 dark:text-slate-400 mb-6">Your PDF has been stamped. Store your password safely.</p>
           <div class="flex gap-3 justify-center">
-            <a [href]="result()!.downloadUrl" [download]="result()!.fileName" class="btn btn-primary">⬇️ Download PDF</a>
+            <button type="button" (click)="converter.downloadResult(result()!)" class="btn btn-primary">⬇️ Download PDF</button>
             <button (click)="reset()" class="btn btn-secondary">🔄 Protect Another</button>
           </div>
         </div>

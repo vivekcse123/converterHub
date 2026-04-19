@@ -1,4 +1,5 @@
-import { Injectable, signal } from '@angular/core';
+import { Injectable, signal, inject, PLATFORM_ID } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 import { Observable, map, filter, catchError, throwError } from 'rxjs';
 import { ApiService } from './api.service';
 import { ConversionResult } from '../models/conversion.model';
@@ -14,8 +15,33 @@ export class ConverterService {
   readonly progressLabel  = signal<string>('Uploading…');
 
   private processingTicker?: ReturnType<typeof setInterval>;
+  private readonly isBrowser = isPlatformBrowser(inject(PLATFORM_ID));
 
   constructor(private api: ApiService) {}
+
+  /**
+   * Download a conversion result reliably across origins.
+   * Fetches as a blob so the `download` attribute works even for cross-origin URLs.
+   */
+  downloadResult(res: ConversionResult): void {
+    if (!this.isBrowser) return;
+    this.api.downloadBlob(res.downloadUrl).subscribe({
+      next: (blob) => {
+        const url = URL.createObjectURL(blob);
+        const a   = document.createElement('a');
+        a.href     = url;
+        a.download = res.fileName;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        setTimeout(() => URL.revokeObjectURL(url), 10_000);
+      },
+      error: () => {
+        // Fallback: open in new tab
+        window.open(res.downloadUrl, '_blank');
+      },
+    });
+  }
   imageToPdf(files: File[], options: Record<string, string> = {}): Observable<ConversionResult> {
     return this.doUpload('convert/image-to-pdf', files, options, true);
   }

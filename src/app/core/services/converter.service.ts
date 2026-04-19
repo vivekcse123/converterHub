@@ -19,10 +19,6 @@ export class ConverterService {
 
   constructor(private api: ApiService) {}
 
-  /**
-   * Download a conversion result.
-   * Opens in new tab — backend sends Content-Disposition:attachment so browser downloads it.
-   */
   downloadResult(res: ConversionResult): void {
     if (!this.isBrowser) return;
     window.open(res.downloadUrl, '_blank');

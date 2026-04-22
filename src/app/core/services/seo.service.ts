@@ -1,4 +1,5 @@
-import { Injectable, inject } from '@angular/core';
+import { Injectable, inject, PLATFORM_ID } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 import { Meta, Title } from '@angular/platform-browser';
 import { Router, NavigationEnd, ActivatedRoute } from '@angular/router';
 import { filter, map } from 'rxjs';
@@ -9,11 +10,13 @@ const SITE_URL   = 'https://www.apnaconverter.com';
 
 @Injectable({ providedIn: 'root' })
 export class SeoService {
-  private meta   = inject(Meta);
-  private title  = inject(Title);
-  private router = inject(Router);
-  private route  = inject(ActivatedRoute);
+  private meta       = inject(Meta);
+  private title      = inject(Title);
+  private router     = inject(Router);
+  private route      = inject(ActivatedRoute);
+  private isBrowser  = isPlatformBrowser(inject(PLATFORM_ID));
 
+  /** Bootstrap automatic per-route SEO updates. Call once in AppComponent.ngOnInit(). */
   init(): void {
     this.router.events.pipe(
       filter(e => e instanceof NavigationEnd),
@@ -23,16 +26,40 @@ export class SeoService {
         return child.snapshot;
       })
     ).subscribe(snapshot => {
-      const t = snapshot.title || BASE_TITLE;
-      const description = (snapshot.data['description'] as string) || BASE_DESC;
-      const url = SITE_URL + this.router.url;
-
-      this.title.setTitle(t);
-      this.meta.updateTag({ name: 'description',       content: description });
-      this.meta.updateTag({ property: 'og:title',       content: t });
-      this.meta.updateTag({ property: 'og:description', content: description });
-      this.meta.updateTag({ property: 'og:url',         content: url });
-      this.meta.updateTag({ rel: 'canonical',            href: url });
+      const t    = snapshot.title    || BASE_TITLE;
+      const desc = (snapshot.data['description'] as string) || BASE_DESC;
+      this.setPage({ title: t, description: desc });
     });
+  }
+
+  /**
+   * Imperatively update all SEO tags for a page.
+   * Components that need custom descriptions call this in ngOnInit().
+   */
+  setPage(opts: { title: string; description: string; canonical?: string }): void {
+    const url = opts.canonical ?? (SITE_URL + this.router.url.split('?')[0]);
+
+    this.title.setTitle(opts.title);
+
+    this.meta.updateTag({ name: 'description',        content: opts.description });
+    this.meta.updateTag({ property: 'og:title',        content: opts.title });
+    this.meta.updateTag({ property: 'og:description',  content: opts.description });
+    this.meta.updateTag({ property: 'og:url',          content: url });
+    this.meta.updateTag({ name: 'twitter:title',        content: opts.title });
+    this.meta.updateTag({ name: 'twitter:description',  content: opts.description });
+
+    // <link rel="canonical"> must be a DOM link element, not a meta tag
+    this.setCanonical(url);
+  }
+
+  private setCanonical(url: string): void {
+    if (!this.isBrowser) return;
+    let link: HTMLLinkElement | null = document.querySelector('link[rel="canonical"]');
+    if (!link) {
+      link = document.createElement('link');
+      link.setAttribute('rel', 'canonical');
+      document.head.appendChild(link);
+    }
+    link.setAttribute('href', url);
   }
 }

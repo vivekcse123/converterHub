@@ -15,7 +15,7 @@ import { FormsModule } from '@angular/forms';
       <div class="container-app text-center">
         <div class="w-16 h-16 mx-auto mb-5 bg-white/20 rounded-2xl flex items-center justify-center text-3xl">🛡️</div>
         <h1 class="text-3xl md:text-4xl font-extrabold mb-3">Protect PDF</h1>
-        <p class="text-red-100 text-lg max-w-md mx-auto">Add a password and protection stamp to your PDF.</p>
+        <p class="text-red-100 text-lg max-w-md mx-auto">Add real password encryption to your PDF.</p>
       </div>
     </div>
 
@@ -38,18 +38,21 @@ import { FormsModule } from '@angular/forms';
             </div>
             <div>
               <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">
-                Owner Password (optional)
+                Owner Password <span class="text-slate-400 text-xs font-normal">(optional — defaults to user password)</span>
               </label>
-              <input type="password" [(ngModel)]="ownerPassword" placeholder="Defaults to user password"
+              <input type="password" [(ngModel)]="ownerPassword" placeholder="Leave blank to use same password"
                 class="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700
                        bg-white dark:bg-slate-800 text-slate-800 dark:text-white text-sm
                        focus:outline-none focus:ring-2 focus:ring-primary-500" />
+            </div>
+            <div class="rounded-xl bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-700 p-3 text-xs text-amber-800 dark:text-amber-300">
+              ℹ️ Your PDF will be encrypted with AES encryption. Store the password safely — there is no recovery option.
             </div>
             <div class="flex justify-center pt-2">
               <button (click)="convert()" [disabled]="converter.isConverting() || userPassword.length < 4"
                 class="btn btn-primary btn-lg min-w-[200px] disabled:opacity-50">
                 @if (!converter.isConverting()) { <span>🛡️ Protect PDF</span> }
-                @if (converter.isConverting())  { <span>Protecting…</span> }
+                @if (converter.isConverting())  { <span>Encrypting…</span> }
               </button>
             </div>
           </div>
@@ -57,18 +60,20 @@ import { FormsModule } from '@angular/forms';
 
         @if (converter.isConverting()) {
           <div class="mt-4">
-            <app-progress-bar [value]="converter.uploadProgress()" label="Protecting PDF…" />
+            <app-progress-bar [value]="converter.uploadProgress()" label="Encrypting PDF…" />
           </div>
         }
       </div>
 
       @if (result()) {
         <div class="card p-8 text-center mt-6 animate-bounce-in">
-          <div class="text-5xl mb-4">✅</div>
-          <h2 class="text-xl font-bold mb-4 text-slate-800 dark:text-white">PDF protected!</h2>
-          <p class="text-sm text-slate-500 dark:text-slate-400 mb-6">Your PDF has been stamped. Store your password safely.</p>
+          <div class="text-5xl mb-4">🔐</div>
+          <h2 class="text-xl font-bold mb-2 text-slate-800 dark:text-white">PDF encrypted!</h2>
+          <p class="text-sm text-slate-500 dark:text-slate-400 mb-6">
+            Your PDF is now password-protected. Keep the password safe — it cannot be recovered.
+          </p>
           <div class="flex gap-3 justify-center">
-            <button type="button" (click)="converter.downloadResult(result()!)" class="btn btn-primary">⬇️ Download PDF</button>
+            <button type="button" (click)="converter.downloadResult(result()!)" class="btn btn-primary">⬇️ Download Protected PDF</button>
             <button (click)="reset()" class="btn btn-secondary">🔄 Protect Another</button>
           </div>
         </div>
@@ -90,7 +95,7 @@ export class ProtectPdfComponent {
     const f = this.file();
     if (!f || this.userPassword.length < 4) return;
     this.converter.protectPdf(f, this.userPassword, this.ownerPassword || undefined).subscribe({
-      next: (r) => { this.result.set(r); this.notify.success('Done!', 'PDF protected with stamp.'); },
+      next:  (r) => { this.result.set(r); this.notify.success('Done!', 'PDF encrypted successfully.'); },
       error: (e) => this.notify.error('Failed', e.error?.message ?? 'Could not protect PDF'),
     });
   }

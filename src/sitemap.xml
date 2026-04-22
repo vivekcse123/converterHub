@@ -1,38 +1,52 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url><loc>https://www.apnaconverter.com/</loc><changefreq>weekly</changefreq><priority>1.0</priority></url>
-  <url><loc>https://www.apnaconverter.com/pdf-editor</loc><changefreq>monthly</changefreq><priority>0.9</priority></url>
-  <url><loc>https://www.apnaconverter.com/image-editor</loc><changefreq>monthly</changefreq><priority>0.9</priority></url>
-  <url><loc>https://www.apnaconverter.com/pdf-to-word</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://www.apnaconverter.com/word-to-pdf</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://www.apnaconverter.com/pdf-to-jpg</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://www.apnaconverter.com/image-to-pdf</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://www.apnaconverter.com/compress</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://www.apnaconverter.com/ocr</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://www.apnaconverter.com/pdf-to-txt</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://www.apnaconverter.com/pdf-to-csv</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://www.apnaconverter.com/pdf-to-excel</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://www.apnaconverter.com/pdf-to-json</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://www.apnaconverter.com/pdf-to-xml</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://www.apnaconverter.com/pdf-to-markdown</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://www.apnaconverter.com/pdf-to-epub</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://www.apnaconverter.com/pdf-to-pptx</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://www.apnaconverter.com/pdf-to-pdfa</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://www.apnaconverter.com/html-to-pdf</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://www.apnaconverter.com/markdown-to-pdf</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://www.apnaconverter.com/svg-to-pdf</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://www.apnaconverter.com/csv-to-pdf</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://www.apnaconverter.com/text-to-pdf</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://www.apnaconverter.com/gif-to-pdf</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://www.apnaconverter.com/heic-to-jpg</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://www.apnaconverter.com/watermark-pdf</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://www.apnaconverter.com/sign-pdf</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://www.apnaconverter.com/page-numbers</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://www.apnaconverter.com/redact-pdf</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://www.apnaconverter.com/compare-pdfs</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://www.apnaconverter.com/protect-pdf</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://www.apnaconverter.com/unlock-pdf</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://www.apnaconverter.com/organize-pdf</loc><changefreq>monthly</changefreq><priority>0.7</priority></url>
-  <url><loc>https://www.apnaconverter.com/login</loc><changefreq>yearly</changefreq><priority>0.4</priority></url>
-  <url><loc>https://www.apnaconverter.com/register</loc><changefreq>yearly</changefreq><priority>0.4</priority></url>
+  <url><loc>https://www.apnaconverter.com/</loc><lastmod>2026-04-22</lastmod><changefreq>weekly</changefreq><priority>1.0</priority></url>
+
+  <!-- PDF Tools -->
+  <url><loc>https://www.apnaconverter.com/pdf-editor</loc><lastmod>2026-04-22</lastmod><changefreq>monthly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://www.apnaconverter.com/pdf-to-word</loc><lastmod>2026-04-22</lastmod><changefreq>monthly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://www.apnaconverter.com/word-to-pdf</loc><lastmod>2026-04-22</lastmod><changefreq>monthly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://www.apnaconverter.com/image-to-pdf</loc><lastmod>2026-04-22</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://www.apnaconverter.com/pdf-to-jpg</loc><lastmod>2026-04-22</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://www.apnaconverter.com/compress</loc><lastmod>2026-04-22</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://www.apnaconverter.com/ocr</loc><lastmod>2026-04-22</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+
+  <!-- PDF Security -->
+  <url><loc>https://www.apnaconverter.com/protect-pdf</loc><lastmod>2026-04-22</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://www.apnaconverter.com/unlock-pdf</loc><lastmod>2026-04-22</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://www.apnaconverter.com/organize-pdf</loc><lastmod>2026-04-22</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://www.apnaconverter.com/redact-pdf</loc><lastmod>2026-04-22</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+
+  <!-- PDF Enhancements -->
+  <url><loc>https://www.apnaconverter.com/watermark-pdf</loc><lastmod>2026-04-22</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://www.apnaconverter.com/sign-pdf</loc><lastmod>2026-04-22</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://www.apnaconverter.com/page-numbers</loc><lastmod>2026-04-22</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://www.apnaconverter.com/compare-pdfs</loc><lastmod>2026-04-22</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://www.apnaconverter.com/pdf-to-pdfa</loc><lastmod>2026-04-22</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+
+  <!-- PDF Export -->
+  <url><loc>https://www.apnaconverter.com/pdf-to-txt</loc><lastmod>2026-04-22</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://www.apnaconverter.com/pdf-to-csv</loc><lastmod>2026-04-22</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://www.apnaconverter.com/pdf-to-excel</loc><lastmod>2026-04-22</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://www.apnaconverter.com/pdf-to-json</loc><lastmod>2026-04-22</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://www.apnaconverter.com/pdf-to-xml</loc><lastmod>2026-04-22</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://www.apnaconverter.com/pdf-to-markdown</loc><lastmod>2026-04-22</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://www.apnaconverter.com/pdf-to-epub</loc><lastmod>2026-04-22</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://www.apnaconverter.com/pdf-to-pptx</loc><lastmod>2026-04-22</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+
+  <!-- Convert to PDF -->
+  <url><loc>https://www.apnaconverter.com/html-to-pdf</loc><lastmod>2026-04-22</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://www.apnaconverter.com/markdown-to-pdf</loc><lastmod>2026-04-22</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://www.apnaconverter.com/svg-to-pdf</loc><lastmod>2026-04-22</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://www.apnaconverter.com/csv-to-pdf</loc><lastmod>2026-04-22</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://www.apnaconverter.com/text-to-pdf</loc><lastmod>2026-04-22</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://www.apnaconverter.com/gif-to-pdf</loc><lastmod>2026-04-22</lastmod><changefreq>monthly</changefreq><priority>0.6</priority></url>
+
+  <!-- Image Tools -->
+  <url><loc>https://www.apnaconverter.com/image-editor</loc><lastmod>2026-04-22</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://www.apnaconverter.com/heic-to-jpg</loc><lastmod>2026-04-22</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+
+  <!-- Auth -->
+  <url><loc>https://www.apnaconverter.com/login</loc><lastmod>2026-04-22</lastmod><changefreq>yearly</changefreq><priority>0.4</priority></url>
+  <url><loc>https://www.apnaconverter.com/register</loc><lastmod>2026-04-22</lastmod><changefreq>yearly</changefreq><priority>0.4</priority></url>
 </urlset>

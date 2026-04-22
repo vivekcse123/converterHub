@@ -6,11 +6,12 @@ import { ProgressBarComponent } from '../../shared/components/progress-bar/progr
 import { ConverterService } from '../../core/services/converter.service';
 import { NotificationService } from '../../core/services/notification.service';
 import { ConversionResult } from '../../core/models/conversion.model';
+import { AdBannerComponent } from '../../shared/components/ad-banner/ad-banner.component';
 
 @Component({
   selector: 'app-image-to-pdf',
   standalone: true,
-  imports: [FormsModule, FileUploadComponent, ProgressBarComponent],
+  imports: [FormsModule, FileUploadComponent, ProgressBarComponent, AdBannerComponent],
   templateUrl: './image-to-pdf.component.html',
   styleUrls: ['./image-to-pdf.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,

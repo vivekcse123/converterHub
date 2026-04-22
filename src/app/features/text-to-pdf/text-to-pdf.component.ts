@@ -3,11 +3,12 @@ import { FormsModule } from '@angular/forms';
 import { ConverterService } from '../../core/services/converter.service';
 import { NotificationService } from '../../core/services/notification.service';
 import { ConversionResult } from '../../core/models/conversion.model';
+import { AdBannerComponent } from '../../shared/components/ad-banner/ad-banner.component';
 
 @Component({
   selector: 'app-text-to-pdf',
   standalone: true,
-  imports: [FormsModule],
+  imports: [FormsModule, AdBannerComponent],
   template: `
     <div class="bg-gradient-to-r from-amber-400 to-orange-500 text-white py-14">
       <div class="container-app text-center">
@@ -55,6 +56,7 @@ import { ConversionResult } from '../../core/models/conversion.model';
           <button (click)="result.set(null)" class="btn btn-secondary">🔄 New Text</button>
         </div>
       </div>
+        <app-ad-banner slot="rectangle" />
       }
     </div>
   `,

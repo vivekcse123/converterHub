@@ -3,11 +3,12 @@ import { FormsModule } from '@angular/forms';
 import { ConverterService } from '../../core/services/converter.service';
 import { NotificationService } from '../../core/services/notification.service';
 import { ConversionResult } from '../../core/models/conversion.model';
+import { AdBannerComponent } from '../../shared/components/ad-banner/ad-banner.component';
 
 @Component({
   selector: 'app-pdf-to-jpg',
   standalone: true,
-  imports: [FormsModule],
+  imports: [FormsModule, AdBannerComponent],
   template: `
     <div class="max-w-2xl mx-auto px-4 py-10">
       <h1 class="text-2xl font-bold text-slate-800 dark:text-white mb-1">PDF to JPG</h1>

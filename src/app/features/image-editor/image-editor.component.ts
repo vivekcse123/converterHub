@@ -5,13 +5,14 @@ import { ProgressBarComponent } from '../../shared/components/progress-bar/progr
 import { ConverterService } from '../../core/services/converter.service';
 import { NotificationService } from '../../core/services/notification.service';
 import { ConversionResult } from '../../core/models/conversion.model';
+import { AdBannerComponent } from '../../shared/components/ad-banner/ad-banner.component';
 
 type ImageAction = 'resize' | 'compress' | 'convert';
 
 @Component({
   selector: 'app-image-editor',
   standalone: true,
-  imports: [FormsModule, FileUploadComponent, ProgressBarComponent],
+  imports: [FormsModule, FileUploadComponent, ProgressBarComponent, AdBannerComponent],
   templateUrl: './image-editor.component.html',
 })
 export class ImageEditorComponent {

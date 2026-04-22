@@ -2,6 +2,7 @@ import { Component, signal } from '@angular/core';
 import { ConverterService } from '../../core/services/converter.service';
 import { NotificationService } from '../../core/services/notification.service';
 import { ConversionResult } from '../../core/models/conversion.model';
+import { AdBannerComponent } from '../../shared/components/ad-banner/ad-banner.component';
 
 @Component({
   selector: 'app-html-to-pdf',

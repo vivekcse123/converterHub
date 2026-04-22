@@ -5,11 +5,12 @@ import { ProgressBarComponent } from '../../shared/components/progress-bar/progr
 import { ConverterService } from '../../core/services/converter.service';
 import { NotificationService } from '../../core/services/notification.service';
 import { ConversionResult } from '../../core/models/conversion.model';
+import { AdBannerComponent } from '../../shared/components/ad-banner/ad-banner.component';
 
 @Component({
   selector: 'app-compress',
   standalone: true,
-  imports: [FormsModule, FileUploadComponent, ProgressBarComponent],
+  imports: [FormsModule, FileUploadComponent, ProgressBarComponent, AdBannerComponent],
   template: `
     <div class="bg-gradient-to-r from-emerald-500 to-teal-500 text-white py-14">
       <div class="container-app text-center">
@@ -51,6 +52,7 @@ import { ConversionResult } from '../../core/models/conversion.model';
           <button (click)="reset()" class="btn btn-secondary">🔄 Create Another</button>
         </div>
       </div>
+        <app-ad-banner slot="rectangle" />
       }
     </div>
   `,

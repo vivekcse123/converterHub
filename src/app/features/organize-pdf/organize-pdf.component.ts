@@ -4,12 +4,13 @@ import { ProgressBarComponent } from '../../shared/components/progress-bar/progr
 import { ConverterService } from '../../core/services/converter.service';
 import { NotificationService } from '../../core/services/notification.service';
 import { ConversionResult } from '../../core/models/conversion.model';
+import { AdBannerComponent } from '../../shared/components/ad-banner/ad-banner.component';
 import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-organize-pdf',
   standalone: true,
-  imports: [FileUploadComponent, ProgressBarComponent, FormsModule],
+  imports: [FileUploadComponent, ProgressBarComponent, FormsModule, AdBannerComponent],
   template: `
     <div class="bg-gradient-to-r from-purple-600 to-violet-600 text-white py-14">
       <div class="container-app text-center">
@@ -80,6 +81,7 @@ import { FormsModule } from '@angular/forms';
             <button (click)="reset()" class="btn btn-secondary">🔄 Organize Another</button>
           </div>
         </div>
+        <app-ad-banner slot="rectangle" />
       }
     </div>
   `,

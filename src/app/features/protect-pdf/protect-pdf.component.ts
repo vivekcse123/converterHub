@@ -5,11 +5,12 @@ import { ConverterService } from '../../core/services/converter.service';
 import { NotificationService } from '../../core/services/notification.service';
 import { ConversionResult } from '../../core/models/conversion.model';
 import { FormsModule } from '@angular/forms';
+import { AdBannerComponent } from '../../shared/components/ad-banner/ad-banner.component';
 
 @Component({
   selector: 'app-protect-pdf',
   standalone: true,
-  imports: [FileUploadComponent, ProgressBarComponent, FormsModule],
+  imports: [FileUploadComponent, ProgressBarComponent, FormsModule, AdBannerComponent],
   template: `
     <div class="bg-gradient-to-r from-red-600 to-rose-600 text-white py-14">
       <div class="container-app text-center">
@@ -77,6 +78,7 @@ import { FormsModule } from '@angular/forms';
             <button (click)="reset()" class="btn btn-secondary">🔄 Protect Another</button>
           </div>
         </div>
+        <app-ad-banner slot="rectangle" />
       }
     </div>
   `,

@@ -49,6 +49,11 @@
   </div>
 </section>
 
+<!-- ─── Ad: below stats ───────────────────────────────────────── -->
+<div class="container-app">
+  <app-ad-banner slot="horizontal" />
+</div>
+
 <!-- ─── Trending section ──────────────────────────────────────── -->
 @if (trendingService.loaded() && trendingService.trending().length > 0) {
 <section class="container-app py-10">
@@ -124,6 +129,11 @@
     </div>
   </div>
 </section>
+
+<!-- ─── Ad: above CTA ────────────────────────────────────────── -->
+<div class="container-app">
+  <app-ad-banner slot="horizontal" />
+</div>
 
 <!-- ─── CTA ───────────────────────────────────────────────────── -->
 <section class="container-app py-20 text-center">

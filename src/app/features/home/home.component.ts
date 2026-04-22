@@ -2,13 +2,14 @@ import { Component, computed, signal, OnInit } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { ToolCardComponent } from '../../shared/components/tool-card/tool-card.component';
 import { GlobalSearchComponent } from '../../shared/components/global-search/global-search.component';
+import { AdBannerComponent } from '../../shared/components/ad-banner/ad-banner.component';
 import { TOOLS, Tool, ToolCategory } from '../../core/models/tool.model';
 import { TrendingService } from '../../core/services/trending.service';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [RouterLink, ToolCardComponent, GlobalSearchComponent],
+  imports: [RouterLink, ToolCardComponent, GlobalSearchComponent, AdBannerComponent],
   templateUrl: './home.component.html',
 })
 export class HomeComponent implements OnInit {

@@ -35,7 +35,8 @@
               "src/favicon.ico",
               "src/assets",
               "src/sitemap.xml",
-              "src/robots.txt"
+              "src/robots.txt",
+              "src/ads.txt"
             ],
             "styles": ["src/styles.css"],
             "scripts": []

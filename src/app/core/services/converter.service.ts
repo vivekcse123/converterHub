@@ -19,28 +19,9 @@ export class ConverterService {
 
   constructor(private api: ApiService) {}
 
-  /**
-   * Download a conversion result reliably across origins.
-   * Fetches as a blob so the `download` attribute works even for cross-origin URLs.
-   */
   downloadResult(res: ConversionResult): void {
     if (!this.isBrowser) return;
-    this.api.downloadBlob(res.downloadUrl).subscribe({
-      next: (blob) => {
-        const url = URL.createObjectURL(blob);
-        const a   = document.createElement('a');
-        a.href     = url;
-        a.download = res.fileName;
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        setTimeout(() => URL.revokeObjectURL(url), 10_000);
-      },
-      error: () => {
-        // Fallback: open in new tab
-        window.open(res.downloadUrl, '_blank');
-      },
-    });
+    window.open(res.downloadUrl, '_blank');
   }
   imageToPdf(files: File[], options: Record<string, string> = {}): Observable<ConversionResult> {
     return this.doUpload('convert/image-to-pdf', files, options, true);
@@ -241,38 +222,39 @@ export class ConverterService {
     return this.doUploadFd(endpoint, fd);
   }
 
-  /** Upload a pre-built FormData with progress tracking (two-phase: upload + processing). */
+  /** Upload FormData with immediate fake progress animation (works regardless of upload speed). */
   private doUploadFd(endpoint: string, fd: FormData): Observable<ConversionResult> {
     this.isConverting.set(true);
     this.uploadProgress.set(0);
     this.progressLabel.set('Uploading…');
     this.stopProcessingTicker();
 
+    // Start fake progress immediately — small files complete upload before
+    // HttpEventType.UploadProgress fires, so we animate from the start.
+    let fakeProgress = 0;
+    this.processingTicker = setInterval(() => {
+      fakeProgress += 1;
+      if (fakeProgress <= 30) {
+        // Fast ramp 0→30% (upload phase)
+        this.uploadProgress.set(fakeProgress);
+        this.progressLabel.set('Uploading…');
+      } else if (fakeProgress <= 90) {
+        // Slow crawl 30→90% (processing phase)
+        this.uploadProgress.set(fakeProgress);
+        this.progressLabel.set('Processing…');
+      }
+      // Stops at 90 — finalized to 100 on response
+    }, 150);
+
     return this.api.uploadWithProgress<{ data: ConversionResult }>(endpoint, fd).pipe(
       map((event: UploadEvent) => {
         if (event.result) {
-          // Response received — finalize
           this.stopProcessingTicker();
           this.uploadProgress.set(100);
           this.progressLabel.set('Done!');
           this.isConverting.set(false);
           return event.result.data;
         }
-
-        // Map raw upload progress (0–100) → display range 0–65%
-        const uploadPct = Math.min(event.progress, 100);
-        const displayPct = Math.round(uploadPct * 0.65);
-        this.uploadProgress.set(displayPct);
-
-        // Once upload bytes are fully sent, start processing animation (65→95%)
-        if (uploadPct >= 100 && !this.processingTicker) {
-          this.progressLabel.set('Processing…');
-          this.processingTicker = setInterval(() => {
-            const cur = this.uploadProgress();
-            if (cur < 95) this.uploadProgress.set(cur + 1);
-          }, 120);
-        }
-
         return null as unknown as ConversionResult;
       }),
       filter((v): v is ConversionResult => v !== null),

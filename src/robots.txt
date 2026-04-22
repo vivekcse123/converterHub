@@ -5,4 +5,4 @@ Disallow: /admin/
 Disallow: /dashboard/
 Disallow: /api/
 
-Sitemap: https://converterhub.app/sitemap.xml
+Sitemap: https://www.apnaconverter.com/sitemap.xml

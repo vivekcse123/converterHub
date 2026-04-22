@@ -11,7 +11,10 @@ import { AuthService } from '../../../core/services/auth.service';
 
       <!-- Mobile top bar -->
       <header class="lg:hidden flex items-center justify-between bg-slate-900 text-white px-4 py-3 sticky top-0 z-40">
-        <span class="text-lg font-bold"><span class="text-indigo-400">⚙</span> Admin Panel</span>
+        <span class="flex items-center gap-2 text-lg font-bold">
+          <img src="assets/web-app-manifest-192x192.png" alt="logo" class="w-9 h-9 object-contain">
+          Admin Panel
+        </span>
         <button (click)="sidebarOpen.set(!sidebarOpen())" class="p-2 rounded-lg hover:bg-slate-700 transition-colors">
           @if (sidebarOpen()) {
             <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
@@ -30,10 +33,9 @@ import { AuthService } from '../../../core/services/auth.service';
         <!-- Sidebar -->
         <aside [class]="sidebarOpen() ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'"
                class="fixed lg:sticky top-0 lg:top-0 z-40 h-screen w-64 shrink-0 bg-slate-900 text-white flex flex-col transition-transform duration-200 ease-in-out">
-          <div class="hidden lg:block px-6 py-5 border-b border-slate-700">
-            <span class="text-xl font-bold tracking-tight">
-              <span class="text-indigo-400">⚙</span> Admin Panel
-            </span>
+          <div class="hidden lg:flex items-center gap-3 px-6 py-5 border-b border-slate-700">
+            <img src="assets/web-app-manifest-192x192.png" alt="ApnaConverter logo" class="w-9 h-9 object-contain">
+            <span class="text-xl font-bold tracking-tight">Admin Panel</span>
           </div>
           <nav class="flex-1 p-4 space-y-1 overflow-y-auto mt-2 lg:mt-0">
             @for (item of navItems; track item.path) {

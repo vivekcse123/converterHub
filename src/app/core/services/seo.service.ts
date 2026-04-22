@@ -5,7 +5,7 @@ import { filter, map } from 'rxjs';
 
 const BASE_TITLE = 'ApnaConverter — Free Online File Converter';
 const BASE_DESC  = 'Convert PDFs, images, Word documents and more — free, fast, and secure. 30+ tools.';
-const SITE_URL   = 'https://converterhub.app';
+const SITE_URL   = 'https://www.apnaconverter.com';
 
 @Injectable({ providedIn: 'root' })
 export class SeoService {

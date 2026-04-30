@@ -5,7 +5,6 @@ import {
   OnDestroy,
   inject,
   PLATFORM_ID,
-  ElementRef,
   ChangeDetectionStrategy,
 } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
@@ -31,6 +30,10 @@ export type AdSlot = keyof typeof AD_SLOTS;
   selector: 'app-ad-banner',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
+  // Skip Angular hydration — AdSense manipulates the <ins> DOM directly after
+  // load, which conflicts with hydration's DOM reuse. Re-rendering from scratch
+  // on the client lets AdSense take full ownership of the element.
+  host: { ngSkipHydration: 'true' },
   template: `
     <div class="ad-wrapper overflow-hidden text-center" [class]="wrapperClass">
       <ins class="adsbygoogle"

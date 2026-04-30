@@ -1,5 +1,5 @@
 import { Injectable, inject, PLATFORM_ID } from '@angular/core';
-import { isPlatformBrowser } from '@angular/common';
+import { DOCUMENT, isPlatformBrowser } from '@angular/common';
 import { Meta, Title } from '@angular/platform-browser';
 import { Router, NavigationEnd, ActivatedRoute } from '@angular/router';
 import { filter, map } from 'rxjs';
@@ -10,11 +10,11 @@ const SITE_URL   = 'https://www.apnaconverter.com';
 
 @Injectable({ providedIn: 'root' })
 export class SeoService {
-  private meta       = inject(Meta);
-  private title      = inject(Title);
-  private router     = inject(Router);
-  private route      = inject(ActivatedRoute);
-  private isBrowser  = isPlatformBrowser(inject(PLATFORM_ID));
+  private meta      = inject(Meta);
+  private title     = inject(Title);
+  private router    = inject(Router);
+  private route     = inject(ActivatedRoute);
+  private doc       = inject(DOCUMENT);
 
   /** Bootstrap automatic per-route SEO updates. Call once in AppComponent.ngOnInit(). */
   init(): void {
@@ -53,12 +53,11 @@ export class SeoService {
   }
 
   private setCanonical(url: string): void {
-    if (!this.isBrowser) return;
-    let link: HTMLLinkElement | null = document.querySelector('link[rel="canonical"]');
+    let link = this.doc.querySelector<HTMLLinkElement>('link[rel="canonical"]');
     if (!link) {
-      link = document.createElement('link');
+      link = this.doc.createElement('link');
       link.setAttribute('rel', 'canonical');
-      document.head.appendChild(link);
+      this.doc.head.appendChild(link);
     }
     link.setAttribute('href', url);
   }

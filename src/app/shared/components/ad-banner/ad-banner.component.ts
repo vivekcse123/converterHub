@@ -43,8 +43,7 @@ export type AdSlot = keyof typeof AD_SLOTS;
     </div>
   `,
   styles: [`
-    .ad-wrapper { min-height: 90px; }
-    .ad-wrapper.rect { min-height: 250px; }
+    .ad-wrapper { min-height: 0; }
   `],
 })
 export class AdBannerComponent implements AfterViewInit, OnDestroy {

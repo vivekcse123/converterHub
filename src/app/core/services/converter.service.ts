@@ -21,7 +21,13 @@ export class ConverterService {
 
   downloadResult(res: ConversionResult): void {
     if (!this.isBrowser) return;
-    window.open(res.downloadUrl, '_blank');
+    const a = document.createElement('a');
+    a.href = res.downloadUrl;
+    a.download = '';
+    a.rel = 'noopener noreferrer';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
   }
   imageToPdf(files: File[], options: Record<string, string> = {}): Observable<ConversionResult> {
     return this.doUpload('convert/image-to-pdf', files, options, true);

@@ -1,9 +1,12 @@
-import { Component, signal } from '@angular/core';
+import { Component, OnInit, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ConverterService } from '../../core/services/converter.service';
 import { NotificationService } from '../../core/services/notification.service';
+import { SeoService } from '../../core/services/seo.service';
 import { ConversionResult } from '../../core/models/conversion.model';
 import { AdBannerComponent } from '../../shared/components/ad-banner/ad-banner.component';
+
+const MAX_SIZE_BYTES = 50 * 1024 * 1024;
 
 @Component({
   selector: 'app-pdf-to-jpg',
@@ -12,7 +15,7 @@ import { AdBannerComponent } from '../../shared/components/ad-banner/ad-banner.c
   template: `
     <div class="max-w-2xl mx-auto px-4 py-10">
       <h1 class="text-2xl font-bold text-slate-800 dark:text-white mb-1">PDF to JPG</h1>
-      <p class="text-slate-500 text-sm mb-6">Convert each PDF page to a high-quality JPG image.</p>
+      <p class="text-slate-500 text-sm mb-6">Convert each PDF page to a high-quality JPG image. Max 50 MB.</p>
 
       <div class="bg-white dark:bg-slate-800 rounded-2xl p-6 shadow-sm border border-slate-100 dark:border-slate-700 space-y-4">
         <div (click)="fileInput.click()" (dragover)="$event.preventDefault()" (drop)="onDrop($event)"
@@ -45,7 +48,7 @@ import { AdBannerComponent } from '../../shared/components/ad-banner/ad-banner.c
         @if (converter.isConverting()) {
         <div>
           <div class="flex justify-between text-xs text-slate-500 mb-1">
-            <span>Converting...</span><span>{{ converter.uploadProgress() }}%</span>
+            <span>{{ converter.progressLabel() }}</span><span>{{ converter.uploadProgress() }}%</span>
           </div>
           <div class="w-full bg-slate-100 dark:bg-slate-700 rounded-full h-2">
             <div class="bg-indigo-500 h-2 rounded-full transition-all" [style.width.%]="converter.uploadProgress()"></div>
@@ -71,15 +74,47 @@ import { AdBannerComponent } from '../../shared/components/ad-banner/ad-banner.c
     </div>
   `,
 })
-export class PdfToJpgComponent {
+export class PdfToJpgComponent implements OnInit {
   readonly file   = signal<File | null>(null);
   readonly result = signal<ConversionResult | null>(null);
   dpi = '300'; format = 'jpg';
 
-  constructor(public converter: ConverterService, private notify: NotificationService) {}
+  constructor(
+    public converter: ConverterService,
+    private notify: NotificationService,
+    private seo: SeoService,
+  ) {}
 
-  onFileChange(e: Event): void { const f = (e.target as HTMLInputElement).files?.[0]; if (f) this.file.set(f); }
-  onDrop(e: DragEvent): void { e.preventDefault(); const f = e.dataTransfer?.files?.[0]; if (f) this.file.set(f); }
+  ngOnInit(): void {
+    this.seo.setPage({
+      title: 'PDF to JPG Converter — Free Online Tool | ApnaConverter',
+      description: 'Convert PDF pages to high-quality JPG, PNG, or WebP images online for free. Choose DPI quality up to 600. No signup required.',
+    });
+  }
+
+  onFileChange(e: Event): void {
+    const f = (e.target as HTMLInputElement).files?.[0];
+    if (f) this.pickFile(f);
+  }
+
+  onDrop(e: DragEvent): void {
+    e.preventDefault();
+    const f = e.dataTransfer?.files?.[0];
+    if (f) this.pickFile(f);
+  }
+
+  private pickFile(f: File): void {
+    if (f.size > MAX_SIZE_BYTES) {
+      this.notify.error('File too large. Maximum size is 50 MB.');
+      return;
+    }
+    if (!f.name.toLowerCase().endsWith('.pdf')) {
+      this.notify.error('Please select a valid PDF file.');
+      return;
+    }
+    this.file.set(f);
+    this.result.set(null);
+  }
 
   convert(): void {
     if (!this.file()) return;

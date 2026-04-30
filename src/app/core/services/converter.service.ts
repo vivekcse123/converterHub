@@ -21,13 +21,21 @@ export class ConverterService {
 
   downloadResult(res: ConversionResult): void {
     if (!this.isBrowser) return;
-    const a = document.createElement('a');
-    a.href = res.downloadUrl;
-    a.download = '';
-    a.rel = 'noopener noreferrer';
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
+    this.api.downloadBlob(res.downloadUrl).subscribe({
+      next: (blob) => {
+        const url = URL.createObjectURL(blob);
+        const a   = document.createElement('a');
+        a.href     = url;
+        a.download = res.fileName;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        setTimeout(() => URL.revokeObjectURL(url), 10_000);
+      },
+      error: () => {
+        window.open(res.downloadUrl, '_blank');
+      },
+    });
   }
   imageToPdf(files: File[], options: Record<string, string> = {}): Observable<ConversionResult> {
     return this.doUpload('convert/image-to-pdf', files, options, true);

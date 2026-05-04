@@ -61,6 +61,11 @@ export const routes: Routes = [
   { path: 'protect-pdf',  loadComponent: () => import('./features/protect-pdf/protect-pdf.component').then(m => m.ProtectPdfComponent),    title: 'Protect PDF — ApnaConverter',  data: { description: 'Add password protection and encryption to a PDF file. Free online PDF security tool.' } },
   { path: 'organize-pdf', loadComponent: () => import('./features/organize-pdf/organize-pdf.component').then(m => m.OrganizePdfComponent), title: 'Organize PDF — ApnaConverter', data: { description: 'Reorder or delete pages in a PDF document online. Free PDF page organizer.' } },
 
+  // ── Legal & About ────────────────────────────────────────────────────────────
+  { path: 'privacy-policy', loadComponent: () => import('./features/privacy-policy/privacy-policy.component').then(m => m.PrivacyPolicyComponent), title: 'Privacy Policy — ApnaConverter', data: { description: 'Learn how ApnaConverter handles your files and personal data. Your files are auto-deleted within 2 hours and never shared.' } },
+  { path: 'terms',          loadComponent: () => import('./features/terms/terms.component').then(m => m.TermsComponent),                          title: 'Terms of Service — ApnaConverter', data: { description: 'Read the Terms of Service for ApnaConverter. Understand your rights and responsibilities when using our free file conversion tools.' } },
+  { path: 'about',          loadComponent: () => import('./features/about/about.component').then(m => m.AboutComponent),                          title: 'About ApnaConverter — Free Online File Converter', data: { description: 'Learn about ApnaConverter — 37+ free file conversion tools with no sign-up required. Built by ApnaInsights.' } },
+
   // ── 404 ──────────────────────────────────────────────────────────────────────
   { path: '**', loadComponent: () => import('./features/not-found/not-found.component').then(m => m.NotFoundComponent), title: 'Page Not Found — ApnaConverter' },
 ];

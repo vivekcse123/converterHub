@@ -4,11 +4,12 @@ import { ConverterService } from '../../core/services/converter.service';
 import { NotificationService } from '../../core/services/notification.service';
 import { ConversionResult } from '../../core/models/conversion.model';
 import { AdBannerComponent } from '../../shared/components/ad-banner/ad-banner.component';
+import { ToolInfoSectionComponent } from '../../shared/components/tool-info-section/tool-info-section.component';
 
 @Component({
   selector: 'app-text-to-pdf',
   standalone: true,
-  imports: [FormsModule, AdBannerComponent],
+  imports: [FormsModule, AdBannerComponent, ToolInfoSectionComponent],
   template: `
     <div class="bg-gradient-to-r from-amber-400 to-orange-500 text-white py-14">
       <div class="container-app text-center">
@@ -47,6 +48,8 @@ import { AdBannerComponent } from '../../shared/components/ad-banner/ad-banner.c
         </button>
       </div>
 
+      <app-ad-banner slot="horizontal" class="mt-6" />
+
       @if (result()) {
       <div class="card p-8 text-center mt-6 animate-bounce-in">
         <div class="text-5xl mb-4">✅</div>
@@ -59,6 +62,7 @@ import { AdBannerComponent } from '../../shared/components/ad-banner/ad-banner.c
         <app-ad-banner slot="rectangle" />
       }
     </div>
+    <app-tool-info-section toolId="text-to-pdf" />
   `,
 })
 export class TextToPdfComponent {

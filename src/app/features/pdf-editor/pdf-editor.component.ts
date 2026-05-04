@@ -6,13 +6,14 @@ import { ConverterService } from '../../core/services/converter.service';
 import { NotificationService } from '../../core/services/notification.service';
 import { ConversionResult } from '../../core/models/conversion.model';
 import { AdBannerComponent } from '../../shared/components/ad-banner/ad-banner.component';
+import { ToolInfoSectionComponent } from '../../shared/components/tool-info-section/tool-info-section.component';
 
 type PdfAction = 'merge' | 'split' | 'compress';
 
 @Component({
   selector: 'app-pdf-editor',
   standalone: true,
-  imports: [FormsModule, FileUploadComponent, ProgressBarComponent, AdBannerComponent],
+  imports: [FormsModule, FileUploadComponent, ProgressBarComponent, AdBannerComponent, ToolInfoSectionComponent],
   templateUrl: './pdf-editor.component.html',
 })
 export class PdfEditorComponent {

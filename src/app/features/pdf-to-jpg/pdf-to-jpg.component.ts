@@ -5,13 +5,14 @@ import { NotificationService } from '../../core/services/notification.service';
 import { SeoService } from '../../core/services/seo.service';
 import { ConversionResult } from '../../core/models/conversion.model';
 import { AdBannerComponent } from '../../shared/components/ad-banner/ad-banner.component';
+import { ToolInfoSectionComponent } from '../../shared/components/tool-info-section/tool-info-section.component';
 
 const MAX_SIZE_BYTES = 50 * 1024 * 1024;
 
 @Component({
   selector: 'app-pdf-to-jpg',
   standalone: true,
-  imports: [FormsModule, AdBannerComponent],
+  imports: [FormsModule, AdBannerComponent, ToolInfoSectionComponent],
   template: `
     <div class="max-w-2xl mx-auto px-4 py-10">
       <h1 class="text-2xl font-bold text-slate-800 dark:text-white mb-1">PDF to JPG</h1>
@@ -71,7 +72,9 @@ const MAX_SIZE_BYTES = 50 * 1024 * 1024;
         </div>
         }
       </div>
+      <app-ad-banner slot="horizontal" class="mt-6" />
     </div>
+    <app-tool-info-section toolId="pdf-to-jpg" />
   `,
 })
 export class PdfToJpgComponent implements OnInit {

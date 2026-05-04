@@ -6,11 +6,12 @@ import { NotificationService } from '../../core/services/notification.service';
 import { ConversionResult } from '../../core/models/conversion.model';
 import { FormsModule } from '@angular/forms';
 import { AdBannerComponent } from '../../shared/components/ad-banner/ad-banner.component';
+import { ToolInfoSectionComponent } from '../../shared/components/tool-info-section/tool-info-section.component';
 
 @Component({
   selector: 'app-protect-pdf',
   standalone: true,
-  imports: [FileUploadComponent, ProgressBarComponent, FormsModule, AdBannerComponent],
+  imports: [FileUploadComponent, ProgressBarComponent, FormsModule, AdBannerComponent, ToolInfoSectionComponent],
   template: `
     <div class="bg-gradient-to-r from-red-600 to-rose-600 text-white py-14">
       <div class="container-app text-center">
@@ -66,6 +67,8 @@ import { AdBannerComponent } from '../../shared/components/ad-banner/ad-banner.c
         }
       </div>
 
+      <app-ad-banner slot="horizontal" class="mt-6" />
+
       @if (result()) {
         <div class="card p-8 text-center mt-6 animate-bounce-in">
           <div class="text-5xl mb-4">🔐</div>
@@ -81,6 +84,7 @@ import { AdBannerComponent } from '../../shared/components/ad-banner/ad-banner.c
         <app-ad-banner slot="rectangle" />
       }
     </div>
+    <app-tool-info-section toolId="protect-pdf" />
   `,
 })
 export class ProtectPdfComponent {

@@ -4,11 +4,12 @@ import { ConverterService } from '../../core/services/converter.service';
 import { NotificationService } from '../../core/services/notification.service';
 import { ConversionResult } from '../../core/models/conversion.model';
 import { AdBannerComponent } from '../../shared/components/ad-banner/ad-banner.component';
+import { ToolInfoSectionComponent } from '../../shared/components/tool-info-section/tool-info-section.component';
 
 @Component({
   selector: 'app-sign-pdf',
   standalone: true,
-  imports: [FormsModule, AdBannerComponent],
+  imports: [FormsModule, AdBannerComponent, ToolInfoSectionComponent],
   template: `
     <div class="max-w-2xl mx-auto px-4 py-10">
       <h1 class="text-2xl font-bold text-slate-800 dark:text-white mb-1">Sign PDF</h1>
@@ -77,7 +78,9 @@ import { AdBannerComponent } from '../../shared/components/ad-banner/ad-banner.c
         </div>
         }
       </div>
+      <app-ad-banner slot="horizontal" class="mt-6" />
     </div>
+    <app-tool-info-section toolId="sign-pdf" />
   `,
 })
 export class SignPdfComponent {

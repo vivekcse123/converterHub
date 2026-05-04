@@ -13,15 +13,20 @@ declare global {
   interface Window { adsbygoogle: unknown[]; }
 }
 
-/**
- * Slot IDs from your AdSense dashboard (Ads → By ad unit → Create ad unit).
- * Replace each value with your real slot ID once you create the units.
- * Until then AdSense will serve house ads or nothing — this won't cause errors.
- */
+// ─── HOW TO GET YOUR REAL SLOT IDs ──────────────────────────────────────────
+// 1. Go to Google AdSense → Ads → By ad unit → Display ads
+// 2. Create a unit named "Horizontal / Leaderboard" → choose "Horizontal" size → Save
+//    Copy the slot ID (a 10-digit number like 1234567890) → paste as `horizontal`
+// 3. Create a unit named "Rectangle" → choose "Rectangle" size → Save
+//    Copy the slot ID → paste as `rectangle`
+// 4. Create a unit named "Infeed" → choose "In-article" or "In-feed" → Save
+//    Copy the slot ID → paste as `infeed`
+// 5. Deploy the site and wait 24-48h for Google to verify and serve real ads.
+// ─────────────────────────────────────────────────────────────────────────────
 const AD_SLOTS = {
-  horizontal:  '1234567890',   // 728×90  leaderboard / responsive
-  rectangle:   '0987654321',   // 300×250 medium rectangle
-  infeed:      '1122334455',   // In-feed / native
+  horizontal: '7965745803',   // leaderboard / responsive banner
+  rectangle:  '1121655375',    // 300×250 medium rectangle
+  infeed:     '3747818718',        // in-article / in-feed
 } as const;
 
 export type AdSlot = keyof typeof AD_SLOTS;

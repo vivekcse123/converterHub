@@ -51,7 +51,10 @@ export type AdSlot = keyof typeof AD_SLOTS;
     </div>
   `,
   styles: [`
+    :host { display: block; min-height: 0; }
     .ad-wrapper { min-height: 0; }
+    /* Collapse host entirely when AdSense marks the slot as unfilled */
+    :host-context([data-ad-status="unfilled"]) { display: none !important; }
   `],
 })
 export class AdBannerComponent implements AfterViewInit, OnDestroy {

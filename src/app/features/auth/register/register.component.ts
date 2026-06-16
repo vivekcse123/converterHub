@@ -1,6 +1,6 @@
 import { Component, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../../core/services/auth.service';
 import { NotificationService } from '../../../core/services/notification.service';
 
@@ -72,6 +72,7 @@ export class RegisterComponent {
     private auth:   AuthService,
     private notify: NotificationService,
     private router: Router,
+    private route:  ActivatedRoute,
   ) {}
 
   onSubmit(): void {
@@ -79,7 +80,8 @@ export class RegisterComponent {
     this.auth.register(this.name, this.email, this.password).subscribe({
       next: () => {
         this.notify.success('Account created!', 'Welcome to ApnaConverter.');
-        this.router.navigate(['/dashboard']);
+        const returnUrl = this.route.snapshot.queryParams['returnUrl'];
+        this.router.navigateByUrl(returnUrl || '/dashboard');
       },
       error: (e) => {
         this.notify.error('Registration failed', e.error?.message ?? 'Please try again.');

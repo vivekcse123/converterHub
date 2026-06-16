@@ -1,0 +1,35 @@
+<div class="flex flex-col items-center">
+  @if (showControls()) {
+    <div class="flex items-center justify-between w-full max-w-[210mm] mb-3 px-1">
+      <span class="text-xs font-medium text-slate-500 dark:text-slate-400">
+        {{ pageCount() }} {{ pageCount() === 1 ? 'page' : 'pages' }}
+      </span>
+      <div class="flex items-center gap-1">
+        <button type="button" (click)="zoomOut()" class="btn-sm btn-secondary !px-2" aria-label="Zoom out">−</button>
+        <button type="button" (click)="resetZoom()" class="text-xs font-medium text-slate-500 dark:text-slate-400 w-12 text-center hover:text-primary-600" title="Fit to width">
+          {{ (zoom() * 100) | number: '1.0-0' }}%
+        </button>
+        <button type="button" (click)="zoomIn()" class="btn-sm btn-secondary !px-2" aria-label="Zoom in">+</button>
+      </div>
+    </div>
+  }
+
+  <div #scrollHost class="preview-scroll w-full flex justify-center overflow-y-auto overflow-x-hidden rounded-xl bg-slate-100 dark:bg-slate-950/50 p-4">
+    <div
+      class="preview-zoom-wrap"
+      [style.transform]="'scale(' + zoom() + ')'"
+    >
+      <div #pageHost class="preview-page-host relative shadow-card bg-white">
+        <ng-container *ngComponentOutlet="templateComponent(); inputs: templateInputs()" />
+
+        @if (showControls()) {
+          @for (offset of pageBreaks(); track offset) {
+            <div class="page-break-line" [style.top.px]="offset">
+              <span class="page-break-label">Page break</span>
+            </div>
+          }
+        }
+      </div>
+    </div>
+  </div>
+</div>

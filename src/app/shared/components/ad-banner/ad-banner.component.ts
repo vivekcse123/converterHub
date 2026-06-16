@@ -3,9 +3,11 @@ import {
   Input,
   AfterViewInit,
   OnDestroy,
+  ElementRef,
   inject,
   PLATFORM_ID,
   ChangeDetectionStrategy,
+  signal,
 } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 
@@ -40,21 +42,21 @@ export type AdSlot = keyof typeof AD_SLOTS;
   // on the client lets AdSense take full ownership of the element.
   host: { ngSkipHydration: 'true' },
   template: `
-    <div class="ad-wrapper overflow-hidden text-center" [class]="wrapperClass">
-      <ins class="adsbygoogle"
-           style="display:block"
-           [attr.data-ad-client]="adClient"
-           [attr.data-ad-slot]="slotId"
-           [attr.data-ad-format]="adFormat"
-           data-full-width-responsive="true">
-      </ins>
-    </div>
+    @if (!unfilled()) {
+      <div class="ad-wrapper overflow-hidden text-center" [class]="wrapperClass">
+        <ins #insEl class="adsbygoogle"
+             style="display:block"
+             [attr.data-ad-client]="adClient"
+             [attr.data-ad-slot]="slotId"
+             [attr.data-ad-format]="adFormat"
+             data-full-width-responsive="true">
+        </ins>
+      </div>
+    }
   `,
   styles: [`
     :host { display: block; min-height: 0; }
     .ad-wrapper { min-height: 0; }
-    /* Collapse host entirely when AdSense marks the slot as unfilled */
-    :host-context([data-ad-status="unfilled"]) { display: none !important; }
   `],
 })
 export class AdBannerComponent implements AfterViewInit, OnDestroy {
@@ -63,6 +65,11 @@ export class AdBannerComponent implements AfterViewInit, OnDestroy {
 
   readonly adClient = 'ca-pub-6477809641944524';
   private readonly isBrowser = isPlatformBrowser(inject(PLATFORM_ID));
+  private readonly host = inject(ElementRef<HTMLElement>);
+
+  /** Set when AdSense marks this slot as unfilled — collapses the wrapper to avoid blank gaps. */
+  readonly unfilled = signal(false);
+  private observer?: MutationObserver;
 
   get slotId()      { return AD_SLOTS[this.slot]; }
   get adFormat()    { return this.slot === 'rectangle' ? 'rectangle' : 'auto'; }
@@ -70,10 +77,21 @@ export class AdBannerComponent implements AfterViewInit, OnDestroy {
 
   ngAfterViewInit(): void {
     if (!this.isBrowser) return;
+    const ins = this.host.nativeElement.querySelector('ins.adsbygoogle');
+    if (ins) {
+      this.observer = new MutationObserver(() => {
+        if (ins.getAttribute('data-ad-status') === 'unfilled') {
+          this.unfilled.set(true);
+        }
+      });
+      this.observer.observe(ins, { attributes: true, attributeFilter: ['data-ad-status'] });
+    }
     try {
       (window.adsbygoogle = window.adsbygoogle || []).push({});
     } catch { /* AdSense not loaded yet — safe to ignore */ }
   }
 
-  ngOnDestroy(): void {}
+  ngOnDestroy(): void {
+    this.observer?.disconnect();
+  }
 }

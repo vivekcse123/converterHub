@@ -1,0 +1,34 @@
+/* Shared print/A4 styles for resume templates. Imported by every template component. */
+
+.resume-page {
+  width: 210mm;
+  min-height: 297mm;
+  padding: 14mm 16mm;
+  box-sizing: border-box;
+  background: #ffffff;
+  color: #1e293b;
+  font-size: 10.5pt;
+  line-height: 1.5;
+}
+
+.resume-page * {
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+
+.resume-section {
+  break-inside: avoid;
+}
+
+.resume-entry {
+  break-inside: avoid;
+}
+
+@media print {
+  .resume-page {
+    width: 100%;
+    min-height: 0;
+    padding: 0;
+    box-shadow: none !important;
+  }
+}

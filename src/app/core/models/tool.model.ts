@@ -13,9 +13,12 @@ export interface Tool {
   weight?: number;
 }
 
-export type ToolCategory = 'pdf' | 'image' | 'document' | 'archive';
+export type ToolCategory = 'pdf' | 'image' | 'document' | 'archive' | 'resume';
 
 export const TOOLS: Tool[] = [
+  // ── Resume Builder ───────────────────────────────────────────────────────────
+  { id: 'resume-builder',   title: 'Resume Builder',     description: 'Build a professional, ATS-friendly resume with live preview and free PDF download.', icon: '🧑‍💼', route: '/resume-builder',   category: 'resume',   acceptedFormats: [],                        outputFormat: 'PDF',    color: 'from-violet-500 to-indigo-600',   badge: 'New', weight: 110 },
+
   // ── Original PDF tools ───────────────────────────────────────────────────────
   { id: 'image-to-pdf',     title: 'Image to PDF',       description: 'Convert JPG, PNG, or WebP images into a single PDF document.',               icon: '🖼️',  route: '/image-to-pdf',     category: 'pdf',      acceptedFormats: ['.jpg','.png','.webp'],   outputFormat: 'PDF',    color: 'from-blue-500 to-cyan-500',       badge: 'Popular', weight: 100 },
   { id: 'pdf-to-word',      title: 'PDF to Word',        description: 'Extract content from a PDF and save it as an editable .docx file.',          icon: '📄',  route: '/pdf-to-word',      category: 'document', acceptedFormats: ['.pdf'],                  outputFormat: 'DOCX',   color: 'from-violet-500 to-purple-600', weight: 90 },

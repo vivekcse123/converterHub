@@ -48,8 +48,6 @@ import { ToolInfoSectionComponent } from '../../shared/components/tool-info-sect
         </button>
       </div>
 
-      <app-ad-banner slot="horizontal" class="mt-6" />
-
       @if (result()) {
       <div class="card p-8 text-center mt-6 animate-bounce-in">
         <div class="text-5xl mb-4">✅</div>

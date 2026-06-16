@@ -21,7 +21,12 @@
         </div>
 
         <div>
-          <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">Password</label>
+          <div class="flex items-center justify-between mb-1.5">
+            <label class="text-sm font-medium text-slate-700 dark:text-slate-300">Password</label>
+            <a routerLink="/forgot-password" class="text-xs text-primary-600 dark:text-primary-400 hover:underline">
+              Forgot password?
+            </a>
+          </div>
           <input type="password" [(ngModel)]="password" name="password" required
             placeholder="••••••••" class="input" autocomplete="current-password">
         </div>

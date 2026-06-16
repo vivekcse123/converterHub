@@ -1,0 +1,50 @@
+<div class="container-app py-6 space-y-8">
+
+  <app-breadcrumb [items]="breadcrumbs" />
+
+  <!-- Hero -->
+  <header class="max-w-2xl space-y-3">
+    <h1 class="text-2xl sm:text-3xl font-bold text-slate-900 dark:text-white">Resume Examples by Job Title</h1>
+    <p class="text-sm sm:text-base text-slate-600 dark:text-slate-300">
+      Browse free resume examples for popular job titles — each with sample bullet points, recommended templates, and
+      key skills recruiters look for. Pick your role to get started with a head start on your resume.
+    </p>
+  </header>
+
+  <app-ad-banner slot="horizontal" />
+
+  <!-- Role cards -->
+  <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+    @for (role of roles; track role.slug) {
+      <a
+        [routerLink]="['/resume-builder', role.slug]"
+        class="card-hover p-4 space-y-2 group"
+      >
+        <h2 class="font-semibold text-slate-900 dark:text-white group-hover:text-primary-600 dark:group-hover:text-primary-400">
+          {{ role.title }} Resume
+        </h2>
+        <p class="text-sm text-slate-500 dark:text-slate-400 line-clamp-3">{{ role.intro }}</p>
+        <div class="flex flex-wrap gap-1.5 pt-1">
+          @for (skill of role.keySkills.slice(0, 3); track skill) {
+            <span class="badge bg-primary-100 dark:bg-primary-900/40 text-primary-700 dark:text-primary-300 text-xs">{{ skill }}</span>
+          }
+        </div>
+        <span class="inline-block text-sm font-medium text-primary-600 dark:text-primary-400 pt-1">View examples →</span>
+      </a>
+    }
+  </div>
+
+  <app-ad-banner slot="rectangle" />
+
+  <!-- Bottom CTA -->
+  <section class="card p-6 text-center space-y-3">
+    <h2 class="text-lg font-semibold text-slate-900 dark:text-white">Don't see your role?</h2>
+    <p class="text-sm text-slate-500 dark:text-slate-400">
+      You can still build a fully customized resume from scratch — pick any template and add your own sections.
+    </p>
+    <div class="flex flex-wrap justify-center gap-3">
+      <a routerLink="/resume-builder" class="btn btn-primary">Start Building for Free</a>
+      <a routerLink="/resume-templates" class="btn btn-secondary">Browse Templates</a>
+    </div>
+  </section>
+</div>

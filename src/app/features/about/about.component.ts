@@ -22,12 +22,20 @@ import { RouterLink } from '@angular/router';
         <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-4">Our Mission</h2>
         <p class="leading-relaxed text-lg">
           ApnaConverter was created with a simple goal: give everyone access to professional-quality
-          file conversion tools — completely free, with no sign-up required and no data stored.
+          file conversion tools — completely free, with no sign-up required and no data stored on our
+          servers longer than necessary.
         </p>
         <p class="leading-relaxed mt-4">
           Whether you need to convert a PDF to Word for editing, compress images for a website, or
           extract text from a scanned document, ApnaConverter handles it in seconds without asking
-          you to create an account or install software.
+          you to create an account or install software. Every tool is designed to be as fast and
+          straightforward as possible, so you can get back to the work that actually matters.
+        </p>
+        <p class="leading-relaxed mt-4">
+          We believe productivity tools should not be locked behind expensive subscriptions or
+          cluttered with unnecessary sign-up flows. That is why the overwhelming majority of our
+          tools are and always will be free — supported by non-intrusive advertising rather than
+          user data.
         </p>
       </section>
 
@@ -55,9 +63,31 @@ import { RouterLink } from '@angular/router';
         </p>
         <p class="leading-relaxed mt-4">
           Our tools run entirely on server-side processing — your files are never sent to third-party
-          conversion services. Read our full
+          conversion services. This means your sensitive documents, such as contracts, medical records,
+          or financial statements, never leave our controlled infrastructure. Read our full
           <a routerLink="/privacy-policy" class="text-primary-600 dark:text-primary-400 underline font-medium">Privacy Policy</a>
-          for details.
+          for complete details on how we handle your data.
+        </p>
+        <p class="leading-relaxed mt-4">
+          For tools like the Resume Builder, your data stays entirely on your own device — nothing is
+          uploaded to our servers at all. Your resume is stored in your browser's local storage and
+          only leaves your device when you choose to download it as a PDF.
+        </p>
+      </section>
+
+      <section>
+        <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-4">How We Keep the Lights On</h2>
+        <p class="leading-relaxed">
+          ApnaConverter is free to use because we run modest, non-intrusive ads on our pages. We
+          deliberately keep ad placement minimal — you will never see pop-ups, auto-playing video ads,
+          or ads that obscure the tool you are trying to use. We believe a good user experience and
+          sustainable advertising can coexist.
+        </p>
+        <p class="leading-relaxed mt-4">
+          We do not sell your personal data, do not use cookies for cross-site tracking, and do not
+          share your information with third parties beyond what is required to serve relevant ads
+          through Google AdSense. You can read exactly what data we collect in our
+          <a routerLink="/privacy-policy" class="text-primary-600 dark:text-primary-400 underline font-medium">Privacy Policy</a>.
         </p>
       </section>
 
@@ -67,9 +97,16 @@ import { RouterLink } from '@angular/router';
           ApnaConverter is a product of
           <a href="https://apnainsights.com/" target="_blank" rel="noopener noreferrer"
              class="text-primary-600 dark:text-primary-400 underline font-medium">ApnaInsights</a>,
-          an independent technology team focused on building useful tools for everyday users.
-          We are continuously adding new conversion tools and improving existing ones based
-          on user feedback.
+          an independent technology team focused on building useful, accessible tools for everyday users.
+          We are a small team that genuinely cares about quality — we use ApnaConverter ourselves for
+          day-to-day document work, which means when something breaks or feels clunky, we feel it too.
+        </p>
+        <p class="leading-relaxed mt-4">
+          We are continuously adding new conversion tools and improving existing ones based on user
+          feedback. If there is a tool you wish we had, or something about an existing tool you find
+          frustrating, please
+          <a routerLink="/contact" class="text-primary-600 dark:text-primary-400 underline font-medium">reach out to us</a>
+          — your feedback directly shapes what we build next.
         </p>
       </section>
 
@@ -78,7 +115,10 @@ import { RouterLink } from '@angular/router';
         <p class="text-slate-500 dark:text-slate-400 mb-8">
           Browse all 37+ tools — no sign-up, no watermarks, completely free.
         </p>
-        <a routerLink="/" class="btn btn-primary btn-lg">Browse All Tools</a>
+        <div class="flex flex-wrap items-center justify-center gap-3">
+          <a routerLink="/" class="btn btn-primary btn-lg">Browse All Tools</a>
+          <a routerLink="/contact" class="btn btn-secondary btn-lg">Contact Us</a>
+        </div>
       </section>
 
     </div>

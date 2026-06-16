@@ -14,6 +14,7 @@
   "private": true,
   "dependencies": {
     "@angular/animations": "^17.3.12",
+    "@angular/cdk": "^17.3.10",
     "@angular/common": "^17.3.12",
     "@angular/compiler": "^17.3.12",
     "@angular/core": "^17.3.12",
@@ -25,6 +26,7 @@
     "@angular/ssr": "^17.3.17",
     "@types/express": "^4.17.25",
     "express": "^4.22.1",
+    "pdfmake": "^0.2.23",
     "rxjs": "~7.8.0",
     "socket.io-client": "^4.7.2",
     "tslib": "^2.6.2",
@@ -35,6 +37,7 @@
     "@angular/cli": "^17.3.17",
     "@angular/compiler-cli": "^17.3.12",
     "@types/jasmine": "~4.3.6",
+    "@types/pdfmake": "^0.3.3",
     "@types/socket.io-client": "^3.0.0",
     "autoprefixer": "^10.4.19",
     "jasmine-core": "~4.6.0",

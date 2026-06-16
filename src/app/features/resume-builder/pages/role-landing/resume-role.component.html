@@ -1,0 +1,131 @@
+@if (content(); as c) {
+  <div class="container-app py-6 space-y-8">
+
+    <app-breadcrumb [items]="breadcrumbs()" />
+
+    <!-- Hero -->
+    <header class="max-w-3xl space-y-4">
+      <h1 class="text-2xl sm:text-3xl font-bold text-slate-900 dark:text-white">{{ c.heroTitle }}</h1>
+      <p class="text-sm sm:text-base text-slate-600 dark:text-slate-300">{{ c.intro }}</p>
+      <div class="flex flex-wrap items-center gap-3 pt-1">
+        <a
+          [routerLink]="['/resume-builder']"
+          [queryParams]="{ role: c.slug, template: c.recommendedTemplate }"
+          class="btn btn-primary"
+        >
+          Build My {{ c.title }} Resume — Free
+        </a>
+        <a routerLink="/resume-templates" class="btn btn-secondary">Browse Templates</a>
+      </div>
+    </header>
+
+    <app-ad-banner slot="horizontal" />
+
+    <!-- Main content + sample preview -->
+    <div class="grid lg:grid-cols-[1.3fr_1fr] gap-8 items-start">
+      <div class="space-y-8">
+
+        <!-- Example bullet points -->
+        <section class="space-y-3">
+          <h2 class="text-lg font-semibold text-slate-900 dark:text-white">Example {{ c.title }} Resume Bullet Points</h2>
+          <p class="text-sm text-slate-500 dark:text-slate-400">
+            Use these as inspiration — copy the structure (action verb + task + measurable result) and swap in your own numbers.
+          </p>
+          <ul class="space-y-2">
+            @for (bullet of c.bulletExamples; track bullet) {
+              <li class="card p-3 text-sm text-slate-700 dark:text-slate-300 flex gap-2">
+                <span class="text-primary-500 shrink-0" aria-hidden="true">✓</span>
+                <span>{{ bullet }}</span>
+              </li>
+            }
+          </ul>
+        </section>
+
+        <!-- Key skills -->
+        <section class="space-y-3">
+          <h2 class="text-lg font-semibold text-slate-900 dark:text-white">Key Skills & Keywords for {{ c.title }} Resumes</h2>
+          <p class="text-sm text-slate-500 dark:text-slate-400">
+            Include the skills that match your experience — these are commonly searched for by recruiters and ATS software.
+          </p>
+          <div class="flex flex-wrap gap-2">
+            @for (skill of c.keySkills; track skill) {
+              <span class="badge bg-primary-100 dark:bg-primary-900/40 text-primary-700 dark:text-primary-300">{{ skill }}</span>
+            }
+          </div>
+        </section>
+
+        <!-- How to write -->
+        <section class="space-y-3">
+          <h2 class="text-lg font-semibold text-slate-900 dark:text-white">How to Write a {{ c.title }} Resume</h2>
+          <ol class="space-y-3">
+            @for (step of c.howToSteps; track step.title; let i = $index) {
+              <li class="card p-3 flex gap-3">
+                <span class="flex items-center justify-center w-6 h-6 rounded-full bg-primary-500 text-white text-xs font-semibold shrink-0">{{ i + 1 }}</span>
+                <div class="space-y-1">
+                  <p class="text-sm font-semibold text-slate-800 dark:text-slate-100">{{ step.title }}</p>
+                  <p class="text-sm text-slate-500 dark:text-slate-400">{{ step.description }}</p>
+                </div>
+              </li>
+            }
+          </ol>
+        </section>
+      </div>
+
+      <!-- Sample preview -->
+      <div class="space-y-3 sticky top-20">
+        <div class="card p-3 space-y-2">
+          <p class="text-sm font-semibold text-slate-800 dark:text-slate-100">
+            Recommended template for {{ c.title }}s
+          </p>
+          @if (sampleResume(); as sample) {
+            <app-resume-preview [resume]="sample" [showControls]="false" />
+          }
+          <a
+            [routerLink]="['/resume-builder']"
+            [queryParams]="{ role: c.slug, template: c.recommendedTemplate }"
+            class="btn btn-primary w-full"
+          >
+            Use This Template
+          </a>
+        </div>
+        <app-ad-banner slot="rectangle" />
+      </div>
+    </div>
+
+    <!-- FAQ -->
+    <section class="space-y-3 max-w-3xl">
+      <h2 class="text-lg font-semibold text-slate-900 dark:text-white">Frequently Asked Questions</h2>
+      <div class="space-y-2">
+        @for (faq of c.faqs; track faq.q) {
+          <details class="card p-3 group">
+            <summary class="font-medium text-sm text-slate-800 dark:text-slate-100 cursor-pointer list-none flex items-center justify-between gap-2">
+              {{ faq.q }}
+              <span class="text-slate-400 transition-transform group-open:rotate-180" aria-hidden="true">▾</span>
+            </summary>
+            <p class="text-sm text-slate-500 dark:text-slate-400 mt-2">{{ faq.a }}</p>
+          </details>
+        }
+      </div>
+    </section>
+
+    <!-- Bottom CTA -->
+    <section class="card p-6 text-center space-y-3">
+      <h2 class="text-lg font-semibold text-slate-900 dark:text-white">Ready to build your {{ c.title }} resume?</h2>
+      <p class="text-sm text-slate-500 dark:text-slate-400">
+        Pick a template, fill in your details, and download an ATS-friendly PDF — completely free, no sign-up required.
+      </p>
+      <a
+        [routerLink]="['/resume-builder']"
+        [queryParams]="{ role: c.slug, template: c.recommendedTemplate }"
+        class="btn btn-primary"
+      >
+        Start Building Now
+      </a>
+      <p class="text-xs text-slate-400 dark:text-slate-500">
+        Looking for other roles? Browse all <a routerLink="/resume-examples" class="text-primary-600 dark:text-primary-400 hover:underline">resume examples</a>.
+      </p>
+    </section>
+  </div>
+}
+
+<app-ad-banner slot="horizontal" class="mt-6" />

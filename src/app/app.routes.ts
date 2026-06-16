@@ -12,14 +12,31 @@ export const routes: Routes = [
   },
 
   // ── Auth ────────────────────────────────────────────────────────────────────
-  { path: 'login',    loadComponent: () => import('./features/auth/login/login.component').then(m => m.LoginComponent),         title: 'Login — ApnaConverter',    data: { description: 'Log in to your ApnaConverter account to access conversion history and premium features.' } },
-  { path: 'register', loadComponent: () => import('./features/auth/register/register.component').then(m => m.RegisterComponent), title: 'Register — ApnaConverter', data: { description: 'Create a free ApnaConverter account and track your file conversions.' } },
+  { path: 'login',           loadComponent: () => import('./features/auth/login/login.component').then(m => m.LoginComponent),                           title: 'Login — ApnaConverter',             data: { description: 'Log in to your ApnaConverter account to access conversion history and premium features.' } },
+  { path: 'register',        loadComponent: () => import('./features/auth/register/register.component').then(m => m.RegisterComponent),                 title: 'Register — ApnaConverter',          data: { description: 'Create a free ApnaConverter account and track your file conversions.' } },
+  { path: 'forgot-password', loadComponent: () => import('./features/auth/forgot-password/forgot-password.component').then(m => m.ForgotPasswordComponent), title: 'Forgot Password — ApnaConverter',   data: { description: 'Reset your ApnaConverter password. Enter your email and we\'ll send you a reset link.' } },
+  { path: 'reset-password/:token', loadComponent: () => import('./features/auth/reset-password/reset-password.component').then(m => m.ResetPasswordComponent), title: 'Reset Password — ApnaConverter', data: { description: 'Set a new password for your ApnaConverter account.' } },
 
   // ── Protected ───────────────────────────────────────────────────────────────
   { path: 'dashboard', loadComponent: () => import('./features/dashboard/dashboard.component').then(m => m.DashboardComponent), canActivate: [authGuard], title: 'Dashboard — ApnaConverter', data: { description: 'View your conversion history and manage your ApnaConverter account.' } },
 
   // ── Admin (lazy) ────────────────────────────────────────────────────────────
   { path: 'admin', loadChildren: () => import('./features/admin/admin.routes').then(m => m.adminRoutes), canActivate: [adminGuard] },
+
+  // ── Resume Builder ──────────────────────────────────────────────────────────
+  { path: 'resume-builder', loadChildren: () => import('./features/resume-builder/resume-builder.routes').then(m => m.resumeBuilderRoutes) },
+  {
+    path: 'resume-templates',
+    loadComponent: () => import('./features/resume-builder/pages/templates-gallery/resume-templates.component').then(m => m.ResumeTemplatesComponent),
+    title: 'Free ATS-Friendly Resume Templates — ApnaConverter',
+    data: { description: 'Browse free, ATS-friendly resume templates with live previews. Pick one and build your resume online for free — no sign-up required.' },
+  },
+  {
+    path: 'resume-examples',
+    loadComponent: () => import('./features/resume-builder/pages/examples-hub/resume-examples.component').then(m => m.ResumeExamplesComponent),
+    title: 'Resume Examples by Job Title — ApnaConverter',
+    data: { description: 'Free, role-specific resume examples with sample bullet points, key skills, and ATS-friendly templates for popular job titles.' },
+  },
 
   // ── Original tools ──────────────────────────────────────────────────────────
   { path: 'image-to-pdf', loadComponent: () => import('./features/image-to-pdf/image-to-pdf.component').then(m => m.ImageToPdfComponent), title: 'Image to PDF — ApnaConverter', data: { description: 'Convert JPG, PNG, GIF or HEIC images to a PDF file instantly. Free, no sign-up needed.' } },
@@ -65,6 +82,7 @@ export const routes: Routes = [
   { path: 'privacy-policy', loadComponent: () => import('./features/privacy-policy/privacy-policy.component').then(m => m.PrivacyPolicyComponent), title: 'Privacy Policy — ApnaConverter', data: { description: 'Learn how ApnaConverter handles your files and personal data. Your files are auto-deleted within 2 hours and never shared.' } },
   { path: 'terms',          loadComponent: () => import('./features/terms/terms.component').then(m => m.TermsComponent),                          title: 'Terms of Service — ApnaConverter', data: { description: 'Read the Terms of Service for ApnaConverter. Understand your rights and responsibilities when using our free file conversion tools.' } },
   { path: 'about',          loadComponent: () => import('./features/about/about.component').then(m => m.AboutComponent),                          title: 'About ApnaConverter — Free Online File Converter', data: { description: 'Learn about ApnaConverter — 37+ free file conversion tools with no sign-up required. Built by ApnaInsights.' } },
+  { path: 'contact',        loadComponent: () => import('./features/contact/contact.component').then(m => m.ContactComponent),                      title: 'Contact Us — ApnaConverter', data: { description: 'Get in touch with the ApnaConverter team for support, bug reports, or business inquiries. We reply within 1-2 business days.' } },
 
   // ── 404 ──────────────────────────────────────────────────────────────────────
   { path: '**', loadComponent: () => import('./features/not-found/not-found.component').then(m => m.NotFoundComponent), title: 'Page Not Found — ApnaConverter' },

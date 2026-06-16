@@ -1,0 +1,42 @@
+:host {
+  display: block;
+}
+
+.preview-zoom-wrap {
+  transform-origin: top center;
+  transition: transform 0.15s ease-out;
+}
+
+.preview-page-host {
+  position: relative;
+  width: 210mm;
+}
+
+.page-break-line {
+  position: absolute;
+  left: 0;
+  right: 0;
+  border-top: 1px dashed #f59e0b;
+  pointer-events: none;
+}
+
+.page-break-label {
+  position: absolute;
+  right: 4px;
+  top: 2px;
+  font-size: 7pt;
+  color: #f59e0b;
+  background: rgba(255, 255, 255, 0.85);
+  padding: 0 4px;
+  border-radius: 4px;
+}
+
+.preview-scroll {
+  max-height: 80vh;
+}
+
+@media (max-width: 1024px) {
+  .preview-scroll {
+    max-height: none;
+  }
+}

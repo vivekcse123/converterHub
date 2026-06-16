@@ -744,4 +744,28 @@ export const TOOL_CONTENT: Record<string, ToolContent> = {
     ],
   },
 
+  'resume-builder': {
+    steps: [
+      { icon: '🎨', title: 'Choose a Template',  desc: 'Pick from ATS-friendly resume templates designed to pass applicant tracking systems.' },
+      { icon: '✍️', title: 'Fill in Your Details', desc: 'Add your experience, education, skills, and projects with live ATS score feedback.' },
+      { icon: '⬇️', title: 'Download Your PDF',  desc: 'Export a polished, ATS-readable PDF resume — completely free, no sign-up required.' },
+    ],
+    benefits: [
+      'Build a professional resume in minutes with live preview',
+      'ATS-friendly templates designed to pass applicant tracking systems',
+      'Real-time ATS score with suggestions to improve your resume',
+      'Drag-and-drop section reordering and custom sections',
+      'Save multiple resumes locally and edit anytime',
+      'Completely free — no account or sign-up required',
+    ],
+    faqs: [
+      { q: 'Is the resume builder really free?', a: 'Yes, completely free with no sign-up, watermarks, or hidden limits on downloads.' },
+      { q: 'What does "ATS-friendly" mean?', a: 'Applicant Tracking Systems (ATS) scan resumes for keywords and structure before a human sees them. Our templates use single-column layouts, standard fonts, and clear section headings so your resume is parsed correctly.' },
+      { q: 'Is the ATS score accurate?', a: 'The score checks common ATS best practices — contact details, summary length, quantified achievements, skills, and overall resume length — to help you identify quick improvements.' },
+      { q: 'Where is my resume data stored?', a: 'Your resume data is saved locally in your browser. Nothing is uploaded to a server, so your information stays private.' },
+      { q: 'Can I create more than one resume?', a: 'Yes, you can create, duplicate, and switch between multiple resumes from the toolbar.' },
+      { q: 'What format is the downloaded resume?', a: 'A multi-page, print-ready A4 PDF with selectable text — ready to upload to job portals or email to recruiters.' },
+    ],
+  },
+
 };

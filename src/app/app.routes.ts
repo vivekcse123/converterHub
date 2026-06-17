@@ -18,10 +18,10 @@ export const routes: Routes = [
   { path: 'reset-password/:token', loadComponent: () => import('./features/auth/reset-password/reset-password.component').then(m => m.ResetPasswordComponent), title: 'Reset Password — ApnaConverter', data: { description: 'Set a new password for your ApnaConverter account.' } },
 
   // ── Protected ───────────────────────────────────────────────────────────────
-  { path: 'dashboard', loadComponent: () => import('./features/dashboard/dashboard.component').then(m => m.DashboardComponent), canActivate: [authGuard], title: 'Dashboard — ApnaConverter', data: { description: 'View your conversion history and manage your ApnaConverter account.' } },
+  { path: 'dashboard', loadComponent: () => import('./features/dashboard/dashboard.component').then(m => m.DashboardComponent), canActivate: [authGuard], title: 'Dashboard — ApnaConverter', data: { description: 'View your conversion history and manage your ApnaConverter account.', hideShell: true } },
 
   // ── Admin (lazy) ────────────────────────────────────────────────────────────
-  { path: 'admin', loadChildren: () => import('./features/admin/admin.routes').then(m => m.adminRoutes), canActivate: [adminGuard] },
+  { path: 'admin', loadChildren: () => import('./features/admin/admin.routes').then(m => m.adminRoutes), canActivate: [adminGuard], data: { hideShell: true } },
 
   // ── Resume Builder ──────────────────────────────────────────────────────────
   { path: 'resume-builder', loadChildren: () => import('./features/resume-builder/resume-builder.routes').then(m => m.resumeBuilderRoutes) },

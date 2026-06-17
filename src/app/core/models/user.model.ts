@@ -16,6 +16,9 @@
     cancelAtPeriodEnd?:     boolean;
     resumeCount?:           number;
     totalDownloads?:        number;
+    grantedByAdmin?:        boolean;
+    adminNotes?:            string;
+    adminGrantedAt?:        string;
   };
   usage?: {
     conversionsToday:   number;

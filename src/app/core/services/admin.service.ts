@@ -52,6 +52,30 @@ export class AdminService {
     return this.api.post<ApiResponse<unknown>>(`admin/users/${id}/reset-usage`, {});
   }
 
+  grantPro(id: string, data: { plan: string; expiryDate?: string; notes?: string }): Observable<ApiResponse<unknown>> {
+    return this.api.post<ApiResponse<unknown>>(`admin/users/${id}/grant-pro`, data);
+  }
+
+  removePro(id: string): Observable<ApiResponse<unknown>> {
+    return this.api.post<ApiResponse<unknown>>(`admin/users/${id}/remove-pro`, {});
+  }
+
+  extendSubscription(id: string, data: { days?: number; months?: number; reason?: string }): Observable<ApiResponse<unknown>> {
+    return this.api.post<ApiResponse<unknown>>(`admin/users/${id}/extend-subscription`, data);
+  }
+
+  getUserPayments(id: string): Observable<ApiResponse<{ payments: any[] }>> {
+    return this.api.get<ApiResponse<any>>(`admin/users/${id}/payments`);
+  }
+
+  getDetailedSubscriptionStats(): Observable<ApiResponse<any>> {
+    return this.api.get<ApiResponse<any>>('admin/analytics/subscription-stats');
+  }
+
+  getRevenue(): Observable<ApiResponse<any>> {
+    return this.api.get<ApiResponse<any>>('admin/analytics/revenue');
+  }
+
   // ── Analytics ──────────────────────────────────────────────────────────────
   getOverview(): Observable<ApiResponse<AdminStats>> {
     return this.api.get<ApiResponse<AdminStats>>('admin/analytics/overview');

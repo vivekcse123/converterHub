@@ -16,9 +16,8 @@ export const resumeBuilderRoutes: Routes = [
   },
   {
     path: 'dashboard',
-    loadComponent: () => import('./pages/dashboard/resume-dashboard.component').then(m => m.ResumeDashboardComponent),
-    title: 'Resume Dashboard — ApnaConverter',
-    data: { description: 'Manage your resumes, subscription, and downloads.' },
+    redirectTo: '/dashboard',
+    pathMatch: 'full',
   },
   ...ROLE_ORDER.map(slug => {
     const role = ROLE_PAGES[slug];

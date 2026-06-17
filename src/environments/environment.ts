@@ -1,6 +1,6 @@
 export const environment = {
   production: false,
-  // Dev mode uses the deployed Render backend so no local server is required.
-  // To develop against a local backend, change this to 'http://localhost:3000/api'.
-  apiUrl: 'https://converterhubserver-i5kt.onrender.com/api',
+  // Local dev — local backend must be running (cd backend && npm run dev)
+  // To use deployed Render backend, change to: 'https://converterhubserver-i5kt.onrender.com/api'
+  apiUrl: 'http://localhost:3000/api',
 };

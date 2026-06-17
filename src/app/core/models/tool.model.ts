@@ -13,11 +13,12 @@ export interface Tool {
   weight?: number;
 }
 
-export type ToolCategory = 'pdf' | 'image' | 'document' | 'archive' | 'resume';
+export type ToolCategory = 'pdf' | 'image' | 'document' | 'archive' | 'resume' | 'biodata';
 
 export const TOOLS: Tool[] = [
-  // ── Resume Builder ───────────────────────────────────────────────────────────
-  { id: 'resume-builder',   title: 'Resume Builder',     description: 'Build a professional, ATS-friendly resume with live preview and free PDF download.', icon: '🧑‍💼', route: '/resume-builder',   category: 'resume',   acceptedFormats: [],                        outputFormat: 'PDF',    color: 'from-violet-500 to-indigo-600',   badge: 'New', weight: 110 },
+  // ── Resume & Biodata Builders ────────────────────────────────────────────────
+  { id: 'resume-builder',   title: 'Resume Builder',     description: 'Build a professional, ATS-friendly resume with live preview and free PDF download.', icon: '🧑‍💼', route: '/resume-builder',   category: 'resume',   acceptedFormats: [],                        outputFormat: 'PDF',    color: 'from-violet-500 to-indigo-600',   badge: 'Popular', weight: 110 },
+  { id: 'biodata-maker',    title: 'Biodata Maker',      description: 'Create a marriage or professional biodata with photo, family details, and download a free PDF.', icon: '📋', route: '/biodata-maker', category: 'biodata', acceptedFormats: [], outputFormat: 'PDF', color: 'from-rose-500 to-pink-600', badge: 'New', weight: 108 },
 
   // ── Original PDF tools ───────────────────────────────────────────────────────
   { id: 'image-to-pdf',     title: 'Image to PDF',       description: 'Convert JPG, PNG, or WebP images into a single PDF document.',               icon: '🖼️',  route: '/image-to-pdf',     category: 'pdf',      acceptedFormats: ['.jpg','.png','.webp'],   outputFormat: 'PDF',    color: 'from-blue-500 to-cyan-500',       badge: 'Popular', weight: 100 },

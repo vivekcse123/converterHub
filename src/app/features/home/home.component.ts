@@ -20,6 +20,7 @@ export class HomeComponent implements OnInit {
   readonly categories = [
     { id: 'all',      label: 'All Tools' },
     { id: 'resume',   label: '🧑‍💼 Resume' },
+    { id: 'biodata',  label: '📋 Biodata' },
     { id: 'pdf',      label: '📄 PDF' },
     { id: 'image',    label: '🖼️ Image' },
     { id: 'document', label: '📝 Document' },

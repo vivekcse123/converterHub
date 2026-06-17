@@ -1,0 +1,298 @@
+.biodata-page {
+  background: #fff;
+  width: 210mm;
+  min-height: 297mm;
+  box-sizing: border-box;
+  color: #1f2937;
+  font-family: 'Roboto', 'Segoe UI', Arial, sans-serif;
+  font-size: 9pt;
+}
+
+/* Header */
+.pro-header {
+  padding: 14px 20px 0;
+  background: #fff;
+}
+
+.header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.header-text {
+  flex: 1;
+}
+
+.pro-name {
+  font-size: 20pt;
+  font-weight: 700;
+  color: #111827;
+  margin: 0;
+  line-height: 1.1;
+}
+
+.pro-title {
+  font-size: 11pt;
+  color: #3730a3;
+  margin: 4px 0 0;
+  font-weight: 500;
+}
+
+.pro-contact {
+  font-size: 8pt;
+  color: #6b7280;
+  margin: 6px 0 0;
+}
+
+.header-photo {
+  flex-shrink: 0;
+}
+
+.pro-photo {
+  width: 80px;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 4px;
+  border: 2px solid #e0e7ff;
+}
+
+.header-bar {
+  height: 3px;
+  background: linear-gradient(90deg, #3730a3, #7c3aed);
+  margin-top: 10px;
+}
+
+/* Body layout */
+.pro-body {
+  display: flex;
+  gap: 0;
+  min-height: calc(297mm - 80px);
+}
+
+/* Sidebar */
+.pro-sidebar {
+  width: 62mm;
+  background: #f8fafc;
+  border-right: 1px solid #e2e8f0;
+  padding: 12px 10px;
+  flex-shrink: 0;
+}
+
+.pro-card {
+  margin-bottom: 12px;
+}
+
+.card-title {
+  font-size: 8pt;
+  font-weight: 700;
+  color: #3730a3;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  padding-bottom: 3px;
+  border-bottom: 1.5px solid #c7d2fe;
+  margin-bottom: 6px;
+}
+
+.info-item {
+  display: flex;
+  gap: 5px;
+  align-items: flex-start;
+  margin-bottom: 5px;
+}
+
+.info-icon {
+  font-size: 9pt;
+  margin-top: 1px;
+  flex-shrink: 0;
+  width: 14px;
+}
+
+.info-label {
+  font-size: 7pt;
+  color: #6b7280;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.info-value {
+  font-size: 8.5pt;
+  color: #1f2937;
+  line-height: 1.3;
+}
+
+.info-value.small-text {
+  font-size: 7.5pt;
+  word-break: break-all;
+}
+
+/* Tags */
+.tags-group {
+  margin-bottom: 6px;
+}
+
+.tags-label {
+  font-size: 7pt;
+  color: #6b7280;
+  font-weight: 600;
+  text-transform: uppercase;
+  margin-bottom: 3px;
+}
+
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 3px;
+}
+
+.tag {
+  background: #e0e7ff;
+  color: #3730a3;
+  font-size: 7pt;
+  padding: 1px 5px;
+  border-radius: 3px;
+  font-weight: 500;
+}
+
+.hobby-tag {
+  background: #fce7f3;
+  color: #9d174d;
+}
+
+.lang-list {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.lang-item {
+  font-size: 8pt;
+  color: #374151;
+}
+
+/* Main */
+.pro-main {
+  flex: 1;
+  padding: 12px 14px;
+}
+
+.pro-section {
+  margin-bottom: 14px;
+}
+
+.section-heading {
+  font-size: 9pt;
+  font-weight: 700;
+  color: #3730a3;
+  border-bottom: 1.5px solid #e0e7ff;
+  padding-bottom: 4px;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.heading-icon {
+  font-size: 9pt;
+}
+
+/* Professional details grid */
+.pro-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+}
+
+.pro-item {
+  background: #f8fafc;
+  padding: 5px 8px;
+  border-radius: 3px;
+  border-left: 2px solid #c7d2fe;
+}
+
+.pro-item-label {
+  font-size: 7pt;
+  color: #6b7280;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.pro-item-value {
+  font-size: 8.5pt;
+  color: #1f2937;
+  font-weight: 500;
+}
+
+/* Education */
+.edu-entry {
+  margin-bottom: 8px;
+  padding-bottom: 8px;
+  border-bottom: 0.5px solid #f1f5f9;
+}
+
+.edu-entry:last-child {
+  border-bottom: none;
+}
+
+.edu-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.edu-degree {
+  font-weight: 600;
+  color: #111827;
+  font-size: 9pt;
+}
+
+.edu-year {
+  font-size: 8pt;
+  color: #6b7280;
+  flex-shrink: 0;
+}
+
+.edu-inst {
+  color: #374151;
+  font-size: 8.5pt;
+  margin-top: 1px;
+}
+
+.edu-grade {
+  font-size: 7.5pt;
+  color: #6b7280;
+  margin-top: 1px;
+}
+
+/* Achievements */
+.achieve-list {
+  padding-left: 14px;
+  margin: 0;
+  color: #374151;
+  font-size: 8.5pt;
+  line-height: 1.6;
+}
+
+.achieve-list li {
+  margin-bottom: 2px;
+}
+
+.pro-footer {
+  text-align: center;
+  font-size: 7pt;
+  color: #9ca3af;
+  padding: 8px 0;
+  border-top: 0.5px solid #f1f5f9;
+}
+
+@media print {
+  .biodata-page {
+    width: 210mm;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+}

@@ -1,0 +1,319 @@
+<div class="biodata-page modern-card">
+
+  <!-- Gradient Header -->
+  <header class="mc-header">
+    <div class="mc-header-content">
+      @if (biodata().personal.photo) {
+        <div class="mc-avatar-ring">
+          <img [src]="biodata().personal.photo" alt="Profile photo" class="mc-avatar" />
+        </div>
+      } @else {
+        <div class="mc-avatar-ring mc-avatar-placeholder">
+          <span class="mc-avatar-letter">{{ (biodata().personal.fullName || 'B')[0] | uppercase }}</span>
+        </div>
+      }
+      <div class="mc-header-text">
+        <h1 class="mc-name">{{ biodata().personal.fullName || 'Full Name' }}</h1>
+        <div class="mc-pills">
+          @if (biodata().personal.dateOfBirth) {
+            <span class="mc-pill">{{ biodata().personal.dateOfBirth }}</span>
+          }
+          @if (biodata().personal.height) {
+            <span class="mc-pill">{{ biodata().personal.height }}</span>
+          }
+          @if (biodata().personal.religion) {
+            <span class="mc-pill">{{ biodata().personal.religion }}</span>
+          }
+          @if (biodata().personal.caste) {
+            <span class="mc-pill">{{ biodata().personal.caste }}</span>
+          }
+        </div>
+        @if (biodata().contact.phone || biodata().contact.email) {
+          <div class="mc-contact-line">
+            @if (biodata().contact.phone) { <span>📞 {{ biodata().contact.phone }}</span> }
+            @if (biodata().contact.email) { <span>✉️ {{ biodata().contact.email }}</span> }
+          </div>
+        }
+      </div>
+    </div>
+  </header>
+
+  <!-- Cards body -->
+  <div class="mc-body">
+
+    <!-- Personal Details card -->
+    <div class="mc-card">
+      <div class="mc-card-header">
+        <span class="mc-card-icon">👤</span>
+        <span class="mc-card-title">Personal Details</span>
+      </div>
+      <div class="mc-card-body">
+        <div class="mc-rows">
+          @if (biodata().personal.placeOfBirth) {
+            <div class="mc-row"><span class="mc-label">Place of Birth</span><span class="mc-val">{{ biodata().personal.placeOfBirth }}</span></div>
+          }
+          @if (biodata().personal.timeOfBirth) {
+            <div class="mc-row"><span class="mc-label">Time of Birth</span><span class="mc-val">{{ biodata().personal.timeOfBirth }}</span></div>
+          }
+          @if (biodata().personal.bloodGroup) {
+            <div class="mc-row"><span class="mc-label">Blood Group</span><span class="mc-val">{{ biodata().personal.bloodGroup }}</span></div>
+          }
+          @if (biodata().personal.complexion) {
+            <div class="mc-row"><span class="mc-label">Complexion</span><span class="mc-val">{{ biodata().personal.complexion }}</span></div>
+          }
+          @if (biodata().personal.weight) {
+            <div class="mc-row"><span class="mc-label">Weight</span><span class="mc-val">{{ biodata().personal.weight }}</span></div>
+          }
+          @if (biodata().personal.maritalStatus) {
+            <div class="mc-row"><span class="mc-label">Marital Status</span><span class="mc-val">{{ biodata().personal.maritalStatus }}</span></div>
+          }
+          @if (biodata().personal.motherTongue) {
+            <div class="mc-row"><span class="mc-label">Mother Tongue</span><span class="mc-val">{{ biodata().personal.motherTongue }}</span></div>
+          }
+          @if (biodata().personal.gotra) {
+            <div class="mc-row"><span class="mc-label">Gotra</span><span class="mc-val">{{ biodata().personal.gotra }}</span></div>
+          }
+          @if (biodata().personal.manglik) {
+            <div class="mc-row"><span class="mc-label">Manglik</span><span class="mc-val">{{ biodata().personal.manglik }}</span></div>
+          }
+          @if (biodata().personal.diet) {
+            <div class="mc-row"><span class="mc-label">Diet</span><span class="mc-val">{{ biodata().personal.diet }}</span></div>
+          }
+          @if (biodata().personal.subCaste) {
+            <div class="mc-row"><span class="mc-label">Sub-Caste</span><span class="mc-val">{{ biodata().personal.subCaste }}</span></div>
+          }
+          @if (biodata().personal.nationality) {
+            <div class="mc-row"><span class="mc-label">Nationality</span><span class="mc-val">{{ biodata().personal.nationality }}</span></div>
+          }
+        </div>
+      </div>
+    </div>
+
+    <!-- Professional Details card -->
+    @if (isVisible('professional') && hasProfessional()) {
+      <div class="mc-card">
+        <div class="mc-card-header">
+          <span class="mc-card-icon">💼</span>
+          <span class="mc-card-title">Professional Details</span>
+        </div>
+        <div class="mc-card-body">
+          <div class="mc-rows">
+            @if (biodata().professional.occupation) {
+              <div class="mc-row"><span class="mc-label">Occupation</span><span class="mc-val">{{ biodata().professional.occupation }}</span></div>
+            }
+            @if (biodata().professional.jobTitle) {
+              <div class="mc-row"><span class="mc-label">Job Title</span><span class="mc-val">{{ biodata().professional.jobTitle }}</span></div>
+            }
+            @if (biodata().professional.employer) {
+              <div class="mc-row"><span class="mc-label">Employer</span><span class="mc-val">{{ biodata().professional.employer }}</span></div>
+            }
+            @if (biodata().professional.workExperience) {
+              <div class="mc-row"><span class="mc-label">Experience</span><span class="mc-val">{{ biodata().professional.workExperience }}</span></div>
+            }
+            @if (biodata().professional.annualIncome) {
+              <div class="mc-row"><span class="mc-label">Annual Income</span><span class="mc-val">{{ biodata().professional.annualIncome }}</span></div>
+            }
+            @if (workLocation()) {
+              <div class="mc-row"><span class="mc-label">Work Location</span><span class="mc-val">{{ workLocation() }}</span></div>
+            }
+          </div>
+        </div>
+      </div>
+    }
+
+    <!-- Education -->
+    @if (biodata().education.length > 0 && isVisible('education')) {
+      <div class="mc-card">
+        <div class="mc-card-header">
+          <span class="mc-card-icon">🎓</span>
+          <span class="mc-card-title">Education</span>
+        </div>
+        <div class="mc-card-body">
+          @for (edu of biodata().education; track edu.id) {
+            <div class="mc-edu-entry">
+              <div class="mc-edu-top">
+                <span class="mc-edu-degree">{{ edu.degree }}{{ edu.field ? ' — ' + edu.field : '' }}</span>
+                <span class="mc-edu-year">{{ edu.year }}</span>
+              </div>
+              <div class="mc-edu-inst">{{ edu.institution }}</div>
+              @if (edu.grade) {
+                <span class="mc-edu-grade">{{ edu.grade }}</span>
+              }
+            </div>
+          }
+        </div>
+      </div>
+    }
+
+    <!-- Family -->
+    @if (biodata().type === 'marriage' && isVisible('family') && hasFamily()) {
+      <div class="mc-card">
+        <div class="mc-card-header">
+          <span class="mc-card-icon">👨‍👩‍👧‍👦</span>
+          <span class="mc-card-title">Family Information</span>
+        </div>
+        <div class="mc-card-body">
+          <div class="mc-rows">
+            @if (biodata().family.fatherName) {
+              <div class="mc-row"><span class="mc-label">Father's Name</span><span class="mc-val">{{ biodata().family.fatherName }}</span></div>
+            }
+            @if (biodata().family.fatherOccupation) {
+              <div class="mc-row"><span class="mc-label">Father's Occupation</span><span class="mc-val">{{ biodata().family.fatherOccupation }}</span></div>
+            }
+            @if (biodata().family.motherName) {
+              <div class="mc-row"><span class="mc-label">Mother's Name</span><span class="mc-val">{{ biodata().family.motherName }}</span></div>
+            }
+            @if (biodata().family.motherOccupation) {
+              <div class="mc-row"><span class="mc-label">Mother's Occupation</span><span class="mc-val">{{ biodata().family.motherOccupation }}</span></div>
+            }
+            @if (biodata().family.brothers) {
+              <div class="mc-row"><span class="mc-label">Brothers</span><span class="mc-val">{{ biodata().family.brothers }}</span></div>
+            }
+            @if (biodata().family.sisters) {
+              <div class="mc-row"><span class="mc-label">Sisters</span><span class="mc-val">{{ biodata().family.sisters }}</span></div>
+            }
+            @if (biodata().family.familyType) {
+              <div class="mc-row"><span class="mc-label">Family Type</span><span class="mc-val">{{ biodata().family.familyType }}</span></div>
+            }
+            @if (biodata().family.familyStatus) {
+              <div class="mc-row"><span class="mc-label">Family Status</span><span class="mc-val">{{ biodata().family.familyStatus }}</span></div>
+            }
+            @if (biodata().family.nativePlace) {
+              <div class="mc-row"><span class="mc-label">Native Place</span><span class="mc-val">{{ biodata().family.nativePlace }}</span></div>
+            }
+          </div>
+          @if (biodata().family.aboutFamily) {
+            <div class="mc-about-family">{{ biodata().family.aboutFamily }}</div>
+          }
+        </div>
+      </div>
+    }
+
+    <!-- Two-column row: Skills + Contact -->
+    <div class="mc-two-col">
+      @if (isVisible('skills') && (biodata().skills.length > 0 || biodata().hobbies.length > 0 || biodata().languages.length > 0)) {
+        <div class="mc-card mc-half">
+          <div class="mc-card-header">
+            <span class="mc-card-icon">⭐</span>
+            <span class="mc-card-title">Skills & Interests</span>
+          </div>
+          <div class="mc-card-body">
+            @if (biodata().skills.length > 0) {
+              <div class="mc-chip-group">
+                <div class="mc-chip-label">Skills</div>
+                <div class="mc-chips">
+                  @for (s of biodata().skills; track s) {
+                    <span class="mc-chip">{{ s }}</span>
+                  }
+                </div>
+              </div>
+            }
+            @if (biodata().hobbies.length > 0) {
+              <div class="mc-chip-group">
+                <div class="mc-chip-label">Hobbies</div>
+                <div class="mc-chips">
+                  @for (h of biodata().hobbies; track h) {
+                    <span class="mc-chip hobby">{{ h }}</span>
+                  }
+                </div>
+              </div>
+            }
+            @if (biodata().languages.length > 0) {
+              <div class="mc-chip-group">
+                <div class="mc-chip-label">Languages</div>
+                <div class="mc-chips">
+                  @for (l of biodata().languages; track l) {
+                    <span class="mc-chip lang">{{ l }}</span>
+                  }
+                </div>
+              </div>
+            }
+          </div>
+        </div>
+      }
+
+      @if (isVisible('contact')) {
+        <div class="mc-card mc-half">
+          <div class="mc-card-header">
+            <span class="mc-card-icon">📞</span>
+            <span class="mc-card-title">Contact</span>
+          </div>
+          <div class="mc-card-body">
+            <div class="mc-rows">
+              @if (biodata().contact.phone) {
+                <div class="mc-row"><span class="mc-label">Phone</span><span class="mc-val">{{ biodata().contact.phone }}</span></div>
+              }
+              @if (biodata().contact.whatsapp) {
+                <div class="mc-row"><span class="mc-label">WhatsApp</span><span class="mc-val">{{ biodata().contact.whatsapp }}</span></div>
+              }
+              @if (biodata().contact.email) {
+                <div class="mc-row"><span class="mc-label">Email</span><span class="mc-val small">{{ biodata().contact.email }}</span></div>
+              }
+              @if (biodata().contact.city) {
+                <div class="mc-row"><span class="mc-label">City</span><span class="mc-val">{{ cityState() }}</span></div>
+              }
+              @if (biodata().contact.address) {
+                <div class="mc-row"><span class="mc-label">Address</span><span class="mc-val">{{ biodata().contact.address }}</span></div>
+              }
+            </div>
+          </div>
+        </div>
+      }
+    </div>
+
+    <!-- Partner Preferences -->
+    @if (biodata().type === 'marriage' && isVisible('partnerPreferences') && hasPartnerPreferences()) {
+      <div class="mc-card mc-pref-card">
+        <div class="mc-card-header">
+          <span class="mc-card-icon">💞</span>
+          <span class="mc-card-title">Partner Expectations</span>
+        </div>
+        <div class="mc-card-body">
+          <div class="mc-rows">
+            @if (ageRange()) {
+              <div class="mc-row"><span class="mc-label">Age</span><span class="mc-val">{{ ageRange() }}</span></div>
+            }
+            @if (biodata().partnerPreferences.heightFrom) {
+              <div class="mc-row"><span class="mc-label">Height</span><span class="mc-val">{{ biodata().partnerPreferences.heightFrom }}{{ biodata().partnerPreferences.heightTo ? ' – ' + biodata().partnerPreferences.heightTo : '' }}</span></div>
+            }
+            @if (biodata().partnerPreferences.religion) {
+              <div class="mc-row"><span class="mc-label">Religion</span><span class="mc-val">{{ biodata().partnerPreferences.religion }}</span></div>
+            }
+            @if (biodata().partnerPreferences.education) {
+              <div class="mc-row"><span class="mc-label">Education</span><span class="mc-val">{{ biodata().partnerPreferences.education }}</span></div>
+            }
+            @if (biodata().partnerPreferences.occupation) {
+              <div class="mc-row"><span class="mc-label">Occupation</span><span class="mc-val">{{ biodata().partnerPreferences.occupation }}</span></div>
+            }
+            @if (biodata().partnerPreferences.location) {
+              <div class="mc-row"><span class="mc-label">Location</span><span class="mc-val">{{ biodata().partnerPreferences.location }}</span></div>
+            }
+          </div>
+          @if (biodata().partnerPreferences.other) {
+            <div class="mc-pref-note">{{ biodata().partnerPreferences.other }}</div>
+          }
+        </div>
+      </div>
+    }
+
+    <!-- Achievements -->
+    @if (isVisible('achievements') && biodata().achievements.length > 0) {
+      <div class="mc-card">
+        <div class="mc-card-header">
+          <span class="mc-card-icon">🏆</span>
+          <span class="mc-card-title">Achievements</span>
+        </div>
+        <div class="mc-card-body">
+          <ul class="mc-achieve-list">
+            @for (item of biodata().achievements; track item) {
+              <li>{{ item }}</li>
+            }
+          </ul>
+        </div>
+      </div>
+    }
+
+  </div>
+
+  <div class="mc-footer">Created with ApnaConverter — apnaconverter.com</div>
+</div>

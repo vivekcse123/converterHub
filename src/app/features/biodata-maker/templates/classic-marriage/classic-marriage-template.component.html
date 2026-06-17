@@ -1,0 +1,409 @@
+<div class="biodata-page classic-marriage font-serif">
+
+  <!-- Top ornamental border -->
+  <div class="border-top"></div>
+
+  <!-- Header -->
+  <header class="bd-header">
+    <div class="om-symbol">ॐ</div>
+    <h1 class="bd-title">BIODATA</h1>
+    @if (biodata().type === 'marriage') {
+      <p class="bd-subtitle">~ Marriage Biodata ~</p>
+    }
+    <div class="divider-fancy">✦ ✦ ✦</div>
+  </header>
+
+  <!-- Personal Details + Photo -->
+  <section class="bd-section">
+    <h2 class="section-title">Personal Information</h2>
+    <div class="personal-grid">
+      <div class="personal-fields">
+        @if (biodata().personal.fullName) {
+          <div class="field-row highlight-row">
+            <span class="field-label">Full Name</span>
+            <span class="field-value font-bold">{{ biodata().personal.fullName }}</span>
+          </div>
+        }
+        @if (biodata().personal.dateOfBirth) {
+          <div class="field-row">
+            <span class="field-label">Date of Birth</span>
+            <span class="field-value">{{ biodata().personal.dateOfBirth }}</span>
+          </div>
+        }
+        @if (biodata().personal.timeOfBirth) {
+          <div class="field-row">
+            <span class="field-label">Time of Birth</span>
+            <span class="field-value">{{ biodata().personal.timeOfBirth }}</span>
+          </div>
+        }
+        @if (biodata().personal.placeOfBirth) {
+          <div class="field-row">
+            <span class="field-label">Place of Birth</span>
+            <span class="field-value">{{ biodata().personal.placeOfBirth }}</span>
+          </div>
+        }
+        @if (biodata().personal.religion) {
+          <div class="field-row">
+            <span class="field-label">Religion</span>
+            <span class="field-value">{{ biodata().personal.religion }}</span>
+          </div>
+        }
+        @if (biodata().personal.caste) {
+          <div class="field-row">
+            <span class="field-label">Caste</span>
+            <span class="field-value">{{ biodata().personal.caste }}</span>
+          </div>
+        }
+        @if (biodata().personal.subCaste) {
+          <div class="field-row">
+            <span class="field-label">Sub-Caste</span>
+            <span class="field-value">{{ biodata().personal.subCaste }}</span>
+          </div>
+        }
+        @if (biodata().personal.gotra) {
+          <div class="field-row">
+            <span class="field-label">Gotra</span>
+            <span class="field-value">{{ biodata().personal.gotra }}</span>
+          </div>
+        }
+        @if (biodata().personal.height) {
+          <div class="field-row">
+            <span class="field-label">Height</span>
+            <span class="field-value">{{ biodata().personal.height }}</span>
+          </div>
+        }
+        @if (biodata().personal.weight) {
+          <div class="field-row">
+            <span class="field-label">Weight</span>
+            <span class="field-value">{{ biodata().personal.weight }}</span>
+          </div>
+        }
+        @if (biodata().personal.complexion) {
+          <div class="field-row">
+            <span class="field-label">Complexion</span>
+            <span class="field-value">{{ biodata().personal.complexion }}</span>
+          </div>
+        }
+        @if (biodata().personal.bloodGroup) {
+          <div class="field-row">
+            <span class="field-label">Blood Group</span>
+            <span class="field-value">{{ biodata().personal.bloodGroup }}</span>
+          </div>
+        }
+        @if (biodata().personal.maritalStatus) {
+          <div class="field-row">
+            <span class="field-label">Marital Status</span>
+            <span class="field-value">{{ biodata().personal.maritalStatus }}</span>
+          </div>
+        }
+        @if (biodata().personal.motherTongue) {
+          <div class="field-row">
+            <span class="field-label">Mother Tongue</span>
+            <span class="field-value">{{ biodata().personal.motherTongue }}</span>
+          </div>
+        }
+        @if (biodata().personal.manglik) {
+          <div class="field-row">
+            <span class="field-label">Manglik</span>
+            <span class="field-value">{{ biodata().personal.manglik }}</span>
+          </div>
+        }
+        @if (biodata().personal.diet) {
+          <div class="field-row">
+            <span class="field-label">Diet</span>
+            <span class="field-value">{{ biodata().personal.diet }}</span>
+          </div>
+        }
+        @if (biodata().personal.nationality) {
+          <div class="field-row">
+            <span class="field-label">Nationality</span>
+            <span class="field-value">{{ biodata().personal.nationality }}</span>
+          </div>
+        }
+      </div>
+      @if (biodata().personal.photo) {
+        <div class="photo-box">
+          <img [src]="biodata().personal.photo" alt="Profile photo" class="profile-photo" />
+        </div>
+      } @else {
+        <div class="photo-placeholder">
+          <div class="photo-icon">👤</div>
+          <div class="photo-label">Photo</div>
+        </div>
+      }
+    </div>
+  </section>
+
+  <!-- Family Information -->
+  @if (biodata().type === 'marriage' && isVisible('family')) {
+    <section class="bd-section">
+      <h2 class="section-title">Family Information</h2>
+      @if (biodata().family.fatherName) {
+        <div class="field-row">
+          <span class="field-label">Father's Name</span>
+          <span class="field-value">{{ biodata().family.fatherName }}</span>
+        </div>
+      }
+      @if (biodata().family.fatherOccupation) {
+        <div class="field-row">
+          <span class="field-label">Father's Occupation</span>
+          <span class="field-value">{{ biodata().family.fatherOccupation }}</span>
+        </div>
+      }
+      @if (biodata().family.motherName) {
+        <div class="field-row">
+          <span class="field-label">Mother's Name</span>
+          <span class="field-value">{{ biodata().family.motherName }}</span>
+        </div>
+      }
+      @if (biodata().family.motherOccupation) {
+        <div class="field-row">
+          <span class="field-label">Mother's Occupation</span>
+          <span class="field-value">{{ biodata().family.motherOccupation }}</span>
+        </div>
+      }
+      @if (biodata().family.brothers) {
+        <div class="field-row">
+          <span class="field-label">Brothers</span>
+          <span class="field-value">{{ biodata().family.brothers }}</span>
+        </div>
+      }
+      @if (biodata().family.sisters) {
+        <div class="field-row">
+          <span class="field-label">Sisters</span>
+          <span class="field-value">{{ biodata().family.sisters }}</span>
+        </div>
+      }
+      @if (biodata().family.familyType) {
+        <div class="field-row">
+          <span class="field-label">Family Type</span>
+          <span class="field-value">{{ biodata().family.familyType }}</span>
+        </div>
+      }
+      @if (biodata().family.familyStatus) {
+        <div class="field-row">
+          <span class="field-label">Family Status</span>
+          <span class="field-value">{{ biodata().family.familyStatus }}</span>
+        </div>
+      }
+      @if (biodata().family.familyValues) {
+        <div class="field-row">
+          <span class="field-label">Family Values</span>
+          <span class="field-value">{{ biodata().family.familyValues }}</span>
+        </div>
+      }
+      @if (biodata().family.nativePlace) {
+        <div class="field-row">
+          <span class="field-label">Native Place</span>
+          <span class="field-value">{{ biodata().family.nativePlace }}</span>
+        </div>
+      }
+      @if (biodata().family.aboutFamily) {
+        <div class="about-family">
+          <span class="field-label">About Family: </span>
+          <span class="field-value italic">{{ biodata().family.aboutFamily }}</span>
+        </div>
+      }
+    </section>
+  }
+
+  <!-- Education -->
+  @if (biodata().education.length > 0 && isVisible('education')) {
+    <section class="bd-section">
+      <h2 class="section-title">Education</h2>
+      <table class="edu-table">
+        <thead>
+          <tr>
+            <th>Degree / Course</th>
+            <th>Institution</th>
+            <th>Year</th>
+            <th>Grade/Marks</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (edu of biodata().education; track edu.id) {
+            <tr>
+              <td>{{ edu.degree }}{{ edu.field ? ' (' + edu.field + ')' : '' }}</td>
+              <td>{{ edu.institution }}</td>
+              <td>{{ edu.year }}</td>
+              <td>{{ edu.grade }}</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </section>
+  }
+
+  <!-- Professional -->
+  @if (isVisible('professional') && hasProfessional()) {
+    <section class="bd-section">
+      <h2 class="section-title">Professional Details</h2>
+      @if (biodata().professional.occupation) {
+        <div class="field-row">
+          <span class="field-label">Occupation</span>
+          <span class="field-value">{{ biodata().professional.occupation }}</span>
+        </div>
+      }
+      @if (biodata().professional.jobTitle) {
+        <div class="field-row">
+          <span class="field-label">Job Title</span>
+          <span class="field-value">{{ biodata().professional.jobTitle }}</span>
+        </div>
+      }
+      @if (biodata().professional.employer) {
+        <div class="field-row">
+          <span class="field-label">Employer</span>
+          <span class="field-value">{{ biodata().professional.employer }}</span>
+        </div>
+      }
+      @if (biodata().professional.workExperience) {
+        <div class="field-row">
+          <span class="field-label">Work Experience</span>
+          <span class="field-value">{{ biodata().professional.workExperience }}</span>
+        </div>
+      }
+      @if (biodata().professional.annualIncome) {
+        <div class="field-row">
+          <span class="field-label">Annual Income</span>
+          <span class="field-value">{{ biodata().professional.annualIncome }}</span>
+        </div>
+      }
+      @if (workLocation()) {
+        <div class="field-row">
+          <span class="field-label">Work Location</span>
+          <span class="field-value">{{ workLocation() }}</span>
+        </div>
+      }
+    </section>
+  }
+
+  <!-- Skills & Hobbies -->
+  @if (isVisible('skills') && (biodata().skills.length > 0 || biodata().hobbies.length > 0 || biodata().languages.length > 0)) {
+    <section class="bd-section">
+      <h2 class="section-title">Skills & Interests</h2>
+      @if (biodata().skills.length > 0) {
+        <div class="field-row">
+          <span class="field-label">Skills</span>
+          <span class="field-value">{{ biodata().skills.join(' • ') }}</span>
+        </div>
+      }
+      @if (biodata().hobbies.length > 0) {
+        <div class="field-row">
+          <span class="field-label">Hobbies</span>
+          <span class="field-value">{{ biodata().hobbies.join(' • ') }}</span>
+        </div>
+      }
+      @if (biodata().languages.length > 0) {
+        <div class="field-row">
+          <span class="field-label">Languages</span>
+          <span class="field-value">{{ biodata().languages.join(' • ') }}</span>
+        </div>
+      }
+    </section>
+  }
+
+  <!-- Achievements -->
+  @if (isVisible('achievements') && biodata().achievements.length > 0) {
+    <section class="bd-section">
+      <h2 class="section-title">Achievements</h2>
+      <ul class="achievements-list">
+        @for (item of biodata().achievements; track item) {
+          <li>{{ item }}</li>
+        }
+      </ul>
+    </section>
+  }
+
+  <!-- Partner Preferences -->
+  @if (biodata().type === 'marriage' && isVisible('partnerPreferences') && hasPartnerPreferences()) {
+    <section class="bd-section">
+      <h2 class="section-title">Partner Expectations</h2>
+      @if (ageRange()) {
+        <div class="field-row">
+          <span class="field-label">Age</span>
+          <span class="field-value">{{ ageRange() }}</span>
+        </div>
+      }
+      @if (heightRange()) {
+        <div class="field-row">
+          <span class="field-label">Height</span>
+          <span class="field-value">{{ heightRange() }}</span>
+        </div>
+      }
+      @if (biodata().partnerPreferences.religion) {
+        <div class="field-row">
+          <span class="field-label">Religion</span>
+          <span class="field-value">{{ biodata().partnerPreferences.religion }}</span>
+        </div>
+      }
+      @if (biodata().partnerPreferences.caste) {
+        <div class="field-row">
+          <span class="field-label">Caste</span>
+          <span class="field-value">{{ biodata().partnerPreferences.caste }}</span>
+        </div>
+      }
+      @if (biodata().partnerPreferences.education) {
+        <div class="field-row">
+          <span class="field-label">Education</span>
+          <span class="field-value">{{ biodata().partnerPreferences.education }}</span>
+        </div>
+      }
+      @if (biodata().partnerPreferences.occupation) {
+        <div class="field-row">
+          <span class="field-label">Occupation</span>
+          <span class="field-value">{{ biodata().partnerPreferences.occupation }}</span>
+        </div>
+      }
+      @if (biodata().partnerPreferences.location) {
+        <div class="field-row">
+          <span class="field-label">Location</span>
+          <span class="field-value">{{ biodata().partnerPreferences.location }}</span>
+        </div>
+      }
+      @if (biodata().partnerPreferences.other) {
+        <div class="about-family">
+          <span class="field-value italic">{{ biodata().partnerPreferences.other }}</span>
+        </div>
+      }
+    </section>
+  }
+
+  <!-- Contact -->
+  @if (isVisible('contact')) {
+    <section class="bd-section">
+      <h2 class="section-title">Contact Information</h2>
+      @if (biodata().contact.phone) {
+        <div class="field-row">
+          <span class="field-label">Phone</span>
+          <span class="field-value">{{ biodata().contact.phone }}</span>
+        </div>
+      }
+      @if (biodata().contact.whatsapp) {
+        <div class="field-row">
+          <span class="field-label">WhatsApp</span>
+          <span class="field-value">{{ biodata().contact.whatsapp }}</span>
+        </div>
+      }
+      @if (biodata().contact.email) {
+        <div class="field-row">
+          <span class="field-label">Email</span>
+          <span class="field-value">{{ biodata().contact.email }}</span>
+        </div>
+      }
+      @if (fullAddress()) {
+        <div class="field-row">
+          <span class="field-label">Address</span>
+          <span class="field-value">{{ fullAddress() }}</span>
+        </div>
+      }
+    </section>
+  }
+
+  <!-- Footer -->
+  <div class="bd-footer">
+    <div class="divider-fancy">✦ ✦ ✦</div>
+    <p class="footer-text">Created with ApnaConverter — apnaconverter.com</p>
+  </div>
+  <div class="border-bottom"></div>
+
+</div>

@@ -1,0 +1,225 @@
+.biodata-page {
+  background: #fffdf8;
+  width: 210mm;
+  min-height: 297mm;
+  padding: 12mm 14mm;
+  box-sizing: border-box;
+  color: #1f2937;
+  font-size: 9pt;
+  font-family: 'Georgia', 'Times New Roman', serif;
+  position: relative;
+}
+
+.border-top, .border-bottom {
+  position: absolute;
+  left: 6mm;
+  right: 6mm;
+  height: 3px;
+  background: linear-gradient(90deg, #9d174d 0%, #f43f5e 50%, #9d174d 100%);
+}
+.border-top { top: 4mm; }
+.border-bottom { bottom: 4mm; }
+
+.bd-header {
+  text-align: center;
+  padding: 8px 0 6px;
+  border-bottom: 1.5px solid #9d174d;
+  margin-bottom: 10px;
+}
+
+.om-symbol {
+  font-size: 22pt;
+  color: #9d174d;
+  margin-bottom: 4px;
+}
+
+.bd-title {
+  font-size: 18pt;
+  font-weight: 700;
+  color: #9d174d;
+  letter-spacing: 6px;
+  margin: 0;
+}
+
+.bd-subtitle {
+  font-size: 10pt;
+  color: #6b7280;
+  margin: 4px 0 0;
+  font-style: italic;
+}
+
+.divider-fancy {
+  color: #f43f5e;
+  font-size: 9pt;
+  margin: 6px 0 0;
+  letter-spacing: 6px;
+}
+
+/* Sections */
+.bd-section {
+  margin-bottom: 10px;
+}
+
+.section-title {
+  font-size: 9.5pt;
+  font-weight: 700;
+  color: #9d174d;
+  text-align: center;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  padding: 3px 0;
+  border-bottom: 1px solid #fecdd3;
+  border-top: 1px solid #fecdd3;
+  margin-bottom: 6px;
+  background: #fff1f2;
+}
+
+/* Personal grid with photo */
+.personal-grid {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+}
+
+.personal-fields {
+  flex: 1;
+}
+
+.photo-box {
+  flex-shrink: 0;
+}
+
+.profile-photo {
+  width: 90px;
+  height: 110px;
+  object-fit: cover;
+  border: 2px solid #9d174d;
+  border-radius: 2px;
+}
+
+.photo-placeholder {
+  width: 90px;
+  height: 110px;
+  border: 1.5px dashed #f9a8d4;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: #fff1f2;
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+
+.photo-icon {
+  font-size: 22px;
+  color: #f9a8d4;
+}
+
+.photo-label {
+  font-size: 7pt;
+  color: #9ca3af;
+  margin-top: 4px;
+}
+
+/* Field rows */
+.field-row {
+  display: flex;
+  padding: 2px 0;
+  border-bottom: 0.5px solid #fce7f3;
+  gap: 6px;
+}
+
+.highlight-row {
+  background: #fff1f2;
+  border-radius: 2px;
+  padding: 3px 4px;
+}
+
+.field-label {
+  min-width: 105px;
+  font-weight: 600;
+  color: #9d174d;
+  font-size: 8.5pt;
+  flex-shrink: 0;
+}
+
+.field-label::after {
+  content: ':';
+}
+
+.field-value {
+  color: #1f2937;
+  font-size: 8.5pt;
+  flex: 1;
+}
+
+.about-family {
+  margin-top: 5px;
+  padding: 5px 8px;
+  background: #fff1f2;
+  border-left: 3px solid #f43f5e;
+  font-size: 8pt;
+  line-height: 1.5;
+}
+
+/* Education table */
+.edu-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 8.5pt;
+}
+
+.edu-table th {
+  background: #fff1f2;
+  color: #9d174d;
+  font-weight: 600;
+  padding: 3px 6px;
+  text-align: left;
+  border: 0.5px solid #fecdd3;
+}
+
+.edu-table td {
+  padding: 3px 6px;
+  border: 0.5px solid #fce7f3;
+  color: #374151;
+}
+
+.edu-table tr:nth-child(even) td {
+  background: #fdf2f8;
+}
+
+/* Achievements */
+.achievements-list {
+  margin: 0;
+  padding-left: 16px;
+  color: #374151;
+  font-size: 8.5pt;
+  line-height: 1.6;
+}
+
+.achievements-list li {
+  margin-bottom: 2px;
+}
+
+/* Footer */
+.bd-footer {
+  text-align: center;
+  margin-top: 12px;
+  padding-top: 6px;
+  border-top: 1px solid #fecdd3;
+}
+
+.footer-text {
+  font-size: 7pt;
+  color: #9ca3af;
+  margin: 4px 0 0;
+}
+
+@media print {
+  .biodata-page {
+    width: 210mm;
+    padding: 12mm 14mm;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+}

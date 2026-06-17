@@ -768,4 +768,29 @@ export const TOOL_CONTENT: Record<string, ToolContent> = {
     ],
   },
 
+
+  'biodata-maker': {
+    steps: [
+      { icon: '🎨', title: 'Choose a Template', desc: 'Pick from Classic Marriage, Professional, or Modern Card templates to match your style.' },
+      { icon: '✍️', title: 'Fill in Your Details', desc: 'Enter personal info, education, professional details, family info, and upload your photo.' },
+      { icon: '⬇️', title: 'Download Your PDF', desc: 'Download a print-ready, beautifully formatted A4 biodata PDF — completely free.' },
+    ],
+    benefits: [
+      'Marriage biodata with family details, partner preferences, and photo',
+      'Professional biodata format for job applications and general use',
+      'Photo upload stored securely in your browser — never uploaded to any server',
+      'Three distinct templates: Classic, Professional, and Modern Card',
+      'Toggle sections on/off to customise what appears in the PDF',
+      'Completely free — no account or sign-up required',
+    ],
+    faqs: [
+      { q: 'Is the biodata maker free?', a: 'Yes, 100% free with no sign-up, no watermarks, and no hidden charges. Download as many PDFs as you like.' },
+      { q: 'What is the difference between marriage biodata and professional biodata?', a: 'Marriage biodata includes personal details like religion, caste, height, complexion, family information, and partner expectations. Professional biodata focuses on work experience, education, and skills — suitable for job applications or general introductions.' },
+      { q: 'Is my photo and personal data safe?', a: 'Yes. Your entire biodata, including your photo, is saved only in your browser\'s local storage. Nothing is ever sent to our servers. Your data is completely private.' },
+      { q: 'Can I create multiple biodatas?', a: 'Yes, you can create, duplicate, rename, and switch between multiple biodatas using the toolbar.' },
+      { q: 'Can I hide certain sections from the PDF?', a: 'Yes — each section has a visibility toggle (eye icon). Hidden sections are still saved in the editor but won\'t appear in the downloaded PDF.' },
+      { q: 'What format is the downloaded biodata?', a: 'A print-ready A4 PDF. You can print it directly or share it digitally via email or WhatsApp.' },
+    ],
+  },
+
 };

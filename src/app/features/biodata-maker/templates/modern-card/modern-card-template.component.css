@@ -1,0 +1,309 @@
+.biodata-page {
+  background: #f5f3ff;
+  width: 210mm;
+  min-height: 297mm;
+  box-sizing: border-box;
+  font-family: 'Roboto', 'Segoe UI', Arial, sans-serif;
+  font-size: 9pt;
+  color: #1f2937;
+}
+
+/* Header */
+.mc-header {
+  background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 60%, #4f46e5 100%);
+  padding: 16px 16px;
+  color: #fff;
+}
+
+.mc-header-content {
+  display: flex;
+  gap: 14px;
+  align-items: center;
+}
+
+.mc-avatar-ring {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  border: 3px solid rgba(255,255,255,0.7);
+  overflow: hidden;
+  flex-shrink: 0;
+  background: rgba(255,255,255,0.15);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.mc-avatar {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.mc-avatar-placeholder {
+  background: rgba(255,255,255,0.2);
+}
+
+.mc-avatar-letter {
+  font-size: 28pt;
+  font-weight: 700;
+  color: rgba(255,255,255,0.9);
+}
+
+.mc-header-text {
+  flex: 1;
+}
+
+.mc-name {
+  font-size: 18pt;
+  font-weight: 700;
+  color: #fff;
+  margin: 0;
+  line-height: 1.1;
+}
+
+.mc-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-top: 6px;
+}
+
+.mc-pill {
+  background: rgba(255,255,255,0.2);
+  color: #e9d5ff;
+  font-size: 7.5pt;
+  padding: 2px 7px;
+  border-radius: 10px;
+  border: 1px solid rgba(255,255,255,0.3);
+}
+
+.mc-contact-line {
+  display: flex;
+  gap: 10px;
+  margin-top: 8px;
+  font-size: 7.5pt;
+  color: #c4b5fd;
+  flex-wrap: wrap;
+}
+
+/* Body */
+.mc-body {
+  padding: 10px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* Cards */
+.mc-card {
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.07);
+  overflow: hidden;
+}
+
+.mc-card-header {
+  background: linear-gradient(90deg, #7c3aed 0%, #6d28d9 100%);
+  padding: 5px 10px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.mc-card-icon {
+  font-size: 9pt;
+}
+
+.mc-card-title {
+  font-size: 8.5pt;
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: 0.3px;
+}
+
+.mc-card-body {
+  padding: 8px 10px;
+}
+
+/* Rows */
+.mc-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.mc-row {
+  display: flex;
+  gap: 8px;
+  align-items: baseline;
+  font-size: 8.5pt;
+  padding: 1.5px 0;
+  border-bottom: 0.5px solid #f3f4f6;
+}
+
+.mc-label {
+  min-width: 110px;
+  font-weight: 600;
+  color: #6b7280;
+  font-size: 7.5pt;
+  flex-shrink: 0;
+}
+
+.mc-val {
+  color: #111827;
+  flex: 1;
+}
+
+.mc-val.small {
+  font-size: 7.5pt;
+  word-break: break-all;
+}
+
+/* About family */
+.mc-about-family {
+  margin-top: 6px;
+  font-size: 8pt;
+  color: #374151;
+  font-style: italic;
+  padding: 5px 8px;
+  background: #f5f3ff;
+  border-left: 3px solid #7c3aed;
+  border-radius: 0 4px 4px 0;
+  line-height: 1.5;
+}
+
+/* Two column */
+.mc-two-col {
+  display: flex;
+  gap: 8px;
+}
+
+.mc-half {
+  flex: 1;
+  min-width: 0;
+}
+
+/* Chips */
+.mc-chip-group {
+  margin-bottom: 6px;
+}
+
+.mc-chip-label {
+  font-size: 7pt;
+  color: #6b7280;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  margin-bottom: 3px;
+}
+
+.mc-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 3px;
+}
+
+.mc-chip {
+  background: #ede9fe;
+  color: #5b21b6;
+  font-size: 7pt;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-weight: 500;
+}
+
+.mc-chip.hobby {
+  background: #fce7f3;
+  color: #9d174d;
+}
+
+.mc-chip.lang {
+  background: #d1fae5;
+  color: #065f46;
+}
+
+/* Education */
+.mc-edu-entry {
+  padding: 5px 0;
+  border-bottom: 0.5px solid #f3f4f6;
+}
+
+.mc-edu-entry:last-child {
+  border-bottom: none;
+}
+
+.mc-edu-top {
+  display: flex;
+  justify-content: space-between;
+  gap: 4px;
+}
+
+.mc-edu-degree {
+  font-weight: 600;
+  color: #111827;
+  font-size: 8.5pt;
+}
+
+.mc-edu-year {
+  font-size: 7.5pt;
+  color: #6b7280;
+  flex-shrink: 0;
+}
+
+.mc-edu-inst {
+  font-size: 8pt;
+  color: #374151;
+  margin-top: 1px;
+}
+
+.mc-edu-grade {
+  font-size: 7.5pt;
+  color: #6b7280;
+}
+
+/* Partner preferences */
+.mc-pref-card .mc-card-header {
+  background: linear-gradient(90deg, #9d174d 0%, #be185d 100%);
+}
+
+.mc-pref-note {
+  margin-top: 6px;
+  font-size: 8pt;
+  color: #374151;
+  font-style: italic;
+  padding: 5px 8px;
+  background: #fdf2f8;
+  border-left: 3px solid #db2777;
+  border-radius: 0 4px 4px 0;
+  line-height: 1.5;
+}
+
+/* Achievements */
+.mc-achieve-list {
+  margin: 0;
+  padding-left: 14px;
+  font-size: 8.5pt;
+  color: #374151;
+  line-height: 1.6;
+}
+
+.mc-achieve-list li {
+  margin-bottom: 2px;
+}
+
+/* Footer */
+.mc-footer {
+  text-align: center;
+  font-size: 7pt;
+  color: #9ca3af;
+  padding: 8px 0;
+}
+
+@media print {
+  .biodata-page {
+    width: 210mm;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+}

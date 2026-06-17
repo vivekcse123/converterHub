@@ -38,6 +38,9 @@ export const routes: Routes = [
     data: { description: 'Free, role-specific resume examples with sample bullet points, key skills, and ATS-friendly templates for popular job titles.' },
   },
 
+  // ── Biodata Maker ───────────────────────────────────────────────────────────
+  { path: 'biodata-maker', loadChildren: () => import('./features/biodata-maker/biodata-maker.routes').then(m => m.biodataMakerRoutes) },
+
   // ── Original tools ──────────────────────────────────────────────────────────
   { path: 'image-to-pdf', loadComponent: () => import('./features/image-to-pdf/image-to-pdf.component').then(m => m.ImageToPdfComponent), title: 'Image to PDF — ApnaConverter', data: { description: 'Convert JPG, PNG, GIF or HEIC images to a PDF file instantly. Free, no sign-up needed.' } },
   { path: 'pdf-to-word',  loadComponent: () => import('./features/pdf-to-word/pdf-to-word.component').then(m => m.PdfToWordComponent),    title: 'PDF to Word — ApnaConverter',  data: { description: 'Convert PDF files to editable Word (.docx) documents for free. Fast and easy.' } },

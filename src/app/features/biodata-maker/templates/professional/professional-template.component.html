@@ -1,0 +1,219 @@
+<div class="biodata-page professional">
+
+  <!-- Header -->
+  <header class="pro-header">
+    <div class="header-content">
+      <div class="header-text">
+        <h1 class="pro-name">{{ biodata().personal.fullName || 'Full Name' }}</h1>
+        @if (biodata().professional.jobTitle) {
+          <p class="pro-title">{{ biodata().professional.jobTitle }}</p>
+        }
+        @if (contactLine()) {
+          <p class="pro-contact">{{ contactLine() }}</p>
+        }
+      </div>
+      @if (biodata().personal.photo) {
+        <div class="header-photo">
+          <img [src]="biodata().personal.photo" alt="Profile photo" class="pro-photo" />
+        </div>
+      }
+    </div>
+    <div class="header-bar"></div>
+  </header>
+
+  <!-- Two column layout -->
+  <div class="pro-body">
+
+    <!-- Left column -->
+    <aside class="pro-sidebar">
+
+      <!-- Personal -->
+      <section class="pro-card">
+        <h2 class="card-title">Personal</h2>
+        @if (biodata().personal.dateOfBirth) {
+          <div class="info-item">
+            <span class="info-icon">🎂</span>
+            <div><div class="info-label">Date of Birth</div><div class="info-value">{{ biodata().personal.dateOfBirth }}</div></div>
+          </div>
+        }
+        @if (biodata().personal.gender) {
+          <div class="info-item">
+            <span class="info-icon">👤</span>
+            <div><div class="info-label">Gender</div><div class="info-value">{{ biodata().personal.gender }}</div></div>
+          </div>
+        }
+        @if (biodata().personal.bloodGroup) {
+          <div class="info-item">
+            <span class="info-icon">🩸</span>
+            <div><div class="info-label">Blood Group</div><div class="info-value">{{ biodata().personal.bloodGroup }}</div></div>
+          </div>
+        }
+        @if (biodata().personal.maritalStatus) {
+          <div class="info-item">
+            <span class="info-icon">💍</span>
+            <div><div class="info-label">Marital Status</div><div class="info-value">{{ biodata().personal.maritalStatus }}</div></div>
+          </div>
+        }
+        @if (biodata().personal.religion) {
+          <div class="info-item">
+            <span class="info-icon">🙏</span>
+            <div><div class="info-label">Religion</div><div class="info-value">{{ biodata().personal.religion }}</div></div>
+          </div>
+        }
+        @if (biodata().personal.motherTongue) {
+          <div class="info-item">
+            <span class="info-icon">🗣️</span>
+            <div><div class="info-label">Mother Tongue</div><div class="info-value">{{ biodata().personal.motherTongue }}</div></div>
+          </div>
+        }
+        @if (biodata().personal.nationality) {
+          <div class="info-item">
+            <span class="info-icon">🌏</span>
+            <div><div class="info-label">Nationality</div><div class="info-value">{{ biodata().personal.nationality }}</div></div>
+          </div>
+        }
+        @if (biodata().personal.height) {
+          <div class="info-item">
+            <span class="info-icon">📏</span>
+            <div><div class="info-label">Height</div><div class="info-value">{{ biodata().personal.height }}</div></div>
+          </div>
+        }
+      </section>
+
+      <!-- Skills -->
+      @if (isVisible('skills') && (biodata().skills.length > 0 || biodata().hobbies.length > 0 || biodata().languages.length > 0)) {
+        <section class="pro-card">
+          <h2 class="card-title">Skills & Interests</h2>
+          @if (biodata().skills.length > 0) {
+            <div class="tags-group">
+              <div class="tags-label">Skills</div>
+              <div class="tags">
+                @for (skill of biodata().skills; track skill) {
+                  <span class="tag">{{ skill }}</span>
+                }
+              </div>
+            </div>
+          }
+          @if (biodata().hobbies.length > 0) {
+            <div class="tags-group">
+              <div class="tags-label">Hobbies</div>
+              <div class="tags">
+                @for (hobby of biodata().hobbies; track hobby) {
+                  <span class="tag hobby-tag">{{ hobby }}</span>
+                }
+              </div>
+            </div>
+          }
+          @if (biodata().languages.length > 0) {
+            <div class="tags-group">
+              <div class="tags-label">Languages</div>
+              <div class="lang-list">
+                @for (lang of biodata().languages; track lang) {
+                  <span class="lang-item">{{ lang }}</span>
+                }
+              </div>
+            </div>
+          }
+        </section>
+      }
+
+      <!-- Contact -->
+      @if (isVisible('contact')) {
+        <section class="pro-card">
+          <h2 class="card-title">Contact</h2>
+          @if (biodata().contact.phone) {
+            <div class="info-item">
+              <span class="info-icon">📞</span>
+              <div><div class="info-label">Phone</div><div class="info-value">{{ biodata().contact.phone }}</div></div>
+            </div>
+          }
+          @if (biodata().contact.whatsapp) {
+            <div class="info-item">
+              <span class="info-icon">💬</span>
+              <div><div class="info-label">WhatsApp</div><div class="info-value">{{ biodata().contact.whatsapp }}</div></div>
+            </div>
+          }
+          @if (biodata().contact.email) {
+            <div class="info-item">
+              <span class="info-icon">✉️</span>
+              <div><div class="info-label">Email</div><div class="info-value small-text">{{ biodata().contact.email }}</div></div>
+            </div>
+          }
+          @if (biodata().contact.city) {
+            <div class="info-item">
+              <span class="info-icon">📍</span>
+              <div>
+                <div class="info-label">Location</div>
+                <div class="info-value">{{ cityState() }}</div>
+              </div>
+            </div>
+          }
+        </section>
+      }
+    </aside>
+
+    <!-- Main column -->
+    <main class="pro-main">
+
+      <!-- Professional -->
+      @if (isVisible('professional') && hasProfessional()) {
+        <section class="pro-section">
+          <h2 class="section-heading"><span class="heading-icon">💼</span> Professional Details</h2>
+          <div class="pro-grid">
+            @if (biodata().professional.occupation) {
+              <div class="pro-item"><div class="pro-item-label">Occupation</div><div class="pro-item-value">{{ biodata().professional.occupation }}</div></div>
+            }
+            @if (biodata().professional.jobTitle) {
+              <div class="pro-item"><div class="pro-item-label">Job Title</div><div class="pro-item-value">{{ biodata().professional.jobTitle }}</div></div>
+            }
+            @if (biodata().professional.employer) {
+              <div class="pro-item"><div class="pro-item-label">Employer</div><div class="pro-item-value">{{ biodata().professional.employer }}</div></div>
+            }
+            @if (biodata().professional.workExperience) {
+              <div class="pro-item"><div class="pro-item-label">Experience</div><div class="pro-item-value">{{ biodata().professional.workExperience }}</div></div>
+            }
+            @if (biodata().professional.annualIncome) {
+              <div class="pro-item"><div class="pro-item-label">Annual Income</div><div class="pro-item-value">{{ biodata().professional.annualIncome }}</div></div>
+            }
+            @if (workLocation()) {
+              <div class="pro-item"><div class="pro-item-label">Work Location</div><div class="pro-item-value">{{ workLocation() }}</div></div>
+            }
+          </div>
+        </section>
+      }
+
+      <!-- Education -->
+      @if (biodata().education.length > 0 && isVisible('education')) {
+        <section class="pro-section">
+          <h2 class="section-heading"><span class="heading-icon">🎓</span> Education</h2>
+          @for (edu of biodata().education; track edu.id) {
+            <div class="edu-entry">
+              <div class="edu-top">
+                <span class="edu-degree">{{ edu.degree }}{{ edu.field ? ' — ' + edu.field : '' }}</span>
+                <span class="edu-year">{{ edu.year }}</span>
+              </div>
+              <div class="edu-inst">{{ edu.institution }}</div>
+              @if (edu.grade) {
+                <div class="edu-grade">{{ edu.grade }}</div>
+              }
+            </div>
+          }
+        </section>
+      }
+
+      <!-- Achievements -->
+      @if (isVisible('achievements') && biodata().achievements.length > 0) {
+        <section class="pro-section">
+          <h2 class="section-heading"><span class="heading-icon">🏆</span> Achievements</h2>
+          <ul class="achieve-list">
+            @for (item of biodata().achievements; track item) {
+              <li>{{ item }}</li>
+            }
+          </ul>
+        </section>
+      }
+    </main>
+  </div>
+
+  <div class="pro-footer">Created with ApnaConverter — apnaconverter.com</div>
+</div>

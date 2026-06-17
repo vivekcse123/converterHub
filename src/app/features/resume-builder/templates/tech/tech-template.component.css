@@ -1,0 +1,31 @@
+.tech-tpl {
+  font-family: Inter, Arial, sans-serif;
+}
+
+.tech-header {
+  background: #0f172a;
+}
+
+.tech-heading {
+  font-size: 11pt;
+  font-weight: 700;
+  color: #0f172a;
+  border-bottom: 2px solid #10b981;
+  padding-bottom: 3pt;
+  margin-bottom: 6pt;
+}
+
+.tech-heading::before {
+  content: '▶ ';
+  color: #10b981;
+}
+
+.tech-skill-tag {
+  background: #f0fdf4;
+  border: 1px solid #bbf7d0;
+  color: #065f46;
+  border-radius: 4px;
+  padding: 1px 8px;
+  font-size: 8.5pt;
+  font-family: 'Courier New', monospace;
+}

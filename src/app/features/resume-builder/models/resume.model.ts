@@ -1,4 +1,4 @@
-export type TemplateId = 'ats-professional' | 'modern-professional' | 'fresher';
+export type TemplateId = 'ats-professional' | 'modern-professional' | 'fresher' | 'executive' | 'creative' | 'minimal' | 'tech' | 'elegant' | 'compact' | 'bold';
 
 export interface PersonalInfo {
   fullName: string;

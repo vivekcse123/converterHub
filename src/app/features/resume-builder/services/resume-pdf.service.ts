@@ -4,11 +4,25 @@ import { ResumeData, TemplateId } from '../models/resume.model';
 import { buildAtsProfessionalDoc } from '../pdf/ats-professional.pdf';
 import { buildModernProfessionalDoc } from '../pdf/modern-professional.pdf';
 import { buildFresherDoc } from '../pdf/fresher.pdf';
+import { buildExecutiveDoc } from '../pdf/executive.pdf';
+import { buildCreativeDoc } from '../pdf/creative.pdf';
+import { buildMinimalDoc } from '../pdf/minimal.pdf';
+import { buildTechDoc } from '../pdf/tech.pdf';
+import { buildElegantDoc } from '../pdf/elegant.pdf';
+import { buildCompactDoc } from '../pdf/compact.pdf';
+import { buildBoldDoc } from '../pdf/bold.pdf';
 
 const DOC_BUILDERS: Record<TemplateId, (resume: ResumeData) => TDocumentDefinitions> = {
   'ats-professional': buildAtsProfessionalDoc,
   'modern-professional': buildModernProfessionalDoc,
   fresher: buildFresherDoc,
+  executive: buildExecutiveDoc,
+  creative: buildCreativeDoc,
+  minimal: buildMinimalDoc,
+  tech: buildTechDoc,
+  elegant: buildElegantDoc,
+  compact: buildCompactDoc,
+  bold: buildBoldDoc,
 };
 
 function slugify(value: string): string {

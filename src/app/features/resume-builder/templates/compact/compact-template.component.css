@@ -1,0 +1,95 @@
+.compact-tpl {
+  padding: 0;
+  font-family: Inter, Arial, sans-serif;
+  font-size: 9pt;
+}
+
+.compact-layout {
+  display: grid;
+  grid-template-columns: 65mm 1fr;
+  min-height: 297mm;
+}
+
+.compact-sidebar {
+  background: #1d4ed8;
+  color: #ffffff;
+  padding: 10mm 7mm;
+}
+
+.compact-sidebar-inner {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.compact-name {
+  font-size: 15pt;
+  font-weight: 700;
+  color: #ffffff;
+  line-height: 1.2;
+  margin-bottom: 3px;
+}
+
+.compact-job-title {
+  font-size: 9pt;
+  font-style: italic;
+  color: #bfdbfe;
+  margin-bottom: 8px;
+}
+
+.compact-sidebar-section {
+  margin-top: 10px;
+}
+
+.compact-sidebar-heading {
+  font-size: 8.5pt;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #bfdbfe;
+  border-bottom: 1px solid rgba(255,255,255,0.3);
+  padding-bottom: 2px;
+  margin-bottom: 5px;
+}
+
+.compact-sidebar-category {
+  font-size: 7.5pt;
+  font-weight: 600;
+  color: #93c5fd;
+  margin-top: 3px;
+  margin-bottom: 1px;
+}
+
+.compact-contact-item {
+  font-size: 8pt;
+  color: #dbeafe;
+  line-height: 1.6;
+  word-break: break-all;
+}
+
+.compact-sidebar-item {
+  font-size: 8.5pt;
+  color: #dbeafe;
+  line-height: 1.6;
+}
+
+.compact-sidebar-muted {
+  font-size: 7.5pt;
+  color: #93c5fd;
+  font-style: italic;
+}
+
+.compact-main {
+  padding: 10mm 10mm 10mm 8mm;
+}
+
+.compact-heading {
+  color: #1d4ed8;
+  font-size: 10.5pt;
+  font-weight: 700;
+  border-bottom: 2px solid #bfdbfe;
+  margin-bottom: 5pt;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding-bottom: 2px;
+}

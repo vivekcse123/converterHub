@@ -1,0 +1,18 @@
+.elegant-tpl {
+  font-family: Georgia, 'Times New Roman', serif;
+}
+
+.elegant-header {
+  background: #fdf2f8;
+  text-align: center;
+}
+
+.elegant-heading {
+  font-variant: small-caps;
+  font-size: 11pt;
+  color: #9d174d;
+  text-align: center;
+  border-bottom: 1px solid #fbcfe8;
+  padding-bottom: 2pt;
+  margin-bottom: 6pt;
+}

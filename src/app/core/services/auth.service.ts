@@ -20,8 +20,14 @@ export class AuthService {
   readonly token       = this._token.asReadonly();
   readonly isLoggedIn  = computed(() => !!this._token());
   readonly isAdmin     = computed(() => ['admin','superadmin'].includes(this._user()?.role ?? ''));
-  readonly isPremium   = computed(() => ['premium','admin','superadmin'].includes(this._user()?.role ?? ''));
+  readonly isPro       = computed(() => {
+    if (['admin','superadmin'].includes(this._user()?.role ?? '')) return true;
+    const sub = this._user()?.subscription;
+    return sub?.status === 'active' && ['monthly','yearly'].includes(sub?.plan ?? '');
+  });
+  readonly isPremium   = this.isPro; // alias
   readonly currentPlan = computed(() => this._user()?.subscription?.plan ?? 'free');
+  readonly subscriptionEnd = computed(() => this._user()?.subscription?.currentPeriodEnd ?? null);
 
   constructor(private api: ApiService, private router: Router) {}
 

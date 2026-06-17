@@ -8,9 +8,14 @@
   isSuspended: boolean;
   banReason?:  string;
   subscription?: {
-    plan:   'free' | 'pro' | 'team' | 'enterprise';
-    status: 'active' | 'cancelled' | 'expired' | 'trialing';
-    currentPeriodEnd?: string;
+    plan:                   'free' | 'monthly' | 'yearly';
+    status:                 'free' | 'active' | 'past_due' | 'cancelled' | 'expired';
+    razorpaySubscriptionId?: string;
+    currentPeriodStart?:    string;
+    currentPeriodEnd?:      string;
+    cancelAtPeriodEnd?:     boolean;
+    resumeCount?:           number;
+    totalDownloads?:        number;
   };
   usage?: {
     conversionsToday:   number;

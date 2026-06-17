@@ -45,30 +45,30 @@ const SECTION_ICONS: Record<BiodataSectionId, string> = {
           <section class="card overflow-hidden">
             <!-- Accordion header -->
             <header
-              class="flex items-center gap-2 px-4 py-3 cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors select-none"
+              class="flex items-center gap-2.5 px-5 py-3.5 bg-slate-50 dark:bg-slate-800/60 border-b border-slate-200 dark:border-slate-700 cursor-pointer hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors select-none"
               (click)="toggle(section)"
             >
-              <span class="text-base">{{ icon(section) }}</span>
+              <span class="text-base leading-none">{{ icon(section) }}</span>
               <span class="flex-1 font-semibold text-slate-800 dark:text-slate-100 text-sm">{{ label(section) }}</span>
-              <div class="flex items-center gap-2">
+              <div class="flex items-center gap-1.5">
                 @if (!store.isSectionVisible(section)) {
-                  <span class="badge bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400 text-xs">Hidden in PDF</span>
+                  <span class="text-xs px-1.5 py-0.5 rounded bg-slate-200 dark:bg-slate-700 text-slate-500 dark:text-slate-400 font-medium">Hidden</span>
                 }
                 <button
                   type="button"
-                  class="text-xs text-slate-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors px-1 py-0.5 rounded hover:bg-slate-100 dark:hover:bg-slate-700"
+                  class="w-6 h-6 flex items-center justify-center rounded text-slate-400 hover:text-primary-600 dark:hover:text-primary-400 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors text-sm"
                   [title]="store.isSectionVisible(section) ? 'Hide from PDF' : 'Show in PDF'"
                   (click)="$event.stopPropagation(); store.toggleSectionVisibility(section)"
                 >
-                  {{ store.isSectionVisible(section) ? '👁️' : '🙈' }}
+                  {{ store.isSectionVisible(section) ? '👁' : '🚫' }}
                 </button>
-                <span class="text-slate-400 text-xs transition-transform duration-200" [class.rotate-180]="isOpen(section)">▼</span>
+                <svg class="w-3.5 h-3.5 text-slate-400 transition-transform duration-200 flex-shrink-0" [class.rotate-180]="isOpen(section)" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 4l4 4 4-4"/></svg>
               </div>
             </header>
 
             <!-- Accordion body -->
             @if (isOpen(section)) {
-              <div class="px-4 pb-4 pt-1 border-t border-slate-100 dark:border-slate-700/60">
+              <div class="px-5 py-4">
                 @switch (section) {
                   @case ('personal') { <app-biodata-personal-form /> }
                   @case ('contact') { <app-biodata-contact-form /> }

@@ -49,29 +49,51 @@
   </div>
 </section>
 
-<!-- ─── Resume Builder promo ─────────────────────────────────── -->
+<!-- ─── Resume Builder + Biodata Maker promos ────────────────── -->
 <section class="container-app py-10">
-  <a routerLink="/resume-builder"
-     class="group relative flex flex-col sm:flex-row sm:items-center gap-5 overflow-hidden rounded-2xl
-            bg-gradient-to-br from-violet-600 via-indigo-600 to-indigo-700 text-white p-6 sm:p-8 shadow-lg
-            hover:shadow-xl transition-shadow">
-    <div class="absolute -top-10 -right-10 w-48 h-48 bg-white/10 rounded-full blur-2xl pointer-events-none"></div>
-    <div class="flex-1 relative">
-      <span class="badge bg-white/15 text-white">✨ New</span>
-      <h2 class="text-xl sm:text-2xl font-extrabold mt-2 mb-1.5">
-        Build a Free ATS-Friendly Resume
-      </h2>
-      <p class="text-sm sm:text-base text-indigo-100 max-w-xl leading-relaxed">
-        Choose a professional template, fill in your details, get a live ATS score, and download a polished PDF —
-        100% free, no sign-up, your data stays on your device.
-      </p>
-    </div>
-    <div class="relative shrink-0">
-      <span class="btn btn-lg bg-white text-indigo-700 group-hover:bg-indigo-50 shadow-md whitespace-nowrap">
+  <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+
+    <!-- Resume Builder -->
+    <a routerLink="/resume-builder"
+       class="group relative flex flex-col gap-4 overflow-hidden rounded-2xl
+              bg-gradient-to-br from-violet-600 via-indigo-600 to-indigo-700 text-white p-6 sm:p-7 shadow-lg
+              hover:shadow-xl transition-shadow">
+      <div class="absolute -top-10 -right-10 w-48 h-48 bg-white/10 rounded-full blur-2xl pointer-events-none"></div>
+      <div class="relative">
+        <span class="badge bg-white/15 text-white">✨ New</span>
+        <h2 class="text-lg sm:text-xl font-extrabold mt-2 mb-1.5">
+          Build a Free ATS-Friendly Resume
+        </h2>
+        <p class="text-sm text-indigo-100 leading-relaxed">
+          Choose a professional template, fill in your details, get a live ATS score, and download a polished PDF — 100% free.
+        </p>
+      </div>
+      <span class="btn bg-white text-indigo-700 group-hover:bg-indigo-50 shadow-md w-fit whitespace-nowrap mt-auto">
         🧑‍💼 Build My Resume →
       </span>
-    </div>
-  </a>
+    </a>
+
+    <!-- Biodata Maker -->
+    <a routerLink="/biodata-maker"
+       class="group relative flex flex-col gap-4 overflow-hidden rounded-2xl
+              bg-gradient-to-br from-rose-500 via-pink-600 to-rose-700 text-white p-6 sm:p-7 shadow-lg
+              hover:shadow-xl transition-shadow">
+      <div class="absolute -top-10 -right-10 w-48 h-48 bg-white/10 rounded-full blur-2xl pointer-events-none"></div>
+      <div class="relative">
+        <span class="badge bg-white/15 text-white">✨ New</span>
+        <h2 class="text-lg sm:text-xl font-extrabold mt-2 mb-1.5">
+          Create a Beautiful Biodata
+        </h2>
+        <p class="text-sm text-rose-100 leading-relaxed">
+          Marriage or professional biodata with photo support, multiple templates, and instant PDF download — completely free.
+        </p>
+      </div>
+      <span class="btn bg-white text-rose-700 group-hover:bg-rose-50 shadow-md w-fit whitespace-nowrap mt-auto">
+        📋 Create Biodata →
+      </span>
+    </a>
+
+  </div>
 </section>
 
 <!-- ─── Trending section ──────────────────────────────────────── -->

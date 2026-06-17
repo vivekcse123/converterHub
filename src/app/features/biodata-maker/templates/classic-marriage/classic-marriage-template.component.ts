@@ -49,4 +49,15 @@ export class ClassicMarriageTemplateComponent {
     const pp = this.biodata().partnerPreferences;
     return Object.values(pp).some(Boolean);
   }
+
+  headerSymbol(): string {
+    const religion = (this.biodata().personal.religion || '').toLowerCase();
+    if (religion.includes('muslim') || religion.includes('islam')) return '☪';
+    if (religion.includes('christian')) return '✝';
+    if (religion.includes('sikh')) return '☬';
+    if (religion.includes('jain')) return '🕉';
+    if (religion.includes('buddhist') || religion.includes('buddha')) return '☸';
+    // Default Hindu symbol (also shown when religion is blank / Hindu / Other)
+    return 'ॐ';
+  }
 }

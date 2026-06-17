@@ -129,7 +129,7 @@ export class ResumePricingComponent {
   async subscribe(plan: 'monthly' | 'yearly') {
     if (!this.auth.isLoggedIn()) {
       sessionStorage.setItem('pendingUpgrade', plan);
-      this.router.navigate(['/auth/login']);
+      this.router.navigate(['/login']);
       return;
     }
     this.loading.set(plan);

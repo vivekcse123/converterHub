@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ResumeStoreService } from '../../services/resume-store.service';
-import { RESUME_TEMPLATES } from '../../data/resume-templates.data';
+import { TEMPLATE_CATEGORIES, getTemplatesByCategory } from '../../data/resume-templates.data';
 import { TemplateId } from '../../models/resume.model';
 
 @Component({
@@ -11,42 +11,71 @@ import { TemplateId } from '../../models/resume.model';
   host: { class: 'block' },
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <div class="card p-4 sm:p-5">
-      <h3 class="font-semibold text-slate-800 dark:text-slate-100 mb-3 flex items-center gap-2">
+    <div class="card p-4 sm:p-5 space-y-5">
+      <h3 class="font-semibold text-slate-800 dark:text-slate-100 flex items-center gap-2">
         <span>🎨</span> Step 1 — Choose a Template
       </h3>
-      <div class="grid grid-cols-1 sm:grid-cols-3 gap-2.5 sm:gap-3">
-        @for (tpl of templates; track tpl.id) {
-          <button
-            type="button"
-            class="flex items-center gap-3 text-left rounded-xl border-2 transition-colors p-2.5 sm:p-3 group"
-            [class]="activeId() === tpl.id
-              ? 'border-primary-500 ring-2 ring-primary-200 dark:ring-primary-900/50 bg-primary-50/50 dark:bg-primary-900/10'
-              : 'border-slate-200 dark:border-slate-700 hover:border-primary-300'"
-            (click)="select(tpl.id)"
-          >
-            <div class="w-12 h-12 sm:w-14 sm:h-14 rounded-lg bg-gradient-to-br flex items-center justify-center shrink-0" [class]="tpl.accent">
-              <span class="text-white font-bold text-base sm:text-lg drop-shadow">Aa</span>
-            </div>
-            <div class="min-w-0">
-              <p class="font-medium text-sm text-slate-800 dark:text-slate-100 flex items-center gap-1.5">
-                {{ tpl.name }}
+
+      @for (cat of categories; track cat.label) {
+        <div>
+          <!-- Section header -->
+          <div class="flex items-center gap-2 mb-2.5">
+            <span class="text-base leading-none">{{ cat.icon }}</span>
+            <span class="text-sm font-semibold text-slate-700 dark:text-slate-200">{{ cat.label }}</span>
+            <span class="hidden sm:inline text-xs text-slate-400 dark:text-slate-500">— {{ cat.hint }}</span>
+            <div class="flex-1 h-px bg-slate-200 dark:bg-slate-700 ml-1"></div>
+          </div>
+
+          <!-- Templates in this category -->
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 sm:gap-2.5">
+            @for (tpl of templatesFor(cat.label); track tpl.id) {
+              <button
+                type="button"
+                class="flex items-center gap-3 text-left rounded-xl border-2 transition-all p-2.5 group"
+                [class]="activeId() === tpl.id
+                  ? 'border-primary-500 ring-2 ring-primary-200 dark:ring-primary-900/50 bg-primary-50/50 dark:bg-primary-900/10'
+                  : 'border-slate-200 dark:border-slate-700 hover:border-primary-300 hover:bg-slate-50 dark:hover:bg-slate-800/50'"
+                (click)="select(tpl.id)"
+              >
+                <!-- Gradient swatch -->
+                <div
+                  class="w-11 h-11 sm:w-12 sm:h-12 rounded-lg bg-gradient-to-br flex items-center justify-center shrink-0 shadow-sm"
+                  [class]="tpl.accent"
+                >
+                  <span class="text-white font-bold text-sm drop-shadow">Aa</span>
+                </div>
+
+                <!-- Info -->
+                <div class="min-w-0 flex-1">
+                  <p class="font-medium text-sm text-slate-800 dark:text-slate-100 flex items-center gap-1.5 flex-wrap">
+                    {{ tpl.name }}
+                    @if (activeId() === tpl.id) {
+                      <span class="badge bg-primary-100 dark:bg-primary-900/40 text-primary-700 dark:text-primary-300 text-[10px] px-1.5 py-0.5">Active</span>
+                    }
+                  </p>
+                  <p class="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5 line-clamp-1">{{ tpl.bestFor.replace('Best for: ', '') }}</p>
+                </div>
+
+                <!-- Check icon when active -->
                 @if (activeId() === tpl.id) {
-                  <span class="badge bg-primary-100 dark:bg-primary-900/40 text-primary-700 dark:text-primary-300">Active</span>
+                  <svg class="w-4 h-4 text-primary-500 shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                  </svg>
                 }
-              </p>
-              <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5 truncate">{{ tpl.bestFor }}</p>
-            </div>
-          </button>
-        }
-      </div>
+              </button>
+            }
+          </div>
+        </div>
+      }
     </div>
   `,
 })
 export class TemplatePickerComponent {
   private readonly store = inject(ResumeStoreService);
-  readonly templates = RESUME_TEMPLATES;
+  readonly categories = TEMPLATE_CATEGORIES;
   readonly activeId = computed(() => this.store.activeResume()?.templateId);
+
+  templatesFor = getTemplatesByCategory;
 
   select(id: TemplateId): void {
     this.store.setTemplate(id);

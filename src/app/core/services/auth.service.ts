@@ -67,6 +67,19 @@ export class AuthService {
       }));
   }
 
+  hasPurchasedTemplate(templateId: string): boolean {
+    return (this._user()?.templatePurchases ?? []).some(p => p.templateId === templateId);
+  }
+
+  /** Optimistically update local state after a successful payment so the UI unlocks instantly. */
+  addPurchasedTemplate(templateId: string): void {
+    const u = this._user();
+    if (!u) return;
+    const updated = { ...u, templatePurchases: [...(u.templatePurchases ?? []), { templateId, purchasedAt: new Date().toISOString() }] };
+    this._user.set(updated);
+    this.lsSet(this.USER_KEY, JSON.stringify(updated));
+  }
+
   forgotPassword(email: string): Observable<any> {
     return this.api.post<any>('auth/forgot-password', { email });
   }

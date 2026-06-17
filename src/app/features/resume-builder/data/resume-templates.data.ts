@@ -13,6 +13,10 @@ import { BoldTemplateComponent } from '../templates/bold/bold-template.component
 
 export type TemplateCategory = 'Classic & ATS-Safe' | 'Modern & Professional' | 'Creative & Bold' | 'Executive & Two-Column';
 
+/** Templates that require a one-time ₹29 purchase. */
+export const PREMIUM_TEMPLATE_IDS: TemplateId[] = ['ats-professional', 'modern-professional'];
+export const TEMPLATE_PRICE_INR = 29;
+
 export interface ResumeTemplateMeta {
   id: TemplateId;
   name: string;
@@ -22,6 +26,7 @@ export interface ResumeTemplateMeta {
   accent: string;
   bestFor: string;
   category: TemplateCategory;
+  isPremium: boolean;
 }
 
 export const RESUME_TEMPLATES: ResumeTemplateMeta[] = [
@@ -33,6 +38,7 @@ export const RESUME_TEMPLATES: ResumeTemplateMeta[] = [
     accent: 'from-slate-700 to-slate-900',
     bestFor: 'Best for: corporate roles, government & finance applications',
     category: 'Classic & ATS-Safe',
+    isPremium: true,
   },
   {
     id: 'minimal',
@@ -42,6 +48,7 @@ export const RESUME_TEMPLATES: ResumeTemplateMeta[] = [
     accent: 'from-gray-400 to-gray-700',
     bestFor: 'Best for: consultants, academics, and executive candidates',
     category: 'Classic & ATS-Safe',
+    isPremium: false,
   },
   {
     id: 'fresher',
@@ -51,6 +58,7 @@ export const RESUME_TEMPLATES: ResumeTemplateMeta[] = [
     accent: 'from-emerald-500 to-teal-600',
     bestFor: 'Best for: students, internships, and first jobs',
     category: 'Classic & ATS-Safe',
+    isPremium: false,
   },
   {
     id: 'modern-professional',
@@ -60,6 +68,7 @@ export const RESUME_TEMPLATES: ResumeTemplateMeta[] = [
     accent: 'from-blue-500 to-indigo-600',
     bestFor: 'Best for: tech, marketing, and product roles',
     category: 'Modern & Professional',
+    isPremium: true,
   },
   {
     id: 'tech',
@@ -69,6 +78,7 @@ export const RESUME_TEMPLATES: ResumeTemplateMeta[] = [
     accent: 'from-slate-900 to-emerald-600',
     bestFor: 'Best for: software engineers, DevOps, and data scientists',
     category: 'Modern & Professional',
+    isPremium: false,
   },
   {
     id: 'elegant',
@@ -78,6 +88,7 @@ export const RESUME_TEMPLATES: ResumeTemplateMeta[] = [
     accent: 'from-rose-400 to-pink-600',
     bestFor: 'Best for: healthcare, education, and hospitality professionals',
     category: 'Modern & Professional',
+    isPremium: false,
   },
   {
     id: 'creative',
@@ -87,6 +98,7 @@ export const RESUME_TEMPLATES: ResumeTemplateMeta[] = [
     accent: 'from-violet-500 to-purple-700',
     bestFor: 'Best for: designers, content creators, and marketing roles',
     category: 'Creative & Bold',
+    isPremium: false,
   },
   {
     id: 'bold',
@@ -96,6 +108,7 @@ export const RESUME_TEMPLATES: ResumeTemplateMeta[] = [
     accent: 'from-violet-600 to-purple-800',
     bestFor: 'Best for: startup, agency, and leadership roles',
     category: 'Creative & Bold',
+    isPremium: false,
   },
   {
     id: 'executive',
@@ -105,6 +118,7 @@ export const RESUME_TEMPLATES: ResumeTemplateMeta[] = [
     accent: 'from-slate-800 to-yellow-600',
     bestFor: 'Best for: senior management, C-level, and finance roles',
     category: 'Executive & Two-Column',
+    isPremium: false,
   },
   {
     id: 'compact',
@@ -114,6 +128,7 @@ export const RESUME_TEMPLATES: ResumeTemplateMeta[] = [
     accent: 'from-blue-600 to-indigo-700',
     bestFor: 'Best for: senior professionals with extensive experience',
     category: 'Executive & Two-Column',
+    isPremium: false,
   },
 ];
 

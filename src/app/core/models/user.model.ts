@@ -18,6 +18,7 @@
     totalConversions:   number;
     totalFilesUploaded: number;
   };
+  templatePurchases?: { templateId: string; purchasedAt: string }[];
   lastLoginAt?:  string;
   loginCount?:   number;
   adminNotes?:   string;

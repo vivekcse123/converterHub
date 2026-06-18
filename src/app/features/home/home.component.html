@@ -11,7 +11,7 @@
       <div class="animate-slide-up">
         <span class="inline-flex items-center gap-2 mb-5 px-4 py-1.5 bg-white/10 backdrop-blur rounded-full text-sm font-medium">
           <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-          40+ Free Tools · Resume Builder · Portfolio Builder · Biodata Maker
+          40+ Free Tools · Resume Builder · Cover Letter · Portfolio · Biodata
         </span>
         <h1 class="text-4xl sm:text-5xl md:text-6xl font-extrabold leading-tight tracking-tight mb-5">
           Build Professional<br>
@@ -21,18 +21,22 @@
         <p class="text-lg text-indigo-100 max-w-lg mb-8 leading-relaxed">
           ATS-friendly resume templates, portfolio pages, cover letters, marriage biodata, and 37+ conversion tools — all in one place. Free forever.
         </p>
-        <div class="flex flex-col sm:flex-row gap-3 mb-8">
+        <div class="flex flex-col sm:flex-row flex-wrap gap-3 mb-8">
           <a routerLink="/resume-builder"
              class="flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-white text-indigo-700 font-bold hover:bg-indigo-50 shadow-xl transition text-sm">
             🧑‍💼 Create Resume — Free
           </a>
+          <a routerLink="/resume-builder/cover-letter"
+             class="flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-white font-semibold transition text-sm shadow-lg">
+            ✉️ Cover Letter
+          </a>
           <a routerLink="/resume-builder/portfolio"
              class="flex items-center justify-center gap-2 px-6 py-3 rounded-xl border-2 border-white/30 text-white font-semibold hover:bg-white/10 transition text-sm">
-            🌐 Build Portfolio
+            🌐 Portfolio
           </a>
           <a routerLink="/biodata-maker"
              class="flex items-center justify-center gap-2 px-6 py-3 rounded-xl border-2 border-white/20 text-white/80 font-semibold hover:bg-white/10 transition text-sm">
-            📋 Create Biodata
+            📋 Biodata
           </a>
         </div>
 
@@ -207,7 +211,7 @@
       <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white mt-3 mb-2">
         Professional Resume Templates
       </h2>
-      <p class="text-slate-500 dark:text-slate-400 text-sm">8 free templates · 2 premium templates · new designs added regularly</p>
+      <p class="text-slate-500 dark:text-slate-400 text-sm">7 free templates · 3 premium templates · new designs added regularly</p>
     </div>
 
     <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 mb-6">
@@ -332,7 +336,7 @@
       <p class="text-xs text-slate-400 mb-4">Forever</p>
       <ul class="text-xs text-slate-500 dark:text-slate-400 space-y-1.5 mb-5 text-left flex-1">
         <li>✓ 2 Resumes + 2 Biodata</li>
-        <li>✓ 8 Free templates</li>
+        <li>✓ 7 Free templates</li>
         <li>✓ Basic ATS score</li>
         <li class="text-slate-300 dark:text-slate-600">✗ Watermark on PDF</li>
         <li class="text-slate-300 dark:text-slate-600">✗ Premium templates</li>
@@ -346,11 +350,11 @@
       <p class="text-4xl font-extrabold text-slate-800 dark:text-white mb-1">₹9 <span class="text-base font-normal text-slate-400">/mo</span></p>
       <p class="text-xs text-slate-400 mb-4">Cancel anytime</p>
       <ul class="text-xs text-slate-500 dark:text-slate-400 space-y-1.5 mb-5 text-left flex-1">
-        <li>✓ All 10 premium templates</li>
-        <li>✓ No watermark</li>
+        <li>✓ All 10 templates (3 premium)</li>
+        <li>✓ No watermark on PDFs</li>
+        <li>✓ Cover Letter Builder</li>
         <li>✓ Unlimited resumes</li>
         <li>✓ Full ATS checker</li>
-        <li>✓ Priority support</li>
       </ul>
       <a routerLink="/resume-builder/pricing" class="btn btn-primary text-xs py-2">Upgrade Now</a>
     </div>
@@ -386,8 +390,9 @@
   <div class="max-w-2xl mx-auto">
     <h2 class="text-3xl font-extrabold text-slate-900 dark:text-white mb-4">Ready to build your dream resume?</h2>
     <p class="text-slate-500 dark:text-slate-400 mb-8 text-lg">Free to start. No account required for basic tools.</p>
-    <div class="flex flex-col sm:flex-row gap-3 justify-center">
+    <div class="flex flex-col sm:flex-row gap-3 justify-center flex-wrap">
       <a routerLink="/resume-builder" class="btn btn-primary btn-lg">🧑‍💼 Create Resume — Free</a>
+      <a routerLink="/resume-builder/cover-letter" class="btn btn-secondary btn-lg">✉️ Cover Letter</a>
       <a routerLink="/biodata-maker" class="btn btn-secondary btn-lg">📋 Create Biodata</a>
     </div>
   </div>

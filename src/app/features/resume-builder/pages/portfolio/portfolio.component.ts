@@ -1,8 +1,9 @@
-import { Component, OnInit, inject, signal } from '@angular/core';
+import { Component, OnDestroy, OnInit, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { CareerService, Portfolio } from '../../services/career.service';
+import { JsonLdService } from '../../../../core/services/json-ld.service';
 import { AuthService } from '../../../../core/services/auth.service';
 import { NotificationService } from '../../../../core/services/notification.service';
 import { UpgradeModalComponent } from '../../components/upgrade-modal/upgrade-modal.component';
@@ -103,6 +104,12 @@ type Tab = 'basic' | 'social' | 'skills' | 'projects';
                        class="w-full px-3 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-sm focus:outline-none focus:ring-2 focus:ring-violet-500" />
               </div>
             </div>
+            <div>
+              <label class="text-xs font-semibold text-slate-500 block mb-1">Mobile Number <span class="font-normal text-slate-400">(optional)</span></label>
+              <input type="tel" [(ngModel)]="form.phone" placeholder="+91 98765 43210"
+                     class="w-full px-3 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-sm text-slate-700 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-violet-500" />
+              <p class="text-[11px] text-slate-400 mt-1">Only shown on your public portfolio if you choose to display it.</p>
+            </div>
 
             <div class="flex items-center gap-3 pt-1">
               <label class="text-xs font-semibold text-slate-600 dark:text-slate-300">Make portfolio public</label>
@@ -139,7 +146,7 @@ type Tab = 'basic' | 'social' | 'skills' | 'projects';
                        class="flex-1 px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-sm text-slate-700 dark:text-slate-200 focus:outline-none" />
                 <select [(ngModel)]="skill.level"
                         class="px-2 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-sm text-slate-600 dark:text-slate-300 focus:outline-none">
-                  @for (l of skillLevels; track l) { <option [value]="l">{{ l }}</option> }
+                  @for (l of skillLevels; track l) { <option [value]="l.toLowerCase()">{{ l }}</option> }
                 </select>
                 <button class="text-red-400 hover:text-red-600 text-sm px-1" (click)="removeSkill(i)">✕</button>
               </div>
@@ -195,10 +202,11 @@ type Tab = 'basic' | 'social' | 'skills' | 'projects';
     </div>
   `,
 })
-export class PortfolioComponent implements OnInit {
+export class PortfolioComponent implements OnInit, OnDestroy {
   readonly career  = inject(CareerService);
   readonly auth    = inject(AuthService);
   private notify   = inject(NotificationService);
+  private jsonLd   = inject(JsonLdService);
 
   readonly showUpgrade    = signal(false);
   readonly saving         = signal(false);
@@ -225,11 +233,19 @@ export class PortfolioComponent implements OnInit {
   readonly skillLevels = ['Beginner', 'Intermediate', 'Advanced', 'Expert'];
 
   form: Partial<Portfolio & { social: Portfolio['social'] }> = {
-    username: '', displayName: '', tagline: '', about: '', location: '', email: '',
+    username: '', displayName: '', tagline: '', about: '', location: '', email: '', phone: '',
     isPublic: false, social: {}, skills: [], projects: [],
   };
 
   async ngOnInit(): Promise<void> {
+    this.jsonLd.setJsonLd('portfolio-builder-app', {
+      '@context': 'https://schema.org', '@type': 'SoftwareApplication',
+      name: 'ApnaConverter Portfolio Builder',
+      url: 'https://www.apnaconverter.com/resume-builder/portfolio',
+      applicationCategory: 'BusinessApplication',
+      description: 'Create a public portfolio page with your bio, skills, projects, and social links. Share a professional profile with employers — free with ApnaConverter Pro.',
+      offers: { '@type': 'Offer', price: '9', priceCurrency: 'INR', description: 'Available on Pro plan from ₹9/month' },
+    });
     if (!this.auth.isPro()) return;
     await this.career.loadPortfolio();
     const p = this.career.portfolio();
@@ -258,10 +274,14 @@ export class PortfolioComponent implements OnInit {
     this.usernameStatus.set(avail ? 'available' : 'taken');
   }
 
-  addSkill():       void { this.form.skills = [...(this.form.skills ?? []), { name: '', level: 'Intermediate' }]; }
+  addSkill():       void { this.form.skills = [...(this.form.skills ?? []), { name: '', level: 'intermediate' }]; }
   removeSkill(i: number): void { this.form.skills = this.form.skills!.filter((_, idx) => idx !== i); }
   addProject():     void { this.form.projects = [...(this.form.projects ?? []), { title: '', description: '', featured: false }]; }
   removeProject(i: number): void { this.form.projects = this.form.projects!.filter((_, idx) => idx !== i); }
+
+  ngOnDestroy(): void {
+    this.jsonLd.removeJsonLd('portfolio-builder-app');
+  }
 
   async save(): Promise<void> {
     if (!this.form.username?.trim()) { this.notify.warning('Username is required'); return; }

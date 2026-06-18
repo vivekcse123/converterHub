@@ -4,8 +4,8 @@ import { Meta, Title } from '@angular/platform-browser';
 import { Router, NavigationEnd, ActivatedRoute } from '@angular/router';
 import { filter, map } from 'rxjs';
 
-const BASE_TITLE = 'ApnaConverter — Free Online File Converter';
-const BASE_DESC  = 'Convert PDFs, images, Word documents and more — free, fast, and secure. 30+ tools.';
+const BASE_TITLE = 'ApnaConverter — Free Resume Builder, Portfolio & File Converter';
+const BASE_DESC  = 'Build professional resumes, portfolio pages, biodata & cover letters free. Plus 40+ tools for PDF conversion, image editing, OCR, merge, compress and more.';
 const SITE_URL   = 'https://www.apnaconverter.com';
 
 @Injectable({ providedIn: 'root' })

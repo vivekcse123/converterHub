@@ -33,198 +33,270 @@ export class BiodataPdfService {
   // ── Classic Marriage ──────────────────────────────────────────────────────
 
   private buildClassicMarriageDoc(b: BiodataData): any {
-    const p = b.personal;
-    const c = b.contact;
-    const f = b.family;
-    const pr = b.professional;
+    const p    = b.personal;
+    const c    = b.contact;
+    const f    = b.family;
+    const pr   = b.professional;
     const pref = b.partnerPreferences;
-    const accent = '#9d174d';
-    const lightAccent = '#fce7f3';
 
-    const row = (label: string, value: string) =>
-      value ? [{ text: `${label}: `, bold: true, color: '#374151' }, { text: value, color: '#1f2937' }] : null;
+    const ACCENT       = '#9d174d';
+    const ACCENT_LIGHT = '#fecdd3';
+    const ACCENT_BG    = '#fff1f2';
+    const ACCENT_MID   = '#fce7f3';
+    const TEXT_DARK    = '#1f2937';
+    const TEXT_MID     = '#374151';
+    const TEXT_GREY    = '#6b7280';
 
-    const rows = (pairs: Array<[string, string]>) =>
-      pairs
-        .filter(([, v]) => !!v)
-        .map(([l, v]) => ({ columns: [{ text: l + ':', bold: true, color: accent, width: 130 }, { text: v, color: '#1f2937', fontSize: 9 }], columnGap: 4, margin: [0, 1, 0, 1] as [number, number, number, number] }));
+    // Religion-specific symbol (matches the HTML template logic)
+    const religion = (p.religion || '').toLowerCase();
+    let symbol = 'ॐ'; // ॐ (Om)
+    if (religion.includes('muslim') || religion.includes('islam'))  symbol = '☪'; // ☪
+    else if (religion.includes('christian'))                        symbol = '✝'; // ✝
+    else if (religion.includes('sikh'))                             symbol = '☬'; // ☬
 
-    const sectionHeader = (title: string) => ({
-      text: `— ${title} —`,
-      style: 'sectionHeader',
+    // Section header – uppercase, centred, pink bg with border (matches .section-title CSS)
+    const sectionHdr = (title: string): any => ({
+      table: { widths: ['*'], body: [[{
+        text: title.toUpperCase(),
+        bold: true, color: ACCENT, alignment: 'center', fontSize: 8.5, characterSpacing: 1.5,
+      }]] },
+      layout: {
+        fillColor:    () => ACCENT_BG,
+        hLineWidth:   () => 0.5,
+        hLineColor:   () => ACCENT_LIGHT,
+        vLineWidth:   () => 0,
+        paddingTop:   () => 3,
+        paddingBottom:() => 3,
+        paddingLeft:  () => 4,
+        paddingRight: () => 4,
+      },
+      margin: [0, 8, 0, 5] as [number, number, number, number],
     });
+
+    // Field rows as a table so we get proper pink row separators and highlight support
+    const fieldRows = (pairs: Array<[string, string, boolean?]>): any | null => {
+      const filtered = pairs.filter(([, v]) => !!v);
+      if (!filtered.length) return null;
+      return {
+        table: {
+          widths: [108, '*'],
+          body: filtered.map(([label, value, highlight]) => [
+            { text: label + ':', bold: true, color: ACCENT, fontSize: 8.5, fillColor: highlight ? ACCENT_BG : null },
+            { text: value,       color: TEXT_DARK, fontSize: 8.5,          fillColor: highlight ? ACCENT_BG : null },
+          ]),
+        },
+        layout: {
+          hLineWidth: (i: number, node: any) => (i === 0 || i === node.table.body.length) ? 0 : 0.4,
+          hLineColor: () => ACCENT_MID,
+          vLineWidth: () => 0,
+          paddingTop:   () => 2,
+          paddingBottom:() => 2,
+          paddingLeft:  (i: number) => i === 0 ? 2 : 6,
+          paddingRight: () => 2,
+        },
+      };
+    };
 
     const content: any[] = [];
 
-    // Header
-    content.push({ text: 'BIODATA', style: 'mainTitle', alignment: 'center' });
+    // ── Header ──────────────────────────────────────────────────
+    content.push({ text: symbol, fontSize: 22, color: ACCENT, alignment: 'center', margin: [0, 0, 0, 4] as [number, number, number, number] });
+    content.push({ text: 'BIODATA', fontSize: 18, bold: true, color: ACCENT, alignment: 'center', characterSpacing: 6, margin: [0, 0, 0, 0] as [number, number, number, number] });
     if (b.type === 'marriage') {
-      content.push({ text: '🌸 Marriage Biodata 🌸', style: 'subtitle', alignment: 'center' });
+      content.push({ text: '~ Marriage Biodata ~', fontSize: 10, color: TEXT_GREY, alignment: 'center', italics: true, margin: [0, 4, 0, 4] as [number, number, number, number] });
     }
-    content.push({ canvas: [{ type: 'line', x1: 0, y1: 0, x2: 515, y2: 0, lineWidth: 2, lineColor: accent }], margin: [0, 8, 0, 16] });
+    content.push({ text: '✶  ✶  ✶', color: '#f43f5e', alignment: 'center', fontSize: 9, margin: [0, 2, 0, 4] as [number, number, number, number] });
+    content.push({ canvas: [{ type: 'line', x1: 0, y1: 0, x2: 515, y2: 0, lineWidth: 1.5, lineColor: ACCENT }], margin: [0, 0, 0, 8] as [number, number, number, number] });
 
-    // Photo + Personal details side by side
-    const personalPairs: Array<[string, string]> = [
-      ['Full Name', p.fullName],
-      ['Date of Birth', p.dateOfBirth],
-      ['Time of Birth', p.timeOfBirth],
+    // ── Personal Information ─────────────────────────────────────
+    content.push(sectionHdr('Personal Information'));
+
+    const personalPairs: Array<[string, string, boolean?]> = [
+      ['Full Name',      p.fullName,      true],
+      ['Date of Birth',  p.dateOfBirth],
+      ['Time of Birth',  p.timeOfBirth],
       ['Place of Birth', p.placeOfBirth],
-      ['Religion', p.religion],
-      ['Caste', p.caste],
-      ['Sub-Caste', p.subCaste],
-      ['Gotra', p.gotra],
-      ['Height', p.height],
-      ['Weight', p.weight],
-      ['Complexion', p.complexion],
-      ['Blood Group', p.bloodGroup],
+      ['Religion',       p.religion],
+      ['Caste',          p.caste],
+      ['Sub-Caste',      p.subCaste],
+      ['Gotra',          p.gotra],
+      ['Height',         p.height],
+      ['Weight',         p.weight],
+      ['Complexion',     p.complexion],
+      ['Blood Group',    p.bloodGroup],
       ['Marital Status', p.maritalStatus],
-      ['Mother Tongue', p.motherTongue],
-      ['Nationality', p.nationality],
-      ['Manglik', p.manglik],
-      ['Diet', p.diet],
+      ['Mother Tongue',  p.motherTongue],
+      ['Nationality',    p.nationality],
+      ['Manglik',        p.manglik],
+      ['Diet',           p.diet],
     ];
 
-    const personalContent = {
-      stack: rows(personalPairs),
-    };
-
+    const personalTable = fieldRows(personalPairs);
     if (p.photo && p.photo.startsWith('data:')) {
       content.push({
         columns: [
-          { stack: [sectionHeader('Personal Information'), personalContent], width: '*' },
-          { image: p.photo, width: 90, height: 110, alignment: 'center', margin: [8, 20, 0, 0] as [number, number, number, number] },
+          { ...personalTable, width: '*' },
+          { image: p.photo, width: 90, height: 110, alignment: 'center' as const, margin: [8, 0, 0, 0] as [number, number, number, number] },
         ],
       });
     } else {
-      content.push(sectionHeader('Personal Information'));
-      content.push({ stack: rows(personalPairs), margin: [0, 4, 0, 0] as [number, number, number, number] });
+      content.push(personalTable);
     }
 
-    // Family
+    // ── Family Information ───────────────────────────────────────
     if (b.type === 'marriage' && (b.sectionVisibility['family'] ?? true)) {
-      content.push({ canvas: [{ type: 'line', x1: 0, y1: 0, x2: 515, y2: 0, lineWidth: 0.5, lineColor: '#e5e7eb' }], margin: [0, 12, 0, 4] });
-      content.push(sectionHeader('Family Information'));
+      content.push(sectionHdr('Family Information'));
       const familyPairs: Array<[string, string]> = [
-        ["Father's Name", f.fatherName],
+        ["Father's Name",       f.fatherName],
         ["Father's Occupation", f.fatherOccupation],
-        ["Mother's Name", f.motherName],
+        ["Mother's Name",       f.motherName],
         ["Mother's Occupation", f.motherOccupation],
-        ['Brothers', f.brothers],
-        ['Sisters', f.sisters],
-        ['Family Type', f.familyType],
-        ['Family Status', f.familyStatus],
-        ['Family Values', f.familyValues],
-        ['Native Place', f.nativePlace],
+        ['Brothers',            f.brothers],
+        ['Sisters',             f.sisters],
+        ['Family Type',         f.familyType],
+        ['Family Status',       f.familyStatus],
+        ['Family Values',       f.familyValues],
+        ['Native Place',        f.nativePlace],
       ];
-      content.push({ stack: rows(familyPairs), margin: [0, 4, 0, 0] as [number, number, number, number] });
+      content.push(fieldRows(familyPairs));
       if (f.aboutFamily) {
-        content.push({ text: 'About Family: ', bold: true, color: accent, margin: [0, 4, 0, 0] as [number, number, number, number] });
-        content.push({ text: f.aboutFamily, color: '#374151', fontSize: 9, italics: true });
+        // Replicates the .about-family block with left pink border
+        content.push({
+          table: { widths: ['*'], body: [[{
+            stack: [
+              { text: 'About Family:', bold: true, color: ACCENT, fontSize: 8, margin: [0, 0, 0, 2] as [number, number, number, number] },
+              { text: f.aboutFamily, color: TEXT_MID, fontSize: 8, italics: true, lineHeight: 1.5 },
+            ],
+          }]] },
+          layout: {
+            fillColor:    () => ACCENT_BG,
+            hLineWidth:   () => 0,
+            vLineWidth:   (i: number) => i === 0 ? 2.5 : 0,
+            vLineColor:   () => '#f43f5e',
+            paddingLeft:  () => 10,
+            paddingTop:   () => 5,
+            paddingBottom:() => 5,
+          },
+          margin: [0, 5, 0, 5] as [number, number, number, number],
+        });
       }
     }
 
-    // Education
+    // ── Education ────────────────────────────────────────────────
     if (b.education.length > 0 && (b.sectionVisibility['education'] ?? true)) {
-      content.push({ canvas: [{ type: 'line', x1: 0, y1: 0, x2: 515, y2: 0, lineWidth: 0.5, lineColor: '#e5e7eb' }], margin: [0, 12, 0, 4] });
-      content.push(sectionHeader('Education'));
-      const eduRows = b.education.map(e => [
-        { text: e.degree + (e.field ? ` (${e.field})` : ''), bold: true, color: '#1f2937', fontSize: 9 },
-        { text: e.institution, color: '#374151', fontSize: 9 },
-        { text: e.year, color: '#6b7280', fontSize: 9 },
-        { text: e.grade, color: '#6b7280', fontSize: 9 },
-      ]);
+      content.push(sectionHdr('Education'));
+      const headerRow = [
+        { text: 'Degree / Course', bold: true, color: ACCENT, fontSize: 8.5, fillColor: ACCENT_BG },
+        { text: 'Institution',     bold: true, color: ACCENT, fontSize: 8.5, fillColor: ACCENT_BG },
+        { text: 'Year',            bold: true, color: ACCENT, fontSize: 8.5, fillColor: ACCENT_BG },
+        { text: 'Grade/Marks',     bold: true, color: ACCENT, fontSize: 8.5, fillColor: ACCENT_BG },
+      ];
+      const dataRows = b.education.map((e, i) => {
+        const bg = i % 2 === 1 ? '#fdf2f8' : null;
+        return [
+          { text: e.degree + (e.field ? ` (${e.field})` : ''), color: TEXT_DARK, fontSize: 8.5, fillColor: bg },
+          { text: e.institution,                                 color: TEXT_MID,  fontSize: 8.5, fillColor: bg },
+          { text: e.year,                                        color: TEXT_GREY, fontSize: 8.5, fillColor: bg },
+          { text: e.grade || '',                                 color: TEXT_GREY, fontSize: 8.5, fillColor: bg },
+        ];
+      });
       content.push({
-        table: {
-          widths: ['*', '*', 60, 60],
-          body: [
-            [{ text: 'Degree', bold: true, color: accent, fontSize: 9 }, { text: 'Institution', bold: true, color: accent, fontSize: 9 }, { text: 'Year', bold: true, color: accent, fontSize: 9 }, { text: 'Grade', bold: true, color: accent, fontSize: 9 }],
-            ...eduRows,
-          ],
+        table: { widths: ['*', '*', 55, 60], body: [headerRow, ...dataRows] },
+        layout: {
+          hLineWidth:   () => 0.5,
+          hLineColor:   () => ACCENT_LIGHT,
+          vLineWidth:   () => 0.5,
+          vLineColor:   () => ACCENT_LIGHT,
+          paddingTop:   () => 3,
+          paddingBottom:() => 3,
+          paddingLeft:  () => 6,
+          paddingRight: () => 6,
         },
-        layout: 'lightHorizontalLines',
-        margin: [0, 4, 0, 0] as [number, number, number, number],
+        margin: [0, 0, 0, 4] as [number, number, number, number],
       });
     }
 
-    // Professional
+    // ── Professional Details ─────────────────────────────────────
     if ((b.sectionVisibility['professional'] ?? true) && Object.values(pr).some(Boolean)) {
-      content.push({ canvas: [{ type: 'line', x1: 0, y1: 0, x2: 515, y2: 0, lineWidth: 0.5, lineColor: '#e5e7eb' }], margin: [0, 12, 0, 4] });
-      content.push(sectionHeader('Professional Details'));
-      const profPairs: Array<[string, string]> = [
-        ['Occupation', pr.occupation],
-        ['Job Title', pr.jobTitle],
-        ['Employer', pr.employer],
+      content.push(sectionHdr('Professional Details'));
+      content.push(fieldRows([
+        ['Occupation',      pr.occupation],
+        ['Job Title',       pr.jobTitle],
+        ['Employer',        pr.employer],
         ['Work Experience', pr.workExperience],
-        ['Annual Income', pr.annualIncome],
-        ['Work Location', [pr.workCity, pr.workCountry].filter(Boolean).join(', ')],
-      ];
-      content.push({ stack: rows(profPairs), margin: [0, 4, 0, 0] as [number, number, number, number] });
+        ['Annual Income',   pr.annualIncome],
+        ['Work Location',   [pr.workCity, pr.workCountry].filter(Boolean).join(', ')],
+      ]));
     }
 
-    // Skills & Hobbies
+    // ── Skills & Interests ───────────────────────────────────────
     if ((b.sectionVisibility['skills'] ?? true) && (b.skills.length > 0 || b.hobbies.length > 0 || b.languages.length > 0)) {
-      content.push({ canvas: [{ type: 'line', x1: 0, y1: 0, x2: 515, y2: 0, lineWidth: 0.5, lineColor: '#e5e7eb' }], margin: [0, 12, 0, 4] });
-      content.push(sectionHeader('Skills & Interests'));
-      if (b.skills.length > 0) content.push({ columns: [{ text: 'Skills:', bold: true, color: accent, width: 80, fontSize: 9 }, { text: b.skills.join(' • '), color: '#374151', fontSize: 9 }], margin: [0, 3, 0, 0] as [number, number, number, number] });
-      if (b.hobbies.length > 0) content.push({ columns: [{ text: 'Hobbies:', bold: true, color: accent, width: 80, fontSize: 9 }, { text: b.hobbies.join(' • '), color: '#374151', fontSize: 9 }], margin: [0, 3, 0, 0] as [number, number, number, number] });
-      if (b.languages.length > 0) content.push({ columns: [{ text: 'Languages:', bold: true, color: accent, width: 80, fontSize: 9 }, { text: b.languages.join(' • '), color: '#374151', fontSize: 9 }], margin: [0, 3, 0, 0] as [number, number, number, number] });
+      content.push(sectionHdr('Skills & Interests'));
+      const skillPairs: Array<[string, string]> = [];
+      if (b.skills.length   > 0) skillPairs.push(['Skills',    b.skills.join(' • ')]);
+      if (b.hobbies.length  > 0) skillPairs.push(['Hobbies',   b.hobbies.join(' • ')]);
+      if (b.languages.length> 0) skillPairs.push(['Languages', b.languages.join(' • ')]);
+      content.push(fieldRows(skillPairs));
     }
 
-    // Achievements
+    // ── Achievements ─────────────────────────────────────────────
     if ((b.sectionVisibility['achievements'] ?? true) && b.achievements.length > 0) {
-      content.push({ canvas: [{ type: 'line', x1: 0, y1: 0, x2: 515, y2: 0, lineWidth: 0.5, lineColor: '#e5e7eb' }], margin: [0, 12, 0, 4] });
-      content.push(sectionHeader('Achievements'));
-      content.push({ ul: b.achievements, color: '#374151', fontSize: 9, margin: [0, 4, 0, 0] as [number, number, number, number] });
+      content.push(sectionHdr('Achievements'));
+      content.push({ ul: b.achievements, color: TEXT_MID, fontSize: 8.5, lineHeight: 1.6, margin: [0, 4, 0, 0] as [number, number, number, number] });
     }
 
-    // Partner Preferences
+    // ── Partner Expectations ─────────────────────────────────────
     if (b.type === 'marriage' && (b.sectionVisibility['partnerPreferences'] ?? true)) {
       const pp = pref;
       const hasPref = Object.values(pp).some(Boolean);
       if (hasPref) {
-        content.push({ canvas: [{ type: 'line', x1: 0, y1: 0, x2: 515, y2: 0, lineWidth: 0.5, lineColor: '#e5e7eb' }], margin: [0, 12, 0, 4] });
-        content.push(sectionHeader('Partner Expectations'));
+        content.push(sectionHdr('Partner Expectations'));
+        const ageRange    = pp.ageFrom && pp.ageTo ? `${pp.ageFrom} – ${pp.ageTo} years` : (pp.ageFrom || pp.ageTo || '');
+        const heightRange = pp.heightFrom && pp.heightTo ? `${pp.heightFrom} – ${pp.heightTo}` : (pp.heightFrom || pp.heightTo || '');
         const prefPairs: Array<[string, string]> = [
-          ['Age', pp.ageFrom && pp.ageTo ? `${pp.ageFrom} – ${pp.ageTo} years` : (pp.ageFrom || pp.ageTo)],
-          ['Height', pp.heightFrom && pp.heightTo ? `${pp.heightFrom} – ${pp.heightTo}` : (pp.heightFrom || pp.heightTo)],
-          ['Religion', pp.religion],
-          ['Caste', pp.caste],
-          ['Education', pp.education],
+          ['Age',        ageRange],
+          ['Height',     heightRange],
+          ['Religion',   pp.religion],
+          ['Caste',      pp.caste],
+          ['Education',  pp.education],
           ['Occupation', pp.occupation],
-          ['Location', pp.location],
-          ['Other', pp.other],
+          ['Location',   pp.location],
         ];
-        content.push({ stack: rows(prefPairs), margin: [0, 4, 0, 0] as [number, number, number, number] });
+        content.push(fieldRows(prefPairs));
+        if (pp.other) {
+          content.push({ text: pp.other, color: TEXT_MID, fontSize: 8, italics: true, margin: [4, 4, 0, 0] as [number, number, number, number] });
+        }
       }
     }
 
-    // Contact
+    // ── Contact Information ──────────────────────────────────────
     if (b.sectionVisibility['contact'] ?? true) {
-      content.push({ canvas: [{ type: 'line', x1: 0, y1: 0, x2: 515, y2: 0, lineWidth: 0.5, lineColor: '#e5e7eb' }], margin: [0, 12, 0, 4] });
-      content.push(sectionHeader('Contact Information'));
-      const contactPairs: Array<[string, string]> = [
-        ['Phone', c.phone],
+      content.push(sectionHdr('Contact Information'));
+      content.push(fieldRows([
+        ['Phone',    c.phone],
         ['WhatsApp', c.whatsapp],
-        ['Email', c.email],
-        ['Address', [c.address, c.city, c.state, c.pincode, c.country].filter(Boolean).join(', ')],
-      ];
-      content.push({ stack: rows(contactPairs), margin: [0, 4, 0, 0] as [number, number, number, number] });
+        ['Email',    c.email],
+        ['Address',  [c.address, c.city, c.state, c.pincode, c.country].filter(Boolean).join(', ')],
+      ]));
     }
 
-    // Footer
-    content.push({ canvas: [{ type: 'line', x1: 0, y1: 0, x2: 515, y2: 0, lineWidth: 2, lineColor: accent }], margin: [0, 20, 0, 8] });
-    content.push({ text: 'Created with ApnaConverter — apnaconverter.com', color: '#9ca3af', fontSize: 8, alignment: 'center' });
+    // ── Footer ───────────────────────────────────────────────────
+    content.push({ canvas: [{ type: 'line', x1: 0, y1: 0, x2: 515, y2: 0, lineWidth: 0.8, lineColor: ACCENT_LIGHT }], margin: [0, 14, 0, 4] as [number, number, number, number] });
+    content.push({ text: '✶  ✶  ✶', color: '#f43f5e', alignment: 'center', fontSize: 9, margin: [0, 0, 0, 4] as [number, number, number, number] });
+    content.push({ text: 'Created with ApnaConverter — apnaconverter.com', color: '#9ca3af', fontSize: 7, alignment: 'center' });
 
     return {
-      content,
-      pageSize: 'A4',
-      pageMargins: [40, 40, 40, 40] as [number, number, number, number],
-      defaultStyle: { font: 'Roboto', fontSize: 10, lineHeight: 1.3 },
-      styles: {
-        mainTitle: { fontSize: 22, bold: true, color: accent, letterSpacing: 4 },
-        subtitle: { fontSize: 11, color: '#6b7280', margin: [0, 4, 0, 0] as [number, number, number, number] },
-        sectionHeader: { fontSize: 11, bold: true, color: accent, alignment: 'center' as const, margin: [0, 8, 0, 4] as [number, number, number, number] },
-      },
+      content: content.filter(Boolean),
+      pageSize:    'A4',
+      pageMargins: [40, 50, 40, 50] as [number, number, number, number],
+      defaultStyle: { font: 'Roboto', fontSize: 9, lineHeight: 1.3 },
+      // Top and bottom ornamental bar on every page (replicates .border-top / .border-bottom)
+      header: () => ({
+        canvas: [{ type: 'rect', x: 20, y: 14, w: 555, h: 3, r: 0, color: ACCENT }],
+      }),
+      footer: () => ({
+        canvas: [{ type: 'rect', x: 20, y: 15, w: 555, h: 3, r: 0, color: ACCENT }],
+      }),
     };
   }
 

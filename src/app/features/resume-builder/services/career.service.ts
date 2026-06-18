@@ -33,6 +33,7 @@ export interface Portfolio {
   photoUrl?:    string;
   location?:    string;
   email?:       string;
+  phone?:       string;
   social?: { linkedin?: string; github?: string; twitter?: string; website?: string; youtube?: string };
   skills?: { name: string; level: string }[];
   projects?: { title: string; description: string; url?: string; githubUrl?: string; tags?: string[]; featured?: boolean }[];

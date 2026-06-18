@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { SubscriptionService } from '../../services/subscription.service';
@@ -24,15 +24,16 @@ import { AuthService } from '../../../../core/services/auth.service';
             <span class="text-2xl">⭐</span>
             <h2 class="text-xl font-bold">Upgrade to ApnaConverter Pro</h2>
           </div>
-          <p class="text-white/80 text-sm">Unlock all premium templates, no watermark, unlimited downloads</p>
+          <p class="text-white/80 text-sm">Unlock all premium templates, cover letter builder, no watermark, unlimited downloads</p>
         </div>
 
         <!-- Plans -->
         <div class="p-6 grid grid-cols-1 sm:grid-cols-2 gap-4">
 
           <!-- Monthly -->
-          <div class="border-2 border-slate-200 dark:border-slate-700 rounded-xl p-5 hover:border-violet-400 transition cursor-pointer"
-               [class.ring-2]="hoveredPlan() === 'monthly'" [class.ring-violet-300]="hoveredPlan() === 'monthly'"
+          <div class="border-2 rounded-xl p-5 transition cursor-pointer"
+               [class]="auth.currentPlan() === 'yearly' ? 'border-slate-200 dark:border-slate-700 opacity-60' :
+                        (hoveredPlan() === 'monthly' ? 'border-violet-400 ring-2 ring-violet-300' : 'border-slate-200 dark:border-slate-700 hover:border-violet-400')"
                (mouseenter)="hoveredPlan.set('monthly')" (mouseleave)="hoveredPlan.set(null)">
             <div class="flex items-start justify-between mb-3">
               <div>
@@ -46,11 +47,17 @@ import { AuthService } from '../../../../core/services/auth.service';
                 <li class="flex items-center gap-2"><span class="text-emerald-500">✓</span> {{ f }}</li>
               }
             </ul>
-            <button class="w-full py-2.5 rounded-lg bg-violet-600 hover:bg-violet-700 text-white font-semibold transition text-sm"
-                    [disabled]="loading()"
-                    (click)="subscribe('monthly')">
-              {{ loading() === 'monthly' ? 'Opening...' : 'Start Monthly Plan' }}
-            </button>
+            @if (auth.currentPlan() === 'monthly') {
+              <div class="text-center text-sm py-2.5 rounded-lg border border-slate-200 dark:border-slate-700 text-slate-400 font-medium">Current Plan ✓</div>
+            } @else if (auth.currentPlan() === 'yearly') {
+              <div class="text-center text-xs py-2.5 text-slate-400">🔒 Not available on Yearly</div>
+            } @else {
+              <button class="w-full py-2.5 rounded-lg bg-violet-600 hover:bg-violet-700 text-white font-semibold transition text-sm"
+                      [disabled]="loading()"
+                      (click)="subscribe('monthly')">
+                {{ loading() === 'monthly' ? 'Opening...' : 'Start Monthly Plan' }}
+              </button>
+            }
           </div>
 
           <!-- Yearly (highlighted) -->
@@ -71,11 +78,21 @@ import { AuthService } from '../../../../core/services/auth.service';
                 <li class="flex items-center gap-2"><span class="text-emerald-500">✓</span> {{ f }}</li>
               }
             </ul>
-            <button class="w-full py-2.5 rounded-lg bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-700 hover:to-indigo-700 text-white font-semibold transition text-sm shadow-md"
-                    [disabled]="loading()"
-                    (click)="subscribe('yearly')">
-              {{ loading() === 'yearly' ? 'Opening...' : 'Get Yearly Plan' }}
-            </button>
+            @if (auth.currentPlan() === 'yearly') {
+              <div class="text-center text-sm py-2.5 rounded-lg bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-300 font-semibold">Current Plan ✓</div>
+            } @else if (auth.currentPlan() === 'monthly') {
+              <button class="w-full py-2.5 rounded-lg bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-700 hover:to-indigo-700 text-white font-semibold transition text-sm shadow-md"
+                      [disabled]="loading()"
+                      (click)="subscribe('yearly')">
+                {{ loading() === 'yearly' ? 'Opening...' : '⬆ Upgrade to Yearly' }}
+              </button>
+            } @else {
+              <button class="w-full py-2.5 rounded-lg bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-700 hover:to-indigo-700 text-white font-semibold transition text-sm shadow-md"
+                      [disabled]="loading()"
+                      (click)="subscribe('yearly')">
+                {{ loading() === 'yearly' ? 'Opening...' : 'Get Yearly Plan' }}
+              </button>
+            }
           </div>
         </div>
 
@@ -98,25 +115,31 @@ import { AuthService } from '../../../../core/services/auth.service';
     </div>
   `,
 })
-export class UpgradeModalComponent {
+export class UpgradeModalComponent implements OnInit {
   @Input() triggeredBy?: string;
   @Output() close     = new EventEmitter<void>();
   @Output() upgraded  = new EventEmitter<void>();
 
   private readonly subs   = inject(SubscriptionService);
-  private readonly auth   = inject(AuthService);
+  readonly auth           = inject(AuthService);
   private readonly router = inject(Router);
 
   readonly loading     = signal<'monthly' | 'yearly' | null>(null);
   readonly hoveredPlan = signal<'monthly' | 'yearly' | null>(null);
+
+  ngOnInit(): void {
+    if (this.auth.isLoggedIn()) {
+      this.subs.getStatus();
+    }
+  }
 
   readonly monthlyFeatures = [
     'All premium templates',
     'No watermark on PDFs',
     'Unlimited resumes',
     'Unlimited downloads',
+    'Cover Letter Builder',
     'ATS score checker',
-    'Priority support',
   ];
 
   readonly yearlyFeatures = [
@@ -124,17 +147,17 @@ export class UpgradeModalComponent {
     'Early access to new templates',
     'Exclusive premium designs',
     'Resume analytics',
-    'Cover letter generator (soon)',
+    'Portfolio builder',
     'Premium support',
   ];
 
   readonly comparisonRows = [
-    { label: 'Templates',    free: '8 free',     pro: 'All 10 ✓' },
+    { label: 'Templates',    free: '7 free',     pro: 'All 10 ✓' },
     { label: 'PDF watermark',free: 'Yes',         pro: 'None ✓' },
     { label: 'Resumes',      free: 'Up to 2',     pro: 'Unlimited ✓' },
     { label: 'Downloads',    free: '3/day',       pro: 'Unlimited ✓' },
     { label: 'ATS Score',    free: 'Basic',       pro: 'Full ✓' },
-    { label: 'AI features',  free: '✗',           pro: 'Coming soon' },
+    { label: 'Cover Letter', free: '✗',            pro: '✓ Live' },
   ];
 
   async subscribe(plan: 'monthly' | 'yearly'): Promise<void> {

@@ -1,4 +1,4 @@
-import { Injectable, PLATFORM_ID, inject } from '@angular/core';
+import { Injectable, PLATFORM_ID, inject, signal } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { firstValueFrom } from 'rxjs';
 import { AuthService } from '../../../core/services/auth.service';
@@ -7,12 +7,29 @@ import { NotificationService } from '../../../core/services/notification.service
 
 export type SubscriptionPlan = 'monthly' | 'yearly';
 
+export interface SubscriptionStatus {
+  isPro:              boolean;
+  isPremium:          boolean;
+  plan:               string;
+  status:             string;
+  startedAt:          string | null;
+  currentPeriodEnd:   string | null;
+  cancelAtPeriodEnd:  boolean;
+  daysRemaining:      number;
+  resumeCount:        number;
+  totalDownloads:     number;
+  canPurchaseMonthly: boolean;
+  canPurchaseYearly:  boolean;
+}
+
 @Injectable({ providedIn: 'root' })
 export class SubscriptionService {
   private readonly auth       = inject(AuthService);
   private readonly api        = inject(ApiService);
   private readonly notify     = inject(NotificationService);
   private readonly platformId = inject(PLATFORM_ID);
+
+  readonly subStatus = signal<SubscriptionStatus | null>(null);
 
   isPro(): boolean {
     return this.auth.isPro();
@@ -23,12 +40,46 @@ export class SubscriptionService {
     return this.isPro();
   }
 
+  canPurchaseMonthly(): boolean {
+    return this.subStatus()?.canPurchaseMonthly ?? !this.isPro();
+  }
+
+  canPurchaseYearly(): boolean {
+    return this.subStatus()?.canPurchaseYearly ?? true;
+  }
+
+  async getStatus(): Promise<SubscriptionStatus | null> {
+    if (!this.auth.isLoggedIn()) return null;
+    try {
+      const res = await firstValueFrom(this.api.get<any>('subscriptions/status'));
+      const status = res.data as SubscriptionStatus;
+      this.subStatus.set(status);
+      return status;
+    } catch { return null; }
+  }
+
   /** Opens Razorpay subscription checkout. Returns true if activated. */
   async subscribe(plan: SubscriptionPlan): Promise<boolean> {
     if (!isPlatformBrowser(this.platformId)) return false;
 
     if (!this.auth.isLoggedIn()) {
       this.notify.warning('Sign in required', 'Please sign in to subscribe.');
+      return false;
+    }
+
+    // Refresh status and enforce hierarchy before calling backend
+    await this.getStatus();
+    if (plan === 'monthly' && !this.canPurchaseMonthly()) {
+      const currentPlan = this.auth.currentPlan();
+      if (currentPlan === 'yearly') {
+        this.notify.warning('Already on Yearly', 'You already have the highest tier. No upgrade needed.');
+      } else {
+        this.notify.warning('Already subscribed', 'You already have an active Monthly plan.');
+      }
+      return false;
+    }
+    if (plan === 'yearly' && !this.canPurchaseYearly()) {
+      this.notify.warning('Already on Yearly', 'You already have an active Yearly plan.');
       return false;
     }
 

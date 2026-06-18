@@ -47,7 +47,7 @@ export class HomeComponent implements OnInit {
     { name: 'ATS Professional', gradient: 'from-slate-700 to-slate-900',   isPremium: true  },
     { name: 'Modern Pro',        gradient: 'from-blue-500 to-indigo-600',   isPremium: true  },
     { name: 'Minimal',           gradient: 'from-gray-400 to-gray-700',     isPremium: false },
-    { name: 'Tech',              gradient: 'from-slate-900 to-emerald-600', isPremium: false },
+    { name: 'Tech',              gradient: 'from-slate-900 to-emerald-600', isPremium: true  },
     { name: 'Creative',          gradient: 'from-violet-500 to-purple-700', isPremium: false },
     { name: 'Elegant',           gradient: 'from-rose-400 to-pink-600',     isPremium: false },
     { name: 'Executive',         gradient: 'from-slate-800 to-yellow-600',  isPremium: false },
@@ -58,10 +58,10 @@ export class HomeComponent implements OnInit {
 
   readonly features = [
     { icon: '🎯', bg: 'bg-violet-100 dark:bg-violet-900/30',  title: 'ATS-Friendly Templates',    desc: 'All resume templates are designed to pass modern Applicant Tracking Systems without errors.' },
-    { icon: '🧑‍💼', bg: 'bg-indigo-100 dark:bg-indigo-900/30', title: 'Professional Designs',       desc: 'Crafted by designers for recruiters — modern, clean, and polished layouts.' },
+    { icon: '✉️', bg: 'bg-emerald-100 dark:bg-emerald-900/30', title: 'Cover Letter Builder',      desc: 'Generate a tailored cover letter from your resume in seconds. Three tone options — professional, confident, or enthusiastic.' },
+    { icon: '🌐', bg: 'bg-indigo-100 dark:bg-indigo-900/30',  title: 'Portfolio Builder',          desc: 'Create a shareable public portfolio page with your bio, skills, projects and social links.' },
     { icon: '📋', bg: 'bg-rose-100 dark:bg-rose-900/30',     title: 'Biodata Builder',             desc: 'Marriage and personal biodata templates with photo support and instant PDF download.' },
     { icon: '⚡', bg: 'bg-amber-100 dark:bg-amber-900/30',   title: 'One-Click PDF Download',      desc: 'Download a polished, print-ready PDF instantly — no email or account required.' },
-    { icon: '🔒', bg: 'bg-emerald-100 dark:bg-emerald-900/30', title: 'Secure & Private',          desc: 'Your data stays on your device. Nothing is stored or shared without your permission.' },
     { icon: '⭐', bg: 'bg-orange-100 dark:bg-orange-900/30', title: 'Premium Templates',           desc: 'Unlock exclusive Pro-only designs for ₹9/month — cancel anytime, no commitment.' },
   ];
 }

@@ -1,4 +1,4 @@
-import { Component, OnInit, computed, inject, signal } from '@angular/core';
+import { Component, OnDestroy, OnInit, computed, inject, signal } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
@@ -6,6 +6,7 @@ import { ResumeStoreService } from '../../services/resume-store.service';
 import { AuthService } from '../../../../core/services/auth.service';
 import { NotificationService } from '../../../../core/services/notification.service';
 import { UpgradeModalComponent } from '../../components/upgrade-modal/upgrade-modal.component';
+import { JsonLdService } from '../../../../core/services/json-ld.service';
 
 interface CoverLetterForm {
   hiringManager: string;
@@ -169,10 +170,11 @@ ${candidateName || 'Your Name'}`;
     </div>
   `,
 })
-export class CoverLetterComponent implements OnInit {
-  readonly store  = inject(ResumeStoreService);
-  readonly auth   = inject(AuthService);
-  private notify  = inject(NotificationService);
+export class CoverLetterComponent implements OnInit, OnDestroy {
+  readonly store   = inject(ResumeStoreService);
+  readonly auth    = inject(AuthService);
+  private notify   = inject(NotificationService);
+  private readonly jsonLd = inject(JsonLdService);
 
   readonly showUpgrade = signal(false);
   readonly letterText  = signal('');
@@ -198,6 +200,18 @@ export class CoverLetterComponent implements OnInit {
       this.form.resumeId = active.id;
       this.form.role = active.personal.jobTitle || '';
     }
+    this.jsonLd.setJsonLd('cover-letter-app', {
+      '@context': 'https://schema.org', '@type': 'SoftwareApplication',
+      name: 'ApnaConverter Cover Letter Builder',
+      url: 'https://www.apnaconverter.com/resume-builder/cover-letter',
+      applicationCategory: 'BusinessApplication',
+      description: 'Generate a professional, tailored cover letter from your resume data in seconds. Choose tone, fill in company details, and get a ready-to-send letter — free.',
+      offers: { '@type': 'Offer', price: '0', priceCurrency: 'INR' },
+    });
+  }
+
+  ngOnDestroy(): void {
+    this.jsonLd.removeJsonLd('cover-letter-app');
   }
 
   onResumeChange(): void {

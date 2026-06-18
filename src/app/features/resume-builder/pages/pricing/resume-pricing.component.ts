@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
 import { SubscriptionService } from '../../services/subscription.service';
@@ -64,7 +64,11 @@ import { AuthService } from '../../../../core/services/auth.service';
               }
             </ul>
             @if (auth.isPro() && auth.currentPlan() === 'monthly') {
-              <div class="btn btn-secondary text-center text-sm w-full py-2.5 opacity-60 cursor-default">Current Plan</div>
+              <div class="btn btn-secondary text-center text-sm w-full py-2.5 opacity-60 cursor-default">Current Plan ✓</div>
+            } @else if (auth.isPro() && auth.currentPlan() === 'yearly') {
+              <div class="text-center text-xs text-slate-400 py-2.5 border border-dashed border-slate-300 dark:border-slate-700 rounded-lg">
+                🔒 Not available — you're on Yearly
+              </div>
             } @else {
               <button class="btn btn-primary text-sm w-full py-2.5"
                       [disabled]="loading() === 'monthly'"
@@ -93,6 +97,12 @@ import { AuthService } from '../../../../core/services/auth.service';
             </ul>
             @if (auth.isPro() && auth.currentPlan() === 'yearly') {
               <div class="text-center text-sm w-full py-2.5 rounded-lg bg-emerald-100 text-emerald-700 font-semibold">Current Plan ✓</div>
+            } @else if (auth.isPro() && auth.currentPlan() === 'monthly') {
+              <button class="w-full py-2.5 rounded-lg bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-700 hover:to-indigo-700 text-white font-semibold transition text-sm shadow-md"
+                      [disabled]="loading() === 'yearly'"
+                      (click)="subscribe('yearly')">
+                {{ loading() === 'yearly' ? 'Opening...' : '⬆ Upgrade to Yearly' }}
+              </button>
             } @else {
               <button class="w-full py-2.5 rounded-lg bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-700 hover:to-indigo-700 text-white font-semibold transition text-sm shadow-md"
                       [disabled]="loading() === 'yearly'"
@@ -120,11 +130,17 @@ import { AuthService } from '../../../../core/services/auth.service';
     </div>
   `,
 })
-export class ResumePricingComponent {
+export class ResumePricingComponent implements OnInit {
   readonly auth    = inject(AuthService);
   readonly subs    = inject(SubscriptionService);
   readonly router  = inject(Router);
   readonly loading = signal<'monthly' | 'yearly' | null>(null);
+
+  async ngOnInit() {
+    if (this.auth.isLoggedIn()) {
+      await this.subs.getStatus();
+    }
+  }
 
   async subscribe(plan: 'monthly' | 'yearly') {
     if (!this.auth.isLoggedIn()) {
@@ -140,7 +156,7 @@ export class ResumePricingComponent {
 
   readonly freeFeatures = [
     { text: 'Up to 2 resumes', included: true },
-    { text: '8 free templates', included: true },
+    { text: '7 free templates', included: true },
     { text: 'Basic ATS score', included: true },
     { text: 'PDF download with watermark', included: true },
     { text: 'Premium templates', included: false },
@@ -150,12 +166,12 @@ export class ResumePricingComponent {
   ];
 
   readonly monthlyFeatures = [
-    'All 10 premium templates',
+    'All 10 templates (3 premium unlocked)',
     'No watermark on PDFs',
     'Unlimited resumes',
     'Unlimited PDF downloads',
     'Full ATS score checker',
-    'Resume analytics',
+    'Cover Letter Builder',
     'Priority support',
     'AI suggestions (coming soon)',
   ];
@@ -164,7 +180,7 @@ export class ResumePricingComponent {
     'Everything in Monthly',
     'Early access to new templates',
     'Exclusive premium designs',
-    'Cover letter generator (soon)',
+    'Portfolio builder',
     'Resume performance insights',
     'Premium email support',
   ];

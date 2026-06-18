@@ -209,9 +209,17 @@ import { UpgradeModalComponent } from '../../components/upgrade-modal/upgrade-mo
                       <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> Active
                     </span>
                   </div>
+                  @if (auth.user()?.subscription?.currentPeriodStart) {
+                    <div class="flex items-center justify-between">
+                      <span class="text-xs text-slate-500">Started</span>
+                      <span class="text-xs font-medium text-slate-700 dark:text-slate-300">
+                        {{ auth.user()?.subscription?.currentPeriodStart | date:'dd MMM yyyy' }}
+                      </span>
+                    </div>
+                  }
                   @if (auth.user()?.subscription?.currentPeriodEnd) {
                     <div class="flex items-center justify-between">
-                      <span class="text-xs text-slate-500">Renews</span>
+                      <span class="text-xs text-slate-500">{{ auth.user()?.subscription?.cancelAtPeriodEnd ? 'Expires' : 'Renews' }}</span>
                       <span class="text-xs font-medium text-slate-700 dark:text-slate-300">
                         {{ auth.user()?.subscription?.currentPeriodEnd | date:'dd MMM yyyy' }}
                       </span>
@@ -227,6 +235,13 @@ import { UpgradeModalComponent } from '../../components/upgrade-modal/upgrade-mo
                     <p class="text-xs text-amber-600 dark:text-amber-400 bg-amber-50 dark:bg-amber-900/20 p-2 rounded-lg">
                       ⚠ Cancels at end of period
                     </p>
+                  }
+                  @if (auth.currentPlan() === 'monthly') {
+                    <div class="pt-1">
+                      <a routerLink="/resume-builder/pricing" class="text-xs text-violet-600 dark:text-violet-400 hover:underline font-medium">
+                        ⬆ Upgrade to Yearly — save ₹9
+                      </a>
+                    </div>
                   }
                   <div class="pt-2 border-t border-slate-100 dark:border-slate-800">
                     <button class="text-xs text-slate-400 hover:text-red-500 transition"
@@ -347,9 +362,9 @@ export class ResumeDashboardComponent implements OnInit {
     'Premium Resume Templates (ATS Pro, Modern Pro)',
     'No watermark on downloaded PDFs',
     'Unlimited resumes & biodata',
-    'AI Resume Suggestions (coming soon)',
-    'AI Cover Letter Generator (coming soon)',
+    'Cover Letter Builder',
     'Full ATS Score Checker',
+    'AI Suggestions (coming soon)',
   ];
 
   initials() {
@@ -386,7 +401,10 @@ export class ResumeDashboardComponent implements OnInit {
 
   async ngOnInit() {
     if (this.auth.isLoggedIn()) {
-      const history = await this.subs.getPaymentHistory();
+      const [history] = await Promise.all([
+        this.subs.getPaymentHistory(),
+        this.subs.getStatus(),
+      ]);
       this.payments.set(history);
       this.subs.syncResumeCount(this.store.resumes().length);
     }

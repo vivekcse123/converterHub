@@ -1,6 +1,7 @@
-import { ChangeDetectionStrategy, Component, DestroyRef, OnInit, PLATFORM_ID, computed, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, DestroyRef, OnDestroy, OnInit, PLATFORM_ID, computed, inject, signal } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
+import { JsonLdService } from '../../../../core/services/json-ld.service';
 import { ResumeStoreService } from '../../services/resume-store.service';
 import { ResumePdfService } from '../../services/resume-pdf.service';
 import { ResumeAuthGateService } from '../../services/resume-auth-gate.service';
@@ -50,7 +51,7 @@ const MOBILE_STEP_LABELS = ['Enter Details', 'Customize', 'Download'];
   templateUrl: './resume-builder.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ResumeBuilderComponent implements OnInit {
+export class ResumeBuilderComponent implements OnInit, OnDestroy {
   readonly store = inject(ResumeStoreService);
   private readonly pdfService = inject(ResumePdfService);
   private readonly authGate = inject(ResumeAuthGateService);
@@ -58,6 +59,7 @@ export class ResumeBuilderComponent implements OnInit {
   private readonly route = inject(ActivatedRoute);
   private readonly platformId = inject(PLATFORM_ID);
   private readonly destroyRef = inject(DestroyRef);
+  private readonly jsonLd = inject(JsonLdService);
 
   readonly resume = computed(() => this.store.activeResume());
   readonly atsResult = computed(() => this.atsScore.compute(this.resume()));
@@ -73,6 +75,32 @@ export class ResumeBuilderComponent implements OnInit {
     if (this.authGate.consumePendingDownload()) {
       this.download();
     }
+    this.jsonLd.setJsonLd('resume-builder-app', {
+      '@context': 'https://schema.org', '@type': 'SoftwareApplication',
+      name: 'ApnaConverter Resume Builder',
+      url: 'https://www.apnaconverter.com/resume-builder',
+      applicationCategory: 'BusinessApplication',
+      operatingSystem: 'Any',
+      description: 'Free ATS-friendly resume builder with live ATS score, 10 professional templates, job description matching, AI writing assistant, and one-click PDF download.',
+      featureList: ['Live ATS score', '10 resume templates', 'AI writing assistant', 'Job description keyword match', 'One-click PDF download', 'Cover letter generator', 'Portfolio builder'],
+      offers: [{ '@type': 'Offer', price: '0', priceCurrency: 'INR', description: 'Free — 8 templates, basic ATS score' }, { '@type': 'Offer', price: '9', priceCurrency: 'INR', description: 'Pro — all templates, no watermark' }],
+    });
+    this.jsonLd.setJsonLd('resume-builder-howto', {
+      '@context': 'https://schema.org', '@type': 'HowTo',
+      name: 'How to Build an ATS-Friendly Resume',
+      description: 'Step-by-step guide to creating a professional, ATS-optimized resume using ApnaConverter.',
+      step: [
+        { '@type': 'HowToStep', position: 1, name: 'Choose a Template', text: 'Pick from 10 ATS-friendly resume templates. Free users get 8 templates; Pro users unlock all 10 including premium designs.' },
+        { '@type': 'HowToStep', position: 2, name: 'Fill in Your Details', text: 'Enter your personal info, work experience, education, skills, and projects. Use the AI writing assistant to generate a professional summary.' },
+        { '@type': 'HowToStep', position: 3, name: 'Check Your ATS Score', text: 'See your live ATS score on the right panel. Paste a job description to get a keyword match score and see missing keywords.' },
+        { '@type': 'HowToStep', position: 4, name: 'Download Your Resume', text: 'Click Download to get a polished, ATS-readable PDF. Free resumes include a light watermark; upgrade to Pro to remove it.' },
+      ],
+    });
+  }
+
+  ngOnDestroy(): void {
+    this.jsonLd.removeJsonLd('resume-builder-app');
+    this.jsonLd.removeJsonLd('resume-builder-howto');
   }
 
   private applyQueryParams(): void {

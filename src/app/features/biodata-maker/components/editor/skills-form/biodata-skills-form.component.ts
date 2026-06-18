@@ -15,7 +15,8 @@ import { LABEL, inp } from '../editor-utils';
         <!-- Skills -->
         <div>
           <label [class]="lc">Skills <span class="text-slate-400 font-normal">(comma-separated)</span></label>
-          <input class="input" [value]="skillsText()" (input)="onSkills($event)" placeholder="JavaScript, Angular, Python, SQL" />
+          <input class="input" [value]="skillsText()" (input)="onSkills($event)"
+                 [placeholder]="b.type === 'marriage' ? 'Cooking, Classical Music, Painting, Yoga' : 'MS Office, Communication, Teamwork, Leadership'" />
           @if (b.skills.length > 0) {
             <div class="flex flex-wrap gap-1.5 mt-2">
               @for (s of b.skills; track s) {

@@ -12,8 +12,11 @@ import { CareerService, JOB_STATUS_CONFIG, JobStatus } from '../resume-builder/s
 import { UpgradeModalComponent } from '../resume-builder/components/upgrade-modal/upgrade-modal.component';
 import { ConversionHistory, PaginatedResponse } from '../../core/models/conversion.model';
 import { ResumeData } from '../resume-builder/models/resume.model';
+import { BiodataStoreService } from '../biodata-maker/services/biodata-store.service';
+import { BiodataPdfService } from '../biodata-maker/services/biodata-pdf.service';
+import { BiodataData } from '../biodata-maker/models/biodata.model';
 
-type Section = 'overview' | 'resumes' | 'jobs' | 'subscription' | 'payments' | 'history' | 'profile' | 'portfolio';
+type Section = 'overview' | 'resumes' | 'jobs' | 'subscription' | 'payments' | 'history' | 'profile' | 'portfolio' | 'biodata';
 
 @Component({
   selector: 'app-dashboard',
@@ -158,7 +161,7 @@ type Section = 'overview' | 'resumes' | 'jobs' | 'subscription' | 'payments' | '
             <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
               @for (stat of overviewStats(); track stat.label) {
                 <div class="bg-white dark:bg-slate-900 rounded-2xl p-4 border border-slate-200 dark:border-slate-800 hover:border-violet-300 dark:hover:border-violet-700 transition cursor-pointer"
-                     (click)="setSection(stat.section ?? 'overview')">
+                     (click)="setSection(stat.section)">
                   <div class="text-2xl mb-2">{{ stat.icon }}</div>
                   <p class="text-2xl font-extrabold" [class]="stat.color">{{ stat.value }}</p>
                   <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">{{ stat.label }}</p>
@@ -179,10 +182,11 @@ type Section = 'overview' | 'resumes' | 'jobs' | 'subscription' | 'payments' | '
                   <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center text-lg group-hover:scale-110 transition-transform">🎯</div>
                   <p class="text-xs font-semibold text-slate-700 dark:text-slate-200">Track Job</p>
                 </button>
-                <a routerLink="/biodata-maker" class="group bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 flex flex-col items-center gap-2 hover:border-rose-300 hover:shadow-md transition text-center">
+                <button class="group bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 flex flex-col items-center gap-2 hover:border-rose-300 hover:shadow-md transition text-center"
+                        (click)="setSection('biodata')">
                   <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-rose-500 to-pink-600 flex items-center justify-center text-lg group-hover:scale-110 transition-transform">📋</div>
                   <p class="text-xs font-semibold text-slate-700 dark:text-slate-200">Biodata</p>
-                </a>
+                </button>
                 <button class="group bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 flex flex-col items-center gap-2 hover:border-emerald-300 hover:shadow-md transition text-center"
                         (click)="auth.isPro() ? null : showUpgrade.set(true)">
                   <div class="w-10 h-10 rounded-xl" [class]="auth.isPro() ? 'bg-gradient-to-br from-emerald-500 to-teal-600' : 'bg-gradient-to-br from-slate-400 to-slate-500'" style="display:flex;align-items:center;justify-content:center;font-size:1.125rem">
@@ -566,6 +570,60 @@ type Section = 'overview' | 'resumes' | 'jobs' | 'subscription' | 'payments' | '
             </div>
           }
 
+          <!-- ══ BIODATA ══ -->
+          @if (activeSection() === 'biodata') {
+            <div>
+              <div class="flex items-center justify-between mb-5">
+                <h1 class="text-lg font-extrabold text-slate-900 dark:text-white">My Biodata</h1>
+                <a routerLink="/biodata-maker" class="px-4 py-2 rounded-xl bg-gradient-to-r from-rose-500 to-pink-600 text-white text-xs font-bold hover:opacity-90 transition">+ Create New</a>
+              </div>
+
+              @if (biodataStore.biodatas().length === 0) {
+                <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-10 text-center space-y-3">
+                  <p class="text-5xl">📋</p>
+                  <p class="font-bold text-slate-800 dark:text-white text-base">No biodata yet</p>
+                  <p class="text-sm text-slate-500 dark:text-slate-400">Create a marriage or professional biodata with instant PDF download.</p>
+                  <a routerLink="/biodata-maker" class="inline-block mt-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-rose-500 to-pink-600 text-white text-sm font-bold">Create Biodata</a>
+                </div>
+              } @else {
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                  @for (b of biodataStore.biodatas(); track b.id) {
+                    <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 flex flex-col gap-3 hover:border-rose-200 dark:hover:border-rose-800 hover:shadow-sm transition">
+                      <div class="flex items-start gap-3">
+                        <div class="w-11 h-11 rounded-xl bg-gradient-to-br from-rose-500 to-pink-600 flex items-center justify-center text-white font-extrabold text-sm shrink-0 shadow">
+                          {{ (b.personal.fullName || b.name || 'B').substring(0, 2).toUpperCase() }}
+                        </div>
+                        <div class="flex-1 min-w-0">
+                          <p class="font-semibold text-slate-800 dark:text-white text-sm truncate">{{ b.name }}</p>
+                          <div class="flex items-center gap-2 mt-0.5">
+                            <span class="text-[10px] font-medium px-1.5 py-0.5 rounded-full"
+                                  [class]="b.type === 'marriage' ? 'bg-rose-100 dark:bg-rose-900/40 text-rose-600 dark:text-rose-300' : 'bg-indigo-100 dark:bg-indigo-900/40 text-indigo-600 dark:text-indigo-300'">
+                              {{ biodataTypeLabel(b) }}
+                            </span>
+                            <span class="text-[10px] text-slate-400">{{ b.updatedAt | date:'dd MMM yyyy' }}</span>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="flex gap-2 mt-auto">
+                        <button class="flex-1 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 text-xs font-semibold hover:bg-rose-100 dark:hover:bg-rose-900/30 hover:text-rose-700 dark:hover:text-rose-300 transition"
+                                (click)="editBiodata(b)">✏️ Edit</button>
+                        <button class="flex-1 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 text-xs font-semibold hover:bg-emerald-100 dark:hover:bg-emerald-900/30 hover:text-emerald-700 dark:hover:text-emerald-300 transition"
+                                (click)="downloadBiodata(b)">⬇ PDF</button>
+                        <button class="py-2 px-3 rounded-xl bg-slate-100 dark:bg-slate-800 text-red-400 text-xs font-semibold hover:bg-red-100 dark:hover:bg-red-900/30 hover:text-red-600 transition"
+                                (click)="confirmDeleteBiodata(b)">🗑</button>
+                      </div>
+                    </div>
+                  }
+                  <!-- Add new card -->
+                  <a routerLink="/biodata-maker" class="bg-white dark:bg-slate-900 border-2 border-dashed border-slate-200 dark:border-slate-700 rounded-2xl p-5 flex flex-col items-center justify-center gap-2 text-center hover:border-rose-300 dark:hover:border-rose-700 hover:shadow-sm transition group min-h-[140px]">
+                    <span class="text-3xl group-hover:scale-110 transition-transform">➕</span>
+                    <p class="text-xs font-semibold text-slate-500 dark:text-slate-400 group-hover:text-rose-600 transition">New Biodata</p>
+                  </a>
+                </div>
+              }
+            </div>
+          }
+
           <!-- ══ PROFILE ══ -->
           @if (activeSection() === 'profile') {
             <div class="max-w-lg">
@@ -629,14 +687,16 @@ type Section = 'overview' | 'resumes' | 'jobs' | 'subscription' | 'payments' | '
   `,
 })
 export class DashboardComponent implements OnInit {
-  readonly auth    = inject(AuthService);
-  readonly subs    = inject(SubscriptionService);
-  readonly store   = inject(ResumeStoreService);
-  readonly career  = inject(CareerService);
-  private  api     = inject(ApiService);
-  private  notify  = inject(NotificationService);
-  private  confirm = inject(ConfirmDialogService);
-  private  router  = inject(Router);
+  readonly auth          = inject(AuthService);
+  readonly subs          = inject(SubscriptionService);
+  readonly store         = inject(ResumeStoreService);
+  readonly career        = inject(CareerService);
+  readonly biodataStore  = inject(BiodataStoreService);
+  private  biodataPdf    = inject(BiodataPdfService);
+  private  api           = inject(ApiService);
+  private  notify        = inject(NotificationService);
+  private  confirm       = inject(ConfirmDialogService);
+  private  router        = inject(Router);
 
   readonly showUpgrade    = signal(false);
   readonly cancelling     = signal(false);
@@ -655,6 +715,7 @@ export class DashboardComponent implements OnInit {
     { id: 'overview'      as Section, icon: '🏠', label: 'Dashboard' },
     { id: 'resumes'       as Section, icon: '📄', label: 'My Resumes' },
     { id: 'jobs'          as Section, icon: '🎯', label: 'Job Tracker' },
+    { id: 'biodata'       as Section, icon: '📋', label: 'My Biodata' },
     { id: 'portfolio'     as Section, icon: '🌐', label: 'Portfolio' },
     { id: 'subscription'  as Section, icon: '⭐', label: 'Subscription' },
     { id: 'payments'      as Section, icon: '🧾', label: 'Payments' },
@@ -665,7 +726,7 @@ export class DashboardComponent implements OnInit {
   readonly proHighlights = ['Unlimited resumes', 'Version history', 'AI assistant', 'ATS checker', 'Job tracker', 'Cover letter builder', 'Portfolio page'];
 
   readonly allProFeatures = [
-    'Unlimited resumes', 'Unlimited PDF downloads', 'All 10 templates',
+    'Unlimited resumes', 'Unlimited PDF downloads', 'All 10 templates (3 premium)',
     'Resume duplication', 'Version history', 'Cover letter builder',
     'ATS score checker', 'Job description match', 'AI summary generator',
     'AI bullet rewriter', 'Shareable resume links', 'Personal portfolio',
@@ -708,8 +769,8 @@ export class DashboardComponent implements OnInit {
     return [
       { icon: '📄', label: 'Resumes',      value: String(this.store.resumes().length),   color: 'text-violet-600',  section: 'resumes' as Section },
       { icon: '🎯', label: 'Applications', value: String(this.career.totalJobs()),        color: 'text-amber-500',   section: 'jobs' as Section },
+      { icon: '📋', label: 'Biodatas',     value: String(this.biodataStore.biodatas().length), color: 'text-rose-500', section: 'biodata' as Section },
       { icon: '🔄', label: 'Conversions',  value: String(this.history().length),          color: 'text-blue-600',    section: 'history' as Section },
-      { icon: '📥', label: 'Downloads',    value: String(this.auth.user()?.subscription?.totalDownloads ?? 0), color: 'text-emerald-600', section: undefined },
     ];
   }
 
@@ -760,7 +821,8 @@ export class DashboardComponent implements OnInit {
   async updateJobStatus(id: string, event: Event) {
     const status = (event.target as HTMLSelectElement).value as JobStatus;
     await this.career.updateJob(id, { status });
-    this.career.loadStats();
+    // Reload both stats and the current filtered list so moved jobs disappear from active filter
+    await Promise.all([this.career.loadStats(), this.loadJobs()]);
     this.notify.success('Status updated');
   }
 
@@ -768,6 +830,23 @@ export class DashboardComponent implements OnInit {
     const ok = await this.confirm.open({ icon: '🗑️', title: 'Remove Application', message: 'Remove this job application?', confirmLabel: 'Remove', danger: true });
     if (ok) { await this.career.deleteJob(id); this.career.loadStats(); this.notify.success('Removed'); }
   }
+
+  // ── Biodata ────────────────────────────────────────────────────────────────
+  editBiodata(b: BiodataData) {
+    this.biodataStore.setActive(b.id);
+    this.router.navigate(['/biodata-maker']);
+  }
+
+  async downloadBiodata(b: BiodataData) {
+    await this.biodataPdf.download(b);
+  }
+
+  async confirmDeleteBiodata(b: BiodataData) {
+    const ok = await this.confirm.open({ icon: '🗑️', title: 'Delete Biodata', message: `Delete "${b.name}"? This cannot be undone.`, confirmLabel: 'Delete', danger: true });
+    if (ok) { this.biodataStore.deleteBiodata(b.id); this.notify.success('Deleted'); }
+  }
+
+  biodataTypeLabel(b: BiodataData): string { return b.type === 'marriage' ? '💍 Marriage' : '💼 Professional'; }
 
   // ── Subscription ────────────────────────────────────────────────────────────
   async cancelSub() {

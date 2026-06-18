@@ -91,6 +91,13 @@ export type BuiltInSectionId =
 /** Either a built-in section id, or `custom:<customSection.id>`. */
 export type SectionRef = BuiltInSectionId | `custom:${string}`;
 
+export interface ResumeVersion {
+  versionId:   string;
+  label:       string;
+  savedAt:     number;
+  snapshot:    Omit<ResumeData, 'versions'>;
+}
+
 export interface ResumeData {
   id: string;
   name: string;
@@ -109,6 +116,10 @@ export interface ResumeData {
   sectionOrder: SectionRef[];
   sectionVisibility: Record<string, boolean>;
   updatedAt: number;
+  // v2 fields
+  atsScore?: number;
+  publicSlug?: string;
+  versions?: ResumeVersion[];
 }
 
 export const SECTION_LABELS: Record<BuiltInSectionId, string> = {

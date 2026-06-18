@@ -15,6 +15,18 @@ export const resumeBuilderRoutes: Routes = [
     data: { description: 'Upgrade to ApnaConverter Pro for unlimited resumes, all premium templates, and no watermark. Plans from just ₹9/month.' },
   },
   {
+    path: 'cover-letter',
+    loadComponent: () => import('./pages/cover-letter/cover-letter.component').then(m => m.CoverLetterComponent),
+    title: 'Cover Letter Builder — ApnaConverter',
+    data: { description: 'Generate a professional, tailored cover letter from your resume data in seconds.' },
+  },
+  {
+    path: 'portfolio',
+    loadComponent: () => import('./pages/portfolio/portfolio.component').then(m => m.PortfolioComponent),
+    title: 'Portfolio Builder — ApnaConverter',
+    data: { description: 'Build a public portfolio page with your bio, skills, projects, and pinned resume.' },
+  },
+  {
     path: 'dashboard',
     redirectTo: '/dashboard',
     pathMatch: 'full',

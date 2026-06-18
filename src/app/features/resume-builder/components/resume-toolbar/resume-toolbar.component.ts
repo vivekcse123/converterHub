@@ -3,6 +3,9 @@ import { CommonModule } from '@angular/common';
 import { ResumeStoreService } from '../../services/resume-store.service';
 import { ResumePdfService } from '../../services/resume-pdf.service';
 import { ResumeAuthGateService } from '../../services/resume-auth-gate.service';
+import { ShareService } from '../../services/share.service';
+import { AuthService } from '../../../../core/services/auth.service';
+import { NotificationService } from '../../../../core/services/notification.service';
 import { inputValue } from '../editor/editor-utils';
 
 @Component({
@@ -35,6 +38,11 @@ import { inputValue } from '../editor/editor-utils';
         <button type="button" class="btn btn-secondary btn-sm" (click)="duplicate()" title="Duplicate this resume">
           ⧉ Duplicate
         </button>
+        @if (auth.isPro()) {
+          <button type="button" class="btn btn-secondary btn-sm whitespace-nowrap" (click)="share()" [disabled]="shareSvc.publishing()" title="Share a public link to this resume">
+            @if (shareSvc.publishing()) { ⏳ Sharing... } @else { 🔗 Share }
+          </button>
+        }
         <button
           type="button"
           class="btn btn-secondary btn-sm text-red-600 hover:text-red-700 dark:text-red-400"
@@ -44,34 +52,41 @@ import { inputValue } from '../editor/editor-utils';
         >
           🗑️ Delete
         </button>
-
         <button type="button" class="btn btn-primary btn-sm whitespace-nowrap" (click)="download()" [disabled]="downloading()">
-          @if (downloading()) {
-            ⏳ Generating...
-          } @else {
-            ⬇️ Download PDF
-          }
+          @if (downloading()) { ⏳ Generating... } @else { ⬇️ Download PDF }
         </button>
       </div>
     </div>
+
+    <!-- Share success banner -->
+    @if (shareUrl()) {
+      <div class="mt-2 flex items-center gap-2 bg-emerald-50 dark:bg-emerald-900/20 border border-emerald-200 dark:border-emerald-800 rounded-xl px-4 py-2.5">
+        <span class="text-emerald-600 dark:text-emerald-400 text-xs font-semibold shrink-0">🔗 Public link:</span>
+        <span class="text-xs text-slate-700 dark:text-slate-200 flex-1 truncate font-mono">{{ shareUrl() }}</span>
+        <button class="text-xs font-bold text-violet-600 dark:text-violet-400 hover:underline shrink-0" (click)="copyLink()">Copy</button>
+        <button class="text-slate-400 hover:text-slate-600 text-xs shrink-0" (click)="shareUrl.set('')">✕</button>
+      </div>
+    }
   `,
 })
 export class ResumeToolbarComponent {
-  readonly store = inject(ResumeStoreService);
-  private readonly pdfService = inject(ResumePdfService);
-  private readonly authGate = inject(ResumeAuthGateService);
+  readonly store    = inject(ResumeStoreService);
+  readonly auth     = inject(AuthService);
+  readonly shareSvc = inject(ShareService);
+  private  pdfService = inject(ResumePdfService);
+  private  authGate   = inject(ResumeAuthGateService);
+  private  notify     = inject(NotificationService);
 
-  readonly resume = computed(() => this.store.activeResume());
+  readonly resume      = computed(() => this.store.activeResume());
   readonly downloading = signal(false);
+  readonly shareUrl    = signal('');
 
   rename(event: Event): void {
     const id = this.store.activeId();
     if (id) this.store.renameResume(id, inputValue(event));
   }
 
-  switchResume(event: Event): void {
-    this.store.setActive(inputValue(event));
-  }
+  switchResume(event: Event): void { this.store.setActive(inputValue(event)); }
 
   duplicate(): void {
     const id = this.store.activeId();
@@ -81,6 +96,23 @@ export class ResumeToolbarComponent {
   remove(): void {
     const id = this.store.activeId();
     if (id) this.store.deleteResume(id);
+  }
+
+  async share(): Promise<void> {
+    const r = this.resume();
+    if (!r) return;
+    const result = await this.shareSvc.publish(r);
+    if (result?.slug) {
+      const url = this.shareSvc.publicUrl(result.slug);
+      this.shareUrl.set(url);
+      this.store.setPublicSlug(r.id, result.slug);
+    } else {
+      this.notify.error('Share failed', 'Could not publish resume. Please try again.');
+    }
+  }
+
+  copyLink(): void {
+    navigator.clipboard.writeText(this.shareUrl()).then(() => this.notify.success('Link copied!'));
   }
 
   async download(): Promise<void> {

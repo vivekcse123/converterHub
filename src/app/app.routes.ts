@@ -87,6 +87,12 @@ export const routes: Routes = [
   { path: 'about',          loadComponent: () => import('./features/about/about.component').then(m => m.AboutComponent),                          title: 'About ApnaConverter — Free Online File Converter', data: { description: 'Learn about ApnaConverter — 37+ free file conversion tools with no sign-up required. Built by ApnaInsights.' } },
   { path: 'contact',        loadComponent: () => import('./features/contact/contact.component').then(m => m.ContactComponent),                      title: 'Contact Us — ApnaConverter', data: { description: 'Get in touch with the ApnaConverter team for support, bug reports, or business inquiries. We reply within 1-2 business days.' } },
 
+  // ── Public shared resume ─────────────────────────────────────────────────────
+  { path: 'r/:slug', loadComponent: () => import('./features/resume-builder/pages/public-resume/public-resume.component').then(m => m.PublicResumeComponent), title: 'Resume — ApnaConverter' },
+
+  // ── Portfolio public page ─────────────────────────────────────────────────────
+  { path: 'p/:username', loadComponent: () => import('./features/resume-builder/pages/public-portfolio/public-portfolio.component').then(m => m.PublicPortfolioComponent), title: 'Portfolio — ApnaConverter' },
+
   // ── 404 ──────────────────────────────────────────────────────────────────────
   { path: '**', loadComponent: () => import('./features/not-found/not-found.component').then(m => m.NotFoundComponent), title: 'Page Not Found — ApnaConverter' },
 ];

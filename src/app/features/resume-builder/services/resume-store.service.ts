@@ -12,6 +12,7 @@ import {
   PersonalInfo,
   ProjectItem,
   ResumeData,
+  ResumeVersion,
   SECTION_LABELS,
   SectionRef,
   SkillGroup,
@@ -399,6 +400,52 @@ export class ResumeStoreService {
         s.id === sectionId ? { ...s, entries: s.entries.filter(e => e.id !== entryId) } : s
       ),
     }));
+  }
+
+  // ── Version History ────────────────────────────────────────────────────────
+
+  saveVersion(id: string, label?: string): void {
+    const resume = this.resumes().find(r => r.id === id);
+    if (!resume) return;
+    const { versions: _, ...snapshot } = resume as any;
+    const version: ResumeVersion = {
+      versionId: uid(),
+      label: label || new Date().toLocaleString('en-IN', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' }),
+      savedAt:  Date.now(),
+      snapshot,
+    };
+    this.resumes.update(list => list.map(r => {
+      if (r.id !== id) return r;
+      const versions = [version, ...(r.versions ?? [])].slice(0, 20); // max 20 versions
+      return { ...r, versions };
+    }));
+  }
+
+  restoreVersion(id: string, versionId: string): void {
+    const resume = this.resumes().find(r => r.id === id);
+    const version = resume?.versions?.find(v => v.versionId === versionId);
+    if (!version) return;
+    this.resumes.update(list => list.map(r =>
+      r.id === id
+        ? { ...version.snapshot, id: r.id, versions: r.versions, updatedAt: Date.now() }
+        : r
+    ));
+  }
+
+  deleteVersion(id: string, versionId: string): void {
+    this.resumes.update(list => list.map(r =>
+      r.id === id
+        ? { ...r, versions: (r.versions ?? []).filter(v => v.versionId !== versionId) }
+        : r
+    ));
+  }
+
+  updateAtsScore(id: string, score: number): void {
+    this.patchActive(r => ({ ...r, atsScore: score }), id);
+  }
+
+  setPublicSlug(id: string, slug: string | undefined): void {
+    this.patchActive(r => ({ ...r, publicSlug: slug }), id);
   }
 
   // ── Section ordering & visibility ─────────────────────────────────────────

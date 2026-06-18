@@ -12,6 +12,7 @@ import { SectionListComponent } from '../../components/editor/section-list/secti
 import { ResumePreviewComponent } from '../../components/preview/resume-preview.component';
 import { TemplatePickerComponent } from '../../components/template-picker/template-picker.component';
 import { AtsScorePanelComponent } from '../../components/ats-panel/ats-score-panel.component';
+import { AiAssistantPanelComponent } from '../../components/ai-assistant/ai-assistant-panel.component';
 import { ResumeToolbarComponent } from '../../components/resume-toolbar/resume-toolbar.component';
 import { ResumeAuthPromptComponent } from '../../components/auth-prompt/resume-auth-prompt.component';
 import { AdBannerComponent } from '../../../../shared/components/ad-banner/ad-banner.component';
@@ -40,6 +41,7 @@ const MOBILE_STEP_LABELS = ['Enter Details', 'Customize', 'Download'];
     ResumePreviewComponent,
     TemplatePickerComponent,
     AtsScorePanelComponent,
+    AiAssistantPanelComponent,
     ResumeToolbarComponent,
     ResumeAuthPromptComponent,
     AdBannerComponent,

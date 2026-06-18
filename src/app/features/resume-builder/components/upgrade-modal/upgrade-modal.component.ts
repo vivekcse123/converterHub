@@ -10,7 +10,8 @@ import { AuthService } from '../../../../core/services/auth.service';
   imports: [CommonModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <div class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm" (click)="close.emit()">
+    <div class="fixed inset-0 z-50 overflow-y-auto bg-black/60 backdrop-blur-sm" (click)="close.emit()">
+      <div class="flex min-h-full items-center justify-center p-4 py-6">
       <div class="relative w-full max-w-2xl bg-white dark:bg-slate-900 rounded-2xl shadow-2xl overflow-hidden" (click)="$event.stopPropagation()">
 
         <!-- Header -->
@@ -111,6 +112,7 @@ import { AuthService } from '../../../../core/services/auth.service';
           </div>
         </div>
 
+      </div>
       </div>
     </div>
   `,

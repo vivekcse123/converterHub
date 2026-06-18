@@ -1,10 +1,14 @@
-import { Component, OnInit, inject, signal } from '@angular/core';
+import { Component, OnDestroy, OnInit, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { ApiService } from '../../../../core/services/api.service';
+import { SeoService } from '../../../../core/services/seo.service';
+import { JsonLdService } from '../../../../core/services/json-ld.service';
 import { ResumePreviewComponent } from '../../components/preview/resume-preview.component';
 import { ResumeData } from '../../models/resume.model';
 import { firstValueFrom } from 'rxjs';
+
+const SITE_URL = 'https://www.apnaconverter.com';
 
 @Component({
   selector: 'app-public-resume',
@@ -56,24 +60,65 @@ import { firstValueFrom } from 'rxjs';
     }
   `,
 })
-export class PublicResumeComponent implements OnInit {
-  private route = inject(ActivatedRoute);
-  private api   = inject(ApiService);
+export class PublicResumeComponent implements OnInit, OnDestroy {
+  private route  = inject(ActivatedRoute);
+  private api    = inject(ApiService);
+  private seo    = inject(SeoService);
+  private jsonLd = inject(JsonLdService);
 
-  readonly loading  = signal(true);
-  readonly notFound = signal(false);
-  readonly resume   = signal<ResumeData | null>(null);
+  readonly loading    = signal(true);
+  readonly notFound   = signal(false);
+  readonly resume     = signal<ResumeData | null>(null);
   readonly resumeName = signal('');
-  readonly views    = signal(0);
+  readonly views      = signal(0);
 
   async ngOnInit(): Promise<void> {
     const slug = this.route.snapshot.paramMap.get('slug') ?? '';
     try {
       const res = await firstValueFrom(this.api.get<any>(`public/r/${slug}`));
       if (res.success && res.data?.snapshot) {
-        this.resume.set(res.data.snapshot as ResumeData);
-        this.resumeName.set(res.data.name ?? 'Resume');
+        const snap: ResumeData = res.data.snapshot;
+        const name = res.data.name ?? 'Resume';
+        const ownerName = snap.personal?.fullName || 'Professional';
+        const jobTitle  = snap.personal?.jobTitle  || 'Resume';
+
+        this.resume.set(snap);
+        this.resumeName.set(name);
         this.views.set(res.data.views ?? 0);
+
+        const pageUrl = `${SITE_URL}/r/${slug}`;
+        this.seo.setPage({
+          title:       `${ownerName} — ${jobTitle} Resume | ApnaConverter`,
+          description: `${ownerName}'s professional ${jobTitle} resume. Created with ApnaConverter's free ATS-friendly resume builder.`,
+          canonical:   pageUrl,
+          ogType:      'profile',
+        });
+
+        this.jsonLd.setJsonLd('public-resume', {
+          '@context': 'https://schema.org',
+          '@type': 'ProfilePage',
+          name: `${ownerName} — Resume`,
+          url: pageUrl,
+          mainEntity: {
+            '@type': 'Person',
+            name: ownerName,
+            jobTitle: jobTitle,
+            description: snap.summary || undefined,
+            email: snap.personal?.email || undefined,
+            address: snap.personal?.location ? { '@type': 'PostalAddress', addressLocality: snap.personal.location } : undefined,
+            sameAs: [snap.personal?.linkedin, snap.personal?.github, snap.personal?.portfolio].filter(Boolean),
+          },
+        });
+
+        this.jsonLd.setJsonLd('public-resume-breadcrumb', {
+          '@context': 'https://schema.org',
+          '@type': 'BreadcrumbList',
+          itemListElement: [
+            { '@type': 'ListItem', position: 1, name: 'Home',           item: SITE_URL },
+            { '@type': 'ListItem', position: 2, name: 'Resume Builder', item: `${SITE_URL}/resume-builder` },
+            { '@type': 'ListItem', position: 3, name: `${ownerName}'s Resume`, item: pageUrl },
+          ],
+        });
       } else {
         this.notFound.set(true);
       }
@@ -82,5 +127,10 @@ export class PublicResumeComponent implements OnInit {
     } finally {
       this.loading.set(false);
     }
+  }
+
+  ngOnDestroy(): void {
+    this.jsonLd.removeJsonLd('public-resume');
+    this.jsonLd.removeJsonLd('public-resume-breadcrumb');
   }
 }

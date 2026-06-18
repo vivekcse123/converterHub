@@ -36,19 +36,38 @@ export class SeoService {
    * Imperatively update all SEO tags for a page.
    * Components that need custom descriptions call this in ngOnInit().
    */
-  setPage(opts: { title: string; description: string; canonical?: string }): void {
-    const url = opts.canonical ?? (SITE_URL + this.router.url.split('?')[0]);
+  setPage(opts: {
+    title: string;
+    description: string;
+    canonical?: string;
+    ogImage?: string;
+    ogImageAlt?: string;
+    ogType?: string;
+    keywords?: string;
+  }): void {
+    const url      = opts.canonical ?? (SITE_URL + this.router.url.split('?')[0]);
+    const ogImage  = opts.ogImage ?? `${SITE_URL}/assets/web-app-manifest-512x512.png`;
+    const ogImgAlt = opts.ogImageAlt ?? opts.title;
 
     this.title.setTitle(opts.title);
 
-    this.meta.updateTag({ name: 'description',        content: opts.description });
-    this.meta.updateTag({ property: 'og:title',        content: opts.title });
-    this.meta.updateTag({ property: 'og:description',  content: opts.description });
-    this.meta.updateTag({ property: 'og:url',          content: url });
-    this.meta.updateTag({ name: 'twitter:title',        content: opts.title });
-    this.meta.updateTag({ name: 'twitter:description',  content: opts.description });
+    this.meta.updateTag({ name: 'description',           content: opts.description });
+    if (opts.keywords) this.meta.updateTag({ name: 'keywords', content: opts.keywords });
 
-    // <link rel="canonical"> must be a DOM link element, not a meta tag
+    this.meta.updateTag({ property: 'og:title',           content: opts.title });
+    this.meta.updateTag({ property: 'og:description',     content: opts.description });
+    this.meta.updateTag({ property: 'og:url',             content: url });
+    this.meta.updateTag({ property: 'og:type',            content: opts.ogType ?? 'website' });
+    this.meta.updateTag({ property: 'og:image',           content: ogImage });
+    this.meta.updateTag({ property: 'og:image:alt',       content: ogImgAlt });
+    this.meta.updateTag({ property: 'og:image:width',     content: '512' });
+    this.meta.updateTag({ property: 'og:image:height',    content: '512' });
+
+    this.meta.updateTag({ name: 'twitter:title',          content: opts.title });
+    this.meta.updateTag({ name: 'twitter:description',    content: opts.description });
+    this.meta.updateTag({ name: 'twitter:image',          content: ogImage });
+    this.meta.updateTag({ name: 'twitter:image:alt',      content: ogImgAlt });
+
     this.setCanonical(url);
   }
 

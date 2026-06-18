@@ -28,10 +28,14 @@ type Section = 'overview' | 'resumes' | 'jobs' | 'subscription' | 'payments' | '
 
       <!-- ── Sidebar ── -->
       <aside class="hidden md:flex flex-col w-60 bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-800 shrink-0 sticky top-0 h-screen overflow-y-auto">
-        <div class="px-5 py-5 border-b border-slate-100 dark:border-slate-800">
-          <a routerLink="/" class="flex items-center gap-2">
-            <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-violet-600 to-indigo-600 flex items-center justify-center text-white font-bold text-sm">A</div>
-            <span class="font-extrabold text-slate-800 dark:text-white text-sm">ApnaConverter</span>
+        <div class="px-5 py-4 border-b border-slate-100 dark:border-slate-800">
+          <a routerLink="/" class="flex items-center gap-2.5 group" title="Back to home">
+            <img src="assets/web-app-manifest-192x192.png" alt="ApnaConverter" class="w-8 h-8 object-contain group-hover:scale-105 transition-transform" width="32" height="32">
+            <span class="font-bold text-slate-900 dark:text-white text-sm tracking-tight">Apna<span class="text-violet-600">Converter</span></span>
+          </a>
+          <a routerLink="/" class="mt-2 flex items-center gap-1 text-[11px] text-slate-400 hover:text-violet-600 dark:hover:text-violet-400 transition-colors font-medium">
+            <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
+            Back to Home
           </a>
         </div>
         <div class="px-4 py-4 border-b border-slate-100 dark:border-slate-800">

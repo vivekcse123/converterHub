@@ -34,13 +34,21 @@ export class TrendingService {
   /** Returns TOOLS sorted by trending count (descending), falling back to static order. */
   sortedTools(allTools: Tool[]): Tool[] {
     const trend = this.trending();
-    if (!trend.length) return allTools;
+    if (!trend.length) {
+      // No trending data — sort by weight descending so high-weight tools appear first
+      return [...allTools].sort((a, b) => (b.weight ?? 0) - (a.weight ?? 0));
+    }
     const rank = new Map<string, number>();
     trend.forEach((t: TrendingEntry, i: number) => rank.set(t.tool, i));
     return [...allTools].sort((a, b) => {
-      const ra = rank.has(a.id) ? rank.get(a.id)! : 9999;
-      const rb = rank.has(b.id) ? rank.get(b.id)! : 9999;
-      return ra - rb;
+      const inTrendA = rank.has(a.id);
+      const inTrendB = rank.has(b.id);
+      // Trending tools first, sorted by trending rank
+      if (inTrendA && inTrendB) return rank.get(a.id)! - rank.get(b.id)!;
+      if (inTrendA) return -1;
+      if (inTrendB) return 1;
+      // Both non-trending: sort by weight descending so high-value new tools surface
+      return (b.weight ?? 0) - (a.weight ?? 0);
     });
   }
 }

@@ -1,17 +1,19 @@
 import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { RouterLink } from '@angular/router';
 import { ResumeStoreService } from '../../services/resume-store.service';
 import { ResumePdfService } from '../../services/resume-pdf.service';
 import { ResumeAuthGateService } from '../../services/resume-auth-gate.service';
 import { ShareService } from '../../services/share.service';
 import { AuthService } from '../../../../core/services/auth.service';
 import { NotificationService } from '../../../../core/services/notification.service';
+import { UpgradeModalComponent } from '../upgrade-modal/upgrade-modal.component';
 import { inputValue } from '../editor/editor-utils';
 
 @Component({
   selector: 'app-resume-toolbar',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, UpgradeModalComponent],
   host: { class: 'block' },
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
@@ -52,8 +54,18 @@ import { inputValue } from '../editor/editor-utils';
         >
           🗑️ Delete
         </button>
-        <button type="button" class="btn btn-primary btn-sm whitespace-nowrap" (click)="download()" [disabled]="downloading()">
-          @if (downloading()) { ⏳ Generating... } @else { ⬇️ Download PDF }
+        <button type="button"
+          class="btn btn-primary btn-sm whitespace-nowrap"
+          (click)="download()"
+          [disabled]="downloading()"
+          [title]="isPremiumTemplate() && !auth.isPro() ? 'Pro subscription required for this template' : 'Download as PDF'">
+          @if (downloading()) {
+            ⏳ Generating...
+          } @else if (isPremiumTemplate() && !auth.isPro()) {
+            🔒 Download PDF
+          } @else {
+            ⬇️ Download PDF
+          }
         </button>
       </div>
     </div>
@@ -67,19 +79,28 @@ import { inputValue } from '../editor/editor-utils';
         <button class="text-slate-400 hover:text-slate-600 text-xs shrink-0" (click)="shareUrl.set('')">✕</button>
       </div>
     }
+
+    <!-- Upgrade modal — shown when free user tries to download a premium template -->
+    @if (authGate.showUpgrade()) {
+      <app-upgrade-modal (close)="authGate.dismissUpgrade()" />
+    }
   `,
 })
 export class ResumeToolbarComponent {
-  readonly store    = inject(ResumeStoreService);
-  readonly auth     = inject(AuthService);
-  readonly shareSvc = inject(ShareService);
+  readonly store      = inject(ResumeStoreService);
+  readonly auth       = inject(AuthService);
+  readonly shareSvc   = inject(ShareService);
+  readonly authGate   = inject(ResumeAuthGateService);
   private  pdfService = inject(ResumePdfService);
-  private  authGate   = inject(ResumeAuthGateService);
   private  notify     = inject(NotificationService);
 
   readonly resume      = computed(() => this.store.activeResume());
   readonly downloading = signal(false);
   readonly shareUrl    = signal('');
+
+  readonly isPremiumTemplate = computed(() =>
+    this.pdfService.isPremiumTemplate(this.resume()?.templateId ?? '')
+  );
 
   rename(event: Event): void {
     const id = this.store.activeId();
@@ -118,10 +139,17 @@ export class ResumeToolbarComponent {
   async download(): Promise<void> {
     const resume = this.resume();
     if (!resume || this.downloading()) return;
-    if (!this.authGate.canDownload()) return;
+    if (!this.authGate.canDownload(resume.templateId)) return;
     this.downloading.set(true);
     try {
       await this.pdfService.download(resume);
+    } catch (err: any) {
+      const status = err?.status ?? err?.error?.status;
+      if (status === 403) {
+        this.authGate.showUpgrade.set(true);
+      } else {
+        this.notify.error('Download failed', 'Could not generate PDF. Please try again.');
+      }
     } finally {
       this.downloading.set(false);
     }

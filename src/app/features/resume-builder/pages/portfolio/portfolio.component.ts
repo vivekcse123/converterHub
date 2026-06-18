@@ -61,13 +61,14 @@ type Tab = 'basic' | 'social' | 'skills' | 'projects';
               <label class="text-xs font-semibold text-slate-500 block mb-1">Username (your public URL) *</label>
               <div class="flex items-center gap-2">
                 <span class="text-xs text-slate-400 shrink-0">apnaconverter.com/p/</span>
-                <input type="text" [(ngModel)]="form.username" (blur)="checkUsername()"
-                       placeholder="yourname" maxlength="30"
+                <input type="text" [(ngModel)]="form.username" (input)="normalizeUsername()" (blur)="checkUsername()"
+                       placeholder="yourname" maxlength="50"
                        class="flex-1 px-3 py-2.5 rounded-xl border text-sm bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-violet-500"
-                       [class]="usernameStatus() === 'available' ? 'border-emerald-400' : usernameStatus() === 'taken' ? 'border-red-400' : 'border-slate-200 dark:border-slate-700'" />
+                       [style.border-color]="usernameStatus() === 'available' ? '#34d399' : (usernameStatus() === 'taken' || usernameStatus() === 'invalid') ? '#f87171' : ''" />
               </div>
               @if (usernameStatus() === 'available') { <p class="text-xs text-emerald-600 mt-1">✅ Username available</p> }
               @if (usernameStatus() === 'taken') { <p class="text-xs text-red-500 mt-1">❌ Username already taken</p> }
+              @if (usernameStatus() === 'invalid') { <p class="text-xs text-red-500 mt-1">⚠️ Only lowercase letters, numbers, hyphens and underscores (e.g. vivek-kumar)</p> }
             </div>
 
             <div class="grid grid-cols-2 gap-3">
@@ -105,11 +106,11 @@ type Tab = 'basic' | 'social' | 'skills' | 'projects';
 
             <div class="flex items-center gap-3 pt-1">
               <label class="text-xs font-semibold text-slate-600 dark:text-slate-300">Make portfolio public</label>
-              <button class="relative w-10 h-6 rounded-full transition-colors shrink-0"
-                      [class]="form.isPublic ? 'bg-violet-600' : 'bg-slate-300 dark:bg-slate-600'"
+              <button class="relative w-10 h-6 rounded-full shrink-0 transition-all duration-200"
+                      [style.background]="form.isPublic ? '#7c3aed' : '#cbd5e1'"
                       (click)="form.isPublic = !form.isPublic">
-                <span class="absolute top-1 w-4 h-4 bg-white rounded-full shadow transition-transform"
-                      [class]="form.isPublic ? 'translate-x-5' : 'translate-x-1'"></span>
+                <span class="absolute top-1 left-1 w-4 h-4 bg-white rounded-full shadow transition-transform duration-200"
+                      [style.transform]="form.isPublic ? 'translateX(16px)' : 'translateX(0)'"></span>
               </button>
             </div>
           }
@@ -202,7 +203,7 @@ export class PortfolioComponent implements OnInit {
   readonly showUpgrade    = signal(false);
   readonly saving         = signal(false);
   readonly tab            = signal<Tab>('basic');
-  readonly usernameStatus = signal<'idle' | 'available' | 'taken'>('idle');
+  readonly usernameStatus = signal<'idle' | 'available' | 'taken' | 'invalid'>('idle');
 
   portfolio = this.career.portfolio;
 
@@ -235,9 +236,22 @@ export class PortfolioComponent implements OnInit {
     if (p) this.form = { ...p, social: { ...p.social }, skills: [...(p.skills ?? [])], projects: [...(p.projects ?? [])] };
   }
 
+  normalizeUsername(): void {
+    if (!this.form.username) return;
+    this.form.username = this.form.username
+      .toLowerCase()
+      .replace(/\s+/g, '-')
+      .replace(/[^a-z0-9_-]/g, '')
+      .replace(/-+/g, '-');
+  }
+
+  readonly USERNAME_RE = /^[a-z0-9_-]{3,50}$/;
+
   async checkUsername(): Promise<void> {
+    this.normalizeUsername();
     const u = this.form.username?.trim() ?? '';
     if (!u || u.length < 3) { this.usernameStatus.set('idle'); return; }
+    if (!this.USERNAME_RE.test(u)) { this.usernameStatus.set('invalid'); return; }
     const existing = this.career.portfolio()?.username;
     if (u === existing) { this.usernameStatus.set('idle'); return; }
     const avail = await this.career.checkUsername(u);
@@ -251,6 +265,7 @@ export class PortfolioComponent implements OnInit {
 
   async save(): Promise<void> {
     if (!this.form.username?.trim()) { this.notify.warning('Username is required'); return; }
+    if (this.usernameStatus() === 'invalid') { this.notify.warning('Invalid username — only lowercase letters, numbers, hyphens, underscores allowed'); return; }
     if (this.usernameStatus() === 'taken') { this.notify.warning('Username already taken — choose a different one'); return; }
     this.saving.set(true);
     const result = await this.career.savePortfolio(this.form as Portfolio);

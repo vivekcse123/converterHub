@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@a
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ResumeStoreService } from '../../services/resume-store.service';
-import { AtsScoreService } from '../../services/ats-score.service';
+import { AtsScoreService, JdMatchResult } from '../../services/ats-score.service';
 import { AuthService } from '../../../../core/services/auth.service';
 
 type Tab = 'ats' | 'jd';
@@ -75,7 +75,7 @@ type Tab = 'ats' | 'jd';
           </div>
 
           @if (jdText.trim()) {
-            <!-- Match score ring -->
+            <!-- Score rings: weighted (primary) + raw -->
             <div class="flex items-center gap-4 py-2">
               <div class="relative w-16 h-16 shrink-0">
                 <svg viewBox="0 0 36 36" class="w-16 h-16 -rotate-90">
@@ -86,18 +86,48 @@ type Tab = 'ats' | 'jd';
                     [attr.stroke-dashoffset]="jdDashOffset()" />
                 </svg>
                 <div class="absolute inset-0 flex items-center justify-center">
-                  <span class="text-sm font-extrabold text-slate-800 dark:text-white">{{ jdResult().score }}%</span>
+                  <span class="text-sm font-extrabold text-slate-800 dark:text-white">{{ jdResult().weightedScore }}%</span>
                 </div>
               </div>
-              <div>
+              <div class="flex-1 min-w-0">
                 <p class="font-bold text-slate-800 dark:text-white text-sm">{{ jdMatchLabel() }}</p>
-                <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">{{ jdResult().matched.length }} of {{ jdResult().totalKeywords }} keywords matched</p>
+                <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+                  {{ jdResult().matched.length }} of {{ jdResult().totalKeywords }} keywords matched
+                </p>
+                @if (jdResult().highPriorityMissing.length === 0 && jdResult().missing.length > 0) {
+                  <p class="text-[10px] text-amber-600 dark:text-amber-400 mt-1">General terms missing — check soft skills</p>
+                }
               </div>
             </div>
 
+            <!-- High-priority missing (tech skills) -->
+            @if (jdResult().highPriorityMissing.length > 0) {
+              <div class="rounded-xl bg-red-50 dark:bg-red-950/20 border border-red-200 dark:border-red-900/40 p-3">
+                <p class="text-xs font-bold text-red-700 dark:text-red-400 mb-2">🔴 Critical Skills Missing ({{ jdResult().highPriorityMissing.length }})</p>
+                <div class="flex flex-wrap gap-1">
+                  @for (kw of jdResult().highPriorityMissing; track kw) {
+                    <span class="text-[10px] font-semibold px-2 py-1 rounded-full bg-red-100 dark:bg-red-900/40 text-red-700 dark:text-red-300 border border-red-200 dark:border-red-800 cursor-pointer hover:bg-red-200 transition" title="Add to resume">+ {{ kw }}</span>
+                  }
+                </div>
+                <p class="text-[10px] text-red-500 dark:text-red-400/70 mt-2">Add these to your Skills section or experience bullets.</p>
+              </div>
+            }
+
+            <!-- General missing keywords -->
+            @if (generalMissing().length > 0) {
+              <div>
+                <p class="text-xs font-semibold text-amber-700 dark:text-amber-400 mb-1.5">🟡 Other Missing ({{ generalMissing().length }})</p>
+                <div class="flex flex-wrap gap-1">
+                  @for (kw of generalMissing(); track kw) {
+                    <span class="text-[10px] font-medium px-2 py-0.5 rounded-full bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-400 cursor-pointer hover:bg-amber-200 transition" title="Add this keyword to your resume">{{ kw }} +</span>
+                  }
+                </div>
+              </div>
+            }
+
             @if (jdResult().matched.length > 0) {
               <div>
-                <p class="text-xs font-semibold text-emerald-700 dark:text-emerald-400 mb-1.5">✅ Matched Keywords ({{ jdResult().matched.length }})</p>
+                <p class="text-xs font-semibold text-emerald-700 dark:text-emerald-400 mb-1.5">✅ Matched ({{ jdResult().matched.length }})</p>
                 <div class="flex flex-wrap gap-1">
                   @for (kw of jdResult().matched; track kw) {
                     <span class="text-[10px] font-medium px-2 py-0.5 rounded-full bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-300">{{ kw }}</span>
@@ -106,17 +136,10 @@ type Tab = 'ats' | 'jd';
               </div>
             }
 
-            @if (jdResult().missing.length > 0) {
-              <div>
-                <p class="text-xs font-semibold text-red-600 dark:text-red-400 mb-1.5">❌ Missing Keywords ({{ jdResult().missing.length }})</p>
-                <div class="flex flex-wrap gap-1">
-                  @for (kw of jdResult().missing; track kw) {
-                    <span class="text-[10px] font-medium px-2 py-0.5 rounded-full bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400 cursor-pointer hover:bg-red-200 transition" title="Add this keyword to your resume">{{ kw }} +</span>
-                  }
-                </div>
-                <p class="text-[10px] text-slate-400 mt-2">💡 Add these keywords naturally into your skills, summary, or experience bullets.</p>
-              </div>
+            @if (jdResult().missing.length === 0 && jdResult().matched.length > 0) {
+              <p class="text-xs text-emerald-600 dark:text-emerald-400 font-semibold text-center py-1">Your resume covers all detected keywords!</p>
             }
+            <p class="text-[10px] text-slate-400 mt-1">💡 Score weighted by skill importance. Add missing keywords naturally into your summary, skills, or bullets.</p>
           } @else {
             <div class="text-center py-4 text-slate-400">
               <p class="text-3xl mb-2">🎯</p>
@@ -139,10 +162,16 @@ export class AtsScorePanelComponent {
 
   readonly result = computed(() => this.atsSvc.compute(this.store.activeResume()));
 
-  readonly jdResult = signal({ score: 0, matched: [] as string[], missing: [] as string[], totalKeywords: 0 });
+  readonly jdResult = signal<JdMatchResult>({
+    score: 0, weightedScore: 0, matched: [], missing: [], totalKeywords: 0, highPriorityMissing: [],
+  });
 
-  readonly dashOffset = computed(() => this.circumference * (1 - this.result().score / 100));
-  readonly jdDashOffset = computed(() => this.circumference * (1 - this.jdResult().score / 100));
+  readonly generalMissing = computed(() =>
+    this.jdResult().missing.filter(kw => !this.jdResult().highPriorityMissing.includes(kw))
+  );
+
+  readonly dashOffset   = computed(() => this.circumference * (1 - this.result().score / 100));
+  readonly jdDashOffset = computed(() => this.circumference * (1 - this.jdResult().weightedScore / 100));
 
   runJdMatch(): void {
     const resume = this.store.activeResume();
@@ -169,14 +198,14 @@ export class AtsScorePanelComponent {
   }
 
   jdRingClass(): string {
-    const s = this.jdResult().score;
+    const s = this.jdResult().weightedScore;
     return s >= 70 ? 'stroke-emerald-500' : s >= 45 ? 'stroke-amber-500' : 'stroke-red-500';
   }
 
   jdMatchLabel(): string {
-    const s = this.jdResult().score;
+    const s = this.jdResult().weightedScore;
     if (s >= 70) return 'Strong match';
     if (s >= 45) return 'Moderate match';
-    return 'Weak match — add more keywords';
+    return 'Weak match — add missing skills';
   }
 }

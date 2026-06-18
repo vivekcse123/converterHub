@@ -14,7 +14,7 @@ import { BoldTemplateComponent } from '../templates/bold/bold-template.component
 export type TemplateCategory = 'Classic & ATS-Safe' | 'Modern & Professional' | 'Creative & Bold' | 'Executive & Two-Column';
 
 /** Templates that require a one-time ₹29 purchase. */
-export const PREMIUM_TEMPLATE_IDS: TemplateId[] = ['ats-professional', 'modern-professional'];
+export const PREMIUM_TEMPLATE_IDS: TemplateId[] = ['ats-professional', 'modern-professional', 'tech'];
 export const TEMPLATE_PRICE_INR = 29;
 
 export interface ResumeTemplateMeta {
@@ -78,7 +78,7 @@ export const RESUME_TEMPLATES: ResumeTemplateMeta[] = [
     accent: 'from-slate-900 to-emerald-600',
     bestFor: 'Best for: software engineers, DevOps, and data scientists',
     category: 'Modern & Professional',
-    isPremium: false,
+    isPremium: true,
   },
   {
     id: 'elegant',

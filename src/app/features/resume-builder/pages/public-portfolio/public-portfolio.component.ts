@@ -1,9 +1,13 @@
-import { Component, OnInit, inject, signal } from '@angular/core';
+import { Component, OnDestroy, OnInit, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { ApiService } from '../../../../core/services/api.service';
+import { SeoService } from '../../../../core/services/seo.service';
+import { JsonLdService } from '../../../../core/services/json-ld.service';
 import { Portfolio } from '../../services/career.service';
 import { firstValueFrom } from 'rxjs';
+
+const SITE_URL = 'https://www.apnaconverter.com';
 
 @Component({
   selector: 'app-public-portfolio',
@@ -140,9 +144,11 @@ import { firstValueFrom } from 'rxjs';
     }
   `,
 })
-export class PublicPortfolioComponent implements OnInit {
-  private route = inject(ActivatedRoute);
-  private api   = inject(ApiService);
+export class PublicPortfolioComponent implements OnInit, OnDestroy {
+  private route  = inject(ActivatedRoute);
+  private api    = inject(ApiService);
+  private seo    = inject(SeoService);
+  private jsonLd = inject(JsonLdService);
 
   readonly loading   = signal(true);
   readonly portfolio = signal<Portfolio | null>(null);
@@ -151,12 +157,81 @@ export class PublicPortfolioComponent implements OnInit {
     const username = this.route.snapshot.paramMap.get('username') ?? '';
     try {
       const res = await firstValueFrom(this.api.get<any>(`public/portfolio/${username}`));
-      this.portfolio.set(res.data?.portfolio ?? null);
+      const p: Portfolio | null = res.data?.portfolio ?? null;
+      this.portfolio.set(p);
+
+      if (p) {
+        const displayName = p.displayName || p.username;
+        const pageUrl     = `${SITE_URL}/p/${p.username}`;
+        const skillNames  = (p.skills ?? []).map((s: any) => s.name).join(', ');
+        const description = p.about
+          ? p.about.substring(0, 160)
+          : `${displayName}'s professional portfolio. ${skillNames ? 'Skills: ' + skillNames.substring(0, 80) + '.' : ''}`;
+
+        this.seo.setPage({
+          title:       `${displayName} — Portfolio | ApnaConverter`,
+          description: description,
+          canonical:   pageUrl,
+          ogType:      'profile',
+        });
+
+        const socialLinks = [
+          p.social?.linkedin, p.social?.github,
+          p.social?.twitter,  p.social?.website,
+        ].filter(Boolean);
+
+        this.jsonLd.setJsonLd('public-portfolio', {
+          '@context': 'https://schema.org',
+          '@type': 'ProfilePage',
+          name: `${displayName} — Portfolio`,
+          url: pageUrl,
+          mainEntity: {
+            '@type': 'Person',
+            name:         displayName,
+            description:  p.about || undefined,
+            email:        p.email || undefined,
+            address:      p.location ? { '@type': 'PostalAddress', addressLocality: p.location } : undefined,
+            sameAs:       socialLinks.length ? socialLinks : undefined,
+            knowsAbout:   (p.skills ?? []).map((s: any) => s.name),
+          },
+        });
+
+        if ((p.projects ?? []).length > 0) {
+          this.jsonLd.setJsonLd('public-portfolio-projects', {
+            '@context': 'https://schema.org',
+            '@type': 'ItemList',
+            name: `${displayName}'s Projects`,
+            itemListElement: (p.projects ?? []).map((proj: any, i: number) => ({
+              '@type': 'ListItem',
+              position: i + 1,
+              name: proj.title,
+              description: proj.description || undefined,
+              url: proj.url || proj.githubUrl || undefined,
+            })),
+          });
+        }
+
+        this.jsonLd.setJsonLd('public-portfolio-breadcrumb', {
+          '@context': 'https://schema.org',
+          '@type': 'BreadcrumbList',
+          itemListElement: [
+            { '@type': 'ListItem', position: 1, name: 'Home',      item: SITE_URL },
+            { '@type': 'ListItem', position: 2, name: 'Portfolios', item: `${SITE_URL}/resume-builder/portfolio` },
+            { '@type': 'ListItem', position: 3, name: displayName,  item: pageUrl },
+          ],
+        });
+      }
     } catch {
       this.portfolio.set(null);
     } finally {
       this.loading.set(false);
     }
+  }
+
+  ngOnDestroy(): void {
+    this.jsonLd.removeJsonLd('public-portfolio');
+    this.jsonLd.removeJsonLd('public-portfolio-projects');
+    this.jsonLd.removeJsonLd('public-portfolio-breadcrumb');
   }
 
   initials(): string {

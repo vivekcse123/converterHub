@@ -55,20 +55,43 @@ function rewriteBullet(bullet: string): string[] {
   return variants.slice(0, 3);
 }
 
+const OPENERS   = ['Results-driven','Dedicated','Dynamic','Accomplished','Experienced','Innovative','Skilled','Versatile','Motivated','Detail-oriented'];
+const CLOSERS   = [
+  'Passionate about building innovative products and collaborating with cross-functional teams.',
+  'Committed to writing clean, maintainable code and continuously improving engineering processes.',
+  'Known for delivering projects on time and raising engineering standards across teams.',
+  'Driven by a passion for solving complex problems and creating meaningful user experiences.',
+  'Adept at bridging the gap between technical teams and business stakeholders.',
+  'Strong communicator who thrives in fast-paced, agile environments.',
+  'Continuously upskilling to stay at the forefront of industry trends and best practices.',
+];
+const MID_PHRASES = [
+  'Proven track record of delivering scalable, high-quality solutions that drive measurable business outcomes.',
+  'Adept at translating business requirements into robust, maintainable technical solutions.',
+  'Experienced across the full software development lifecycle — from design through deployment.',
+  'Brings a strong foundation in system design, performance optimization, and team collaboration.',
+  'Skilled at breaking down complex challenges into elegant, efficient solutions.',
+  'Consistently delivers impactful results in cross-functional, deadline-driven environments.',
+];
+
+function shuffle<T>(arr: T[]): T[] { return [...arr].sort(() => Math.random() - 0.5); }
+
 function generateSummary(jobTitle: string, skills: string[], expYears: number, hasProjects: boolean): string[] {
-  const topSkills = skills.slice(0, 4).join(', ') || 'software development';
+  const shuffledSkills = shuffle(skills);
   const yearStr = expYears > 0 ? `${expYears}+ year${expYears !== 1 ? 's' : ''}` : '';
   const expClause = yearStr ? `with ${yearStr} of professional experience` : '';
+  const openers  = shuffle(OPENERS);
+  const mids     = shuffle(MID_PHRASES);
+  const closers  = shuffle(CLOSERS);
 
-  const templates = [
-    `Results-driven ${jobTitle} ${expClause} specializing in ${topSkills}. Proven track record of delivering scalable, high-quality solutions that drive measurable business outcomes. Passionate about building innovative products and collaborating with cross-functional teams to solve complex technical challenges.`,
-
-    `Dedicated ${jobTitle} ${expClause} ${expClause ? 'and a' : 'with a'} strong background in ${topSkills}. Adept at translating business requirements into robust technical solutions${hasProjects ? ', with a portfolio of impactful projects' : ''}. Committed to writing clean, maintainable code and continuously improving engineering processes.`,
-
-    `Dynamic ${jobTitle} ${expClause} who excels in ${topSkills}. Experienced in full software development lifecycle — from requirements analysis and architecture through deployment and optimization. Known for delivering projects on time, mentoring teammates, and raising engineering standards.`,
-  ];
-
-  return templates.map(t => t.replace(/\s+/g, ' ').trim());
+  const variants: string[] = [];
+  for (let i = 0; i < 3; i++) {
+    const topSkills = shuffledSkills.slice(0, 3 + (i % 2)).join(', ') || 'software development';
+    const projectClause = hasProjects ? `, with a portfolio of impactful projects` : '';
+    const t = `${openers[i]} ${jobTitle} ${expClause ? expClause + ' and a' : 'with a'} strong background in ${topSkills}${projectClause}. ${mids[i % mids.length]} ${closers[i % closers.length]}`;
+    variants.push(t.replace(/\s+/g, ' ').trim());
+  }
+  return variants;
 }
 
 @Component({
@@ -99,10 +122,12 @@ function generateSummary(jobTitle: string, skills: string[], expYears: number, h
         <!-- Tab -->
         <div class="flex gap-0 mb-4 border border-slate-200 dark:border-slate-700 rounded-xl overflow-hidden">
           <button class="flex-1 py-2 text-xs font-semibold transition"
-                  [class]="tool() === 'summary' ? 'bg-indigo-600 text-white' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800'"
+                  [style.background]="tool() === 'summary' ? '#4f46e5' : ''"
+                  [style.color]="tool() === 'summary' ? '#fff' : ''"
                   (click)="tool.set('summary')">📝 Summary</button>
           <button class="flex-1 py-2 text-xs font-semibold transition"
-                  [class]="tool() === 'bullet' ? 'bg-indigo-600 text-white' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800'"
+                  [style.background]="tool() === 'bullet' ? '#4f46e5' : ''"
+                  [style.color]="tool() === 'bullet' ? '#fff' : ''"
                   (click)="tool.set('bullet')">✨ Bullet</button>
         </div>
 

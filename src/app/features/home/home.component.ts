@@ -38,7 +38,7 @@ export class HomeComponent implements OnInit {
 
   readonly stats = [
     { value: '10M+',  label: 'Files Converted' },
-    { value: '37+',   label: 'Tools Available' },
+    { value: '40+',   label: 'Tools Available' },
     { value: '10',    label: 'Resume Templates' },
     { value: 'Free',  label: 'To Start' },
   ];

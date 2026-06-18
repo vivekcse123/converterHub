@@ -141,7 +141,7 @@ export class UpgradeModalComponent {
     if (!this.auth.isLoggedIn()) {
       sessionStorage.setItem('pendingUpgrade', plan);
       this.close.emit();
-      this.router.navigate(['/auth/login']);
+      this.router.navigate(['/login']);
       return;
     }
 

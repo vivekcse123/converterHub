@@ -1,5 +1,6 @@
-import { Component, Input, signal } from '@angular/core';
+import { Component, Input, OnDestroy, inject, signal } from '@angular/core';
 import { TOOL_CONTENT, ToolContent } from '../../data/tool-content.data';
+import { ToolSeoService } from '../../../core/services/tool-seo.service';
 
 @Component({
   selector: 'app-tool-info-section',
@@ -64,13 +65,26 @@ import { TOOL_CONTENT, ToolContent } from '../../data/tool-content.data';
     }
   `,
 })
-export class ToolInfoSectionComponent {
-  @Input() set toolId(id: string) { this.content = TOOL_CONTENT[id] ?? null; }
+export class ToolInfoSectionComponent implements OnDestroy {
+  private toolSeo = inject(ToolSeoService);
 
   content: ToolContent | null = null;
   readonly openFaq = signal<number | null>(null);
+  private currentToolId = '';
+
+  @Input() set toolId(id: string) {
+    if (!id) return;
+    this.currentToolId = id;
+    this.content = TOOL_CONTENT[id] ?? null;
+    // Inject SoftwareApplication + HowTo + FAQPage + BreadcrumbList JSON-LD
+    this.toolSeo.setup(id);
+  }
 
   toggleFaq(i: number): void {
     this.openFaq.update(cur => (cur === i ? null : i));
+  }
+
+  ngOnDestroy(): void {
+    if (this.currentToolId) this.toolSeo.cleanup(this.currentToolId);
   }
 }

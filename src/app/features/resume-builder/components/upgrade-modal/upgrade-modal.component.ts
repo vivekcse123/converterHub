@@ -10,11 +10,11 @@ import { AuthService } from '../../../../core/services/auth.service';
   imports: [CommonModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <div class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm" (click)="close.emit()">
-      <div class="relative w-full max-w-2xl max-h-[90vh] flex flex-col bg-white dark:bg-slate-900 rounded-2xl shadow-2xl overflow-hidden" (click)="$event.stopPropagation()">
+    <div class="fixed inset-0 z-[60] flex items-start justify-center px-4 pt-20 pb-4 bg-black/60 backdrop-blur-sm" (click)="close.emit()">
+      <div class="relative w-full max-w-2xl max-h-[85vh] flex flex-col bg-white dark:bg-slate-900 rounded-2xl shadow-2xl" (click)="$event.stopPropagation()">
 
-        <!-- Sticky Header -->
-        <div class="bg-gradient-to-r from-violet-600 to-indigo-600 px-6 py-5 text-white shrink-0">
+        <!-- Header: fixed, never scrolls -->
+        <div class="bg-gradient-to-r from-violet-600 to-indigo-600 px-6 py-5 text-white rounded-t-2xl shrink-0">
           <button class="absolute top-4 right-4 text-white/70 hover:text-white transition" (click)="close.emit()">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
@@ -27,8 +27,8 @@ import { AuthService } from '../../../../core/services/auth.service';
           <p class="text-white/80 text-sm">Unlock all premium templates, cover letter builder, no watermark, unlimited downloads</p>
         </div>
 
-        <!-- Scrollable Body -->
-        <div class="overflow-y-auto flex-1">
+        <!-- Scrollable body -->
+        <div class="overflow-y-auto flex-1 min-h-0">
 
         <!-- Plans -->
         <div class="p-6 grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -114,7 +114,7 @@ import { AuthService } from '../../../../core/services/auth.service';
           </div>
         </div>
 
-        </div><!-- end scrollable body -->
+        </div><!-- /scrollable body -->
       </div>
     </div>
   `,

@@ -34,12 +34,14 @@ type Tab = 'basic' | 'social' | 'skills' | 'projects';
       </div>
 
       @if (!auth.isPro()) {
-        <div class="bg-white dark:bg-slate-900 border border-amber-200 dark:border-amber-800 rounded-2xl p-8 text-center space-y-4">
+        <div class="min-h-[70vh] flex items-center justify-center">
+        <div class="bg-white dark:bg-slate-900 border border-amber-200 dark:border-amber-800 rounded-2xl p-10 text-center space-y-4 w-full max-w-md">
           <p class="text-5xl">🌐</p>
           <p class="text-lg font-bold text-slate-800 dark:text-white">Portfolio Page — Pro Only</p>
           <p class="text-sm text-slate-500 dark:text-slate-400 max-w-md mx-auto">Create a beautiful public profile page with your bio, skills, projects, and pinned resume. Available on Pro.</p>
           <button class="px-6 py-3 rounded-xl bg-gradient-to-r from-violet-600 to-indigo-600 text-white font-bold hover:opacity-90 transition shadow-md"
                   (click)="showUpgrade.set(true)">Upgrade to Pro ⭐</button>
+        </div>
         </div>
       } @else {
 

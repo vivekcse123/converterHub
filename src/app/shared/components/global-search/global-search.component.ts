@@ -20,7 +20,7 @@ import { SearchService } from '../../../core/services/search.service';
         </span>
         <input
           #searchInput
-          type="search"
+          type="text"
           [ngModel]="search.query()"
           (ngModelChange)="search.setQuery($event)"
           (focus)="search.open()"

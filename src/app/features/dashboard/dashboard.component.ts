@@ -653,7 +653,7 @@ type Section = 'overview' | 'resumes' | 'jobs' | 'subscription' | 'payments' | '
 
     <!-- Add Job Modal -->
     @if (showAddJob()) {
-      <div class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm" (click)="showAddJob.set(false)">
+      <div class="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm" (click)="showAddJob.set(false)">
         <div class="w-full max-w-md bg-white dark:bg-slate-900 rounded-2xl shadow-2xl p-6" (click)="$event.stopPropagation()">
           <h3 class="text-base font-bold text-slate-800 dark:text-white mb-4">Add Job Application</h3>
           <div class="space-y-3">

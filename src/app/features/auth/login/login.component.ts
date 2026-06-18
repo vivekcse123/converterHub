@@ -13,7 +13,8 @@ import { NotificationService } from '../../../core/services/notification.service
 export class LoginComponent {
   email    = '';
   password = '';
-  readonly loading = signal(false);
+  readonly loading      = signal(false);
+  readonly showPassword = signal(false);
 
   constructor(
     private auth:     AuthService,

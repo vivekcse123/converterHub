@@ -24,7 +24,7 @@ import { AuthService } from '../../../../core/services/auth.service';
             <span class="text-2xl">⭐</span>
             <h2 class="text-xl font-bold">Upgrade to ApnaConverter Pro</h2>
           </div>
-          <p class="text-white/80 text-sm">Unlock all premium templates, cover letter builder, no watermark, unlimited downloads</p>
+          <p class="text-white/80 text-sm">Unlock all 10 templates, AI assistant, no watermark, unlimited resumes &amp; downloads</p>
         </div>
 
         <!-- Scrollable Body -->
@@ -138,30 +138,33 @@ export class UpgradeModalComponent implements OnInit {
   }
 
   readonly monthlyFeatures = [
-    'All premium templates',
+    'All 10 premium templates',
     'No watermark on PDFs',
-    'Unlimited resumes',
-    'Unlimited downloads',
+    'Unlimited resumes & downloads',
+    'Full ATS score + sub-scores',
+    'AI Resume Assistant',
     'Cover Letter Builder',
-    'ATS score checker',
+    'Portfolio Builder',
   ];
 
   readonly yearlyFeatures = [
     'Everything in Monthly',
+    'Resume Import (PDF/DOCX)',
+    'Job Application Tracker',
     'Early access to new templates',
-    'Exclusive premium designs',
     'Resume analytics',
-    'Portfolio builder',
-    'Premium support',
+    'Priority support',
   ];
 
   readonly comparisonRows = [
-    { label: 'Templates',    free: '7 free',     pro: 'All 10 ✓' },
-    { label: 'PDF watermark',free: 'Yes',         pro: 'None ✓' },
-    { label: 'Resumes',      free: 'Up to 2',     pro: 'Unlimited ✓' },
-    { label: 'Downloads',    free: '3/day',       pro: 'Unlimited ✓' },
-    { label: 'ATS Score',    free: 'Basic',       pro: 'Full ✓' },
-    { label: 'Cover Letter', free: '✗',            pro: '✓ Live' },
+    { label: 'Templates',       free: '7 free',   pro: 'All 10 ✓' },
+    { label: 'PDF watermark',   free: 'Yes',       pro: 'None ✓' },
+    { label: 'Resumes',         free: 'Up to 2',   pro: 'Unlimited ✓' },
+    { label: 'Downloads',       free: '3/day',     pro: 'Unlimited ✓' },
+    { label: 'ATS Sub-scores',  free: '✗',          pro: '✓ 4 metrics' },
+    { label: 'AI Assistant',    free: '✗',          pro: '✓ Full' },
+    { label: 'Cover Letter',    free: '✗',          pro: '✓ Live' },
+    { label: 'Portfolio',       free: '✗',          pro: '✓ Full' },
   ];
 
   async subscribe(plan: 'monthly' | 'yearly'): Promise<void> {

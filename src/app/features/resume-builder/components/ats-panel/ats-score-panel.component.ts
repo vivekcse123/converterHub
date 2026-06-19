@@ -27,6 +27,7 @@ type Tab = 'ats' | 'jd';
 
       <!-- ── ATS Score tab ── -->
       @if (tab() === 'ats') {
+        <!-- Score ring + label -->
         <div class="flex items-center gap-4 mb-4">
           <div class="relative w-20 h-20 shrink-0">
             <svg viewBox="0 0 36 36" class="w-20 h-20 -rotate-90">
@@ -36,16 +37,39 @@ type Tab = 'ats' | 'jd';
                 [attr.stroke-dasharray]="circumference"
                 [attr.stroke-dashoffset]="dashOffset()" />
             </svg>
-            <div class="absolute inset-0 flex items-center justify-center">
-              <span class="text-xl font-bold text-slate-800 dark:text-slate-100">{{ result().score }}</span>
+            <div class="absolute inset-0 flex items-center justify-center flex-col">
+              <span class="text-xl font-bold text-slate-800 dark:text-slate-100 leading-none">{{ result().score }}</span>
+              <span class="text-[9px] text-slate-400 leading-none">/100</span>
             </div>
           </div>
-          <div>
-            <p class="font-semibold" [class]="labelColorClass()">{{ scoreLabel() }}</p>
-            <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Based on contact info, summary, experience, skills, and resume length.</p>
+          <div class="flex-1 min-w-0">
+            <p class="font-semibold text-sm" [class]="labelColorClass()">{{ scoreLabel() }}</p>
+            <p class="text-xs text-slate-500 dark:text-slate-400 mt-1 leading-relaxed">Analyzing contact info, content, skills &amp; structure.</p>
           </div>
         </div>
 
+        <!-- Sub-score bars -->
+        <div class="space-y-2 mb-4 p-3 bg-slate-50 dark:bg-slate-800/50 rounded-xl">
+          @for (sub of result().subScores; track sub.label) {
+            <div>
+              <div class="flex items-center justify-between mb-1">
+                <span class="text-[11px] font-medium text-slate-600 dark:text-slate-300">{{ sub.label }}</span>
+                <span class="text-[11px] font-bold"
+                  [class]="sub.color === 'emerald' ? 'text-emerald-600 dark:text-emerald-400' : sub.color === 'amber' ? 'text-amber-600 dark:text-amber-400' : 'text-red-500 dark:text-red-400'">
+                  {{ sub.pct }}%
+                </span>
+              </div>
+              <div class="w-full h-1.5 bg-slate-200 dark:bg-slate-700 rounded-full overflow-hidden">
+                <div class="h-full rounded-full transition-all duration-500"
+                  [class]="sub.color === 'emerald' ? 'bg-emerald-500' : sub.color === 'amber' ? 'bg-amber-500' : 'bg-red-500'"
+                  [style.width.%]="sub.pct">
+                </div>
+              </div>
+            </div>
+          }
+        </div>
+
+        <!-- Checklist -->
         <ul class="space-y-2">
           @for (check of result().checks; track check.label) {
             <li class="flex items-start gap-2 text-sm">

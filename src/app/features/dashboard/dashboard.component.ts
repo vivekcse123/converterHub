@@ -174,54 +174,74 @@ type Section = 'overview' | 'resumes' | 'jobs' | 'subscription' | 'payments' | '
               <h2 class="text-sm font-bold text-slate-700 dark:text-slate-300 mb-3">Quick Actions</h2>
               <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
                 <a routerLink="/resume-builder" class="group bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 flex flex-col items-center gap-2 hover:border-violet-300 hover:shadow-md transition text-center">
-                  <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-violet-500 to-indigo-600 flex items-center justify-center text-lg group-hover:scale-110 transition-transform">📝</div>
-                  <p class="text-xs font-semibold text-slate-700 dark:text-slate-200">New Resume</p>
+                  <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-violet-500 to-indigo-600 flex items-center justify-center text-xl group-hover:scale-110 transition-transform">📄</div>
+                  <p class="text-xs font-semibold text-slate-700 dark:text-slate-200">Create Resume</p>
+                  <p class="text-[10px] text-slate-400">ATS-optimized</p>
                 </a>
-                <button class="group bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 flex flex-col items-center gap-2 hover:border-amber-300 hover:shadow-md transition text-center"
-                        (click)="setSection('jobs')">
-                  <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center text-lg group-hover:scale-110 transition-transform">🎯</div>
-                  <p class="text-xs font-semibold text-slate-700 dark:text-slate-200">Track Job</p>
-                </button>
                 <button class="group bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 flex flex-col items-center gap-2 hover:border-rose-300 hover:shadow-md transition text-center"
                         (click)="setSection('biodata')">
-                  <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-rose-500 to-pink-600 flex items-center justify-center text-lg group-hover:scale-110 transition-transform">📋</div>
-                  <p class="text-xs font-semibold text-slate-700 dark:text-slate-200">Biodata</p>
+                  <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-rose-500 to-pink-600 flex items-center justify-center text-xl group-hover:scale-110 transition-transform">💍</div>
+                  <p class="text-xs font-semibold text-slate-700 dark:text-slate-200">Create Biodata</p>
+                  <p class="text-[10px] text-slate-400">Marriage & Pro</p>
                 </button>
-                <button class="group bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 flex flex-col items-center gap-2 hover:border-emerald-300 hover:shadow-md transition text-center"
-                        (click)="auth.isPro() ? null : showUpgrade.set(true)">
-                  <div class="w-10 h-10 rounded-xl" [class]="auth.isPro() ? 'bg-gradient-to-br from-emerald-500 to-teal-600' : 'bg-gradient-to-br from-slate-400 to-slate-500'" style="display:flex;align-items:center;justify-content:center;font-size:1.125rem">
-                    {{ auth.isPro() ? '🤖' : '🔒' }}
+                <a routerLink="/resume-builder/cover-letter" class="group bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 flex flex-col items-center gap-2 hover:border-emerald-300 hover:shadow-md transition text-center">
+                  <div class="w-12 h-12 rounded-xl flex items-center justify-center text-xl group-hover:scale-110 transition-transform"
+                       [class]="auth.isPro() ? 'bg-gradient-to-br from-emerald-500 to-teal-600' : 'bg-gradient-to-br from-slate-400 to-slate-500'">
+                    {{ auth.isPro() ? '✉️' : '🔒' }}
                   </div>
-                  <p class="text-xs font-semibold text-slate-700 dark:text-slate-200">AI Assistant</p>
-                </button>
+                  <p class="text-xs font-semibold text-slate-700 dark:text-slate-200">Cover Letter</p>
+                  <p class="text-[10px] text-slate-400">{{ auth.isPro() ? 'Pro feature' : 'Pro only' }}</p>
+                </a>
+                <a routerLink="/resume-builder/portfolio" class="group bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 flex flex-col items-center gap-2 hover:border-amber-300 hover:shadow-md transition text-center">
+                  <div class="w-12 h-12 rounded-xl flex items-center justify-center text-xl group-hover:scale-110 transition-transform"
+                       [class]="auth.isPro() ? 'bg-gradient-to-br from-amber-400 to-orange-500' : 'bg-gradient-to-br from-slate-400 to-slate-500'">
+                    {{ auth.isPro() ? '🌐' : '🔒' }}
+                  </div>
+                  <p class="text-xs font-semibold text-slate-700 dark:text-slate-200">Portfolio</p>
+                  <p class="text-[10px] text-slate-400">{{ auth.isPro() ? 'Public URL' : 'Pro only' }}</p>
+                </a>
               </div>
             </div>
 
-            <!-- Recent resumes -->
-            @if (store.resumes().length > 0) {
+            <!-- Recent Documents (resumes + biodata combined) -->
+            @if (store.resumes().length > 0 || biodataStore.biodatas().length > 0) {
               <div>
                 <div class="flex items-center justify-between mb-3">
-                  <h2 class="text-sm font-bold text-slate-700 dark:text-slate-300">Recent Resumes</h2>
-                  <button class="text-xs text-violet-600 dark:text-violet-400 hover:underline" (click)="setSection('resumes')">View all →</button>
+                  <h2 class="text-sm font-bold text-slate-700 dark:text-slate-300">Recent Documents</h2>
                 </div>
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-                  @for (r of store.resumes().slice(0, 3); track r.id) {
+                  @for (r of store.resumes().slice(0, 2); track r.id) {
                     <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 flex items-center gap-3 hover:border-violet-200 hover:shadow-sm transition group">
                       <div class="w-10 h-12 rounded-xl bg-gradient-to-br from-violet-500 to-indigo-600 flex items-center justify-center text-white text-xs font-bold shrink-0">{{ (r.name || 'R').substring(0,2).toUpperCase() }}</div>
                       <div class="flex-1 min-w-0">
                         <p class="font-semibold text-slate-800 dark:text-white text-sm truncate">{{ r.name || 'Untitled' }}</p>
                         <div class="flex items-center gap-2 mt-0.5">
+                          <span class="text-[10px] font-medium bg-violet-100 dark:bg-violet-900/40 text-violet-600 dark:text-violet-400 px-1.5 py-0.5 rounded">📄 Resume</span>
                           <p class="text-[11px] text-slate-400">{{ r.updatedAt | date:'dd MMM' }}</p>
-                          @if (r.atsScore) {
-                            <span class="text-[10px] font-bold px-1.5 py-0.5 rounded-full"
-                                  [class]="r.atsScore >= 80 ? 'bg-emerald-100 text-emerald-700' : r.atsScore >= 60 ? 'bg-amber-100 text-amber-700' : 'bg-red-100 text-red-700'">
-                              ATS {{ r.atsScore }}%
-                            </span>
-                          }
                         </div>
                       </div>
-                      <a routerLink="/resume-builder" [queryParams]="{id: r.id}" class="text-xs text-violet-600 opacity-0 group-hover:opacity-100 transition font-medium">Edit</a>
+                      <a routerLink="/resume-builder" [queryParams]="{id: r.id}" class="text-xs text-violet-600 opacity-0 group-hover:opacity-100 transition font-medium shrink-0">Edit →</a>
                     </div>
+                  }
+                  @for (b of biodataStore.biodatas().slice(0, 1); track b.id) {
+                    <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 flex items-center gap-3 hover:border-rose-200 hover:shadow-sm transition group">
+                      <div class="w-10 h-12 rounded-xl bg-gradient-to-br from-rose-500 to-pink-600 flex items-center justify-center text-white text-xs font-bold shrink-0">{{ (b.personal.fullName || 'B').substring(0,2).toUpperCase() }}</div>
+                      <div class="flex-1 min-w-0">
+                        <p class="font-semibold text-slate-800 dark:text-white text-sm truncate">{{ b.personal.fullName || 'Untitled Biodata' }}</p>
+                        <div class="flex items-center gap-2 mt-0.5">
+                          <span class="text-[10px] font-medium bg-rose-100 dark:bg-rose-900/40 text-rose-600 dark:text-rose-400 px-1.5 py-0.5 rounded">{{ biodataTypeLabel(b) }}</span>
+                        </div>
+                      </div>
+                      <button (click)="editBiodata(b)" class="text-xs text-rose-600 opacity-0 group-hover:opacity-100 transition font-medium shrink-0">Edit →</button>
+                    </div>
+                  }
+                </div>
+                <div class="flex gap-3 mt-3">
+                  @if (store.resumes().length > 2) {
+                    <button class="text-xs text-violet-600 dark:text-violet-400 hover:underline" (click)="setSection('resumes')">View all {{ store.resumes().length }} resumes →</button>
+                  }
+                  @if (biodataStore.biodatas().length > 1) {
+                    <button class="text-xs text-rose-600 dark:text-rose-400 hover:underline" (click)="setSection('biodata')">View all {{ biodataStore.biodatas().length }} biodatas →</button>
                   }
                 </div>
               </div>

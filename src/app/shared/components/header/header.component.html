@@ -28,23 +28,26 @@
       </a>
 
       <!-- Desktop Nav -->
-      <nav class="hidden md:flex items-center gap-1">
-        <a routerLink="/"           routerLinkActive="bg-primary-50 dark:bg-primary-950 text-primary-600" [routerLinkActiveOptions]="{exact:true}"
-           class="px-3.5 py-2 rounded-lg text-sm font-medium text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
+      <nav class="hidden md:flex items-center gap-0.5">
+        <a routerLink="/" routerLinkActive="bg-primary-50 dark:bg-primary-950 text-primary-600" [routerLinkActiveOptions]="{exact:true}"
+           class="px-3 py-2 rounded-lg text-sm font-medium text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
           Tools
         </a>
+        <a routerLink="/resume-builder" routerLinkActive="bg-primary-50 dark:bg-primary-950 text-primary-600" [routerLinkActiveOptions]="{exact:true}"
+           class="px-3 py-2 rounded-lg text-sm font-medium text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
+          Resume
+        </a>
+        <a routerLink="/biodata-maker" routerLinkActive="bg-primary-50 dark:bg-primary-950 text-primary-600"
+           class="px-3 py-2 rounded-lg text-sm font-medium text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
+          Biodata
+        </a>
+        <a routerLink="/resume-builder/cover-letter" routerLinkActive="bg-primary-50 dark:bg-primary-950 text-primary-600"
+           class="px-3 py-2 rounded-lg text-sm font-medium text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
+          Cover Letter
+        </a>
         <a routerLink="/pdf-editor" routerLinkActive="bg-primary-50 dark:bg-primary-950 text-primary-600"
-           class="px-3.5 py-2 rounded-lg text-sm font-medium text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
+           class="px-3 py-2 rounded-lg text-sm font-medium text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
           PDF Editor
-        </a>
-        <a routerLink="/image-editor" routerLinkActive="bg-primary-50 dark:bg-primary-950 text-primary-600"
-           class="px-3.5 py-2 rounded-lg text-sm font-medium text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
-          Image Editor
-        </a>
-        <a routerLink="/resume-builder" routerLinkActive="bg-primary-50 dark:bg-primary-950 text-primary-600"
-           [routerLinkActiveOptions]="{exact: true}"
-           class="px-3.5 py-2 rounded-lg text-sm font-medium text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
-          Resume Builder
         </a>
       </nav>
 
@@ -160,10 +163,12 @@
         <app-global-search />
       </div>
       <nav class="flex flex-col gap-1 pt-2">
-        <a routerLink="/"             (click)="closeMobile()" class="px-4 py-2.5 rounded-xl text-sm font-medium text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800">Tools</a>
-        <a routerLink="/pdf-editor"   (click)="closeMobile()" class="px-4 py-2.5 rounded-xl text-sm font-medium text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800">PDF Editor</a>
-        <a routerLink="/image-editor" (click)="closeMobile()" class="px-4 py-2.5 rounded-xl text-sm font-medium text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800">Image Editor</a>
-        <a routerLink="/resume-builder" (click)="closeMobile()" class="px-4 py-2.5 rounded-xl text-sm font-medium text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800">Resume Builder</a>
+        <a routerLink="/"                         (click)="closeMobile()" class="px-4 py-2.5 rounded-xl text-sm font-medium text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800">🛠 All Tools</a>
+        <a routerLink="/resume-builder"           (click)="closeMobile()" class="px-4 py-2.5 rounded-xl text-sm font-medium text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800">📄 Resume Builder</a>
+        <a routerLink="/biodata-maker"            (click)="closeMobile()" class="px-4 py-2.5 rounded-xl text-sm font-medium text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800">💍 Biodata Maker</a>
+        <a routerLink="/resume-builder/cover-letter" (click)="closeMobile()" class="px-4 py-2.5 rounded-xl text-sm font-medium text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800">✉️ Cover Letter</a>
+        <a routerLink="/pdf-editor"               (click)="closeMobile()" class="px-4 py-2.5 rounded-xl text-sm font-medium text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800">📋 PDF Editor</a>
+        <a routerLink="/image-editor"             (click)="closeMobile()" class="px-4 py-2.5 rounded-xl text-sm font-medium text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800">🖼 Image Editor</a>
         <hr class="my-1 border-slate-200 dark:border-slate-700">
         @if (!auth.isLoggedIn()) {
           <a routerLink="/login"    (click)="closeMobile()" class="px-4 py-2.5 rounded-xl text-sm font-medium text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800">Login</a>

@@ -23,13 +23,13 @@ import { JsonLdService } from '../../core/services/json-ld.service';
           Create a government job resume in the correct official format. Approved for SSC, UPSC, State PSC, Banking, Railways, and all central and state government positions.
         </p>
         <div class="flex flex-col sm:flex-row gap-3 justify-center mb-8">
-          <a routerLink="/resume-builder"
+          <a routerLink="/resume-builder" [queryParams]="{template: 'ats-professional'}"
              class="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl bg-white text-slate-800 font-bold hover:bg-slate-100 shadow-xl transition text-base">
             🏛️ Create Govt Resume — Free
           </a>
-          <a routerLink="/resume-templates"
+          <a routerLink="/resume-builder" [queryParams]="{template: 'minimal'}"
              class="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl border-2 border-white/40 text-white font-semibold hover:bg-white/10 transition text-base">
-            📋 View Formats
+            📋 View Templates
           </a>
         </div>
         <div class="inline-flex flex-wrap justify-center gap-4 bg-white/5 rounded-2xl px-6 py-4">
@@ -37,6 +37,38 @@ import { JsonLdService } from '../../core/services/json-ld.service';
             <span class="text-sm font-semibold text-slate-300">{{ badge }}</span>
           }
         </div>
+      </div>
+    </section>
+
+    <!-- Recommended templates -->
+    <section class="container-app py-12 max-w-4xl mx-auto">
+      <div class="text-center mb-8">
+        <h2 class="text-xl sm:text-2xl font-extrabold text-slate-900 dark:text-white mb-2">Recommended Templates for Government Resumes</h2>
+        <p class="text-slate-500 dark:text-slate-400 text-sm">Use a clean, plain format — no tables, no colors, no graphics</p>
+      </div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+        @for (tpl of recommendedTemplates; track tpl.id) {
+          <a [routerLink]="'/resume-builder'" [queryParams]="{template: tpl.id}"
+             class="group flex items-start gap-4 bg-white dark:bg-slate-900 border-2 rounded-2xl p-5 hover:border-indigo-400 hover:shadow-md transition-all cursor-pointer"
+             [class]="tpl.recommended ? 'border-indigo-400 ring-2 ring-indigo-200 dark:ring-indigo-900/50' : 'border-slate-200 dark:border-slate-700'">
+            <div class="w-14 h-14 rounded-xl flex items-center justify-center text-2xl shrink-0 shadow-sm" [class]="tpl.gradient">
+              {{ tpl.icon }}
+            </div>
+            <div class="flex-1 min-w-0">
+              <div class="flex items-center gap-2 mb-1">
+                <p class="font-bold text-slate-800 dark:text-white text-sm">{{ tpl.name }}</p>
+                @if (tpl.recommended) {
+                  <span class="text-[10px] font-bold bg-indigo-100 dark:bg-indigo-900/40 text-indigo-700 dark:text-indigo-300 px-1.5 py-0.5 rounded">⭐ RECOMMENDED</span>
+                }
+                @if (tpl.free) {
+                  <span class="text-[10px] font-bold bg-emerald-100 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-300 px-1.5 py-0.5 rounded">FREE</span>
+                }
+              </div>
+              <p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed mb-2">{{ tpl.desc }}</p>
+              <span class="text-xs font-semibold text-indigo-600 dark:text-indigo-400 group-hover:underline">Use this template →</span>
+            </div>
+          </a>
+        }
       </div>
     </section>
 
@@ -118,6 +150,27 @@ import { JsonLdService } from '../../core/services/json-ld.service';
 export class GovernmentResumeBuilderComponent implements OnInit, OnDestroy {
   private seo    = inject(SeoService);
   private jsonLd = inject(JsonLdService);
+
+  readonly recommendedTemplates = [
+    {
+      id: 'ats-professional',
+      name: 'ATS Professional',
+      icon: '📋',
+      gradient: 'bg-gradient-to-br from-slate-700 to-slate-900',
+      desc: 'Single-column, plain typography — the closest match to official government resume format. Accepted by all departments.',
+      recommended: true,
+      free: false,
+    },
+    {
+      id: 'minimal',
+      name: 'Minimal',
+      icon: '📄',
+      gradient: 'bg-gradient-to-br from-gray-400 to-gray-600',
+      desc: 'Pure typography, no color or graphics — ideal for government applications that require a simple, clean format.',
+      recommended: false,
+      free: true,
+    },
+  ];
 
   readonly exams = ['SSC', 'UPSC', 'State PSC', 'IBPS', 'SBI PO', 'Railways', 'Defence', 'NHM'];
 

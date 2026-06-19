@@ -6,8 +6,9 @@ import { ResumeStoreService } from '../../services/resume-store.service';
 import { ResumePdfService } from '../../services/resume-pdf.service';
 import { ResumeAuthGateService } from '../../services/resume-auth-gate.service';
 import { AtsScoreService } from '../../services/ats-score.service';
+import { AuthService } from '../../../../core/services/auth.service';
 import { createSampleResume } from '../../data/resume-defaults';
-import { RESUME_TEMPLATES } from '../../data/resume-templates.data';
+import { RESUME_TEMPLATES, PREMIUM_TEMPLATE_IDS } from '../../data/resume-templates.data';
 import { TemplateId } from '../../models/resume.model';
 import { SectionListComponent } from '../../components/editor/section-list/section-list.component';
 import { ResumePreviewComponent } from '../../components/preview/resume-preview.component';
@@ -16,6 +17,7 @@ import { AtsScorePanelComponent } from '../../components/ats-panel/ats-score-pan
 import { AiAssistantPanelComponent } from '../../components/ai-assistant/ai-assistant-panel.component';
 import { ResumeToolbarComponent } from '../../components/resume-toolbar/resume-toolbar.component';
 import { ResumeAuthPromptComponent } from '../../components/auth-prompt/resume-auth-prompt.component';
+import { UpgradeModalComponent } from '../../components/upgrade-modal/upgrade-modal.component';
 import { AdBannerComponent } from '../../../../shared/components/ad-banner/ad-banner.component';
 import { ToolInfoSectionComponent } from '../../../../shared/components/tool-info-section/tool-info-section.component';
 
@@ -45,6 +47,7 @@ const MOBILE_STEP_LABELS = ['Enter Details', 'Customize', 'Download'];
     AiAssistantPanelComponent,
     ResumeToolbarComponent,
     ResumeAuthPromptComponent,
+    UpgradeModalComponent,
     AdBannerComponent,
     ToolInfoSectionComponent,
   ],
@@ -56,6 +59,7 @@ export class ResumeBuilderComponent implements OnInit, OnDestroy {
   private readonly pdfService = inject(ResumePdfService);
   private readonly authGate = inject(ResumeAuthGateService);
   private readonly atsScore = inject(AtsScoreService);
+  private readonly auth = inject(AuthService);
   private readonly route = inject(ActivatedRoute);
   private readonly platformId = inject(PLATFORM_ID);
   private readonly destroyRef = inject(DestroyRef);
@@ -68,6 +72,7 @@ export class ResumeBuilderComponent implements OnInit, OnDestroy {
   readonly mobileStep = signal(1);
   readonly stepLabels = MOBILE_STEP_LABELS;
   readonly downloading = signal(false);
+  readonly showUpgrade = signal(false);
 
   ngOnInit(): void {
     this.applyQueryParams();
@@ -142,7 +147,13 @@ export class ResumeBuilderComponent implements OnInit, OnDestroy {
   async download(): Promise<void> {
     const resume = this.resume();
     if (!resume || this.downloading()) return;
+    // Gate 1: must be logged in
     if (!this.authGate.canDownload()) return;
+    // Gate 2: premium template requires Pro subscription (UX fast-fail; backend also enforces)
+    if (PREMIUM_TEMPLATE_IDS.includes(resume.templateId as TemplateId) && !this.auth.isPro()) {
+      this.showUpgrade.set(true);
+      return;
+    }
     this.downloading.set(true);
     try {
       await this.pdfService.download(resume);

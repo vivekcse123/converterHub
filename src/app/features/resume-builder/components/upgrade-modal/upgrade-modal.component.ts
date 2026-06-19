@@ -1,61 +1,65 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { SubscriptionService } from '../../services/subscription.service';
 import { AuthService } from '../../../../core/services/auth.service';
 
 @Component({
   selector: 'app-upgrade-modal',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, RouterLink],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div class="fixed inset-0 z-[60] flex items-start justify-center px-4 pt-20 pb-4 bg-black/60 backdrop-blur-sm" (click)="close.emit()">
       <div class="relative w-full max-w-2xl max-h-[85vh] flex flex-col bg-white dark:bg-slate-900 rounded-2xl shadow-2xl" (click)="$event.stopPropagation()">
 
         <!-- Sticky Header -->
-        <div class="bg-gradient-to-r from-violet-600 to-indigo-600 px-6 py-5 text-white rounded-t-2xl shrink-0">
+        <div class="bg-gradient-to-br from-violet-600 via-indigo-600 to-blue-700 px-6 py-6 text-white rounded-t-2xl shrink-0">
           <button class="absolute top-4 right-4 text-white/70 hover:text-white transition" (click)="close.emit()">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
             </svg>
           </button>
-          <div class="flex items-center gap-3 mb-1">
-            <span class="text-2xl">⭐</span>
-            <h2 class="text-xl font-bold">Upgrade to ApnaConverter Pro</h2>
+          <div class="text-center mb-4">
+            <span class="inline-block text-3xl mb-2">🚀</span>
+            <h2 class="text-xl font-extrabold leading-tight">Unlock Premium Templates<br>&amp; Career Tools</h2>
+            <p class="text-white/75 text-xs mt-1.5">Everything you need to land your next job — in one plan</p>
           </div>
-          <p class="text-white/80 text-sm">Unlock all 10 templates, AI assistant, no watermark, unlimited resumes &amp; downloads</p>
+          <!-- What you unlock -->
+          <div class="grid grid-cols-2 gap-1.5">
+            @for (f of proFeatures; track f.label) {
+              <div class="flex items-center gap-2 bg-white/10 rounded-lg px-2.5 py-1.5">
+                <span class="text-base shrink-0">{{ f.icon }}</span>
+                <span class="text-xs font-medium leading-tight">{{ f.label }}</span>
+              </div>
+            }
+          </div>
         </div>
 
         <!-- Scrollable Body -->
         <div class="overflow-y-auto flex-1 min-h-0">
 
         <!-- Plans -->
-        <div class="p-6 grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div class="p-5 grid grid-cols-1 sm:grid-cols-2 gap-3">
 
           <!-- Monthly -->
-          <div class="border-2 rounded-xl p-5 transition cursor-pointer"
+          <div class="border-2 rounded-xl p-4 transition cursor-pointer"
                [class]="auth.currentPlan() === 'yearly' ? 'border-slate-200 dark:border-slate-700 opacity-60' :
-                        (hoveredPlan() === 'monthly' ? 'border-violet-400 ring-2 ring-violet-300' : 'border-slate-200 dark:border-slate-700 hover:border-violet-400')"
+                        (hoveredPlan() === 'monthly' ? 'border-violet-400 ring-2 ring-violet-200 dark:ring-violet-900' : 'border-slate-200 dark:border-slate-700 hover:border-violet-400')"
                (mouseenter)="hoveredPlan.set('monthly')" (mouseleave)="hoveredPlan.set(null)">
-            <div class="flex items-start justify-between mb-3">
+            <div class="flex items-start justify-between mb-2">
               <div>
                 <p class="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Monthly</p>
-                <p class="text-3xl font-bold text-slate-800 dark:text-white mt-1">₹9 <span class="text-base font-normal text-slate-400">/mo</span></p>
+                <p class="text-2xl font-bold text-slate-800 dark:text-white mt-0.5">₹9 <span class="text-sm font-normal text-slate-400">/mo</span></p>
               </div>
-              <span class="text-2xl">📅</span>
+              <span class="text-xl">📅</span>
             </div>
-            <ul class="space-y-1.5 text-sm text-slate-600 dark:text-slate-300 mb-4">
-              @for (f of monthlyFeatures; track f) {
-                <li class="flex items-center gap-2"><span class="text-emerald-500">✓</span> {{ f }}</li>
-              }
-            </ul>
             @if (auth.currentPlan() === 'monthly') {
-              <div class="text-center text-sm py-2.5 rounded-lg border border-slate-200 dark:border-slate-700 text-slate-400 font-medium">Current Plan ✓</div>
+              <div class="text-center text-sm py-2 rounded-lg border border-slate-200 dark:border-slate-700 text-slate-400 font-medium">Current Plan ✓</div>
             } @else if (auth.currentPlan() === 'yearly') {
-              <div class="text-center text-xs py-2.5 text-slate-400">🔒 Not available on Yearly</div>
+              <div class="text-center text-xs py-2 text-slate-400">🔒 Not available on Yearly</div>
             } @else {
-              <button class="w-full py-2.5 rounded-lg bg-violet-600 hover:bg-violet-700 text-white font-semibold transition text-sm"
+              <button class="w-full py-2 rounded-lg bg-violet-600 hover:bg-violet-700 text-white font-semibold transition text-sm mt-1"
                       [disabled]="loading()"
                       (click)="subscribe('monthly')">
                 {{ loading() === 'monthly' ? 'Opening...' : 'Start Monthly Plan' }}
@@ -63,53 +67,59 @@ import { AuthService } from '../../../../core/services/auth.service';
             }
           </div>
 
-          <!-- Yearly (highlighted) -->
-          <div class="border-2 border-violet-500 rounded-xl p-5 bg-gradient-to-b from-violet-50 to-indigo-50 dark:from-violet-900/20 dark:to-indigo-900/20 relative cursor-pointer">
+          <!-- Yearly (highlighted as best value) -->
+          <div class="border-2 border-amber-400 rounded-xl p-4 bg-gradient-to-b from-amber-50 to-white dark:from-amber-900/20 dark:to-slate-800/50 relative cursor-pointer shadow-md shadow-amber-100 dark:shadow-amber-900/10">
             <div class="absolute -top-3 left-1/2 -translate-x-1/2">
-              <span class="bg-gradient-to-r from-amber-400 to-orange-500 text-white text-xs font-bold px-3 py-1 rounded-full shadow">🏆 BEST VALUE</span>
+              <span class="bg-gradient-to-r from-amber-400 to-orange-500 text-white text-[10px] font-extrabold px-3 py-1 rounded-full shadow whitespace-nowrap tracking-wide">⭐ BEST VALUE · MOST POPULAR</span>
             </div>
-            <div class="flex items-start justify-between mb-3 mt-1">
+            <div class="flex items-start justify-between mb-2 mt-1">
               <div>
-                <p class="text-xs font-semibold text-violet-600 dark:text-violet-400 uppercase tracking-wider">Yearly</p>
-                <p class="text-3xl font-bold text-slate-800 dark:text-white mt-1">₹99 <span class="text-base font-normal text-slate-400">/yr</span></p>
-                <p class="text-xs text-emerald-600 dark:text-emerald-400 font-medium mt-0.5">Save ₹9 vs monthly</p>
+                <p class="text-xs font-semibold text-amber-600 dark:text-amber-400 uppercase tracking-wider">Yearly</p>
+                <div class="flex items-baseline gap-2 mt-0.5">
+                  <p class="text-2xl font-bold text-slate-800 dark:text-white">₹99 <span class="text-sm font-normal text-slate-400">/yr</span></p>
+                  <span class="text-xs line-through text-slate-400">₹108</span>
+                </div>
+                <p class="text-xs text-emerald-600 dark:text-emerald-400 font-semibold mt-0.5">Save ₹9 — 2 months free!</p>
               </div>
-              <span class="text-2xl">🎯</span>
+              <span class="text-xl">🏆</span>
             </div>
-            <ul class="space-y-1.5 text-sm text-slate-600 dark:text-slate-300 mb-4">
-              @for (f of yearlyFeatures; track f) {
-                <li class="flex items-center gap-2"><span class="text-emerald-500">✓</span> {{ f }}</li>
-              }
-            </ul>
             @if (auth.currentPlan() === 'yearly') {
-              <div class="text-center text-sm py-2.5 rounded-lg bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-300 font-semibold">Current Plan ✓</div>
+              <div class="text-center text-sm py-2 rounded-lg bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-300 font-semibold">Current Plan ✓</div>
             } @else if (auth.currentPlan() === 'monthly') {
-              <button class="w-full py-2.5 rounded-lg bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-700 hover:to-indigo-700 text-white font-semibold transition text-sm shadow-md"
+              <button class="w-full py-2 rounded-lg bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white font-bold transition text-sm shadow mt-1"
                       [disabled]="loading()"
                       (click)="subscribe('yearly')">
-                {{ loading() === 'yearly' ? 'Opening...' : '⬆ Upgrade to Yearly' }}
+                {{ loading() === 'yearly' ? 'Opening...' : '⬆ Upgrade to Yearly — Save ₹9' }}
               </button>
             } @else {
-              <button class="w-full py-2.5 rounded-lg bg-gradient-to-r from-violet-600 to-indigo-600 hover:from-violet-700 hover:to-indigo-700 text-white font-semibold transition text-sm shadow-md"
+              <button class="w-full py-2 rounded-lg bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white font-bold transition text-sm shadow mt-1"
                       [disabled]="loading()"
                       (click)="subscribe('yearly')">
-                {{ loading() === 'yearly' ? 'Opening...' : 'Get Yearly Plan' }}
+                {{ loading() === 'yearly' ? 'Opening...' : 'Get Yearly Plan — Best Value' }}
               </button>
             }
           </div>
         </div>
 
+        <!-- View pricing link -->
+        <div class="text-center pb-1">
+          <a routerLink="/resume-builder/pricing" (click)="close.emit()"
+             class="text-xs text-violet-500 dark:text-violet-400 hover:underline">
+            View full pricing &amp; feature comparison →
+          </a>
+        </div>
+
         <!-- Feature comparison -->
-        <div class="px-6 pb-5">
-          <p class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-3 text-center">What's included</p>
+        <div class="px-5 pb-5 mt-3">
+          <p class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider mb-2.5 text-center">Free vs Pro</p>
           <div class="grid grid-cols-3 text-xs text-center rounded-xl overflow-hidden border border-slate-200 dark:border-slate-700">
             <div class="bg-slate-50 dark:bg-slate-800 p-2 font-semibold text-slate-500">Feature</div>
             <div class="bg-slate-50 dark:bg-slate-800 p-2 font-semibold text-slate-500">Free</div>
-            <div class="bg-violet-600 p-2 font-semibold text-white">Pro</div>
+            <div class="bg-gradient-to-b from-violet-600 to-indigo-700 p-2 font-semibold text-white">Pro</div>
             @for (row of comparisonRows; track row.label) {
               <div class="border-t border-slate-200 dark:border-slate-700 p-2 text-left text-slate-600 dark:text-slate-300">{{ row.label }}</div>
-              <div class="border-t border-slate-200 dark:border-slate-700 p-2 text-slate-500">{{ row.free }}</div>
-              <div class="border-t border-violet-100 dark:border-violet-900/50 bg-violet-50/50 dark:bg-violet-900/10 p-2 text-violet-700 dark:text-violet-300 font-medium">{{ row.pro }}</div>
+              <div class="border-t border-slate-200 dark:border-slate-700 p-2 text-slate-400">{{ row.free }}</div>
+              <div class="border-t border-violet-100 dark:border-violet-900/50 bg-violet-50/30 dark:bg-violet-900/10 p-2 text-violet-700 dark:text-violet-300 font-semibold">{{ row.pro }}</div>
             }
           </div>
         </div>
@@ -137,23 +147,15 @@ export class UpgradeModalComponent implements OnInit {
     }
   }
 
-  readonly monthlyFeatures = [
-    'All 10 premium templates',
-    'No watermark on PDFs',
-    'Unlimited resumes & downloads',
-    'Full ATS score + sub-scores',
-    'AI Resume Assistant',
-    'Cover Letter Builder',
-    'Portfolio Builder',
-  ];
-
-  readonly yearlyFeatures = [
-    'Everything in Monthly',
-    'Resume Import (PDF/DOCX)',
-    'Job Application Tracker',
-    'Early access to new templates',
-    'Resume analytics',
-    'Priority support',
+  readonly proFeatures = [
+    { icon: '📄', label: 'Premium Resume Templates' },
+    { icon: '💌', label: 'Cover Letter Builder' },
+    { icon: '🌐', label: 'Portfolio Builder' },
+    { icon: '⬇️', label: 'Unlimited Downloads' },
+    { icon: '🚫', label: 'No Watermark on PDFs' },
+    { icon: '📊', label: 'Advanced ATS Analysis' },
+    { icon: '📋', label: 'Job Tracker' },
+    { icon: '✨', label: 'All Future Features' },
   ];
 
   readonly comparisonRows = [
@@ -162,9 +164,9 @@ export class UpgradeModalComponent implements OnInit {
     { label: 'Resumes',         free: 'Up to 2',   pro: 'Unlimited ✓' },
     { label: 'Downloads',       free: '3/day',     pro: 'Unlimited ✓' },
     { label: 'ATS Sub-scores',  free: '✗',          pro: '✓ 4 metrics' },
-    { label: 'AI Assistant',    free: '✗',          pro: '✓ Full' },
-    { label: 'Cover Letter',    free: '✗',          pro: '✓ Live' },
+    { label: 'Cover Letter',    free: '✗',          pro: '✓ Full' },
     { label: 'Portfolio',       free: '✗',          pro: '✓ Full' },
+    { label: 'Job Tracker',     free: '✗',          pro: '✓ Included' },
   ];
 
   async subscribe(plan: 'monthly' | 'yearly'): Promise<void> {

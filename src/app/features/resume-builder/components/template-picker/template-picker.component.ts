@@ -1,37 +1,26 @@
-import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ResumeStoreService } from '../../services/resume-store.service';
 import { SubscriptionService } from '../../services/subscription.service';
 import { TEMPLATE_CATEGORIES, getTemplatesByCategory } from '../../data/resume-templates.data';
-import { UpgradeModalComponent } from '../upgrade-modal/upgrade-modal.component';
 import { TemplateId } from '../../models/resume.model';
 
 @Component({
   selector: 'app-template-picker',
   standalone: true,
-  imports: [CommonModule, UpgradeModalComponent],
+  imports: [CommonModule],
   host: { class: 'block' },
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <!-- Upgrade modal -->
-    @if (showUpgrade()) {
-      <app-upgrade-modal
-        (close)="showUpgrade.set(false)"
-        (upgraded)="showUpgrade.set(false)"
-      />
-    }
-
     <div class="card p-4 sm:p-5 space-y-5">
       <div class="flex items-center justify-between gap-2 flex-wrap">
         <h3 class="font-semibold text-slate-800 dark:text-slate-100 flex items-center gap-2">
           <span>🎨</span> Step 1 — Choose a Template
         </h3>
         @if (!subs.isPro()) {
-          <button
-            class="text-xs font-semibold px-3 py-1 rounded-full bg-gradient-to-r from-violet-600 to-indigo-600 text-white hover:opacity-90 transition flex items-center gap-1"
-            (click)="showUpgrade.set(true)">
-            ⭐ Upgrade to Pro
-          </button>
+          <span class="text-[11px] text-slate-400 dark:text-slate-500">
+            ⭐ Premium templates — preview free, upgrade to download
+          </span>
         }
       </div>
 
@@ -56,16 +45,12 @@ import { TemplateId } from '../../models/resume.model';
                   : 'border-slate-200 dark:border-slate-700 hover:border-primary-300 hover:bg-slate-50 dark:hover:bg-slate-800/50'"
                 (click)="select(tpl.id)"
               >
-                <!-- Gradient swatch with optional lock -->
+                <!-- Gradient swatch — premium shows star corner badge, not a dark overlay -->
                 <div class="relative w-11 h-11 sm:w-12 sm:h-12 rounded-lg bg-gradient-to-br flex items-center justify-center shrink-0 shadow-sm"
                      [class]="tpl.accent">
                   <span class="text-white font-bold text-sm drop-shadow">Aa</span>
                   @if (tpl.isPremium && !subs.isPro()) {
-                    <div class="absolute inset-0 rounded-lg bg-black/40 flex items-center justify-center">
-                      <svg class="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
-                        <path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd"/>
-                      </svg>
-                    </div>
+                    <span class="absolute -top-1.5 -right-1.5 w-4 h-4 bg-amber-400 rounded-full flex items-center justify-center text-[9px] shadow border border-white dark:border-slate-900">⭐</span>
                   }
                 </div>
 
@@ -74,8 +59,8 @@ import { TemplateId } from '../../models/resume.model';
                   <p class="font-medium text-sm text-slate-800 dark:text-slate-100 flex items-center gap-1.5 flex-wrap">
                     {{ tpl.name }}
                     @if (tpl.isPremium && !subs.isPro()) {
-                      <span class="inline-flex items-center gap-0.5 text-[10px] font-semibold px-1.5 py-0.5 rounded bg-violet-100 dark:bg-violet-900/40 text-violet-700 dark:text-violet-300">
-                        ⭐ PRO
+                      <span class="inline-flex items-center gap-0.5 text-[10px] font-semibold px-1.5 py-0.5 rounded bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-300 border border-amber-200 dark:border-amber-800">
+                        Premium
                       </span>
                     }
                     @if (tpl.isPremium && subs.isPro()) {
@@ -90,6 +75,9 @@ import { TemplateId } from '../../models/resume.model';
                   <p class="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5 line-clamp-1">
                     {{ tpl.bestFor.replace('Best for: ', '') }}
                   </p>
+                  @if (tpl.isPremium && !subs.isPro()) {
+                    <p class="text-[10px] text-violet-500 dark:text-violet-400 mt-0.5">Click to preview free →</p>
+                  }
                 </div>
 
                 <!-- Check icon when active -->
@@ -111,19 +99,12 @@ export class TemplatePickerComponent {
   readonly subs       = inject(SubscriptionService);
   readonly categories = TEMPLATE_CATEGORIES;
   readonly activeId   = computed(() => this.store.activeResume()?.templateId);
-  readonly showUpgrade = signal(false);
 
   templatesFor = getTemplatesByCategory;
 
   select(id: TemplateId): void {
-    const tpl = this.templatesFor(
-      this.categories.find(c => this.templatesFor(c.label).some(t => t.id === id))?.label ?? 'Classic & ATS-Safe'
-    ).find(t => t.id === id);
-
-    if (tpl?.isPremium && !this.subs.isPro()) {
-      this.showUpgrade.set(true);
-      return;
-    }
+    // Always allow selection — full preview for everyone.
+    // Premium restriction is enforced at download time (server-side + UX gate in builder).
     this.store.setTemplate(id);
   }
 }

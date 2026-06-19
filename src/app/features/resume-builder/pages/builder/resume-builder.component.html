@@ -1,3 +1,12 @@
+<!-- Upgrade modal — shown when user tries to download a premium template without Pro -->
+@if (showUpgrade()) {
+  <app-upgrade-modal
+    triggeredBy="premium-template-download"
+    (close)="showUpgrade.set(false)"
+    (upgraded)="showUpgrade.set(false)"
+  />
+}
+
 @if (resume(); as r) {
   <div class="container-app py-6 sm:py-8 space-y-10 sm:space-y-12">
 

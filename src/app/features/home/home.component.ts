@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { ToolCardComponent } from '../../shared/components/tool-card/tool-card.component';
-import { GlobalSearchComponent } from '../../shared/components/global-search/global-search.component';
 import { AdBannerComponent } from '../../shared/components/ad-banner/ad-banner.component';
 import { TOOLS, Tool } from '../../core/models/tool.model';
 import { TrendingService } from '../../core/services/trending.service';
@@ -9,7 +8,7 @@ import { TrendingService } from '../../core/services/trending.service';
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [RouterLink, ToolCardComponent, GlobalSearchComponent, AdBannerComponent],
+  imports: [RouterLink, ToolCardComponent, AdBannerComponent],
   templateUrl: './home.component.html',
 })
 export class HomeComponent implements OnInit {
@@ -37,10 +36,18 @@ export class HomeComponent implements OnInit {
   }
 
   readonly stats = [
-    { value: '10M+',  label: 'Files Converted' },
-    { value: '40+',   label: 'Tools Available' },
-    { value: '10',    label: 'Resume Templates' },
-    { value: 'Free',  label: 'To Start' },
+    { value: '10M+',   label: 'Files Converted' },
+    { value: '10,000+', label: 'Happy Users' },
+    { value: '40+',    label: 'Free Tools' },
+    { value: '₹0',     label: 'To Get Started' },
+  ];
+
+  readonly biodataTemplates = [
+    { name: 'Marriage Classic',  gradient: 'from-rose-500 to-pink-600'    },
+    { name: 'Marriage Modern',   gradient: 'from-rose-400 to-red-500'     },
+    { name: 'Traditional',       gradient: 'from-orange-500 to-amber-600' },
+    { name: 'Simple & Clean',    gradient: 'from-slate-500 to-slate-700'  },
+    { name: 'Professional Bio',  gradient: 'from-indigo-500 to-blue-600'  },
   ];
 
   readonly showcaseTemplates = [
@@ -54,6 +61,27 @@ export class HomeComponent implements OnInit {
     { name: 'Bold',              gradient: 'from-violet-600 to-purple-800', isPremium: false },
     { name: 'Compact',           gradient: 'from-blue-600 to-indigo-700',   isPremium: false },
     { name: 'Fresher',           gradient: 'from-emerald-500 to-teal-600',  isPremium: false },
+  ];
+
+  readonly howItWorks = [
+    { icon: '📝', bg: 'bg-violet-100 dark:bg-violet-900/30',  title: 'Fill Your Details',    desc: 'Enter your personal info, experience, education and skills in our guided editor.' },
+    { icon: '🎨', bg: 'bg-indigo-100 dark:bg-indigo-900/30',  title: 'Choose a Template',    desc: 'Pick from 10+ professional ATS-friendly designs. Preview instantly in real time.' },
+    { icon: '⬇️', bg: 'bg-emerald-100 dark:bg-emerald-900/30', title: 'Download PDF',        desc: 'Get a polished, print-ready PDF in one click. Share or apply directly.' },
+  ];
+
+  readonly testimonials = [
+    { quote: 'Got placed at Infosys after optimizing my resume with the ATS score. The templates are clean and professional!', name: 'Priya S.', role: 'Software Engineer, Mumbai', initials: 'PS', avatarBg: 'bg-violet-500' },
+    { quote: 'The marriage biodata templates are beautiful. My family loved the quality of the PDF. Highly recommended!', name: 'Rahul M.', role: 'Chartered Accountant, Delhi', initials: 'RM', avatarBg: 'bg-rose-500' },
+    { quote: 'Best resume builder for freshers. Completely free, no hidden charges. Got placed in TCS in my first attempt!', name: 'Ananya K.', role: 'Fresher, Bangalore', initials: 'AK', avatarBg: 'bg-emerald-600' },
+    { quote: 'The cover letter generator saved me hours of work. Professional, personalized results in just minutes.', name: 'Amit P.', role: 'Marketing Manager, Pune', initials: 'AP', avatarBg: 'bg-amber-500' },
+  ];
+
+  readonly trustBadges = [
+    { icon: '🔒', label: 'SSL Secure & Private' },
+    { icon: '⚡', label: 'Instant PDF Download' },
+    { icon: '🆓', label: 'Free Forever Plan' },
+    { icon: '✅', label: 'ATS-Optimized' },
+    { icon: '🇮🇳', label: 'Made for India' },
   ];
 
   readonly features = [

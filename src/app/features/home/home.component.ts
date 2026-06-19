@@ -1,47 +1,14 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { ToolCardComponent } from '../../shared/components/tool-card/tool-card.component';
 import { AdBannerComponent } from '../../shared/components/ad-banner/ad-banner.component';
-import { TOOLS, Tool } from '../../core/models/tool.model';
-import { TrendingService } from '../../core/services/trending.service';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [RouterLink, ToolCardComponent, AdBannerComponent],
+  imports: [RouterLink, AdBannerComponent],
   templateUrl: './home.component.html',
 })
-export class HomeComponent implements OnInit {
-  readonly allTools: Tool[] = TOOLS;
-  activeCategory = 'all';
-
-  readonly categories = [
-    { id: 'all',      label: 'All Tools' },
-    { id: 'resume',   label: '🧑‍💼 Resume' },
-    { id: 'biodata',  label: '📋 Biodata' },
-    { id: 'pdf',      label: '📄 PDF' },
-    { id: 'image',    label: '🖼️ Image' },
-    { id: 'document', label: '📝 Document' },
-    { id: 'archive',  label: '🗜️ Archive' },
-  ];
-
-  constructor(public trendingService: TrendingService) {}
-
-  ngOnInit(): void { this.trendingService.load(); }
-
-  get filteredTools(): Tool[] {
-    const sorted = this.trendingService.sortedTools(this.allTools);
-    if (this.activeCategory === 'all') return sorted;
-    return sorted.filter(t => t.category === this.activeCategory);
-  }
-
-  readonly stats = [
-    { value: '10M+',   label: 'Files Converted' },
-    { value: '10,000+', label: 'Happy Users' },
-    { value: '40+',    label: 'Free Tools' },
-    { value: '₹0',     label: 'To Get Started' },
-  ];
-
+export class HomeComponent {
   readonly biodataTemplates = [
     { name: 'Marriage Classic',  gradient: 'from-rose-500 to-pink-600'    },
     { name: 'Marriage Modern',   gradient: 'from-rose-400 to-red-500'     },
@@ -63,12 +30,6 @@ export class HomeComponent implements OnInit {
     { name: 'Fresher',           gradient: 'from-emerald-500 to-teal-600',  isPremium: false },
   ];
 
-  readonly howItWorks = [
-    { icon: '📝', bg: 'bg-violet-100 dark:bg-violet-900/30',  title: 'Fill Your Details',    desc: 'Enter your personal info, experience, education and skills in our guided editor.' },
-    { icon: '🎨', bg: 'bg-indigo-100 dark:bg-indigo-900/30',  title: 'Choose a Template',    desc: 'Pick from 10+ professional ATS-friendly designs. Preview instantly in real time.' },
-    { icon: '⬇️', bg: 'bg-emerald-100 dark:bg-emerald-900/30', title: 'Download PDF',        desc: 'Get a polished, print-ready PDF in one click. Share or apply directly.' },
-  ];
-
   readonly testimonials = [
     { quote: 'Got placed at Infosys after optimizing my resume with the ATS score. The templates are clean and professional!', name: 'Priya S.', role: 'Software Engineer, Mumbai', initials: 'PS', avatarBg: 'bg-violet-500' },
     { quote: 'The marriage biodata templates are beautiful. My family loved the quality of the PDF. Highly recommended!', name: 'Rahul M.', role: 'Chartered Accountant, Delhi', initials: 'RM', avatarBg: 'bg-rose-500' },
@@ -76,20 +37,19 @@ export class HomeComponent implements OnInit {
     { quote: 'The cover letter generator saved me hours of work. Professional, personalized results in just minutes.', name: 'Amit P.', role: 'Marketing Manager, Pune', initials: 'AP', avatarBg: 'bg-amber-500' },
   ];
 
-  readonly trustBadges = [
-    { icon: '🔒', label: 'SSL Secure & Private' },
-    { icon: '⚡', label: 'Instant PDF Download' },
-    { icon: '🆓', label: 'Free Forever Plan' },
-    { icon: '✅', label: 'ATS-Optimized' },
-    { icon: '🇮🇳', label: 'Made for India' },
+  readonly products = [
+    { icon: '📄', iconBg: 'bg-violet-100 dark:bg-violet-900/40',  title: 'Resume Builder',    desc: 'ATS-friendly resumes with live score feedback',    route: '/resume-builder',              badge: null,    badgeClass: '' },
+    { icon: '✉️', iconBg: 'bg-emerald-100 dark:bg-emerald-900/40', title: 'Cover Letter',      desc: 'Tailored cover letters generated from your resume', route: '/resume-builder/cover-letter', badge: 'Pro',   badgeClass: 'bg-violet-100 dark:bg-violet-900/40 text-violet-700 dark:text-violet-300' },
+    { icon: '🌐', iconBg: 'bg-indigo-100 dark:bg-indigo-900/40',  title: 'Portfolio Builder', desc: 'Shareable public portfolio with live URL',          route: '/resume-builder/portfolio',    badge: 'Pro',   badgeClass: 'bg-violet-100 dark:bg-violet-900/40 text-violet-700 dark:text-violet-300' },
+    { icon: '💍', iconBg: 'bg-rose-100 dark:bg-rose-900/40',      title: 'Biodata Maker',     desc: 'Marriage & personal biodata with photo support',   route: '/biodata-maker',               badge: null,    badgeClass: '' },
+    { icon: '📋', iconBg: 'bg-amber-100 dark:bg-amber-900/40',    title: 'Job Tracker',       desc: 'Track applications, interviews, and offers',       route: '/resume-builder/dashboard',    badge: 'Pro',   badgeClass: 'bg-violet-100 dark:bg-violet-900/40 text-violet-700 dark:text-violet-300' },
+    { icon: '⚡', iconBg: 'bg-slate-100 dark:bg-slate-800',       title: 'File Converter',    desc: '40+ tools — PDF, image, document, archive',        route: '/image-to-pdf',                badge: 'Free',  badgeClass: 'bg-emerald-100 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-300' },
   ];
 
-  readonly features = [
-    { icon: '🎯', bg: 'bg-violet-100 dark:bg-violet-900/30',  title: 'ATS-Friendly Templates',    desc: 'All resume templates are designed to pass modern Applicant Tracking Systems without errors.' },
-    { icon: '✉️', bg: 'bg-emerald-100 dark:bg-emerald-900/30', title: 'Cover Letter Builder',      desc: 'Generate a tailored cover letter from your resume in seconds. Three tone options — professional, confident, or enthusiastic.' },
-    { icon: '🌐', bg: 'bg-indigo-100 dark:bg-indigo-900/30',  title: 'Portfolio Builder',          desc: 'Create a shareable public portfolio page with your bio, skills, projects and social links.' },
-    { icon: '📋', bg: 'bg-rose-100 dark:bg-rose-900/30',     title: 'Biodata Builder',             desc: 'Marriage and personal biodata templates with photo support and instant PDF download.' },
-    { icon: '⚡', bg: 'bg-amber-100 dark:bg-amber-900/30',   title: 'One-Click PDF Download',      desc: 'Download a polished, print-ready PDF instantly — no email or account required.' },
-    { icon: '⭐', bg: 'bg-orange-100 dark:bg-orange-900/30', title: 'Premium Templates',           desc: 'Unlock exclusive Pro-only designs for ₹9/month — cancel anytime, no commitment.' },
+  readonly benefits = [
+    { icon: '🎯', title: 'ATS Friendly',          desc: 'All resume templates pass modern ATS scanners without errors — compatible with Naukri, LinkedIn, and every major job portal.' },
+    { icon: '⚡', title: 'Easy to Use',            desc: 'No design skills needed. Fill in your details, pick a template, and download a polished PDF in under 5 minutes.' },
+    { icon: '🛠️', title: 'Multiple Career Tools', desc: 'Resume, cover letter, portfolio, biodata, and job tracker — everything you need in one place, not scattered across platforms.' },
+    { icon: '⬇️', title: 'Instant Downloads',      desc: 'One-click PDF export. No email required. Your resume is ready to send the moment you click Download.' },
   ];
 }

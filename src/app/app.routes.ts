@@ -41,6 +41,32 @@ export const routes: Routes = [
   // ── Biodata Maker ───────────────────────────────────────────────────────────
   { path: 'biodata-maker', loadChildren: () => import('./features/biodata-maker/biodata-maker.routes').then(m => m.biodataMakerRoutes) },
 
+  // ── SEO Landing Pages ────────────────────────────────────────────────────────
+  {
+    path: 'ats-resume-checker',
+    loadComponent: () => import('./features/seo-pages/ats-resume-checker.component').then(m => m.AtsResumeCheckerComponent),
+    title: 'Free ATS Resume Checker — Score Your Resume Instantly | ApnaConverter',
+    data: { description: 'Check if your resume passes ATS systems. Get instant ATS score, keyword analysis, and improvement tips. Free, no signup required.' },
+  },
+  {
+    path: 'fresher-resume-builder',
+    loadComponent: () => import('./features/seo-pages/fresher-resume-builder.component').then(m => m.FresherResumeBuilderComponent),
+    title: 'Free Resume Builder for Freshers — No Experience? No Problem! | ApnaConverter',
+    data: { description: 'Create a professional fresher resume with ATS-friendly templates. Highlight education, projects, and skills. Free PDF download.' },
+  },
+  {
+    path: 'marriage-biodata-maker',
+    loadComponent: () => import('./features/seo-pages/marriage-biodata-maker.component').then(m => m.MarriageBiodataMakerComponent),
+    title: 'Free Marriage Biodata Maker — Beautiful PDF in Minutes | ApnaConverter',
+    data: { description: 'Create a beautiful marriage biodata in minutes. Multiple templates, photo support, instant PDF download. 100% free.' },
+  },
+  {
+    path: 'government-resume-builder',
+    loadComponent: () => import('./features/seo-pages/government-resume-builder.component').then(m => m.GovernmentResumeBuilderComponent),
+    title: 'Government Job Resume Format — Free PDF Download | ApnaConverter',
+    data: { description: 'Create a government job resume in the correct official format for SSC, UPSC, State PSC, Banking, Railways. Free PDF download.' },
+  },
+
   // ── Original tools ──────────────────────────────────────────────────────────
   { path: 'image-to-pdf', loadComponent: () => import('./features/image-to-pdf/image-to-pdf.component').then(m => m.ImageToPdfComponent), title: 'Image to PDF — ApnaConverter', data: { description: 'Convert JPG, PNG, GIF or HEIC images to a PDF file instantly. Free, no sign-up needed.' } },
   { path: 'pdf-to-word',  loadComponent: () => import('./features/pdf-to-word/pdf-to-word.component').then(m => m.PdfToWordComponent),    title: 'PDF to Word — ApnaConverter',  data: { description: 'Convert PDF files to editable Word (.docx) documents for free. Fast and easy.' } },

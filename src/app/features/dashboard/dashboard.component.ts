@@ -513,7 +513,7 @@ type Section = 'overview' | 'resumes' | 'jobs' | 'subscription' | 'payments' | '
                       @for (p of payments(); track p._id) {
                         <tr class="border-t border-slate-100 dark:border-slate-800 hover:bg-slate-50 dark:hover:bg-slate-800/40">
                           <td class="px-4 py-3 text-slate-600 dark:text-slate-300">{{ p.createdAt | date:'dd MMM yyyy' }}</td>
-                          <td class="px-4 py-3 font-mono text-slate-500">{{ p.invoiceNumber ?? '—' }}</td>
+                          <td class="px-4 py-3 font-mono text-slate-500">{{ p.invoiceNumber ?? '-' }}</td>
                           <td class="px-4 py-3 capitalize font-medium text-slate-700 dark:text-slate-200">Pro {{ p.plan }}</td>
                           <td class="px-4 py-3 font-bold text-slate-800 dark:text-white">₹{{ p.amount / 100 }}</td>
                           <td class="px-4 py-3"><span class="px-2 py-0.5 rounded-full font-semibold" [class]="p.status === 'captured' ? 'bg-emerald-100 text-emerald-700' : 'bg-red-100 text-red-700'">{{ p.status === 'captured' ? 'Paid' : p.status }}</span></td>
@@ -560,7 +560,7 @@ type Section = 'overview' | 'resumes' | 'jobs' | 'subscription' | 'payments' | '
               @if (!auth.isPro()) {
                 <div class="bg-white dark:bg-slate-900 border border-amber-200 dark:border-amber-800 rounded-2xl p-8 text-center space-y-3">
                   <p class="text-4xl">🌐</p>
-                  <p class="font-bold text-slate-800 dark:text-white">Portfolio Page — Pro Only</p>
+                  <p class="font-bold text-slate-800 dark:text-white">Portfolio Page - Pro Only</p>
                   <p class="text-xs text-slate-500 dark:text-slate-400">Create a public profile with your bio, skills, and projects.</p>
                   <button class="px-5 py-2.5 rounded-xl bg-gradient-to-r from-violet-600 to-indigo-600 text-white text-sm font-bold" (click)="showUpgrade.set(true)">Upgrade to Pro ⭐</button>
                 </div>
@@ -701,7 +701,7 @@ type Section = 'overview' | 'resumes' | 'jobs' | 'subscription' | 'payments' | '
     <!-- Mobile sticky CTA -->
     @if (!auth.isPro()) {
       <div class="fixed bottom-0 left-0 right-0 md:hidden z-30 p-3 bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800 shadow-2xl">
-        <button class="w-full py-3 rounded-xl bg-gradient-to-r from-violet-600 to-indigo-600 text-white text-sm font-bold" (click)="showUpgrade.set(true)">⭐ Upgrade to Pro — ₹9/month</button>
+        <button class="w-full py-3 rounded-xl bg-gradient-to-r from-violet-600 to-indigo-600 text-white text-sm font-bold" (click)="showUpgrade.set(true)">⭐ Upgrade to Pro - ₹9/month</button>
       </div>
     }
   `,
@@ -799,7 +799,7 @@ export class DashboardComponent implements OnInit {
     return [
       { label: 'Plan',      value: this.planLabel() },
       { label: 'Status',    value: s?.status ?? 'free' },
-      { label: 'Renews',    value: s?.currentPeriodEnd ? new Date(s.currentPeriodEnd).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' }) : '—' },
+      { label: 'Renews',    value: s?.currentPeriodEnd ? new Date(s.currentPeriodEnd).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' }) : '-' },
       { label: 'Days left', value: this.daysLeft() + ' days' },
     ];
   }

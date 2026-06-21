@@ -10,6 +10,7 @@ import {
   signal,
 } from '@angular/core';
 import { CommonModule, isPlatformBrowser } from '@angular/common';
+import { ActivatedRoute } from '@angular/router';
 import { BiodataStoreService } from '../../services/biodata-store.service';
 import { BiodataAuthGateService } from '../../services/biodata-auth-gate.service';
 import { BiodataTemplatePickerComponent } from '../../components/template-picker/biodata-template-picker.component';
@@ -20,6 +21,8 @@ import { BiodataAuthPromptComponent } from '../../components/auth-prompt/biodata
 import { AdBannerComponent } from '../../../../shared/components/ad-banner/ad-banner.component';
 import { ToolInfoSectionComponent } from '../../../../shared/components/tool-info-section/tool-info-section.component';
 import { JsonLdService } from '../../../../core/services/json-ld.service';
+import { BiodataTemplateId } from '../../models/biodata.model';
+import { BIODATA_TEMPLATES } from '../../data/biodata-templates.data';
 
 const MOBILE_STEPS = ['Fill Details', 'Preview', 'Download'];
 const PAGE_URL = 'https://www.apnaconverter.com/biodata-maker';
@@ -46,6 +49,7 @@ export class BiodataMakerComponent implements OnInit, OnDestroy {
   private readonly platformId = inject(PLATFORM_ID);
   private readonly destroyRef = inject(DestroyRef);
   private readonly jsonLd = inject(JsonLdService);
+  private readonly route = inject(ActivatedRoute);
 
   readonly biodata = computed(() => this.store.activeBiodata());
   readonly isMobile = signal(false);
@@ -59,6 +63,12 @@ export class BiodataMakerComponent implements OnInit, OnDestroy {
       window.addEventListener('resize', update);
       this.destroyRef.onDestroy(() => window.removeEventListener('resize', update));
     }
+
+    const templateParam = this.route.snapshot.queryParamMap.get('template') as BiodataTemplateId | null;
+    if (templateParam && BIODATA_TEMPLATES.some(t => t.id === templateParam)) {
+      this.store.setTemplate(templateParam);
+    }
+
     this.injectJsonLd();
   }
 
@@ -84,7 +94,7 @@ export class BiodataMakerComponent implements OnInit, OnDestroy {
         'Photo upload with PDF embedding',
         'Three templates: Classic Marriage, Professional, Modern Card',
         'Instant A4 PDF download',
-        'Data stored locally — 100% private',
+        'Data stored locally - 100% private',
       ],
     });
 
@@ -93,7 +103,7 @@ export class BiodataMakerComponent implements OnInit, OnDestroy {
       '@type': 'FAQPage',
       mainEntity: [
         { '@type': 'Question', name: 'Is the biodata maker free?', acceptedAnswer: { '@type': 'Answer', text: 'Yes, 100% free with no sign-up, no watermarks, and no hidden charges. Download as many PDFs as you like.' } },
-        { '@type': 'Question', name: 'What is the difference between marriage biodata and professional biodata?', acceptedAnswer: { '@type': 'Answer', text: 'Marriage biodata includes personal details like religion, caste, height, complexion, family information, and partner expectations. Professional biodata focuses on work experience, education, and skills — suitable for job applications or general introductions.' } },
+        { '@type': 'Question', name: 'What is the difference between marriage biodata and professional biodata?', acceptedAnswer: { '@type': 'Answer', text: 'Marriage biodata includes personal details like religion, caste, height, complexion, family information, and partner expectations. Professional biodata focuses on work experience, education, and skills - suitable for job applications or general introductions.' } },
         { '@type': 'Question', name: 'Is my photo and personal data safe?', acceptedAnswer: { '@type': 'Answer', text: 'Yes. Your entire biodata, including your photo, is saved only in your browser\'s local storage. Nothing is ever sent to our servers. Your data is completely private.' } },
         { '@type': 'Question', name: 'Can I create multiple biodatas?', acceptedAnswer: { '@type': 'Answer', text: 'Yes, you can create, duplicate, rename, and switch between multiple biodatas using the toolbar.' } },
         { '@type': 'Question', name: 'What format is the downloaded biodata?', acceptedAnswer: { '@type': 'Answer', text: 'A print-ready A4 PDF. You can print it directly or share it digitally via email or WhatsApp.' } },
@@ -108,7 +118,7 @@ export class BiodataMakerComponent implements OnInit, OnDestroy {
       step: [
         { '@type': 'HowToStep', position: 1, name: 'Choose a Template', text: 'Pick from Classic Marriage, Professional, or Modern Card templates.' },
         { '@type': 'HowToStep', position: 2, name: 'Fill in Your Details', text: 'Enter personal info, education, professional details, family info, and upload your photo.' },
-        { '@type': 'HowToStep', position: 3, name: 'Download Your PDF', text: 'Click Download PDF to get a print-ready A4 biodata PDF instantly — completely free.' },
+        { '@type': 'HowToStep', position: 3, name: 'Download Your PDF', text: 'Click Download PDF to get a print-ready A4 biodata PDF instantly - completely free.' },
       ],
     });
   }

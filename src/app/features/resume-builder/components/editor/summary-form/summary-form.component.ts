@@ -25,7 +25,7 @@ import { BOLD_BTN_CLASS, applyBoldToggle, inputValue, wordCount } from '../edito
         @if (words() < 40) {
           <span class="text-amber-600 dark:text-amber-400">Aim for 40–80 words for best ATS results.</span>
         } @else if (words() > 120) {
-          <span class="text-amber-600 dark:text-amber-400">Consider trimming — keep it concise (40–100 words).</span>
+          <span class="text-amber-600 dark:text-amber-400">Consider trimming - keep it concise (40–100 words).</span>
         } @else {
           <span class="text-emerald-600 dark:text-emerald-400">✓ Good length</span>
         }

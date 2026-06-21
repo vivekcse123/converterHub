@@ -1,0 +1,9 @@
+.pp-heading {
+  font-size: 8.5pt;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  padding-bottom: 3pt;
+  border-bottom: 1.5pt solid currentColor;
+  margin-bottom: 7pt;
+}

@@ -2,11 +2,13 @@ import { Component, OnDestroy, OnInit, computed, inject, signal } from '@angular
 import { CommonModule, DatePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
+import { firstValueFrom } from 'rxjs';
 import { ResumeStoreService } from '../../services/resume-store.service';
 import { AuthService } from '../../../../core/services/auth.service';
 import { NotificationService } from '../../../../core/services/notification.service';
 import { UpgradeModalComponent } from '../../components/upgrade-modal/upgrade-modal.component';
 import { JsonLdService } from '../../../../core/services/json-ld.service';
+import { AiService } from '../../../../core/services/ai.service';
 
 interface CoverLetterForm {
   hiringManager: string;
@@ -72,12 +74,21 @@ ${candidateName || 'Your Name'}`;
       </div>
 
       @if (!auth.isPro()) {
-        <div class="bg-white dark:bg-slate-900 border border-amber-200 dark:border-amber-800 rounded-2xl p-8 text-center space-y-4">
-          <p class="text-5xl">📝</p>
-          <p class="text-lg font-bold text-slate-800 dark:text-white">Cover Letter Builder — Pro Only</p>
-          <p class="text-sm text-slate-500 dark:text-slate-400 max-w-md mx-auto">Generate a professional, tailored cover letter from your resume data in seconds. Available on Pro plan.</p>
-          <button class="px-6 py-3 rounded-xl bg-gradient-to-r from-violet-600 to-indigo-600 text-white font-bold hover:opacity-90 transition shadow-md"
-                  (click)="showUpgrade.set(true)">Upgrade to Pro ⭐</button>
+        <div class="space-y-4">
+          <!-- Sample preview (blurred teaser) -->
+          <div class="relative rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900">
+            <div class="absolute inset-0 bg-white/80 dark:bg-slate-900/85 backdrop-blur-sm z-10 flex flex-col items-center justify-center gap-3 p-6 text-center">
+              <p class="text-4xl">🔒</p>
+              <p class="text-base font-bold text-slate-800 dark:text-white">Cover Letter Builder - Pro Only</p>
+              <p class="text-sm text-slate-500 dark:text-slate-400 max-w-xs">Generate tailored, professional cover letters from your resume in seconds.</p>
+              <button class="px-6 py-2.5 rounded-xl bg-gradient-to-r from-violet-600 to-indigo-600 text-white font-bold text-sm hover:opacity-90 transition shadow-md"
+                      (click)="showUpgrade.set(true)">Upgrade to Pro ⭐</button>
+            </div>
+            <!-- Blurred sample letter content -->
+            <div class="p-6 pointer-events-none select-none" aria-hidden="true">
+              <pre class="whitespace-pre-wrap text-xs text-slate-600 dark:text-slate-300 leading-relaxed font-sans">{{ sampleLetter }}</pre>
+            </div>
+          </div>
         </div>
       } @else {
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -134,11 +145,31 @@ ${candidateName || 'Your Name'}`;
                           class="w-full px-3 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-sm text-slate-700 dark:text-slate-200 resize-none focus:outline-none focus:ring-2 focus:ring-violet-500"></textarea>
               </div>
 
-              <button class="w-full py-3 rounded-xl bg-gradient-to-r from-violet-600 to-indigo-600 text-white font-bold text-sm hover:opacity-90 transition shadow-md"
-                      [disabled]="!form.role || !form.company"
-                      (click)="generate()">
-                ✨ Generate Cover Letter
-              </button>
+              <!-- Generate buttons -->
+              <div class="flex flex-col gap-2">
+                <!-- AI generate — Pro only -->
+                <button class="w-full py-3 rounded-xl font-bold text-sm transition shadow-md flex items-center justify-center gap-2 disabled:opacity-60"
+                        [class]="auth.isPro()
+                          ? 'bg-gradient-to-r from-violet-600 to-indigo-600 text-white hover:opacity-90'
+                          : 'bg-gradient-to-r from-violet-600 to-indigo-600 text-white hover:opacity-90'"
+                        [disabled]="!form.role || !form.company || generating()"
+                        (click)="generateWithAI()">
+                  @if (generating()) {
+                    <span class="w-4 h-4 border-2 border-white/40 border-t-white rounded-full animate-spin"></span>
+                    Generating with AI…
+                  } @else if (!auth.isPro()) {
+                    🔒 Generate with AI — Pro Only
+                  } @else {
+                    🤖 Generate with AI
+                  }
+                </button>
+                <!-- Quick template — always free -->
+                <button class="w-full py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 font-semibold text-xs hover:bg-slate-50 dark:hover:bg-slate-800 transition"
+                        [disabled]="!form.role || !form.company"
+                        (click)="generate()">
+                  ✍️ Quick Template
+                </button>
+              </div>
             </div>
           </div>
 
@@ -175,9 +206,24 @@ export class CoverLetterComponent implements OnInit, OnDestroy {
   readonly auth    = inject(AuthService);
   private notify   = inject(NotificationService);
   private readonly jsonLd = inject(JsonLdService);
+  private readonly ai     = inject(AiService);
 
   readonly showUpgrade = signal(false);
   readonly letterText  = signal('');
+  readonly generating  = signal(false);
+
+  readonly sampleLetter = `21 June 2026
+
+Dear Hiring Manager,
+
+I am writing to express my strong interest in the Senior Software Engineer position at TechCorp India. With 5+ years of experience as a Full Stack Developer and expertise in React, Node.js, and cloud infrastructure, I am well-positioned to contribute meaningfully to your organisation.
+
+Throughout my career at InnoSoft Solutions, I consistently delivered results — reducing API response times by 40%, leading a team of 4 engineers, and shipping 3 major product features ahead of schedule.
+
+I would welcome the opportunity to discuss how my background aligns with your team's needs. Thank you for your time and consideration.
+
+Sincerely,
+Rahul Sharma`;
 
   readonly tones = [
     { value: 'professional' as const, label: '🎩 Professional' },
@@ -205,7 +251,7 @@ export class CoverLetterComponent implements OnInit, OnDestroy {
       name: 'ApnaConverter Cover Letter Builder',
       url: 'https://www.apnaconverter.com/resume-builder/cover-letter',
       applicationCategory: 'BusinessApplication',
-      description: 'Generate a professional, tailored cover letter from your resume data in seconds. Choose tone, fill in company details, and get a ready-to-send letter — free.',
+      description: 'Generate a professional, tailored cover letter from your resume data in seconds. Choose tone, fill in company details, and get a ready-to-send letter - free.',
       offers: { '@type': 'Offer', price: '0', priceCurrency: 'INR' },
     });
   }
@@ -226,6 +272,32 @@ export class CoverLetterComponent implements OnInit, OnDestroy {
     const expYears = this.calcExpYears(r.experience);
     const text = buildLetter(this.form, r.personal.fullName, r.personal.jobTitle, skills, expYears);
     this.letterText.set(text);
+  }
+
+  async generateWithAI(): Promise<void> {
+    if (!this.auth.isPro()) { this.showUpgrade.set(true); return; }
+    const r = this.store.resumes().find(r => r.id === this.form.resumeId) ?? this.store.activeResume();
+    if (!r) { this.notify.error('Select a resume first'); return; }
+
+    this.generating.set(true);
+    try {
+      const skills     = r.skills.flatMap(g => g.items);
+      const experience = r.experience.map(e => `${e.role} at ${e.company}`).join(', ');
+      const res = await firstValueFrom(
+        this.ai.generateCoverLetter({
+          name:        r.personal.fullName,
+          jobTitle:    this.form.role,
+          company:     this.form.company,
+          skills,
+          experience,
+        })
+      );
+      this.letterText.set(res.data?.letter ?? '');
+    } catch {
+      this.notify.error('AI generation failed. Try the Quick Template instead.');
+    } finally {
+      this.generating.set(false);
+    }
   }
 
   copy(): void {

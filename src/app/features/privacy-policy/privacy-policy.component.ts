@@ -47,7 +47,7 @@ import { Component } from '@angular/core';
           <ul class="list-disc pl-6 space-y-2 leading-relaxed">
             <li>All file transfers use HTTPS/TLS encryption</li>
             <li>Uploaded files are stored only temporarily for processing</li>
-            <li>Files are <strong>automatically deleted within 2 hours</strong> of upload — no exceptions</li>
+            <li>Files are <strong>automatically deleted within 2 hours</strong> of upload - no exceptions</li>
             <li>We do not read, analyse, share, or sell the content of your files</li>
             <li>We do not retain copies of converted output files after download</li>
           </ul>

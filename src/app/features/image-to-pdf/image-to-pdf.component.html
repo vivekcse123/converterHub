@@ -56,7 +56,7 @@
         <!-- Margin -->
         <div>
           <label class="block text-sm font-medium text-slate-600 dark:text-slate-300 mb-1.5">
-            Margin (px) — {{ margin }}
+            Margin (px) - {{ margin }}
           </label>
           <input type="range" [(ngModel)]="margin" min="0" max="80" step="5"
             class="w-full accent-primary-600">
@@ -89,7 +89,7 @@
       <div class="mt-6">
         <app-progress-bar
           [value]="converter.uploadProgress()"
-          label="Uploading and converting…" />
+          [label]="converter.progressLabel()" />
       </div>
       }
     </div>

@@ -1,6 +1,6 @@
 <div class="resume-page ats-tpl">
   <!-- Header -->
-  <header class="text-center pb-2 mb-3 border-b-2 border-slate-900">
+  <header class="text-center pb-2 mb-3 border-b-2" [style.border-color]="resume().design?.accentColor ?? '#1e293b'">
     <h1 class="text-[22pt] font-bold uppercase tracking-wide leading-tight">
       {{ resume().personal.fullName || 'Your Name' }}
     </h1>
@@ -64,7 +64,7 @@
                   <p class="text-[9pt] whitespace-nowrap text-slate-600">{{ dateRange(edu.startDate, edu.endDate, edu.current) }}</p>
                 </div>
                 <p class="text-[9pt] text-slate-600 italic">
-                  {{ edu.institution }}@if (edu.gpa) { — GPA: {{ edu.gpa }} }
+                  {{ edu.institution }}@if (edu.gpa) { - GPA: {{ edu.gpa }} }
                 </p>
                 @if (edu.description) {
                   <p class="text-[10pt] leading-snug mt-0.5"><app-rich-text [text]="edu.description" /></p>
@@ -80,7 +80,7 @@
             @for (proj of resume().projects; track proj.id) {
               <div class="resume-entry mb-2">
                 <p class="font-semibold text-[10.5pt]">
-                  {{ proj.name }}@if (proj.techStack) { <span class="font-normal text-slate-600">— {{ proj.techStack }}</span> }
+                  {{ proj.name }}@if (proj.techStack) { <span class="font-normal text-slate-600"> - {{ proj.techStack }}</span> }
                 </p>
                 @if (proj.link) {
                   <p class="text-[9pt] text-slate-600">{{ proj.link }}</p>
@@ -119,7 +119,7 @@
             @for (cert of resume().certifications; track cert.id) {
               <p class="text-[10pt] leading-snug">
                 <span class="font-semibold">{{ cert.name }}</span>
-                @if (cert.issuer) { — {{ cert.issuer }} }
+                @if (cert.issuer) { - {{ cert.issuer }} }
                 @if (cert.date) { <span class="text-slate-600"> ({{ monthYear(cert.date) }})</span> }
               </p>
             }

@@ -11,7 +11,7 @@ import { RouterLink } from '@angular/router';
         <div class="w-20 h-20 bg-white/10 rounded-3xl flex items-center justify-center text-4xl mx-auto mb-6">🔄</div>
         <h1 class="text-3xl md:text-5xl font-extrabold mb-4">About ApnaConverter</h1>
         <p class="text-primary-100 text-lg leading-relaxed">
-          Free, fast, and private file conversion tools — built for everyone.
+          Free, fast, and private file conversion tools - built for everyone.
         </p>
       </div>
     </div>
@@ -22,7 +22,7 @@ import { RouterLink } from '@angular/router';
         <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-4">Our Mission</h2>
         <p class="leading-relaxed text-lg">
           ApnaConverter was created with a simple goal: give everyone access to professional-quality
-          file conversion tools — completely free, with no sign-up required and no data stored on our
+          file conversion tools - completely free, with no sign-up required and no data stored on our
           servers longer than necessary.
         </p>
         <p class="leading-relaxed mt-4">
@@ -34,7 +34,7 @@ import { RouterLink } from '@angular/router';
         <p class="leading-relaxed mt-4">
           We believe productivity tools should not be locked behind expensive subscriptions or
           cluttered with unnecessary sign-up flows. That is why the overwhelming majority of our
-          tools are and always will be free — supported by non-intrusive advertising rather than
+          tools are and always will be free - supported by non-intrusive advertising rather than
           user data.
         </p>
       </section>
@@ -62,14 +62,14 @@ import { RouterLink } from '@angular/router';
           or sell the content of your files. No file is ever retained after processing.
         </p>
         <p class="leading-relaxed mt-4">
-          Our tools run entirely on server-side processing — your files are never sent to third-party
+          Our tools run entirely on server-side processing - your files are never sent to third-party
           conversion services. This means your sensitive documents, such as contracts, medical records,
           or financial statements, never leave our controlled infrastructure. Read our full
           <a routerLink="/privacy-policy" class="text-primary-600 dark:text-primary-400 underline font-medium">Privacy Policy</a>
           for complete details on how we handle your data.
         </p>
         <p class="leading-relaxed mt-4">
-          For tools like the Resume Builder, your data stays entirely on your own device — nothing is
+          For tools like the Resume Builder, your data stays entirely on your own device - nothing is
           uploaded to our servers at all. Your resume is stored in your browser's local storage and
           only leaves your device when you choose to download it as a PDF.
         </p>
@@ -79,7 +79,7 @@ import { RouterLink } from '@angular/router';
         <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-4">How We Keep the Lights On</h2>
         <p class="leading-relaxed">
           ApnaConverter is free to use because we run modest, non-intrusive ads on our pages. We
-          deliberately keep ad placement minimal — you will never see pop-ups, auto-playing video ads,
+          deliberately keep ad placement minimal - you will never see pop-ups, auto-playing video ads,
           or ads that obscure the tool you are trying to use. We believe a good user experience and
           sustainable advertising can coexist.
         </p>
@@ -98,7 +98,7 @@ import { RouterLink } from '@angular/router';
           <a href="https://apnainsights.com/" target="_blank" rel="noopener noreferrer"
              class="text-primary-600 dark:text-primary-400 underline font-medium">ApnaInsights</a>,
           an independent technology team focused on building useful, accessible tools for everyday users.
-          We are a small team that genuinely cares about quality — we use ApnaConverter ourselves for
+          We are a small team that genuinely cares about quality - we use ApnaConverter ourselves for
           day-to-day document work, which means when something breaks or feels clunky, we feel it too.
         </p>
         <p class="leading-relaxed mt-4">
@@ -106,14 +106,14 @@ import { RouterLink } from '@angular/router';
           feedback. If there is a tool you wish we had, or something about an existing tool you find
           frustrating, please
           <a routerLink="/contact" class="text-primary-600 dark:text-primary-400 underline font-medium">reach out to us</a>
-          — your feedback directly shapes what we build next.
+          - your feedback directly shapes what we build next.
         </p>
       </section>
 
       <section class="text-center pt-4">
         <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-4">Start Converting</h2>
         <p class="text-slate-500 dark:text-slate-400 mb-8">
-          Browse all 37+ tools — no sign-up, no watermarks, completely free.
+          Browse all 37+ tools - no sign-up, no watermarks, completely free.
         </p>
         <div class="flex flex-wrap items-center justify-center gap-3">
           <a routerLink="/" class="btn btn-primary btn-lg">Browse All Tools</a>
@@ -126,11 +126,11 @@ import { RouterLink } from '@angular/router';
 })
 export class AboutComponent {
   readonly features = [
-    { icon: '📄', title: '37+ Conversion Tools',  desc: 'PDF, Word, Excel, images, and more — all in one place.' },
+    { icon: '📄', title: '37+ Conversion Tools',  desc: 'PDF, Word, Excel, images, and more - all in one place.' },
     { icon: '⚡', title: 'Lightning Fast',         desc: 'Optimised processing pipeline delivers results in seconds.' },
     { icon: '🔒', title: 'Secure & Private',       desc: 'Files are auto-deleted within 2 hours. Zero data retention.' },
-    { icon: '🆓', title: 'Always Free',            desc: 'Core conversion tools are free forever — no credit card needed.' },
-    { icon: '🌐', title: 'Works Everywhere',       desc: 'Any device, any browser — phone, tablet, or desktop.' },
+    { icon: '🆓', title: 'Always Free',            desc: 'Core conversion tools are free forever - no credit card needed.' },
+    { icon: '🌐', title: 'Works Everywhere',       desc: 'Any device, any browser - phone, tablet, or desktop.' },
     { icon: '🎯', title: 'No Sign-up Required',   desc: 'Start converting instantly. Account optional.' },
   ];
 }

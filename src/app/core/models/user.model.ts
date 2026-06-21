@@ -8,7 +8,7 @@
   isSuspended: boolean;
   banReason?:  string;
   subscription?: {
-    plan:                   'free' | 'monthly' | 'yearly';
+    plan:                   'free' | 'monthly' | 'yearly' | 'lifetime';
     status:                 'free' | 'active' | 'past_due' | 'cancelled' | 'expired';
     razorpaySubscriptionId?: string;
     currentPeriodStart?:    string;

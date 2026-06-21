@@ -32,11 +32,7 @@
 }
 
 .preview-scroll {
-  max-height: 80vh;
-}
-
-@media (max-width: 1024px) {
-  .preview-scroll {
-    max-height: none;
-  }
+  /* Height is controlled by the parent container on desktop (overflow-auto column).
+     On mobile, let content expand naturally. */
+  max-height: none;
 }

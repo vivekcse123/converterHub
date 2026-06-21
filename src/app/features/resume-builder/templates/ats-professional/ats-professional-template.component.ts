@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
+import { Component, computed, input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ResumeData } from '../../models/resume.model';
 import {
@@ -17,7 +17,6 @@ import { RichTextComponent } from '../shared/rich-text.component';
   imports: [CommonModule, RichTextComponent],
   templateUrl: './ats-professional-template.component.html',
   styleUrls: ['../shared/print.css', './ats-professional-template.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AtsProfessionalTemplateComponent {
   readonly resume = input.required<ResumeData>();

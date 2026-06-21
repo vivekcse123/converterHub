@@ -40,7 +40,7 @@ import { ToolInfoSectionComponent } from '../../shared/components/tool-info-sect
             </div>
             <div>
               <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">
-                Owner Password <span class="text-slate-400 text-xs font-normal">(optional — defaults to user password)</span>
+                Owner Password <span class="text-slate-400 text-xs font-normal">(optional - defaults to user password)</span>
               </label>
               <input type="password" [(ngModel)]="ownerPassword" placeholder="Leave blank to use same password"
                 class="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700
@@ -48,7 +48,7 @@ import { ToolInfoSectionComponent } from '../../shared/components/tool-info-sect
                        focus:outline-none focus:ring-2 focus:ring-primary-500" />
             </div>
             <div class="rounded-xl bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-700 p-3 text-xs text-amber-800 dark:text-amber-300">
-              ℹ️ Your PDF will be encrypted with AES encryption. Store the password safely — there is no recovery option.
+              ℹ️ Your PDF will be encrypted with AES encryption. Store the password safely - there is no recovery option.
             </div>
             <div class="flex justify-center pt-2">
               <button (click)="convert()" [disabled]="converter.isConverting() || userPassword.length < 4"
@@ -62,7 +62,7 @@ import { ToolInfoSectionComponent } from '../../shared/components/tool-info-sect
 
         @if (converter.isConverting()) {
           <div class="mt-4">
-            <app-progress-bar [value]="converter.uploadProgress()" label="Encrypting PDF…" />
+            <app-progress-bar [value]="converter.uploadProgress()" [label]="converter.progressLabel()" />
           </div>
         }
       </div>
@@ -72,7 +72,7 @@ import { ToolInfoSectionComponent } from '../../shared/components/tool-info-sect
           <div class="text-5xl mb-4">🔐</div>
           <h2 class="text-xl font-bold mb-2 text-slate-800 dark:text-white">PDF encrypted!</h2>
           <p class="text-sm text-slate-500 dark:text-slate-400 mb-6">
-            Your PDF is now password-protected. Keep the password safe — it cannot be recovered.
+            Your PDF is now password-protected. Keep the password safe - it cannot be recovered.
           </p>
           <div class="flex gap-3 justify-center">
             <button type="button" (click)="converter.downloadResult(result()!)" class="btn btn-primary">⬇️ Download Protected PDF</button>

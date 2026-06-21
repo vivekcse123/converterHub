@@ -22,16 +22,16 @@ import { BOLD_BTN_CLASS, LABEL_CLASS, applyBoldToggle, inputValue } from '../edi
             </button>
           </div>
 
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div class="grid grid-cols-1 gap-4">
             <div>
               <label [class]="labelClass">Project Name</label>
-              <input class="input" [value]="proj.name" (input)="patch(proj.id, 'name', $event)" placeholder="TaskFlow — Team Productivity App" />
+              <input class="input" [value]="proj.name" (input)="patch(proj.id, 'name', $event)" placeholder="TaskFlow - Team Productivity App" />
             </div>
             <div>
               <label [class]="labelClass">Link (optional)</label>
               <input class="input" [value]="proj.link" (input)="patch(proj.id, 'link', $event)" placeholder="github.com/you/project" />
             </div>
-            <div class="sm:col-span-2">
+            <div class="">
               <label [class]="labelClass">Tech Stack</label>
               <input class="input" [value]="proj.techStack" (input)="patch(proj.id, 'techStack', $event)" placeholder="Angular, Node.js, MongoDB" />
             </div>

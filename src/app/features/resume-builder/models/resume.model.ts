@@ -1,4 +1,35 @@
-export type TemplateId = 'ats-professional' | 'modern-professional' | 'fresher' | 'executive' | 'creative' | 'minimal' | 'tech' | 'elegant' | 'compact' | 'bold';
+export type TemplateId =
+  | 'ats-professional' | 'modern-professional' | 'fresher' | 'executive'
+  | 'creative' | 'minimal' | 'tech' | 'elegant' | 'compact' | 'bold'
+  | 'sidebar-classic' | 'sidebar-pro'
+  | 'banner-blue' | 'banner-dark'
+  | 'traditional'
+  | 'timeline-modern' | 'timeline-pro'
+  | 'split-modern' | 'corporate-pro'
+  | 'executive-elite' | 'luxury-gold'
+  | 'creative-portfolio-pro'
+  | 'startup-founder' | 'modern-clean'
+  | 'product-manager-pro'
+  | 'photo-professional' | 'photo-sidebar-modern'
+  | 'photo-teacher' | 'photo-government' | 'photo-executive';
+
+export interface DesignSettings {
+  accentColor: string;
+  fontFamily:  'inter' | 'roboto' | 'georgia';
+  fontSize:    'small' | 'medium' | 'large';
+  baseFontPt?: number;  // precise pt override; if set, takes priority over fontSize
+  lineHeight:  'compact' | 'standard' | 'spacious';
+  paperSize:   'a4' | 'letter';
+}
+
+export const DEFAULT_DESIGN: DesignSettings = {
+  accentColor: '#1e293b',
+  fontFamily:  'inter',
+  fontSize:    'medium',
+  baseFontPt:  10.5,
+  lineHeight:  'standard',
+  paperSize:   'a4',
+};
 
 export interface PersonalInfo {
   fullName: string;
@@ -9,6 +40,7 @@ export interface PersonalInfo {
   linkedin: string;
   portfolio: string;
   github: string;
+  photoUrl?: string;
 }
 
 export interface ExperienceItem {
@@ -115,6 +147,7 @@ export interface ResumeData {
   customSections: CustomSection[];
   sectionOrder: SectionRef[];
   sectionVisibility: Record<string, boolean>;
+  design?: DesignSettings;
   updatedAt: number;
   // v2 fields
   atsScore?: number;

@@ -10,6 +10,11 @@ import { ToolSeoService } from '../../../core/services/tool-seo.service';
     <div class="bg-slate-50 dark:bg-slate-800/30 border-t border-slate-100 dark:border-slate-700/50 mt-8">
       <div class="container-app max-w-3xl py-14 space-y-14">
 
+        <!-- Intro paragraph -->
+        @if (content.intro) {
+        <p class="text-base text-slate-600 dark:text-slate-400 leading-relaxed text-center -mb-4">{{ content.intro }}</p>
+        }
+
         <!-- How it works -->
         <section>
           <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-10 text-center">How It Works</h2>

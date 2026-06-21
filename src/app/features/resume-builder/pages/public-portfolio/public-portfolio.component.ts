@@ -234,11 +234,11 @@ const PROJECT_GRADIENTS = [
         <p class="text-slate-500 text-xs">
           Built with
           <a routerLink="/" class="text-violet-400 hover:text-violet-300 font-semibold transition">ApnaConverter</a>
-          — Free Resume & Portfolio Builder
+          - Free Resume & Portfolio Builder
         </p>
         <a routerLink="/resume-builder/portfolio"
            class="mt-3 inline-block text-xs font-bold px-5 py-2.5 rounded-xl bg-gradient-to-r from-violet-600 to-indigo-600 text-white hover:opacity-90 transition">
-          Create Your Portfolio — Free
+          Create Your Portfolio - Free
         </a>
       </footer>
 
@@ -284,13 +284,13 @@ export class PublicPortfolioComponent implements OnInit, OnDestroy {
           ? p.about.substring(0, 160)
           : `${displayName}'s professional portfolio. ${skillNames ? 'Skills: ' + skillNames.substring(0, 80) + '.' : ''}`;
 
-        this.seo.setPage({ title: `${displayName} — Portfolio | ApnaConverter`, description, canonical: pageUrl, ogType: 'profile' });
+        this.seo.setPage({ title: `${displayName} - Portfolio | ApnaConverter`, description, canonical: pageUrl, ogType: 'profile' });
 
         const socialLinks = [p.social?.linkedin, p.social?.github, p.social?.twitter, p.social?.website].filter(Boolean);
 
         this.jsonLd.setJsonLd('public-portfolio', {
           '@context': 'https://schema.org', '@type': 'ProfilePage',
-          name: `${displayName} — Portfolio`, url: pageUrl,
+          name: `${displayName} - Portfolio`, url: pageUrl,
           mainEntity: {
             '@type': 'Person', name: displayName,
             description: p.about || undefined, email: p.email || undefined,

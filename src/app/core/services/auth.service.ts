@@ -23,10 +23,14 @@ export class AuthService {
   readonly isPro       = computed(() => {
     if (['admin','superadmin'].includes(this._user()?.role ?? '')) return true;
     const sub = this._user()?.subscription;
-    return sub?.status === 'active' && ['monthly','yearly'].includes(sub?.plan ?? '');
+    return sub?.status === 'active' && ['monthly','yearly','lifetime'].includes(sub?.plan ?? '');
   });
   readonly isPremium   = this.isPro; // alias
-  readonly currentPlan = computed(() => this._user()?.subscription?.plan ?? 'free');
+  readonly currentPlan = computed((): 'free' | 'monthly' | 'yearly' | 'lifetime' => {
+    const plan = this._user()?.subscription?.plan;
+    if (plan === 'monthly' || plan === 'yearly' || plan === 'lifetime') return plan;
+    return 'free';
+  });
   readonly subscriptionEnd = computed(() => this._user()?.subscription?.currentPeriodEnd ?? null);
 
   constructor(private api: ApiService, private router: Router) {}
@@ -130,7 +134,7 @@ export class AuthService {
     } catch { return null; }
   }
 
-  /** Safe localStorage helpers — no-op on server */
+  /** Safe localStorage helpers - no-op on server */
   private ls(key: string): string | null {
     return this.isBrowser ? localStorage.getItem(key) : null;
   }

@@ -17,7 +17,7 @@ import { BiodataAuthGateService } from '../../services/biodata-auth-gate.service
           <div class="text-4xl">📋</div>
           <h3 class="text-lg font-semibold text-slate-800 dark:text-slate-100">Sign in to download your biodata</h3>
           <p class="text-sm text-slate-500 dark:text-slate-400">
-            Create a free account to save your biodata and download the PDF. It takes only a few seconds — you'll be brought right back here.
+            Create a free account to save your biodata and download the PDF. It takes only a few seconds - you'll be brought right back here.
           </p>
 
           <div class="flex flex-col gap-2 pt-1">

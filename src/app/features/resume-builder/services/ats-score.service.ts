@@ -8,10 +8,17 @@ export interface AtsCheck {
   tip: string;
 }
 
+export interface AtsSubScore {
+  label: string;
+  pct: number;
+  color: 'emerald' | 'amber' | 'red';
+}
+
 export interface AtsScoreResult {
   score: number;
   checks: AtsCheck[];
   suggestions: string[];
+  subScores: AtsSubScore[];
 }
 
 export interface JdMatchResult {
@@ -21,7 +28,7 @@ export interface JdMatchResult {
   totalKeywords: number;
   // weighted by tech-term importance (more meaningful than raw score)
   weightedScore: number;
-  // only tech/skill keywords that are missing — highest priority to add
+  // only tech/skill keywords that are missing - highest priority to add
   highPriorityMissing: string[];
 }
 
@@ -208,7 +215,7 @@ function extractJdKeywords(jd: string): KwToken[] {
 @Injectable({ providedIn: 'root' })
 export class AtsScoreService {
   compute(resume: ResumeData | null): AtsScoreResult {
-    if (!resume) return { score: 0, checks: [], suggestions: [] };
+    if (!resume) return { score: 0, checks: [], suggestions: [], subScores: [] };
 
     const { personal, summary, experience, education, skills } = resume;
 
@@ -242,7 +249,21 @@ export class AtsScoreService {
     const score = Math.round(checks.reduce((sum, c) => sum + (c.passed ? c.weight : 0), 0));
     const suggestions = checks.filter(c => !c.passed).map(c => c.tip);
 
-    return { score, checks, suggestions };
+    // Sub-scores (normalized to 0–100 each)
+    const fmtPct  = Math.round(((contactComplete ? 15 : 0) + (jobTitlePresent ? 5 : 0) + (lengthGood ? 15 : 0)) / 35 * 100);
+    const cntPct  = Math.round(((summaryGood ? 15 : 0) + (hasExperience ? 10 : 0) + (hasQuantifiedBullets ? 15 : 0)) / 40 * 100);
+    const kwPct   = Math.round(Math.min(totalSkillCount / MIN_SKILLS, 1) * 100);
+    const secPct  = Math.round(((hasExperience ? 1 : 0) + (hasEducation ? 1 : 0) + (skillsGood ? 1 : 0) + (summaryGood ? 1 : 0)) / 4 * 100);
+    const colorOf = (p: number): 'emerald' | 'amber' | 'red' => p >= 70 ? 'emerald' : p >= 40 ? 'amber' : 'red';
+
+    const subScores: AtsSubScore[] = [
+      { label: 'Formatting',          pct: fmtPct,  color: colorOf(fmtPct)  },
+      { label: 'Content Quality',     pct: cntPct,  color: colorOf(cntPct)  },
+      { label: 'Skills & Keywords',   pct: kwPct,   color: colorOf(kwPct)   },
+      { label: 'Section Completeness',pct: secPct,  color: colorOf(secPct)  },
+    ];
+
+    return { score, checks, suggestions, subScores };
   }
 
   computeJdMatch(resume: ResumeData, jd: string): JdMatchResult {

@@ -1,0 +1,9 @@
+.pe-heading {
+  font-size: 8pt;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  padding-bottom: 3pt;
+  border-bottom: 0.75pt solid currentColor;
+  margin-bottom: 8pt;
+}

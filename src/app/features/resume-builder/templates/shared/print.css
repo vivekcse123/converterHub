@@ -7,8 +7,8 @@
   box-sizing: border-box;
   background: #ffffff;
   color: #1e293b;
-  font-size: 10.5pt;
-  line-height: 1.5;
+  font-size: calc(10.5pt * var(--r-size, 1));
+  line-height: var(--r-spacing, 1.5);
 }
 
 .resume-page * {

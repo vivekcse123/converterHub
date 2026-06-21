@@ -19,17 +19,17 @@ import { JsonLdService } from '../../core/services/json-ld.service';
               Specially designed for students & freshers
             </span>
             <h1 class="text-4xl sm:text-5xl font-extrabold leading-tight mb-5">
-              Resume for Freshers —<br>
+              Resume for Freshers - <br>
               <span class="text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 to-amber-300">No Experience?</span><br>
               No Problem!
             </h1>
             <p class="text-lg text-indigo-100 max-w-lg mb-8 leading-relaxed">
-              Create a professional resume as a fresh graduate or student. Our fresher-optimized templates highlight your skills, education, and projects — exactly what recruiters want to see.
+              Create a professional resume as a fresh graduate or student. Our fresher-optimized templates highlight your skills, education, and projects - exactly what recruiters want to see.
             </p>
             <div class="flex flex-col sm:flex-row gap-3 mb-6">
               <a routerLink="/resume-builder" [queryParams]="{template: 'fresher'}"
                  class="inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-xl bg-white text-indigo-700 font-bold hover:bg-indigo-50 shadow-xl transition text-sm">
-                🎓 Create Fresher Resume — Free
+                🎓 Create Fresher Resume - Free
               </a>
               <a routerLink="/resume-templates"
                  class="inline-flex items-center justify-center gap-2 px-7 py-3.5 rounded-xl border-2 border-white/40 text-white font-semibold hover:bg-white/10 transition text-sm">
@@ -122,11 +122,11 @@ import { JsonLdService } from '../../core/services/json-ld.service';
     <!-- CTA -->
     <section class="bg-gradient-to-r from-violet-600 to-indigo-600 py-16 text-white text-center">
       <div class="container-app max-w-2xl mx-auto">
-        <h2 class="text-2xl sm:text-3xl font-extrabold mb-4">Land Your First Job — Start Today!</h2>
+        <h2 class="text-2xl sm:text-3xl font-extrabold mb-4">Land Your First Job - Start Today!</h2>
         <p class="text-indigo-100 mb-8">Create a professional fresher resume in under 10 minutes. ATS-optimized, downloadable as PDF, completely free.</p>
         <a routerLink="/resume-builder" [queryParams]="{template: 'fresher'}"
            class="inline-flex items-center gap-2 px-8 py-4 rounded-xl bg-white text-indigo-700 font-bold hover:bg-indigo-50 shadow-xl transition text-base">
-          🎓 Create My Fresher Resume — Free
+          🎓 Create My Fresher Resume - Free
         </a>
       </div>
     </section>
@@ -142,7 +142,7 @@ export class FresherResumeBuilderComponent implements OnInit, OnDestroy {
     { icon: '🎓', bg: 'bg-violet-100 dark:bg-violet-900/30',   title: 'Education First',        desc: 'Lead with your degree, CGPA, and relevant coursework. For freshers, education is your biggest selling point.' },
     { icon: '💡', bg: 'bg-indigo-100 dark:bg-indigo-900/30',   title: 'Academic Projects',       desc: 'Showcase 2-3 strong projects with tech stack, your role, and the impact or result achieved.' },
     { icon: '🛠', bg: 'bg-blue-100 dark:bg-blue-900/30',       title: 'Technical Skills',        desc: 'List programming languages, tools, frameworks, and certifications. Be honest about your proficiency level.' },
-    { icon: '🤝', bg: 'bg-emerald-100 dark:bg-emerald-900/30', title: 'Internships & Training',  desc: 'Include any internships, industrial training, or part-time work — even if they were short or unpaid.' },
+    { icon: '🤝', bg: 'bg-emerald-100 dark:bg-emerald-900/30', title: 'Internships & Training',  desc: 'Include any internships, industrial training, or part-time work - even if they were short or unpaid.' },
     { icon: '🏆', bg: 'bg-amber-100 dark:bg-amber-900/30',     title: 'Achievements',            desc: 'Hackathons, competitions, scholarships, and certifications show initiative and stand out to recruiters.' },
     { icon: '📊', bg: 'bg-rose-100 dark:bg-rose-900/30',       title: 'Keep It One Page',        desc: 'Freshers should always have a one-page resume. Concise, well-formatted, and easy to read wins every time.' },
   ];
@@ -159,7 +159,7 @@ export class FresherResumeBuilderComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.seo.setPage({
-      title: 'Free Resume Builder for Freshers — No Experience? No Problem! | ApnaConverter',
+      title: 'Free Resume Builder for Freshers - No Experience? No Problem! | ApnaConverter',
       description: 'Create a professional fresher resume in minutes. ATS-friendly templates for students and fresh graduates. Highlight projects, skills, and education. Free PDF download.',
       keywords: 'fresher resume builder, resume for freshers, resume with no experience, student resume India, first job resume, college graduate resume',
     });

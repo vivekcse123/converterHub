@@ -37,7 +37,7 @@ type Tab = 'basic' | 'social' | 'skills' | 'projects';
         <div class="flex-1 flex items-center justify-center">
           <div class="bg-white dark:bg-slate-900 border border-amber-200 dark:border-amber-800 rounded-2xl p-10 text-center space-y-4 w-full max-w-md">
             <p class="text-5xl">🌐</p>
-            <p class="text-lg font-bold text-slate-800 dark:text-white">Portfolio Page — Pro Only</p>
+            <p class="text-lg font-bold text-slate-800 dark:text-white">Portfolio Page - Pro Only</p>
             <p class="text-sm text-slate-500 dark:text-slate-400 max-w-md mx-auto">Create a beautiful public profile page with your bio, skills, projects, and pinned resume. Available on Pro.</p>
             <button class="px-6 py-3 rounded-xl bg-gradient-to-r from-violet-600 to-indigo-600 text-white font-bold hover:opacity-90 transition shadow-md"
                     (click)="showUpgrade.set(true)">Upgrade to Pro ⭐</button>
@@ -245,7 +245,7 @@ export class PortfolioComponent implements OnInit, OnDestroy {
       name: 'ApnaConverter Portfolio Builder',
       url: 'https://www.apnaconverter.com/resume-builder/portfolio',
       applicationCategory: 'BusinessApplication',
-      description: 'Create a public portfolio page with your bio, skills, projects, and social links. Share a professional profile with employers — free with ApnaConverter Pro.',
+      description: 'Create a public portfolio page with your bio, skills, projects, and social links. Share a professional profile with employers - free with ApnaConverter Pro.',
       offers: { '@type': 'Offer', price: '9', priceCurrency: 'INR', description: 'Available on Pro plan from ₹9/month' },
     });
     if (!this.auth.isPro()) return;
@@ -287,8 +287,8 @@ export class PortfolioComponent implements OnInit, OnDestroy {
 
   async save(): Promise<void> {
     if (!this.form.username?.trim()) { this.notify.warning('Username is required'); return; }
-    if (this.usernameStatus() === 'invalid') { this.notify.warning('Invalid username — only lowercase letters, numbers, hyphens, underscores allowed'); return; }
-    if (this.usernameStatus() === 'taken') { this.notify.warning('Username already taken — choose a different one'); return; }
+    if (this.usernameStatus() === 'invalid') { this.notify.warning('Invalid username - only lowercase letters, numbers, hyphens, underscores allowed'); return; }
+    if (this.usernameStatus() === 'taken') { this.notify.warning('Username already taken - choose a different one'); return; }
     this.saving.set(true);
     const result = await this.career.savePortfolio(this.form as Portfolio);
     this.saving.set(false);

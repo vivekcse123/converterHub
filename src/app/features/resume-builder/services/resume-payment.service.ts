@@ -18,10 +18,10 @@ export class ResumePaymentService {
     return PREMIUM_TEMPLATE_IDS.includes(id);
   }
 
-  /** Returns true if the user can use this template right now (free, or purchased). */
+  /** Returns true if the user can use this template right now (free, pro subscriber, or individually purchased). */
   canUse(id: TemplateId): boolean {
     if (!this.isPremium(id)) return true;
-    return this.auth.hasPurchasedTemplate(id);
+    return this.auth.isPro() || this.auth.hasPurchasedTemplate(id);
   }
 
   /**
@@ -97,7 +97,7 @@ export class ResumePaymentService {
                 templateId:          opts.templateId,
               })
             );
-            // Optimistically update local user state — no extra API call needed
+            // Optimistically update local user state - no extra API call needed
             this.auth.addPurchasedTemplate(opts.templateId);
             this.notify.success('Template unlocked! 🎉', `"${opts.templateName}" is now available.`);
             resolve(true);

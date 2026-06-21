@@ -90,7 +90,7 @@ export class PdfToJpgComponent implements OnInit {
 
   ngOnInit(): void {
     this.seo.setPage({
-      title: 'PDF to JPG Converter — Free Online Tool | ApnaConverter',
+      title: 'PDF to JPG Converter - Free Online Tool | ApnaConverter',
       description: 'Convert PDF pages to high-quality JPG, PNG, or WebP images online for free. Choose DPI quality up to 600. No signup required.',
     });
   }

@@ -189,7 +189,7 @@
           @for (edu of biodata().education; track edu.id) {
             <div class="edu-entry">
               <div class="edu-top">
-                <span class="edu-degree">{{ edu.degree }}{{ edu.field ? ' — ' + edu.field : '' }}</span>
+                <span class="edu-degree">{{ edu.degree }}{{ edu.field ? ' - ' + edu.field : '' }}</span>
                 <span class="edu-year">{{ edu.year }}</span>
               </div>
               <div class="edu-inst">{{ edu.institution }}</div>
@@ -215,5 +215,5 @@
     </main>
   </div>
 
-  <div class="pro-footer">Created with ApnaConverter — apnaconverter.com</div>
+  <div class="pro-footer">Created with ApnaConverter | apnaconverter.com</div>
 </div>

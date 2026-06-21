@@ -62,4 +62,17 @@ export class AiService {
     fd.append('file', file);
     return this.api.post<ApiResponse<AIFormResult>>('ai/form-fill', fd);
   }
+
+  generateCoverLetter(payload: {
+    name?: string; jobTitle?: string; company?: string;
+    skills?: string[]; experience?: string; jobDescription?: string;
+  }): Observable<ApiResponse<{ letter: string }>> {
+    return this.api.post<ApiResponse<{ letter: string }>>('ai/resume/cover-letter', payload);
+  }
+
+  generateBullets(payload: {
+    jobTitle: string; company?: string; description?: string; count?: number;
+  }): Observable<ApiResponse<{ bullets: string[] }>> {
+    return this.api.post<ApiResponse<{ bullets: string[] }>>('ai/resume/bullets', payload);
+  }
 }

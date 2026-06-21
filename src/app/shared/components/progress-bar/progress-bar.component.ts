@@ -15,7 +15,7 @@ import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
           }
           {{ label }}
         </span>
-        <span class="tabular-nums font-medium">{{ value }}%</span>
+        <span class="tabular-nums font-medium">{{ value < 100 ? value + '%' : 'Done!' }}</span>
       </div>
       <div class="w-full h-2.5 bg-slate-200 dark:bg-slate-700 rounded-full overflow-hidden">
         <div
@@ -24,11 +24,24 @@ import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
           [style.width.%]="value">
         </div>
       </div>
-      @if (showPhase && value < 100) {
-        <p class="mt-1.5 text-xs text-slate-400 dark:text-slate-500">
-          @if (value < 65) { Uploading file… }
-          @else { Server is processing your file… }
-        </p>
+
+      <!-- Stuck-state notice: shown when conversion takes unusually long -->
+      @if (isStuck) {
+      <div class="mt-3 flex items-start gap-2.5 rounded-lg border border-amber-200 bg-amber-50
+                  dark:border-amber-800/50 dark:bg-amber-900/20 px-3.5 py-3 text-sm">
+        <span class="mt-0.5 shrink-0 text-amber-500">⏳</span>
+        <div>
+          <p class="font-medium text-amber-800 dark:text-amber-300">Still processing…</p>
+          <p class="mt-0.5 text-amber-700 dark:text-amber-400">
+            Large or complex files can take up to 3 minutes. Please leave this tab open.
+            If it keeps stalling,
+            <a href="mailto:support@apnaconverter.com"
+               class="underline underline-offset-2 hover:text-amber-900 dark:hover:text-amber-200">
+              contact support
+            </a>.
+          </p>
+        </div>
+      </div>
       }
     </div>
     }
@@ -38,6 +51,8 @@ export class ProgressBarComponent {
   @Input() value     = 0;
   @Input() label     = 'Processing…';
   @Input() visible   = true;
-  /** Show upload vs processing phase hint below the bar */
+  /** When true, renders a "still processing" notice below the bar */
+  @Input() isStuck   = false;
+  /** @deprecated Use label + isStuck instead */
   @Input() showPhase = false;
 }

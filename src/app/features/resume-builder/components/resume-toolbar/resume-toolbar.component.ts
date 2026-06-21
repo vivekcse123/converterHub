@@ -58,10 +58,10 @@ import { inputValue } from '../editor/editor-utils';
           class="btn btn-primary btn-sm whitespace-nowrap"
           (click)="download()"
           [disabled]="downloading()"
-          [title]="isPremiumTemplate() && !auth.isPro() ? 'Pro subscription required for this template' : 'Download as PDF'">
+          [title]="templateLocked() ? 'Pro subscription required for this template' : 'Download as PDF'">
           @if (downloading()) {
             ⏳ Generating...
-          } @else if (isPremiumTemplate() && !auth.isPro()) {
+          } @else if (templateLocked()) {
             🔒 Download PDF
           } @else {
             ⬇️ Download PDF
@@ -80,7 +80,7 @@ import { inputValue } from '../editor/editor-utils';
       </div>
     }
 
-    <!-- Upgrade modal — shown when free user tries to download a premium template -->
+    <!-- Upgrade modal - shown when free user tries to download a premium template -->
     @if (authGate.showUpgrade()) {
       <app-upgrade-modal (close)="authGate.dismissUpgrade()" />
     }
@@ -101,6 +101,13 @@ export class ResumeToolbarComponent {
   readonly isPremiumTemplate = computed(() =>
     this.pdfService.isPremiumTemplate(this.resume()?.templateId ?? '')
   );
+
+  readonly templateLocked = computed(() => {
+    const tplId = this.resume()?.templateId ?? '';
+    return this.pdfService.isPremiumTemplate(tplId)
+      && !this.auth.isPro()
+      && !this.auth.hasPurchasedTemplate(tplId);
+  });
 
   rename(event: Event): void {
     const id = this.store.activeId();

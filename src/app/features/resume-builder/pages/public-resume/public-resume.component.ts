@@ -88,7 +88,7 @@ export class PublicResumeComponent implements OnInit, OnDestroy {
 
         const pageUrl = `${SITE_URL}/r/${slug}`;
         this.seo.setPage({
-          title:       `${ownerName} — ${jobTitle} Resume | ApnaConverter`,
+          title:       `${ownerName} - ${jobTitle} Resume | ApnaConverter`,
           description: `${ownerName}'s professional ${jobTitle} resume. Created with ApnaConverter's free ATS-friendly resume builder.`,
           canonical:   pageUrl,
           ogType:      'profile',
@@ -97,7 +97,7 @@ export class PublicResumeComponent implements OnInit, OnDestroy {
         this.jsonLd.setJsonLd('public-resume', {
           '@context': 'https://schema.org',
           '@type': 'ProfilePage',
-          name: `${ownerName} — Resume`,
+          name: `${ownerName} - Resume`,
           url: pageUrl,
           mainEntity: {
             '@type': 'Person',

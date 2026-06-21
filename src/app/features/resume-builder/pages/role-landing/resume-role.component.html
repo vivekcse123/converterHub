@@ -13,7 +13,7 @@
           [queryParams]="{ role: c.slug, template: c.recommendedTemplate }"
           class="btn btn-primary"
         >
-          Build My {{ c.title }} Resume — Free
+          Build My {{ c.title }} Resume - Free
         </a>
         <a routerLink="/resume-templates" class="btn btn-secondary">Browse Templates</a>
       </div>
@@ -29,7 +29,7 @@
         <section class="space-y-3">
           <h2 class="text-lg font-semibold text-slate-900 dark:text-white">Example {{ c.title }} Resume Bullet Points</h2>
           <p class="text-sm text-slate-500 dark:text-slate-400">
-            Use these as inspiration — copy the structure (action verb + task + measurable result) and swap in your own numbers.
+            Use these as inspiration - copy the structure (action verb + task + measurable result) and swap in your own numbers.
           </p>
           <ul class="space-y-2">
             @for (bullet of c.bulletExamples; track bullet) {
@@ -45,7 +45,7 @@
         <section class="space-y-3">
           <h2 class="text-lg font-semibold text-slate-900 dark:text-white">Key Skills & Keywords for {{ c.title }} Resumes</h2>
           <p class="text-sm text-slate-500 dark:text-slate-400">
-            Include the skills that match your experience — these are commonly searched for by recruiters and ATS software.
+            Include the skills that match your experience - these are commonly searched for by recruiters and ATS software.
           </p>
           <div class="flex flex-wrap gap-2">
             @for (skill of c.keySkills; track skill) {
@@ -112,7 +112,7 @@
     <section class="card p-6 text-center space-y-3">
       <h2 class="text-lg font-semibold text-slate-900 dark:text-white">Ready to build your {{ c.title }} resume?</h2>
       <p class="text-sm text-slate-500 dark:text-slate-400">
-        Pick a template, fill in your details, and download an ATS-friendly PDF — completely free, no sign-up required.
+        Pick a template, fill in your details, and download an ATS-friendly PDF - completely free, no sign-up required.
       </p>
       <a
         [routerLink]="['/resume-builder']"

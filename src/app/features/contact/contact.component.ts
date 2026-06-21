@@ -11,7 +11,7 @@ import { RouterLink } from '@angular/router';
         <div class="w-20 h-20 bg-white/10 rounded-3xl flex items-center justify-center text-4xl mx-auto mb-6">✉️</div>
         <h1 class="text-3xl md:text-5xl font-extrabold mb-4">Contact Us</h1>
         <p class="text-primary-100 text-lg leading-relaxed">
-          Questions, bug reports, or feedback — we read every message and reply within 1-2 business days.
+          Questions, bug reports, or feedback - we read every message and reply within 1-2 business days.
         </p>
       </div>
     </div>
@@ -40,7 +40,7 @@ import { RouterLink } from '@angular/router';
         <h2 class="text-2xl font-bold text-slate-900 dark:text-white mb-4">What to Include in Your Message</h2>
         <p class="leading-relaxed">
           To help us respond quickly, please mention which tool you were using (e.g. "PDF to Word" or
-          "Resume Builder"), the device and browser you're on, and — if you ran into an error — a short
+          "Resume Builder"), the device and browser you're on, and - if you ran into an error - a short
           description of what you expected to happen versus what actually happened. Screenshots are always
           welcome and help us reproduce issues faster.
         </p>
@@ -99,7 +99,7 @@ export class ContactComponent {
     {
       icon: '🤝',
       title: 'Business & Partnerships',
-      desc: 'Advertising, integrations, or collaboration inquiries — visit ApnaInsights.',
+      desc: 'Advertising, integrations, or collaboration inquiries - visit ApnaInsights.',
       value: 'apnainsights.com',
       href: 'https://apnainsights.com/',
     },
@@ -111,7 +111,7 @@ export class ContactComponent {
       a: 'Yes. All core conversion tools and the resume builder are free with no hidden limits on basic usage. Optional account features like saving history are also free.',
     },
     {
-      q: 'My file failed to convert — what should I do?',
+      q: 'My file failed to convert - what should I do?',
       a: 'First, check that your file is under the size limit shown on the tool page and isn’t password-protected or corrupted. If the problem continues, email us with the file type, size, and a screenshot of the error.',
     },
     {
@@ -119,7 +119,7 @@ export class ContactComponent {
       a: 'No. Files are processed automatically and deleted from our servers within 2 hours. See our Privacy Policy for full details.',
     },
     {
-      q: 'I want to delete my account — how do I do that?',
+      q: 'I want to delete my account - how do I do that?',
       a: 'Email support@apnaconverter.com from the address associated with your account and we’ll remove your account and any stored data within a few business days.',
     },
   ];

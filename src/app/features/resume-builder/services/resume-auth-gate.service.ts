@@ -20,14 +20,15 @@ export class ResumeAuthGateService {
   /**
    * Returns true if the download can proceed.
    * For premium templates, also requires an active Pro subscription.
-   * The server enforces this too — this is the UX-layer fast-fail.
+   * The server enforces this too - this is the UX-layer fast-fail.
    */
   canDownload(templateId?: string): boolean {
     if (!this.auth.isLoggedIn()) {
       this.showPrompt.set(true);
       return false;
     }
-    if (templateId && PREMIUM_TEMPLATE_IDS.includes(templateId as any) && !this.auth.isPro()) {
+    if (templateId && PREMIUM_TEMPLATE_IDS.includes(templateId as any)
+        && !this.auth.isPro() && !this.auth.hasPurchasedTemplate(templateId)) {
       this.showUpgrade.set(true);
       return false;
     }
@@ -48,7 +49,7 @@ export class ResumeAuthGateService {
     this.redirectToAuth('/register');
   }
 
-  /** Call once on builder init — resumes a download that was interrupted by the login/signup redirect. */
+  /** Call once on builder init - resumes a download that was interrupted by the login/signup redirect. */
   consumePendingDownload(): boolean {
     if (!this.isBrowser || !this.auth.isLoggedIn()) return false;
     if (sessionStorage.getItem(PENDING_DOWNLOAD_KEY) !== '1') return false;

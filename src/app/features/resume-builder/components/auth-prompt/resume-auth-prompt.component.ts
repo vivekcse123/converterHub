@@ -24,7 +24,7 @@ import { ResumeAuthGateService } from '../../services/resume-auth-gate.service';
           <div class="text-4xl">🔐</div>
           <h3 class="text-lg font-semibold text-slate-800 dark:text-slate-100">Log in to download your resume</h3>
           <p class="text-sm text-slate-500 dark:text-slate-400">
-            Create a free account (or log in) to save your resume and download the PDF — it only takes a few seconds,
+            Create a free account (or log in) to save your resume and download the PDF - it only takes a few seconds,
             and you'll be brought right back here.
           </p>
 

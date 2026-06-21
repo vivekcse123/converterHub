@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
+import { Component, computed, input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ResumeData } from '../../models/resume.model';
 import { buildContactParts, formatDateRange, formatMonthYear, getCustomSection, getSectionKind, getVisibleSections } from '../shared/template-helpers';
@@ -12,7 +12,6 @@ const SIDEBAR_SECTIONS = ['skills', 'languages', 'certifications', 'interests'];
   imports: [CommonModule, RichTextComponent],
   templateUrl: './compact-template.component.html',
   styleUrls: ['../shared/print.css', './compact-template.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CompactTemplateComponent {
   readonly resume = input.required<ResumeData>();

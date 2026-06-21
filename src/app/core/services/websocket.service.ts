@@ -70,7 +70,7 @@ export class WebsocketService implements OnDestroy {
         this.jobFailedSubject.next(data),
       );
     }).catch(() => {
-      // socket.io-client unavailable — HTTP polling fallback is sufficient
+      // socket.io-client unavailable - HTTP polling fallback is sufficient
     });
   }
 

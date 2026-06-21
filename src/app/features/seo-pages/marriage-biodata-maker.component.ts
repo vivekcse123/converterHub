@@ -20,12 +20,12 @@ import { JsonLdService } from '../../core/services/json-ld.service';
           <span class="text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 to-amber-300">Beautiful PDF in Minutes</span>
         </h1>
         <p class="text-lg text-rose-100 max-w-2xl mx-auto mb-8 leading-relaxed">
-          Create a beautiful, professional marriage biodata for yourself or your family. Multiple templates, easy customization, instant PDF download — all completely free.
+          Create a beautiful, professional marriage biodata for yourself or your family. Multiple templates, easy customization, instant PDF download - all completely free.
         </p>
         <div class="flex flex-col sm:flex-row gap-3 justify-center mb-8">
           <a routerLink="/biodata-maker"
              class="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl bg-white text-rose-700 font-bold hover:bg-rose-50 shadow-xl transition text-base">
-            💍 Create Marriage Biodata — Free
+            💍 Create Marriage Biodata - Free
           </a>
           <a routerLink="/biodata-maker"
              class="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl border-2 border-white/40 text-white font-semibold hover:bg-white/10 transition text-base">
@@ -109,10 +109,10 @@ import { JsonLdService } from '../../core/services/json-ld.service';
     <section class="bg-gradient-to-r from-rose-600 to-pink-600 py-16 text-white text-center">
       <div class="container-app max-w-2xl mx-auto">
         <h2 class="text-2xl sm:text-3xl font-extrabold mb-4">Create Your Marriage Biodata Today</h2>
-        <p class="text-rose-100 mb-8">Beautiful, professional, and ready to share in minutes. Free PDF download — no registration needed.</p>
+        <p class="text-rose-100 mb-8">Beautiful, professional, and ready to share in minutes. Free PDF download - no registration needed.</p>
         <a routerLink="/biodata-maker"
            class="inline-flex items-center gap-2 px-8 py-4 rounded-xl bg-white text-rose-700 font-bold hover:bg-rose-50 shadow-xl transition text-base">
-          💍 Create Marriage Biodata — Free
+          💍 Create Marriage Biodata - Free
         </a>
       </div>
     </section>
@@ -149,8 +149,8 @@ export class MarriageBiodataMakerComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.seo.setPage({
-      title: 'Free Marriage Biodata Maker — Beautiful PDF in Minutes | ApnaConverter',
-      description: 'Create a beautiful marriage biodata in minutes. Multiple templates, photo support, instant PDF download. Used by 5,000+ families. 100% free — no watermark.',
+      title: 'Free Marriage Biodata Maker - Beautiful PDF in Minutes | ApnaConverter',
+      description: 'Create a beautiful marriage biodata in minutes. Multiple templates, photo support, instant PDF download. Used by 5,000+ families. 100% free - no watermark.',
       keywords: 'marriage biodata maker, shaadi biodata, vivah biodata, marriage biodata format, free biodata maker India, biodata PDF download',
     });
     this.jsonLd.setJsonLd('faq', {

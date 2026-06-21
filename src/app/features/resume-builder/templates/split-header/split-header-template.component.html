@@ -1,0 +1,165 @@
+<div class="resume-page split-tpl">
+
+  <!-- Split header -->
+  <header style="display:flex;margin:-20pt -20pt 16pt -20pt;min-height:72pt">
+    <div style="flex:1.1;padding:18pt 20pt 18pt 24pt;display:flex;flex-direction:column;justify-content:center"
+         [style.background]="resume().design?.accentColor ?? '#7c3aed'">
+      <h1 style="color:white;font-size:18pt;font-weight:800;line-height:1.1;margin:0">{{ resume().personal.fullName || 'Your Name' }}</h1>
+      @if (resume().personal.jobTitle) {
+        <p style="color:rgba(255,255,255,0.85);font-size:10pt;font-weight:500;margin-top:4pt">{{ resume().personal.jobTitle }}</p>
+      }
+    </div>
+    <div style="flex:0.9;padding:18pt 24pt 18pt 20pt;background:#f8fafc;display:flex;flex-direction:column;justify-content:center;gap:2pt">
+      @for (part of contactParts(); track $index) {
+        <p style="font-size:8.5pt;color:#475569;line-height:1.6">{{ part }}</p>
+      }
+    </div>
+  </header>
+
+  @for (section of visibleSections(); track section) {
+    <section style="margin-bottom:10pt">
+      @switch (sectionKind(section)) {
+
+        @case ('summary') {
+          @if (resume().summary) {
+            <h2 class="split-heading" [style.color]="resume().design?.accentColor ?? '#7c3aed'">Summary</h2>
+            <p style="font-size:9.5pt;line-height:1.55;color:#374151"><app-rich-text [text]="resume().summary" /></p>
+          }
+        }
+
+        @case ('experience') {
+          @if (resume().experience.length) {
+            <h2 class="split-heading" [style.color]="resume().design?.accentColor ?? '#7c3aed'">Experience</h2>
+            @for (exp of resume().experience; track exp.id) {
+              <div style="margin-bottom:8pt">
+                <div style="display:flex;justify-content:space-between;align-items:baseline;gap:4pt">
+                  <p style="font-size:10.5pt;font-weight:700;color:#111827">{{ exp.role }}</p>
+                  <p style="font-size:9pt;color:#6b7280;white-space:nowrap;flex-shrink:0">{{ dateRange(exp.startDate, exp.endDate, exp.current) }}</p>
+                </div>
+                @if (exp.company) {
+                  <p style="font-size:9.5pt;font-weight:600;margin-top:1pt" [style.color]="resume().design?.accentColor ?? '#7c3aed'">
+                    {{ exp.company }}@if (exp.location) { <span style="color:#6b7280;font-weight:400"> · {{ exp.location }}</span>}
+                  </p>
+                }
+                @if (exp.bullets.length) {
+                  <ul style="list-style:disc;padding-left:14pt;margin-top:3pt">
+                    @for (b of exp.bullets; track $index) {
+                      @if (b) { <li style="font-size:9.5pt;line-height:1.5;color:#374151"><app-rich-text [text]="b" /></li> }
+                    }
+                  </ul>
+                }
+              </div>
+            }
+          }
+        }
+
+        @case ('education') {
+          @if (resume().education.length) {
+            <h2 class="split-heading" [style.color]="resume().design?.accentColor ?? '#7c3aed'">Education</h2>
+            @for (edu of resume().education; track edu.id) {
+              <div style="margin-bottom:6pt">
+                <div style="display:flex;justify-content:space-between;align-items:baseline;gap:4pt">
+                  <p style="font-size:10.5pt;font-weight:700;color:#111827">{{ edu.degree }}@if (edu.field) {, {{ edu.field }}}</p>
+                  <p style="font-size:9pt;color:#6b7280;white-space:nowrap;flex-shrink:0">{{ dateRange(edu.startDate, edu.endDate, edu.current) }}</p>
+                </div>
+                <p style="font-size:9pt;color:#6b7280;font-style:italic">{{ edu.institution }}@if (edu.gpa) { · GPA: {{ edu.gpa }}}</p>
+              </div>
+            }
+          }
+        }
+
+        @case ('skills') {
+          @if (resume().skills.length) {
+            <h2 class="split-heading" [style.color]="resume().design?.accentColor ?? '#7c3aed'">Skills</h2>
+            @for (group of resume().skills; track group.id) {
+              @if (group.items.length) {
+                <p style="font-size:9.5pt;line-height:1.5;color:#374151;margin-bottom:2pt">
+                  @if (group.category) { <span style="font-weight:600">{{ group.category }}: </span> }
+                  {{ group.items.join(', ') }}
+                </p>
+              }
+            }
+          }
+        }
+
+        @case ('projects') {
+          @if (resume().projects.length) {
+            <h2 class="split-heading" [style.color]="resume().design?.accentColor ?? '#7c3aed'">Projects</h2>
+            @for (proj of resume().projects; track proj.id) {
+              <div style="margin-bottom:6pt">
+                <p style="font-size:10pt;font-weight:700;color:#111827">
+                  {{ proj.name }}@if (proj.techStack) { <span style="font-size:9pt;font-weight:400;color:#6b7280"> · {{ proj.techStack }}</span>}
+                </p>
+                @if (proj.bullets.length) {
+                  <ul style="list-style:disc;padding-left:14pt;margin-top:2pt">
+                    @for (b of proj.bullets; track $index) {
+                      @if (b) { <li style="font-size:9.5pt;line-height:1.5;color:#374151"><app-rich-text [text]="b" /></li> }
+                    }
+                  </ul>
+                }
+              </div>
+            }
+          }
+        }
+
+        @case ('certifications') {
+          @if (resume().certifications.length) {
+            <h2 class="split-heading" [style.color]="resume().design?.accentColor ?? '#7c3aed'">Certifications</h2>
+            @for (cert of resume().certifications; track cert.id) {
+              <p style="font-size:9.5pt;line-height:1.6;color:#374151">
+                <span style="font-weight:600">{{ cert.name }}</span>@if (cert.issuer) { · {{ cert.issuer }}}@if (cert.date) { <span style="color:#9ca3af"> ({{ monthYear(cert.date) }})</span>}
+              </p>
+            }
+          }
+        }
+
+        @case ('achievements') {
+          @if (resume().achievements.length) {
+            <h2 class="split-heading" [style.color]="resume().design?.accentColor ?? '#7c3aed'">Achievements</h2>
+            <ul style="list-style:disc;padding-left:14pt">
+              @for (item of resume().achievements; track $index) {
+                @if (item) { <li style="font-size:9.5pt;line-height:1.5;color:#374151"><app-rich-text [text]="item" /></li> }
+              }
+            </ul>
+          }
+        }
+
+        @case ('languages') {
+          @if (resume().languages.length) {
+            <h2 class="split-heading" [style.color]="resume().design?.accentColor ?? '#7c3aed'">Languages</h2>
+            <p style="font-size:9.5pt;color:#374151">
+              @for (lang of resume().languages; track lang.id; let last = $last) {
+                {{ lang.name }} ({{ lang.proficiency }})@if (!last) {, }
+              }
+            </p>
+          }
+        }
+
+        @case ('interests') {
+          @if (resume().interests.length) {
+            <h2 class="split-heading" [style.color]="resume().design?.accentColor ?? '#7c3aed'">Interests</h2>
+            <p style="font-size:9.5pt;color:#374151">{{ resume().interests.join(', ') }}</p>
+          }
+        }
+
+        @case ('custom') {
+          @if (customSection(section); as cs) {
+            @if (cs.entries.length) {
+              <h2 class="split-heading" [style.color]="resume().design?.accentColor ?? '#7c3aed'">{{ cs.title }}</h2>
+              @for (entry of cs.entries; track entry.id) {
+                <div style="margin-bottom:5pt">
+                  <div style="display:flex;justify-content:space-between;align-items:baseline">
+                    @if (entry.heading) { <p style="font-size:10pt;font-weight:700;color:#111827">{{ entry.heading }}</p> }
+                    @if (entry.date) { <p style="font-size:8.5pt;color:#6b7280;white-space:nowrap">{{ entry.date }}</p> }
+                  </div>
+                  @if (entry.subheading) { <p style="font-size:8.5pt;color:#6b7280;font-style:italic">{{ entry.subheading }}</p> }
+                  @if (entry.description) { <p style="font-size:9pt;line-height:1.4;margin-top:2pt;color:#374151"><app-rich-text [text]="entry.description" /></p> }
+                </div>
+              }
+            }
+          }
+        }
+      }
+    </section>
+  }
+</div>

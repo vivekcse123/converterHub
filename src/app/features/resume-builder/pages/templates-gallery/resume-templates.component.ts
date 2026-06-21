@@ -7,7 +7,7 @@ import {
   inject,
   signal,
 } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, NgComponentOutlet } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { JsonLdService } from '../../../../core/services/json-ld.service';
@@ -38,7 +38,7 @@ type SortOption = 'popular' | 'ats' | 'rating' | 'name';
 @Component({
   selector: 'app-resume-templates',
   standalone: true,
-  imports: [CommonModule, RouterLink, FormsModule, BreadcrumbComponent, AdBannerComponent],
+  imports: [CommonModule, NgComponentOutlet, RouterLink, FormsModule, BreadcrumbComponent, AdBannerComponent],
   templateUrl: './resume-templates.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

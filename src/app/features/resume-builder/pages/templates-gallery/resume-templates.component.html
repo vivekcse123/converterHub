@@ -442,53 +442,19 @@
             }
           </div>
 
-          <!-- Template visual thumbnail -->
-          <div class="relative overflow-hidden bg-slate-50 dark:bg-slate-900/50" style="height:220px">
-            <!-- Gradient background matching template accent -->
-            <div class="absolute inset-0 bg-gradient-to-br opacity-10" [class]="card.meta.accent"></div>
-
-            <!-- Mock resume preview -->
-            <div class="absolute inset-0 flex items-start justify-center pt-5 px-6">
-              <div class="w-full max-w-xs bg-white dark:bg-slate-800 rounded-lg shadow-lg overflow-hidden border border-slate-200/50 dark:border-slate-700/50 scale-90 origin-top">
-                <!-- Template header strip -->
-                <div class="h-10 bg-gradient-to-br flex items-center px-3 gap-2" [class]="card.meta.accent">
-                  <div class="w-6 h-6 rounded-full bg-white/25 shrink-0"></div>
-                  <div class="flex-1 space-y-1">
-                    <div class="h-1.5 bg-white/60 rounded-full w-3/5"></div>
-                    <div class="h-1 bg-white/30 rounded-full w-2/5"></div>
-                  </div>
+          <!-- Template visual thumbnail — actual rendered preview -->
+          <div class="relative overflow-hidden bg-white" style="height:220px">
+            <!-- Real template rendered at scale — deferred until visible for performance -->
+            <div class="absolute inset-0 pointer-events-none select-none" aria-hidden="true">
+              @defer (on viewport) {
+                <div style="position:absolute;top:0;left:50%;transform-origin:top left;transform:translateX(-50%) scale(0.34);width:794px;min-height:650px;overflow:hidden;">
+                  <ng-container *ngComponentOutlet="card.meta.component; inputs: { resume: card.sample }" />
                 </div>
-                <!-- Body content lines -->
-                <div class="p-3 space-y-2.5">
-                  <!-- Summary section -->
-                  <div class="space-y-1">
-                    <div class="h-1.5 bg-slate-700 dark:bg-slate-300 rounded w-1/3 opacity-60"></div>
-                    <div class="h-1 bg-slate-200 dark:bg-slate-600 rounded w-full"></div>
-                    <div class="h-1 bg-slate-200 dark:bg-slate-600 rounded w-5/6"></div>
-                    <div class="h-1 bg-slate-200 dark:bg-slate-600 rounded w-4/5"></div>
-                  </div>
-                  <!-- Experience section -->
-                  <div class="space-y-1">
-                    <div class="h-1.5 bg-slate-700 dark:bg-slate-300 rounded w-2/5 opacity-60"></div>
-                    <div class="flex justify-between">
-                      <div class="h-1 bg-slate-300 dark:bg-slate-500 rounded w-2/5"></div>
-                      <div class="h-1 bg-slate-200 dark:bg-slate-600 rounded w-1/4"></div>
-                    </div>
-                    <div class="h-1 bg-slate-200 dark:bg-slate-600 rounded w-full"></div>
-                    <div class="h-1 bg-slate-200 dark:bg-slate-600 rounded w-11/12"></div>
-                  </div>
-                  <!-- Skills section -->
-                  <div class="space-y-1">
-                    <div class="h-1.5 bg-slate-700 dark:bg-slate-300 rounded w-1/4 opacity-60"></div>
-                    <div class="flex flex-wrap gap-1">
-                      <div class="h-3 bg-slate-100 dark:bg-slate-700 rounded-full w-10 border border-slate-200 dark:border-slate-600"></div>
-                      <div class="h-3 bg-slate-100 dark:bg-slate-700 rounded-full w-12 border border-slate-200 dark:border-slate-600"></div>
-                      <div class="h-3 bg-slate-100 dark:bg-slate-700 rounded-full w-8 border border-slate-200 dark:border-slate-600"></div>
-                      <div class="h-3 bg-slate-100 dark:bg-slate-700 rounded-full w-10 border border-slate-200 dark:border-slate-600"></div>
-                    </div>
-                  </div>
+              } @placeholder {
+                <div class="w-full h-full flex items-center justify-center bg-slate-50">
+                  <div class="w-6 h-6 border-2 border-slate-200 border-t-violet-400 rounded-full animate-spin"></div>
                 </div>
-              </div>
+              }
             </div>
 
             <!-- Hover: "View Details" overlay -->

@@ -38,6 +38,7 @@ import { AiAssistantPanelComponent } from '../../components/ai-assistant/ai-assi
 import { ResumeAuthPromptComponent } from '../../components/auth-prompt/resume-auth-prompt.component';
 import { UpgradeModalComponent } from '../../components/upgrade-modal/upgrade-modal.component';
 import { SectionListComponent } from '../../components/editor/section-list/section-list.component';
+import { TemplateGalleryModalComponent } from '../../components/template-gallery/template-gallery-modal.component';
 
 const ROLE_TITLES: Record<string, string> = {
   'software-engineer': 'Software Engineer',
@@ -81,6 +82,7 @@ export const BUILDER_STEPS: BuilderStep[] = [
     ResumePreviewComponent, TemplatePickerComponent,
     AtsScorePanelComponent, AiAssistantPanelComponent,
     ResumeAuthPromptComponent, UpgradeModalComponent,
+    TemplateGalleryModalComponent,
     SectionListComponent,
   ],
   templateUrl: './resume-builder.component.html',
@@ -179,8 +181,10 @@ export class ResumeBuilderComponent implements OnInit, OnDestroy {
   prevStep(): void { if (this.activeStep() > 1) this.activeStep.update(s => s - 1); }
 
   // ── Panels / modals ───────────────────────────────────────────────────────
-  readonly showTemplateDrawer = signal(false);
-  readonly showAiPanel        = signal(false);
+  readonly showTemplateDrawer   = signal(false);
+  readonly showTemplateDropdown = signal(false);
+  readonly showTemplateGallery  = signal(false);
+  readonly showAiPanel          = signal(false);
   readonly showAtsPanel       = signal(false);
   readonly showPreviewModal   = signal(false);
   readonly showDesignPanel    = signal(false);
@@ -217,6 +221,9 @@ export class ResumeBuilderComponent implements OnInit, OnDestroy {
     try { localStorage.setItem('ch_rb_visited', '1'); } catch {}
   }
 
+  openTemplateGallery(): void { this.showTemplateGallery.set(true); }
+  onTemplateApplied(id: TemplateId): void { this.store.setTemplate(id); }
+
   // ── Version history ───────────────────────────────────────────────────────
   readonly versionList = computed(() => this.resume()?.versions ?? []);
   saveVersion(): void {
@@ -235,6 +242,7 @@ export class ResumeBuilderComponent implements OnInit, OnDestroy {
   // ── Save status ───────────────────────────────────────────────────────────
   readonly saveStatus      = signal<'saved' | 'saving'>('saved');
   readonly downloading     = signal(false);
+  readonly downloadDone    = signal(false);
   readonly autoSaveEnabled = signal<boolean>((() => {
     try { return localStorage.getItem('ch_auto_save') !== 'false'; } catch { return true; }
   })());
@@ -246,7 +254,7 @@ export class ResumeBuilderComponent implements OnInit, OnDestroy {
     this.saveStatus.set('saving');
     clearTimeout(this.saveTimer);
     this.saveTimer = setTimeout(() => this.saveStatus.set('saved'), 900);
-  });
+  }, { allowSignalWrites: true });
 
   // ── Design ────────────────────────────────────────────────────────────────
   readonly DEFAULT_DESIGN = DEFAULT_DESIGN;
@@ -311,10 +319,15 @@ export class ResumeBuilderComponent implements OnInit, OnDestroy {
       return;
     }
     this.downloading.set(true);
+    this.downloadDone.set(false);
     try {
-      // Pass the actual rendered preview element so the PDF captures it pixel-perfect
       const pageHost = this.desktopPreview?.pageHost?.nativeElement;
       await this.pdf.download(r, pageHost);
+      this.downloadDone.set(true);
+      setTimeout(() => this.downloadDone.set(false), 3500);
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : 'Something went wrong. Please try again.';
+      this.notify.error('Download failed', msg);
     } finally { this.downloading.set(false); }
   }
 

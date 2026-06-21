@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, inject, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, input, output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ResumeStoreService } from '../../services/resume-store.service';
 import { SubscriptionService } from '../../services/subscription.service';
@@ -148,11 +148,13 @@ export class TemplatePickerComponent {
   readonly subs          = inject(SubscriptionService);
   readonly categories    = TEMPLATE_CATEGORIES;
   readonly activeId      = computed(() => this.store.activeResume()?.templateId);
-  readonly compact       = input(false);
+  readonly compact          = input(false);
+  readonly templateSelected = output<TemplateId>();
 
   templatesFor = getTemplatesByCategory;
 
   select(id: TemplateId): void {
     this.store.setTemplate(id);
+    this.templateSelected.emit(id);
   }
 }

@@ -3,24 +3,28 @@ import { isPlatformBrowser } from '@angular/common';
 import { DEFAULT_DESIGN, DesignSettings, ResumeData } from '../models/resume.model';
 import { PREMIUM_TEMPLATE_IDS, getTemplateMeta } from '../data/resume-templates.data';
 import { AuthService } from '../../../core/services/auth.service';
+import { environment } from 'src/environments/environment';
 
 const FONT_FAMILIES: Record<DesignSettings['fontFamily'], string> = {
   inter:   "'Inter', Arial, Helvetica, sans-serif",
   roboto:  "'Roboto', Arial, Helvetica, sans-serif",
   georgia: "Georgia, 'Times New Roman', serif",
 };
-
 const SPACING_MAP: Record<DesignSettings['lineHeight'], string> = {
-  compact:   '1.3',
-  standard:  '1.5',
-  spacious:  '1.75',
+  compact: '1.3', standard: '1.5', spacious: '1.75',
 };
-
 const BASE_PT = 10.5;
+const CSS_VAR_NAMES = ['--r-accent','--r-accent-12','--r-accent-25','--r-font','--r-size','--r-spacing'] as const;
+const GOOGLE_FONTS_URL =
+  'https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900' +
+  '&family=Roboto:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400' +
+  '&family=Georgia&display=swap';
 
 function slugify(value: string): string {
   return value.toLowerCase().trim().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '') || 'resume';
 }
+
+export type DownloadMethod = 'direct' | 'print-dialog';
 
 @Injectable({ providedIn: 'root' })
 export class ResumePdfService {
@@ -29,187 +33,209 @@ export class ResumePdfService {
   private readonly auth        = inject(AuthService);
 
   get premiumTemplateIds(): string[] { return PREMIUM_TEMPLATE_IDS; }
-
   isPremiumTemplate(templateId: string): boolean {
     return PREMIUM_TEMPLATE_IDS.includes(templateId as any);
   }
 
   /**
-   * Downloads the resume as a pixel-perfect PDF.
-   *
-   * When `captureEl` (the #pageHost element from ResumePreviewComponent) is provided,
-   * html2canvas captures that exact element — same CSS, same fonts, same template render
-   * as what the user sees.  Falls back to an off-screen render when no element is passed.
+   * Downloads the resume as a PDF via Puppeteer on the backend.
+   * Always produces a direct blob download — no browser print dialog.
+   * Throws with a user-readable message on any failure.
    */
-  async download(resume: ResumeData, captureEl?: HTMLElement): Promise<void> {
-    if (!isPlatformBrowser(this.platformId)) return;
+  async download(resume: ResumeData, captureEl?: HTMLElement): Promise<DownloadMethod> {
+    if (!isPlatformBrowser(this.platformId)) return 'print-dialog';
 
-    const isPro = this.auth.isPro() || this.auth.hasPurchasedTemplate(resume.templateId);
-    const filename = `${slugify(resume.personal?.fullName || resume.name)}-resume.pdf`;
-
-    const [html2canvasModule, jsPDFModule] = await Promise.all([
-      import('html2canvas'),
-      import('jspdf'),
-    ]);
-    const html2canvas = html2canvasModule.default;
-    const { jsPDF } = jsPDFModule;
-
-    // Wait for all fonts to finish loading (Inter, Roboto, etc.)
-    await document.fonts.ready;
-
-    let canvas: HTMLCanvasElement;
+    const isPro     = this.auth.isPro() || this.auth.hasPurchasedTemplate(resume.templateId);
+    const filename  = slugify(resume.personal?.fullName || resume.name) + '-resume';
 
     if (captureEl) {
-      canvas = await this._capturePageHost(captureEl, html2canvas);
-    } else {
-      canvas = await this._renderOffScreen(resume, html2canvas);
+      return this._downloadWithFallback(captureEl, filename, isPro);
     }
-
-    // Stamp watermark for free users
-    if (!isPro) {
-      const ctx = canvas.getContext('2d')!;
-      ctx.save();
-      ctx.font = 'bold 28px Arial, sans-serif';
-      ctx.fillStyle = '#94a3b8';
-      ctx.globalAlpha = 0.18;
-      ctx.textAlign = 'center';
-      const text = 'ApnaConverter.com  •  Upgrade to Pro';
-      for (let y = 140; y < canvas.height; y += 240) {
-        ctx.save();
-        ctx.translate(canvas.width / 2, y);
-        ctx.rotate(-Math.PI / 7);
-        ctx.fillText(text, 0, 0);
-        ctx.restore();
-      }
-      ctx.restore();
-    }
-
-    // Build A4 PDF with multi-page support
-    const pdf = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
-    const pageW = pdf.internal.pageSize.getWidth();   // 210 mm
-    const pageH = pdf.internal.pageSize.getHeight();  // 297 mm
-
-    const imgData = canvas.toDataURL('image/jpeg', 0.93);
-    // Image height in mm, proportional to the canvas aspect ratio
-    const imgH = (canvas.height / canvas.width) * pageW;
-
-    pdf.addImage(imgData, 'JPEG', 0, 0, pageW, imgH);
-
-    // Only add more pages when there is a meaningful overflow (> 0.5 mm).
-    // The 0.5 mm guard prevents floating-point rounding from creating a blank
-    // second page when the content is almost exactly 1 A4 page tall.
-    let remaining = imgH - pageH;
-    let page = 1;
-    while (remaining > 0.5) {
-      pdf.addPage();
-      pdf.addImage(imgData, 'JPEG', 0, -(page * pageH), pageW, imgH);
-      remaining -= pageH;
-      page++;
-    }
-
-    pdf.save(filename);
+    return this._downloadOffScreen(resume, filename, isPro);
   }
 
-  /**
-   * Captures the existing #pageHost element from ResumePreviewComponent.
-   *
-   * The pageHost sits inside .preview-zoom-wrap which has a CSS transform:scale(n).
-   * We temporarily reset that transform to scale(1) so html2canvas captures at the
-   * element's natural layout size (A4 width = 210mm ≈ 794px) rather than the
-   * visually-scaled-down preview size.
-   */
-  private async _capturePageHost(
+  // ─── Backend Puppeteer: direct PDF blob download (no print dialog) ──────────
+
+  private async _downloadWithFallback(
     pageHost: HTMLElement,
-    html2canvas: (el: HTMLElement, opts: any) => Promise<HTMLCanvasElement>,
-  ): Promise<HTMLCanvasElement> {
-    const zoomWrap = pageHost.parentElement;   // .preview-zoom-wrap
-    const origTransform = zoomWrap?.style.transform ?? '';
-
-    // Reset parent zoom so pageHost renders at its natural A4 width
-    if (zoomWrap) zoomWrap.style.transform = 'scale(1)';
-
-    try {
-      return await html2canvas(pageHost, {
-        scale:           2,          // 2× pixel ratio for crisp text
-        useCORS:         true,
-        allowTaint:      true,
-        backgroundColor: '#ffffff',
-        logging:         false,
-        // Use the element's natural layout dimensions — ignores any parent transform
-        width:           pageHost.offsetWidth,
-        height:          pageHost.scrollHeight,
-        windowWidth:     pageHost.offsetWidth,
-        scrollX:         0,
-        scrollY:         0,
-      });
-    } finally {
-      // Always restore the zoom transform
-      if (zoomWrap) zoomWrap.style.transform = origTransform;
-    }
+    filename: string,
+    _isPro: boolean,
+  ): Promise<DownloadMethod> {
+    await this._downloadViaBackend(pageHost, filename);
+    return 'direct';
   }
 
-  /**
-   * Fallback: render the template component in a hidden off-screen container
-   * and capture it with html2canvas.  Used when no preview element is available.
-   */
-  private async _renderOffScreen(
-    resume: ResumeData,
-    html2canvas: (el: HTMLElement, opts: any) => Promise<HTMLCanvasElement>,
-  ): Promise<HTMLCanvasElement> {
+  private async _downloadViaBackend(pageHost: HTMLElement, filename: string): Promise<void> {
+    const token = this.auth.token();
+    if (!token) throw new Error('Please log in to download your resume.');
+
+    // Collect ALL CSS text here in the browser so Puppeteer never needs to
+    // reach localhost:4200 URLs which are only reachable from this browser.
+    const allStyles = await this._collectStyles();
+
+    const cs = window.getComputedStyle(pageHost);
+    const cssVarsCss = CSS_VAR_NAMES
+      .map(v => `${v}: ${cs.getPropertyValue(v).trim()};`)
+      .join(' ');
+
+    const clone = pageHost.cloneNode(true) as HTMLElement;
+    CSS_VAR_NAMES.forEach(v => clone.style.setProperty(v, cs.getPropertyValue(v)));
+    (['position','top','left','right','bottom','z-index','opacity'] as const)
+      .forEach(p => clone.style.removeProperty(p));
+    clone.style.setProperty('box-shadow', 'none');
+
+    let resp: Response;
+    try {
+      resp = await fetch(`${environment.apiUrl}/resume/render-html`, {
+        method:  'POST',
+        headers: {
+          'Content-Type':  'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+        body: JSON.stringify({ html: clone.outerHTML, inlineStyles: allStyles, cssVarsCss, filename }),
+        signal: AbortSignal.timeout(90_000),
+      });
+    } catch {
+      throw new Error('Could not reach the server. Check your connection and try again.');
+    }
+
+    if (resp.status === 429) {
+      throw new Error('Too many downloads. Please wait a few minutes and try again.');
+    }
+    if (!resp.ok) {
+      let msg = `Server error (${resp.status}).`;
+      try { const body = await resp.json(); if (body?.message) msg = body.message; } catch {}
+      throw new Error(msg);
+    }
+
+    const blob = await resp.blob();
+    const url  = URL.createObjectURL(blob);
+    const a    = document.createElement('a');
+    a.href     = url;
+    a.download = filename + '.pdf';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    setTimeout(() => URL.revokeObjectURL(url), 10_000);
+  }
+
+  // ─── Fallback: iframe + window.print() (browser-native, pixel-perfect) ──────
+
+  private async _collectStyles(): Promise<string> {
+    const parts: string[] = [];
+    document.querySelectorAll('style').forEach(s => { parts.push(s.textContent ?? ''); });
+    const jobs = Array.from(document.styleSheets)
+      .filter(sheet => !!sheet.href)
+      .map(async sheet => {
+        const href = sheet.href!;
+        if (!href.startsWith(window.location.origin)) return '';
+        try {
+          const res = await fetch(href);
+          return res.ok ? res.text() : '';
+        } catch {
+          try { return Array.from(sheet.cssRules ?? []).map(r => r.cssText).join('\n'); }
+          catch { return ''; }
+        }
+      });
+    parts.push(...await Promise.all(jobs));
+    return parts.join('\n');
+  }
+
+  private async _printViaIframe(pageHost: HTMLElement, filename: string, isPro: boolean): Promise<void> {
+    const styles = await this._collectStyles();
+    const cs     = window.getComputedStyle(pageHost);
+    const clone  = pageHost.cloneNode(true) as HTMLElement;
+    CSS_VAR_NAMES.forEach(v => clone.style.setProperty(v, cs.getPropertyValue(v)));
+    (['position','top','left','right','bottom','z-index','opacity'] as const)
+      .forEach(p => clone.style.removeProperty(p));
+    clone.style.setProperty('box-shadow', 'none');
+
+    const iframe = document.createElement('iframe');
+    iframe.style.cssText = 'position:fixed;top:0;left:0;width:1px;height:1px;opacity:0;border:none;pointer-events:none;';
+    document.body.appendChild(iframe);
+    const iDoc = iframe.contentDocument!;
+
+    const watermarkCss = isPro ? '' : `
+      body::after {
+        content: 'ApnaConverter.com  \\2022  Upgrade to Pro';
+        position: fixed; top: 50%; left: 50%;
+        transform: translate(-50%,-50%) rotate(-25deg);
+        font-size: 18pt; font-family: Arial, sans-serif;
+        color: rgba(0,0,0,0.07); white-space: nowrap;
+        pointer-events: none; z-index: 99999;
+      }`;
+
+    iDoc.open();
+    iDoc.write(`<!DOCTYPE html><html><head><meta charset="UTF-8">
+      <link rel="preconnect" href="https://fonts.googleapis.com">
+      <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+      <link href="${GOOGLE_FONTS_URL}" rel="stylesheet">
+      <style>
+        @page { size: A4 portrait; margin: 0; }
+        html, body { margin: 0; padding: 0; width: 210mm; background: white; color-scheme: light; }
+        *, *::before, *::after { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+        .page-break-line, .page-break-label { display: none !important; }
+        .preview-page-host, .shadow-card { box-shadow: none !important; }
+        ${styles}
+        ${watermarkCss}
+      </style></head><body></body></html>`);
+    iDoc.close();
+    iDoc.body.appendChild(clone);
+
+    const origTitle = document.title;
+    document.title  = filename;
+    try { await (iDoc as Document & { fonts?: FontFaceSet }).fonts?.ready; } catch {}
+    await new Promise<void>(r => setTimeout(r, 500));
+
+    await new Promise<void>(resolve => {
+      let settled = false;
+      const done = () => {
+        if (settled) return; settled = true;
+        document.title = origTitle;
+        try { document.body.removeChild(iframe); } catch {}
+        resolve();
+      };
+      iframe.contentWindow!.addEventListener('afterprint', done, { once: true });
+      const safety = setTimeout(done, 5 * 60 * 1000);
+      iframe.contentWindow!.addEventListener('afterprint', () => clearTimeout(safety), { once: true });
+      setTimeout(() => iframe.contentWindow!.print(), 250);
+    });
+  }
+
+  // ─── Off-screen render (when no live captureEl is provided) ─────────────────
+
+  private async _downloadOffScreen(resume: ResumeData, filename: string, isPro: boolean): Promise<DownloadMethod> {
     const templateMeta = getTemplateMeta(resume.templateId);
     if (!templateMeta?.component) throw new Error('Template component not found');
 
-    const d: DesignSettings = { ...DEFAULT_DESIGN, ...resume.design };
-    const hex    = (d.accentColor || '#1e293b').replace(/^#/, '').padEnd(6, '0');
-    const rC     = parseInt(hex.slice(0, 2), 16) || 0;
-    const gC     = parseInt(hex.slice(2, 4), 16) || 0;
-    const bC     = parseInt(hex.slice(4, 6), 16) || 0;
-    const basePt = typeof d.baseFontPt === 'number' && d.baseFontPt > 0 ? d.baseFontPt : BASE_PT;
+    const d     = { ...DEFAULT_DESIGN, ...resume.design } as DesignSettings;
+    const hex   = (d.accentColor || '#1e293b').replace(/^#/, '').padEnd(6, '0');
+    const rC    = parseInt(hex.slice(0, 2), 16) || 0;
+    const gC    = parseInt(hex.slice(2, 4), 16) || 0;
+    const bC    = parseInt(hex.slice(4, 6), 16) || 0;
+    const scale = ((d.baseFontPt ?? BASE_PT) / BASE_PT).toFixed(4);
 
     const wrapper = document.createElement('div');
-    wrapper.setAttribute('style', [
-      'position:fixed',
-      'top:0',
-      'left:-9999px',
-      'width:210mm',      // same as preview-page-host
-      'background:#fff',
-      'z-index:-9999',
-      `--r-accent:${d.accentColor}`,
-      `--r-accent-12:rgba(${rC},${gC},${bC},0.12)`,
-      `--r-accent-25:rgba(${rC},${gC},${bC},0.25)`,
-      `--r-font:${FONT_FAMILIES[d.fontFamily] ?? FONT_FAMILIES['inter']}`,
-      `--r-size:${((basePt / BASE_PT)).toFixed(4)}`,
-      `--r-spacing:${SPACING_MAP[d.lineHeight ?? 'standard']}`,
-    ].join(';'));
+    wrapper.style.cssText = 'position:fixed;top:0;left:-9999px;width:210mm;background:#fff;z-index:2147483647';
+    wrapper.style.setProperty('--r-accent',    d.accentColor ?? '#1e293b');
+    wrapper.style.setProperty('--r-accent-12', `rgba(${rC},${gC},${bC},0.12)`);
+    wrapper.style.setProperty('--r-accent-25', `rgba(${rC},${gC},${bC},0.25)`);
+    wrapper.style.setProperty('--r-font',      FONT_FAMILIES[d.fontFamily] ?? FONT_FAMILIES['inter']);
+    wrapper.style.setProperty('--r-size',      scale);
+    wrapper.style.setProperty('--r-spacing',   SPACING_MAP[d.lineHeight ?? 'standard']);
     document.body.appendChild(wrapper);
 
-    const ref = createComponent(templateMeta.component, {
-      environmentInjector: this.envInjector,
-      hostElement: wrapper,
-    });
+    const ref = createComponent(templateMeta.component, { environmentInjector: this.envInjector, hostElement: wrapper });
     ref.setInput('resume', resume);
     ref.changeDetectorRef.detectChanges();
-
-    // Give async images time to render (profile photo, etc.)
     await new Promise<void>(r => setTimeout(r, 500));
     ref.changeDetectorRef.detectChanges();
 
     try {
-      return await html2canvas(wrapper, {
-        scale:           2,
-        useCORS:         true,
-        allowTaint:      true,
-        backgroundColor: '#ffffff',
-        logging:         false,
-        width:           wrapper.offsetWidth,
-        height:          wrapper.scrollHeight,
-        windowWidth:     wrapper.offsetWidth,
-        scrollX:         0,
-        scrollY:         0,
-      });
+      return await this._downloadWithFallback(wrapper, filename, isPro);
     } finally {
       ref.destroy();
-      document.body.removeChild(wrapper);
+      try { document.body.removeChild(wrapper); } catch {}
     }
   }
 }

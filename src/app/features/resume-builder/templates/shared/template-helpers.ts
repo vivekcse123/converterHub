@@ -36,11 +36,21 @@ export function formatDateRange(start: string, end: string, current: boolean): s
   return endLabel ? `${startLabel} – ${endLabel}` : startLabel;
 }
 
+/** Strips protocol + www from a URL so it fits inline on a resume. */
+function shortUrl(url: string): string {
+  return (url ?? '').replace(/^https?:\/\/(www\.)?/i, '').replace(/\/$/, '');
+}
+
 /** Builds the contact line for the resume header, filtering out empty fields. */
 export function buildContactParts(personal: {
   email: string; phone: string; location: string; linkedin: string; portfolio: string; github: string;
 }): string[] {
-  return [personal.email, personal.phone, personal.location, personal.linkedin, personal.portfolio, personal.github]
-    .map(v => (v ?? '').trim())
-    .filter(Boolean);
+  return [
+    personal.email,
+    personal.phone,
+    personal.location,
+    shortUrl(personal.linkedin),
+    shortUrl(personal.portfolio),
+    shortUrl(personal.github),
+  ].map(v => (v ?? '').trim()).filter(Boolean);
 }

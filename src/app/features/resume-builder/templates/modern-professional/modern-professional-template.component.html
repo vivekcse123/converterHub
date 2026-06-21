@@ -8,7 +8,7 @@
       <p class="text-[11pt] font-medium mt-0.5 text-primary-100">{{ resume().personal.jobTitle }}</p>
     }
     @if (contactParts().length) {
-      <p class="text-[9pt] mt-2 flex flex-wrap gap-x-3 gap-y-0.5 text-primary-50">
+      <p class="text-[8pt] mt-2 flex flex-wrap gap-x-2 gap-y-0.5 text-primary-50">
         @for (part of contactParts(); track $index) {
           <span>{{ part }}</span>
         }

@@ -28,7 +28,7 @@ export interface JdMatchResult {
   totalKeywords: number;
   // weighted by tech-term importance (more meaningful than raw score)
   weightedScore: number;
-  // only tech/skill keywords that are missing — highest priority to add
+  // only tech/skill keywords that are missing - highest priority to add
   highPriorityMissing: string[];
 }
 

@@ -85,7 +85,7 @@
       </button>
 
       @if (converter.isConverting()) {
-      <app-progress-bar [value]="converter.uploadProgress()" />
+      <app-progress-bar [value]="converter.uploadProgress()" [label]="converter.progressLabel()" />
       }
     </div>
     }

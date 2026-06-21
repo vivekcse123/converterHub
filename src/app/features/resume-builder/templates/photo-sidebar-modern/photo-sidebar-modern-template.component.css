@@ -1,0 +1,17 @@
+.ps-sidebar-heading {
+  font-size: 7.5pt;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.6);
+  margin-bottom: 5pt;
+}
+.ps-main-heading {
+  font-size: 9pt;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding-bottom: 3pt;
+  border-bottom: 2pt solid currentColor;
+  margin-bottom: 7pt;
+}

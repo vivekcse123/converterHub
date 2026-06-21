@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
+import { Component, computed, input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ResumeData } from '../../models/resume.model';
 import {
@@ -30,7 +30,6 @@ const SECTION_ICONS: Record<string, string> = {
   imports: [CommonModule, RichTextComponent],
   templateUrl: './fresher-template.component.html',
   styleUrls: ['../shared/print.css', './fresher-template.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FresherTemplateComponent {
   readonly resume = input.required<ResumeData>();

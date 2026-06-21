@@ -25,7 +25,7 @@ export class ToolSeoService {
 
     // ── Meta tags ────────────────────────────────────────────────────────────
     this.seo.setPage({
-      title:       document?.title || `${tool.title} — ApnaConverter`,
+      title:       document?.title || `${tool.title} | ApnaConverter`,
       description: tool.description,
       canonical:   pageUrl,
     });
@@ -61,7 +61,7 @@ export class ToolSeoService {
       this.jsonLd.setJsonLd(`${toolId}-howto`, {
         '@context': 'https://schema.org',
         '@type': 'HowTo',
-        name: `How to use ${tool.title} — Step-by-step guide`,
+        name: `How to use ${tool.title} - Step-by-step guide`,
         description: `Learn how to ${tool.description.toLowerCase()}`,
         tool: [{
           '@type': 'HowToTool',

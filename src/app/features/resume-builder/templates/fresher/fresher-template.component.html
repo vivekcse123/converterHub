@@ -57,7 +57,7 @@
             @for (proj of resume().projects; track proj.id) {
               <div class="resume-entry mb-2">
                 <p class="font-semibold text-[10.5pt]">
-                  {{ proj.name }}@if (proj.techStack) { <span class="font-normal text-slate-500">— {{ proj.techStack }}</span> }
+                  {{ proj.name }}@if (proj.techStack) { <span class="font-normal text-slate-500"> - {{ proj.techStack }}</span> }
                 </p>
                 @if (proj.link) {
                   <p class="text-[9pt] text-slate-500">{{ proj.link }}</p>
@@ -117,7 +117,7 @@
             @for (cert of resume().certifications; track cert.id) {
               <p class="text-[10pt] leading-snug">
                 <span class="font-semibold">{{ cert.name }}</span>
-                @if (cert.issuer) { — {{ cert.issuer }} }
+                @if (cert.issuer) { - {{ cert.issuer }} }
                 @if (cert.date) { <span class="text-slate-500"> ({{ monthYear(cert.date) }})</span> }
               </p>
             }

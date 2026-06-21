@@ -41,6 +41,9 @@
               "src/favicon.ico",
               "src/assets",
               "src/sitemap.xml",
+              "src/sitemap-pages.xml",
+              "src/sitemap-templates.xml",
+              "src/sitemap-tools.xml",
               "src/robots.txt",
               "src/ads.txt"
             ],

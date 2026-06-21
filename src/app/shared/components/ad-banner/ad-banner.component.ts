@@ -37,7 +37,7 @@ export type AdSlot = keyof typeof AD_SLOTS;
   selector: 'app-ad-banner',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  // Skip Angular hydration — AdSense manipulates the <ins> DOM directly after
+  // Skip Angular hydration - AdSense manipulates the <ins> DOM directly after
   // load, which conflicts with hydration's DOM reuse. Re-rendering from scratch
   // on the client lets AdSense take full ownership of the element.
   host: { ngSkipHydration: 'true' },
@@ -67,7 +67,7 @@ export class AdBannerComponent implements AfterViewInit, OnDestroy {
   private readonly isBrowser = isPlatformBrowser(inject(PLATFORM_ID));
   private readonly host = inject(ElementRef<HTMLElement>);
 
-  /** Set when AdSense marks this slot as unfilled — collapses the wrapper to avoid blank gaps. */
+  /** Set when AdSense marks this slot as unfilled - collapses the wrapper to avoid blank gaps. */
   readonly unfilled = signal(false);
   private observer?: MutationObserver;
 
@@ -88,7 +88,7 @@ export class AdBannerComponent implements AfterViewInit, OnDestroy {
     }
     try {
       (window.adsbygoogle = window.adsbygoogle || []).push({});
-    } catch { /* AdSense not loaded yet — safe to ignore */ }
+    } catch { /* AdSense not loaded yet - safe to ignore */ }
   }
 
   ngOnDestroy(): void {

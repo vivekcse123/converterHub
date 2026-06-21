@@ -283,7 +283,7 @@ export class BiodataPdfService {
     // ── Footer ───────────────────────────────────────────────────
     content.push({ canvas: [{ type: 'line', x1: 0, y1: 0, x2: 515, y2: 0, lineWidth: 0.8, lineColor: ACCENT_LIGHT }], margin: [0, 14, 0, 4] as [number, number, number, number] });
     content.push({ text: '✶  ✶  ✶', color: '#f43f5e', alignment: 'center', fontSize: 9, margin: [0, 0, 0, 4] as [number, number, number, number] });
-    content.push({ text: 'Created with ApnaConverter — apnaconverter.com', color: '#9ca3af', fontSize: 7, alignment: 'center' });
+    content.push({ text: 'Created with ApnaConverter | apnaconverter.com', color: '#9ca3af', fontSize: 7, alignment: 'center' });
 
     return {
       content: content.filter(Boolean),
@@ -383,7 +383,7 @@ export class BiodataPdfService {
     if (b.achievements.length > 0) addSection('Achievements', [{ ul: b.achievements, color: '#374151', fontSize: 9 }]);
 
     content.push({ canvas: [{ type: 'line', x1: 0, y1: 0, x2: 515, y2: 0, lineWidth: 1, lineColor: '#e5e7eb' }], margin: [0, 8, 0, 8] });
-    content.push({ text: 'Created with ApnaConverter — apnaconverter.com', color: '#9ca3af', fontSize: 8, alignment: 'center' });
+    content.push({ text: 'Created with ApnaConverter | apnaconverter.com', color: '#9ca3af', fontSize: 8, alignment: 'center' });
 
     return {
       content,
@@ -481,7 +481,7 @@ export class BiodataPdfService {
     if (b.education.length > 0) {
       const eduRows = b.education.map(e => ({
         columns: [
-          { text: `${e.degree}${e.field ? ` — ${e.field}` : ''}`, bold: true, color: '#1f2937', fontSize: 9, width: '*' },
+          { text: `${e.degree}${e.field ? ` - ${e.field}` : ''}`, bold: true, color: '#1f2937', fontSize: 9, width: '*' },
           { text: e.year, color: '#6b7280', fontSize: 8, width: 45 },
         ],
         margin: [0, 2, 0, 0] as [number, number, number, number],
@@ -520,7 +520,7 @@ export class BiodataPdfService {
     ]));
 
     content.push({ canvas: [{ type: 'line', x1: 0, y1: 0, x2: 515, y2: 0, lineWidth: 1, lineColor: '#e5e7eb' }], margin: [0, 8, 0, 8] });
-    content.push({ text: 'Created with ApnaConverter — apnaconverter.com', color: '#9ca3af', fontSize: 8, alignment: 'center' });
+    content.push({ text: 'Created with ApnaConverter | apnaconverter.com', color: '#9ca3af', fontSize: 8, alignment: 'center' });
 
     return {
       content: content.filter(Boolean),

@@ -22,8 +22,8 @@ import { LABEL_CLASS, inputValue } from '../editor-utils';
             </button>
           </div>
 
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div class="sm:col-span-2">
+          <div class="grid grid-cols-1 gap-4">
+            <div class="">
               <label [class]="labelClass">Certification Name</label>
               <input class="input" [value]="cert.name" (input)="patch(cert.id, 'name', $event)" placeholder="AWS Certified Developer – Associate" />
             </div>
@@ -35,7 +35,7 @@ import { LABEL_CLASS, inputValue } from '../editor-utils';
               <label [class]="labelClass">Date Earned</label>
               <input class="input" type="month" [value]="cert.date" (input)="patch(cert.id, 'date', $event)" />
             </div>
-            <div class="sm:col-span-2">
+            <div class="">
               <label [class]="labelClass">Credential Link (optional)</label>
               <input class="input" [value]="cert.link" (input)="patch(cert.id, 'link', $event)" placeholder="credential verification URL" />
             </div>

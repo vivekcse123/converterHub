@@ -92,7 +92,7 @@ export function createBlankBiodata(
 
 export function createSampleBiodata(templateId: BiodataTemplateId = 'classic-marriage'): BiodataData {
   const biodata = createBlankBiodata(templateId, 'marriage');
-  biodata.name = 'Priya Sharma — Biodata';
+  biodata.name = 'Priya Sharma - Biodata';
   biodata.personal = {
     fullName: 'Priya Sharma',
     gender: 'Female',

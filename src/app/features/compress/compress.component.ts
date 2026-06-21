@@ -40,7 +40,7 @@ import { ToolInfoSectionComponent } from '../../shared/components/tool-info-sect
         </div>
         }
         @if (converter.isConverting()) {
-        <app-progress-bar class="mt-4" [value]="converter.uploadProgress()"  />
+        <app-progress-bar class="mt-4" [value]="converter.uploadProgress()" [label]="converter.progressLabel()" />
         }
       </div>
 

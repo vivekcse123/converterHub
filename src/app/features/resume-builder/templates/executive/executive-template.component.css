@@ -1,6 +1,6 @@
 .executive-tpl {
   padding: 0;
-  font-family: Georgia, 'Times New Roman', serif;
+  font-family: var(--r-font, Georgia, 'Times New Roman', serif);
 }
 
 .executive-layout {
@@ -10,7 +10,7 @@
 }
 
 .executive-sidebar {
-  background: #1e3a5f;
+  background: var(--r-accent, #1e3a5f);
   color: #cbd5e1;
   padding: 14mm 8mm;
 }
@@ -22,7 +22,7 @@
 }
 
 .executive-name {
-  font-size: 18pt;
+  font-size: 1.714em;
   font-weight: 700;
   color: #ffffff;
   line-height: 1.2;
@@ -30,9 +30,9 @@
 }
 
 .executive-job-title {
-  font-size: 9.5pt;
+  font-size: 0.905em;
   font-style: italic;
-  color: #c9a84c;
+  color: rgba(255,255,255,0.75);
   margin-bottom: 10px;
 }
 
@@ -41,39 +41,35 @@
 }
 
 .executive-sidebar-heading {
-  font-size: 9pt;
+  font-size: 0.857em;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.08em;
-  color: #c9a84c;
-  border-bottom: 1px solid #c9a84c;
+  color: rgba(255,255,255,0.9);
+  border-bottom: 1px solid rgba(255,255,255,0.3);
   padding-bottom: 3px;
   margin-bottom: 6px;
 }
 
 .executive-sidebar-category {
-  font-size: 8pt;
+  font-size: 0.762em;
   font-weight: 600;
-  color: #94a3b8;
+  color: rgba(255,255,255,0.6);
   margin-top: 4px;
   margin-bottom: 2px;
 }
 
 .executive-contact-item {
-  font-size: 8.5pt;
-  color: #94a3b8;
+  font-size: 0.81em;
+  color: rgba(255,255,255,0.75);
   line-height: 1.6;
   word-break: break-all;
 }
 
 .executive-skill-item {
-  font-size: 8.5pt;
-  color: #94a3b8;
+  font-size: 0.81em;
+  color: rgba(255,255,255,0.75);
   line-height: 1.6;
-}
-
-.executive-skill-item::first-letter {
-  color: #c9a84c;
 }
 
 .executive-main {
@@ -81,12 +77,19 @@
 }
 
 .executive-heading {
-  font-size: 11pt;
+  font-size: 1.048em;
   font-weight: 700;
-  color: #1e3a5f;
-  border-left: 4px solid #c9a84c;
+  color: var(--r-accent, #1e3a5f);
+  border-left: 4px solid var(--r-accent, #1e3a5f);
   padding-left: 8px;
   margin-bottom: 6px;
   text-transform: uppercase;
   letter-spacing: 0.04em;
+}
+
+@media print {
+  .executive-sidebar {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
 }

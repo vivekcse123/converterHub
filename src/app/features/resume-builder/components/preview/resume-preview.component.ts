@@ -1,19 +1,41 @@
 import {
   AfterViewInit,
   ChangeDetectionStrategy,
+  ChangeDetectorRef,
   Component,
   ElementRef,
   OnDestroy,
   PLATFORM_ID,
   ViewChild,
   computed,
+  effect,
   inject,
   input,
   signal,
 } from '@angular/core';
 import { CommonModule, NgComponentOutlet, isPlatformBrowser } from '@angular/common';
-import { ResumeData } from '../../models/resume.model';
+import { DEFAULT_DESIGN, DesignSettings, ResumeData } from '../../models/resume.model';
 import { getTemplateMeta } from '../../data/resume-templates.data';
+
+const FONT_FAMILIES: Record<DesignSettings['fontFamily'], string> = {
+  inter:   "'Inter', Arial, Helvetica, sans-serif",
+  roboto:  "'Roboto', Arial, Helvetica, sans-serif",
+  georgia: "Georgia, 'Times New Roman', serif",
+};
+
+const LEGACY_SIZE_SCALES: Record<DesignSettings['fontSize'], number> = {
+  small:  9.5,
+  medium: 10.5,
+  large:  11.5,
+};
+
+const BASE_PT = 10.5;
+
+const SPACING_MAP: Record<DesignSettings['lineHeight'], string> = {
+  compact:   '1.3',
+  standard:  '1.5',
+  spacious:  '1.75',
+};
 
 const A4_HEIGHT_MM = 297;
 const A4_WIDTH_MM = 210;
@@ -35,7 +57,15 @@ export class ResumePreviewComponent implements AfterViewInit, OnDestroy {
   @ViewChild('scrollHost') scrollHost?: ElementRef<HTMLElement>;
 
   private readonly platformId = inject(PLATFORM_ID);
+  private readonly cdr = inject(ChangeDetectorRef);
   private resizeObserver?: ResizeObserver;
+
+  // Force this view and descendants to re-check whenever the resume signal changes.
+  // NgComponentOutlet's setInput() can miss OnPush re-render; this guarantees it.
+  private readonly _forceCheck = effect(() => {
+    this.resume();
+    this.cdr.markForCheck();
+  });
 
   readonly zoom = signal(1);
   /** When true, zoom auto-adjusts to fit the available width (no horizontal scrolling). */
@@ -45,6 +75,27 @@ export class ResumePreviewComponent implements AfterViewInit, OnDestroy {
 
   readonly templateComponent = computed(() => getTemplateMeta(this.resume().templateId).component);
   readonly templateInputs = computed(() => ({ resume: this.resume() }));
+
+  /** CSS custom properties passed to the template wrapper so all child CSS can use var(--r-accent) etc. */
+  readonly designVars = computed<string>(() => {
+    const d: DesignSettings = { ...DEFAULT_DESIGN, ...this.resume().design };
+    const hex = (d.accentColor || '#1e293b').replace(/^#/, '').padEnd(6, '0');
+    const r = parseInt(hex.slice(0, 2), 16) || 0;
+    const g = parseInt(hex.slice(2, 4), 16) || 0;
+    const b = parseInt(hex.slice(4, 6), 16) || 0;
+    const basePt = typeof d.baseFontPt === 'number' && d.baseFontPt > 0
+      ? d.baseFontPt
+      : (LEGACY_SIZE_SCALES[d.fontSize ?? 'medium'] ?? BASE_PT);
+    const sizeScale = (basePt / BASE_PT).toFixed(4);
+    return [
+      `--r-accent:${d.accentColor}`,
+      `--r-accent-12:rgba(${r},${g},${b},0.12)`,
+      `--r-accent-25:rgba(${r},${g},${b},0.25)`,
+      `--r-font:${FONT_FAMILIES[d.fontFamily] ?? FONT_FAMILIES['inter']}`,
+      `--r-size:${sizeScale}`,
+      `--r-spacing:${SPACING_MAP[d.lineHeight ?? 'standard']}`,
+    ].join(';');
+  });
 
   ngAfterViewInit(): void {
     if (!isPlatformBrowser(this.platformId) || !this.pageHost || !this.scrollHost) return;

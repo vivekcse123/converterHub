@@ -4,8 +4,8 @@ import { Meta, Title } from '@angular/platform-browser';
 import { Router, NavigationEnd, ActivatedRoute } from '@angular/router';
 import { filter, map } from 'rxjs';
 
-const BASE_TITLE = 'ApnaConverter — Free Resume Builder, Portfolio & File Converter';
-const BASE_DESC  = 'Build professional resumes, portfolio pages, biodata & cover letters free. Plus 40+ tools for PDF conversion, image editing, OCR, merge, compress and more.';
+const BASE_TITLE = 'ApnaConverter: Resume Builder, ATS Checker, Biodata & Career Tools';
+const BASE_DESC  = 'Create ATS-friendly resumes, biodata, cover letters, and portfolios with ApnaConverter. Professional templates, AI-powered tools, and instant PDF downloads.';
 const SITE_URL   = 'https://www.apnaconverter.com';
 
 @Injectable({ providedIn: 'root' })

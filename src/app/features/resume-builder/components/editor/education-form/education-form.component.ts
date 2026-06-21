@@ -22,7 +22,7 @@ import { BOLD_BTN_CLASS, LABEL_CLASS, applyBoldToggle, inputChecked, inputValue 
             </button>
           </div>
 
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div class="grid grid-cols-1 gap-4">
             <div>
               <label [class]="labelClass">Degree</label>
               <input class="input" [value]="edu.degree" (input)="patch(edu.id, 'degree', $event)" placeholder="B.Tech / B.Sc / MBA" />
@@ -31,7 +31,7 @@ import { BOLD_BTN_CLASS, LABEL_CLASS, applyBoldToggle, inputChecked, inputValue 
               <label [class]="labelClass">Field of Study</label>
               <input class="input" [value]="edu.field" (input)="patch(edu.id, 'field', $event)" placeholder="Computer Science" />
             </div>
-            <div class="sm:col-span-2">
+            <div class="">
               <label [class]="labelClass">Institution</label>
               <input class="input" [value]="edu.institution" (input)="patch(edu.id, 'institution', $event)" placeholder="University / College name" />
             </div>
@@ -51,7 +51,7 @@ import { BOLD_BTN_CLASS, LABEL_CLASS, applyBoldToggle, inputChecked, inputValue 
               <label [class]="labelClass">GPA / Score (optional)</label>
               <input class="input" [value]="edu.gpa" (input)="patch(edu.id, 'gpa', $event)" placeholder="8.7/10 or 85%" />
             </div>
-            <div class="sm:col-span-2">
+            <div class="">
               <div class="flex items-center justify-between mb-1">
                 <label class="text-xs font-medium text-slate-500 dark:text-slate-400">Description (optional)</label>
                 <button type="button" [class]="boldBtnClass" (click)="toggleBold(edu.id, descEl)" title="Bold selected text">B</button>

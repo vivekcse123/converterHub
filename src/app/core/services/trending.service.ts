@@ -35,7 +35,7 @@ export class TrendingService {
   sortedTools(allTools: Tool[]): Tool[] {
     const trend = this.trending();
     if (!trend.length) {
-      // No trending data — sort by weight descending so high-weight tools appear first
+      // No trending data - sort by weight descending so high-weight tools appear first
       return [...allTools].sort((a, b) => (b.weight ?? 0) - (a.weight ?? 0));
     }
     const rank = new Map<string, number>();

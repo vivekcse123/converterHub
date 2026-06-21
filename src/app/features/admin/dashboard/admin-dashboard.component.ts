@@ -38,7 +38,7 @@ import { AdminStats, ToolStat, QueueStats } from '../../../core/models/admin.mod
           </div>
           }
           @if (!queueStats()) {
-          <div class="text-sm text-slate-400">Redis not available — running in sync mode</div>
+          <div class="text-sm text-slate-400">Redis not available - running in sync mode</div>
           }
         </div>
 

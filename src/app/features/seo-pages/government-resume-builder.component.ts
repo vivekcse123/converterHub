@@ -25,7 +25,7 @@ import { JsonLdService } from '../../core/services/json-ld.service';
         <div class="flex flex-col sm:flex-row gap-3 justify-center mb-8">
           <a routerLink="/resume-builder" [queryParams]="{template: 'ats-professional'}"
              class="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl bg-white text-slate-800 font-bold hover:bg-slate-100 shadow-xl transition text-base">
-            🏛️ Create Govt Resume — Free
+            🏛️ Create Govt Resume - Free
           </a>
           <a routerLink="/resume-builder" [queryParams]="{template: 'minimal'}"
              class="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl border-2 border-white/40 text-white font-semibold hover:bg-white/10 transition text-base">
@@ -44,7 +44,7 @@ import { JsonLdService } from '../../core/services/json-ld.service';
     <section class="container-app py-12 max-w-4xl mx-auto">
       <div class="text-center mb-8">
         <h2 class="text-xl sm:text-2xl font-extrabold text-slate-900 dark:text-white mb-2">Recommended Templates for Government Resumes</h2>
-        <p class="text-slate-500 dark:text-slate-400 text-sm">Use a clean, plain format — no tables, no colors, no graphics</p>
+        <p class="text-slate-500 dark:text-slate-400 text-sm">Use a clean, plain format - no tables, no colors, no graphics</p>
       </div>
       <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
         @for (tpl of recommendedTemplates; track tpl.id) {
@@ -141,7 +141,7 @@ import { JsonLdService } from '../../core/services/json-ld.service';
         <p class="text-slate-300 mb-8">Professional format accepted by all government departments. Free PDF download.</p>
         <a routerLink="/resume-builder"
            class="inline-flex items-center gap-2 px-8 py-4 rounded-xl bg-white text-slate-800 font-bold hover:bg-slate-100 shadow-xl transition text-base">
-          🏛️ Create Government Resume — Free
+          🏛️ Create Government Resume - Free
         </a>
       </div>
     </section>
@@ -157,7 +157,7 @@ export class GovernmentResumeBuilderComponent implements OnInit, OnDestroy {
       name: 'ATS Professional',
       icon: '📋',
       gradient: 'bg-gradient-to-br from-slate-700 to-slate-900',
-      desc: 'Single-column, plain typography — the closest match to official government resume format. Accepted by all departments.',
+      desc: 'Single-column, plain typography - the closest match to official government resume format. Accepted by all departments.',
       recommended: true,
       free: false,
     },
@@ -166,7 +166,7 @@ export class GovernmentResumeBuilderComponent implements OnInit, OnDestroy {
       name: 'Minimal',
       icon: '📄',
       gradient: 'bg-gradient-to-br from-gray-400 to-gray-600',
-      desc: 'Pure typography, no color or graphics — ideal for government applications that require a simple, clean format.',
+      desc: 'Pure typography, no color or graphics - ideal for government applications that require a simple, clean format.',
       recommended: false,
       free: true,
     },
@@ -213,7 +213,7 @@ export class GovernmentResumeBuilderComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.seo.setPage({
-      title: 'Government Job Resume Format — Free PDF Download | ApnaConverter',
+      title: 'Government Job Resume Format - Free PDF Download | ApnaConverter',
       description: 'Create a government job resume in the correct official format. Works for SSC, UPSC, State PSC, Banking, Railways. Free PDF download. No registration needed.',
       keywords: 'government job resume format, sarkari naukri resume, SSC resume format, UPSC resume, government resume India, sarkari resume PDF',
     });

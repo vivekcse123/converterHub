@@ -17,7 +17,7 @@ import { BOLD_BTN_CLASS, applyBoldToggle, inputValue } from '../editor-utils';
             class="input min-h-[44px] resize-y flex-1"
             [value]="item"
             (input)="patch($index, $event)"
-            placeholder="Winner, Smart India Hackathon 2019 — built an AI-based crop disease detection app."
+            placeholder="Winner, Smart India Hackathon 2019 - built an AI-based crop disease detection app."
           ></textarea>
           <div class="flex flex-col items-center gap-1.5 pt-0.5">
             <button type="button" [class]="boldBtnClass" (click)="toggleBold($index, itemEl)" title="Bold selected text">B</button>

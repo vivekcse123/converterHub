@@ -1,0 +1,9 @@
+.banner-heading {
+  font-size: 9pt;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+  border-left: 3pt solid currentColor;
+  padding-left: 7pt;
+  margin-bottom: 7pt;
+}

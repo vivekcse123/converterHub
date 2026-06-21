@@ -1,13 +1,13 @@
 .minimal-tpl {
-  font-family: Georgia, 'Times New Roman', serif;
+  font-family: var(--r-font, Georgia, 'Times New Roman', serif);
 }
 
 .minimal-heading {
   font-variant: small-caps;
   letter-spacing: 0.1em;
-  font-size: 10pt;
-  color: #374151;
-  border-bottom: 1px solid #e5e7eb;
+  font-size: 0.952em;
+  color: var(--r-accent, #374151);
+  border-bottom: 1px solid var(--r-accent-25, #e5e7eb);
   padding-bottom: 2pt;
   margin-bottom: 5pt;
 }

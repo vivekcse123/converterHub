@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
+import { Component, computed, input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ResumeData } from '../../models/resume.model';
 import { buildContactParts, formatDateRange, formatMonthYear, getCustomSection, getSectionKind, getVisibleSections } from '../shared/template-helpers';
@@ -10,7 +10,6 @@ import { RichTextComponent } from '../shared/rich-text.component';
   imports: [CommonModule, RichTextComponent],
   templateUrl: './creative-template.component.html',
   styleUrls: ['../shared/print.css', './creative-template.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CreativeTemplateComponent {
   readonly resume = input.required<ResumeData>();

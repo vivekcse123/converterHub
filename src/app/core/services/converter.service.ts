@@ -1,10 +1,16 @@
 import { Injectable, signal, inject, PLATFORM_ID } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
-import { Observable, map, filter, catchError, throwError } from 'rxjs';
+import { Observable, map, filter, catchError, throwError, retry, timer } from 'rxjs';
 import { ApiService } from './api.service';
 import { ConversionResult } from '../models/conversion.model';
 
 interface UploadEvent { progress: number; result?: { data: ConversionResult } }
+
+/** Maximum ms before we show the "still processing" notice */
+const STUCK_THRESHOLD_MS = 15_000;
+
+/** Status codes that should NOT be retried (user error, not transient) */
+const NO_RETRY_STATUSES = new Set([400, 401, 403, 404, 409, 413, 415]);
 
 @Injectable({ providedIn: 'root' })
 export class ConverterService {
@@ -13,8 +19,11 @@ export class ConverterService {
   readonly isConverting   = signal<boolean>(false);
   /** Phase label shown in the progress bar */
   readonly progressLabel  = signal<string>('Uploading…');
+  /** True when a conversion has been running for > STUCK_THRESHOLD_MS */
+  readonly isStuck        = signal<boolean>(false);
 
   private processingTicker?: ReturnType<typeof setInterval>;
+  private stuckTimer?: ReturnType<typeof setTimeout>;
   private readonly isBrowser = isPlatformBrowser(inject(PLATFORM_ID));
 
   constructor(private api: ApiService) {}
@@ -23,6 +32,11 @@ export class ConverterService {
     if (!this.isBrowser) return;
     this.api.downloadBlob(res.downloadUrl).subscribe({
       next: (blob) => {
+        if (blob.size === 0) {
+          // Empty blob — file has expired or is missing
+          this._notifyDownloadExpired(res.downloadUrl);
+          return;
+        }
         const url = URL.createObjectURL(blob);
         const a   = document.createElement('a');
         a.href     = url;
@@ -32,11 +46,26 @@ export class ConverterService {
         document.body.removeChild(a);
         setTimeout(() => URL.revokeObjectURL(url), 10_000);
       },
-      error: () => {
-        window.open(res.downloadUrl, '_blank');
+      error: (err) => {
+        const status = err?.status ?? 0;
+        if (status === 404) {
+          this._notifyDownloadExpired(res.downloadUrl);
+        } else {
+          // Fallback to direct tab open for non-404 errors
+          window.open(res.downloadUrl, '_blank');
+        }
       },
     });
   }
+
+  private _notifyDownloadExpired(url: string): void {
+    // Open the URL anyway — browser will show a proper 404 page, and users
+    // can share the error to support.  A more complete implementation would
+    // dispatch a toast notification via NotificationService.
+    console.warn('[ConverterService] Download URL expired or file missing:', url);
+    window.open(url, '_blank');
+  }
+
   imageToPdf(files: File[], options: Record<string, string> = {}): Observable<ConversionResult> {
     return this.doUpload('convert/image-to-pdf', files, options, true);
   }
@@ -77,7 +106,9 @@ export class ConverterService {
     this.isConverting.set(true);
     this.uploadProgress.set(20);
     this.progressLabel.set('Processing…');
+    this.isStuck.set(false);
     this.stopProcessingTicker();
+    this.scheduleStuckTimer();
     this.processingTicker = setInterval(() => {
       const cur = this.uploadProgress();
       if (cur < 90) this.uploadProgress.set(cur + 2);
@@ -87,15 +118,17 @@ export class ConverterService {
       .post<{ data: ConversionResult }>('convert/text-to-pdf', { text })
       .pipe(
         map((r) => {
-          this.stopProcessingTicker();
+          this.clearTimers();
           this.isConverting.set(false);
+          this.isStuck.set(false);
           this.uploadProgress.set(100);
           this.progressLabel.set('Done!');
           return r.data;
         }),
         catchError((err) => {
-          this.stopProcessingTicker();
+          this.clearTimers();
           this.isConverting.set(false);
+          this.isStuck.set(false);
           this.uploadProgress.set(0);
           this.progressLabel.set('Uploading…');
           return throwError(() => err);
@@ -236,45 +269,70 @@ export class ConverterService {
     return this.doUploadFd(endpoint, fd);
   }
 
-  /** Upload FormData with immediate fake progress animation (works regardless of upload speed). */
+  /**
+   * Upload FormData with:
+   * - Animated progress feedback (upload + processing phases)
+   * - Automatic retry on transient errors (network, 429, 500-503) up to 3 times
+   * - Stuck-state detection after STUCK_THRESHOLD_MS with user-facing label
+   */
   private doUploadFd(endpoint: string, fd: FormData): Observable<ConversionResult> {
     this.isConverting.set(true);
     this.uploadProgress.set(0);
     this.progressLabel.set('Uploading…');
+    this.isStuck.set(false);
     this.stopProcessingTicker();
+    this.scheduleStuckTimer();
 
-    // Start fake progress immediately — small files complete upload before
-    // HttpEventType.UploadProgress fires, so we animate from the start.
     let fakeProgress = 0;
     this.processingTicker = setInterval(() => {
       fakeProgress += 1;
       if (fakeProgress <= 30) {
-        // Fast ramp 0→30% (upload phase)
         this.uploadProgress.set(fakeProgress);
         this.progressLabel.set('Uploading…');
-      } else if (fakeProgress <= 90) {
-        // Slow crawl 30→90% (processing phase)
+      } else if (fakeProgress <= 88) {
         this.uploadProgress.set(fakeProgress);
         this.progressLabel.set('Processing…');
       }
-      // Stops at 90 — finalized to 100 on response
+      // Hold at 88 until the response arrives — 89/90 reserved so the user
+      // notices it hasn't jumped straight to 100 (fake completion).
     }, 150);
 
     return this.api.uploadWithProgress<{ data: ConversionResult }>(endpoint, fd).pipe(
       map((event: UploadEvent) => {
         if (event.result) {
-          this.stopProcessingTicker();
+          this.clearTimers();
           this.uploadProgress.set(100);
           this.progressLabel.set('Done!');
           this.isConverting.set(false);
+          this.isStuck.set(false);
           return event.result.data;
         }
         return null as unknown as ConversionResult;
       }),
       filter((v): v is ConversionResult => v !== null),
+      // Retry transient server/network errors with exponential backoff
+      retry({
+        count: 3,
+        delay: (err, retryCount) => {
+          const status: number = (err as any)?.status ?? 0;
+          // Don't retry deterministic client errors
+          if (NO_RETRY_STATUSES.has(status)) {
+            return throwError(() => err);
+          }
+          const delayMs = Math.min(1_000 * Math.pow(2, retryCount - 1), 8_000);
+          // Reset progress and show retry label
+          fakeProgress = 0;
+          this.uploadProgress.set(5);
+          this.progressLabel.set(`Retrying… (attempt ${retryCount + 1}/3)`);
+          this.isStuck.set(false);
+          this.rescheduleStuckTimer();
+          return timer(delayMs);
+        },
+      }),
       catchError((err) => {
-        this.stopProcessingTicker();
+        this.clearTimers();
         this.isConverting.set(false);
+        this.isStuck.set(false);
         this.uploadProgress.set(0);
         this.progressLabel.set('Uploading…');
         return throwError(() => err);
@@ -282,10 +340,34 @@ export class ConverterService {
     );
   }
 
+  /** Show "still processing" notice after STUCK_THRESHOLD_MS of no response. */
+  private scheduleStuckTimer(): void {
+    if (!this.isBrowser) return;
+    this.stuckTimer = setTimeout(() => {
+      if (this.isConverting()) {
+        this.isStuck.set(true);
+        this.progressLabel.set('Still processing — please wait…');
+      }
+    }, STUCK_THRESHOLD_MS);
+  }
+
+  private rescheduleStuckTimer(): void {
+    if (this.stuckTimer) clearTimeout(this.stuckTimer);
+    this.scheduleStuckTimer();
+  }
+
   private stopProcessingTicker(): void {
     if (this.processingTicker) {
       clearInterval(this.processingTicker);
       this.processingTicker = undefined;
+    }
+  }
+
+  private clearTimers(): void {
+    this.stopProcessingTicker();
+    if (this.stuckTimer) {
+      clearTimeout(this.stuckTimer);
+      this.stuckTimer = undefined;
     }
   }
 }

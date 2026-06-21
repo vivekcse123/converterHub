@@ -6,6 +6,7 @@ import {
   CertificationItem,
   CustomSection,
   CustomSectionEntry,
+  DesignSettings,
   EducationItem,
   ExperienceItem,
   LanguageItem,
@@ -56,7 +57,7 @@ export class ResumeStoreService {
           localStorage.setItem(RESUMES_KEY, JSON.stringify(resumes));
           if (activeId) localStorage.setItem(ACTIVE_ID_KEY, activeId);
         } catch {
-          // localStorage unavailable (private mode, quota) — fail silently
+          // localStorage unavailable (private mode, quota) - fail silently
         }
       }, AUTOSAVE_DEBOUNCE_MS);
     });
@@ -81,7 +82,7 @@ export class ResumeStoreService {
         return;
       }
     } catch {
-      // corrupt storage — fall through to fresh resume
+      // corrupt storage - fall through to fresh resume
     }
 
     const blank = createBlankResume();
@@ -155,6 +156,10 @@ export class ResumeStoreService {
 
   updateSummary(summary: string): void {
     this.patchActive(r => ({ ...r, summary }));
+  }
+
+  updateDesign(patch: Partial<DesignSettings>): void {
+    this.patchActive(r => ({ ...r, design: { ...r.design, ...patch } as DesignSettings }));
   }
 
   // ── Experience ────────────────────────────────────────────────────────────

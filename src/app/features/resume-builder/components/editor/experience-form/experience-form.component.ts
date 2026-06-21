@@ -22,7 +22,7 @@ import { BOLD_BTN_CLASS, LABEL_CLASS, applyBoldToggle, inputChecked, inputValue 
             </button>
           </div>
 
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div class="grid grid-cols-1 gap-4">
             <div>
               <label [class]="labelClass">Job Title</label>
               <input class="input" [value]="exp.role" (input)="patch(exp.id, 'role', $event)" placeholder="Software Engineer" />
@@ -31,7 +31,7 @@ import { BOLD_BTN_CLASS, LABEL_CLASS, applyBoldToggle, inputChecked, inputValue 
               <label [class]="labelClass">Company</label>
               <input class="input" [value]="exp.company" (input)="patch(exp.id, 'company', $event)" placeholder="Acme Corp" />
             </div>
-            <div class="sm:col-span-2">
+            <div class="">
               <label [class]="labelClass">Location</label>
               <input class="input" [value]="exp.location" (input)="patch(exp.id, 'location', $event)" placeholder="City, Country" />
             </div>

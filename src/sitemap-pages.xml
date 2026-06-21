@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+
+  <!-- Homepage -->
+  <url><loc>https://www.apnaconverter.com/</loc><lastmod>2026-06-21</lastmod><changefreq>weekly</changefreq><priority>1.0</priority></url>
+
+  <!-- Resume Builder -->
+  <url><loc>https://www.apnaconverter.com/resume-builder</loc><lastmod>2026-06-21</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://www.apnaconverter.com/resume-builder/pricing</loc><lastmod>2026-06-21</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://www.apnaconverter.com/resume-builder/cover-letter</loc><lastmod>2026-06-21</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://www.apnaconverter.com/resume-builder/portfolio</loc><lastmod>2026-06-21</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://www.apnaconverter.com/resume-builder/job-tracker</loc><lastmod>2026-06-21</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+
+  <!-- Resume Builder role landing pages -->
+  <url><loc>https://www.apnaconverter.com/resume-builder/software-engineer</loc><lastmod>2026-06-21</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://www.apnaconverter.com/resume-builder/frontend-developer</loc><lastmod>2026-06-21</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://www.apnaconverter.com/resume-builder/angular-developer</loc><lastmod>2026-06-21</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://www.apnaconverter.com/resume-builder/react-developer</loc><lastmod>2026-06-21</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://www.apnaconverter.com/resume-builder/java-developer</loc><lastmod>2026-06-21</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://www.apnaconverter.com/resume-builder/data-analyst</loc><lastmod>2026-06-21</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://www.apnaconverter.com/resume-builder/accountant</loc><lastmod>2026-06-21</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://www.apnaconverter.com/resume-builder/teacher</loc><lastmod>2026-06-21</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+
+  <!-- Resume Templates Gallery & Examples -->
+  <url><loc>https://www.apnaconverter.com/resume-templates</loc><lastmod>2026-06-21</lastmod><changefreq>monthly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://www.apnaconverter.com/resume-examples</loc><lastmod>2026-06-21</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+
+  <!-- Biodata Maker -->
+  <url><loc>https://www.apnaconverter.com/biodata-maker</loc><lastmod>2026-06-21</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://www.apnaconverter.com/marriage-biodata-maker</loc><lastmod>2026-06-21</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+
+  <!-- SEO Landing Pages -->
+  <url><loc>https://www.apnaconverter.com/ats-resume-checker</loc><lastmod>2026-06-21</lastmod><changefreq>monthly</changefreq><priority>0.9</priority></url>
+  <url><loc>https://www.apnaconverter.com/fresher-resume-builder</loc><lastmod>2026-06-21</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://www.apnaconverter.com/government-resume-builder</loc><lastmod>2026-06-21</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+
+  <!-- Tools Directory -->
+  <url><loc>https://www.apnaconverter.com/tools</loc><lastmod>2026-06-21</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
+
+  <!-- Company Pages -->
+  <url><loc>https://www.apnaconverter.com/about</loc><lastmod>2026-06-21</lastmod><changefreq>monthly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://www.apnaconverter.com/contact</loc><lastmod>2026-06-21</lastmod><changefreq>monthly</changefreq><priority>0.5</priority></url>
+  <url><loc>https://www.apnaconverter.com/privacy-policy</loc><lastmod>2026-06-21</lastmod><changefreq>yearly</changefreq><priority>0.3</priority></url>
+  <url><loc>https://www.apnaconverter.com/terms</loc><lastmod>2026-06-21</lastmod><changefreq>yearly</changefreq><priority>0.3</priority></url>
+  <url><loc>https://www.apnaconverter.com/refund-policy</loc><lastmod>2026-06-21</lastmod><changefreq>yearly</changefreq><priority>0.3</priority></url>
+
+</urlset>

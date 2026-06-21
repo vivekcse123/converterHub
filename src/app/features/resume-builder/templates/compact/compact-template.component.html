@@ -118,7 +118,7 @@
                       <p class="text-[8.5pt] whitespace-nowrap" style="color:#6b7280">{{ dateRange(edu.startDate, edu.endDate, edu.current) }}</p>
                     </div>
                     <p class="text-[8.5pt] italic" style="color:#6b7280">
-                      {{ edu.institution }}@if (edu.gpa) { — GPA: {{ edu.gpa }} }
+                      {{ edu.institution }}@if (edu.gpa) { - GPA: {{ edu.gpa }} }
                     </p>
                     @if (edu.description) {
                       <p class="text-[9pt] leading-snug mt-0.5"><app-rich-text [text]="edu.description" /></p>
@@ -134,7 +134,7 @@
                 @for (proj of resume().projects; track proj.id) {
                   <div class="resume-entry mb-1.5">
                     <p class="font-bold text-[9.5pt]" style="color:#1d4ed8">
-                      {{ proj.name }}@if (proj.techStack) { <span class="font-normal" style="color:#6b7280">— {{ proj.techStack }}</span> }
+                      {{ proj.name }}@if (proj.techStack) { <span class="font-normal" style="color:#6b7280"> - {{ proj.techStack }}</span> }
                     </p>
                     @if (proj.link) {
                       <p class="text-[8.5pt]" style="color:#6b7280">{{ proj.link }}</p>

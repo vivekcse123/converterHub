@@ -36,7 +36,7 @@ import { FormsModule } from '@angular/forms';
                 <span class="font-normal text-slate-400 ml-1">(comma-separated, e.g. "3,1,2" or omit pages to delete them)</span>
               </label>
               <input type="text" [(ngModel)]="pageOrderInput"
-                placeholder="e.g. 1,3,5,2,4  — omit pages to delete them"
+                placeholder="e.g. 1,3,5,2,4  - omit pages to delete them"
                 class="w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700
                        bg-white dark:bg-slate-800 text-slate-800 dark:text-white text-sm
                        focus:outline-none focus:ring-2 focus:ring-primary-500" />
@@ -65,7 +65,7 @@ import { FormsModule } from '@angular/forms';
 
         @if (converter.isConverting()) {
           <div class="mt-4">
-            <app-progress-bar [value]="converter.uploadProgress()" label="Organizing PDF…" />
+            <app-progress-bar [value]="converter.uploadProgress()" [label]="converter.progressLabel()" />
           </div>
         }
       </div>

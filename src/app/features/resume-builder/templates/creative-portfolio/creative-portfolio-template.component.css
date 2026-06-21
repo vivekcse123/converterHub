@@ -1,0 +1,15 @@
+.cp-section-header {
+  display: flex;
+  align-items: center;
+  gap: 8pt;
+  font-size: 10pt;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  margin-bottom: 8pt;
+}
+.cp-num {
+  font-size: 7pt;
+  font-weight: 900;
+  opacity: 0.5;
+}

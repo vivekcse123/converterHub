@@ -1,8 +1,18 @@
 User-agent: *
 Allow: /
 
+# Block private & auth routes
 Disallow: /admin/
-Disallow: /dashboard/
+Disallow: /dashboard
+Disallow: /resume-builder/dashboard
 Disallow: /api/
+Disallow: /login
+Disallow: /register
+Disallow: /forgot-password
+Disallow: /reset-password/
+
+# Block private resume short-links; allow public portfolios for SEO
+Disallow: /r/
+Allow: /p/
 
 Sitemap: https://www.apnaconverter.com/sitemap.xml

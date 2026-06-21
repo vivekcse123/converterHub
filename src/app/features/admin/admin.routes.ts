@@ -11,27 +11,27 @@ export const adminRoutes: Routes = [
       {
         path: 'dashboard',
         loadComponent: () => import('./dashboard/admin-dashboard.component').then(m => m.AdminDashboardComponent),
-        title: 'Admin Dashboard — ApnaConverter',
+        title: 'Admin Dashboard | ApnaConverter',
       },
       {
         path: 'users',
         loadComponent: () => import('./users/users-list.component').then(m => m.UsersListComponent),
-        title: 'Manage Users — Admin',
+        title: 'Manage Users - Admin',
       },
       {
         path: 'analytics',
         loadComponent: () => import('./analytics/analytics.component').then(m => m.AnalyticsComponent),
-        title: 'Analytics — Admin',
+        title: 'Analytics - Admin',
       },
       {
         path: 'jobs',
         loadComponent: () => import('./jobs/jobs-monitor.component').then(m => m.JobsMonitorComponent),
-        title: 'Job Monitor — Admin',
+        title: 'Job Monitor - Admin',
       },
       {
         path: 'settings',
         loadComponent: () => import('./settings/settings.component').then(m => m.SettingsComponent),
-        title: 'Settings — Admin',
+        title: 'Settings - Admin',
       },
     ],
   },

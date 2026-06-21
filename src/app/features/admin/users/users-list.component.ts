@@ -150,7 +150,7 @@ type ModalType = 'grant-pro' | 'remove-pro' | 'extend' | 'suspend' | 'delete' | 
                   </td>
                   <!-- Expiry -->
                   <td class="px-3 py-3 text-slate-500 dark:text-slate-400 whitespace-nowrap">
-                    {{ (user.subscription?.currentPeriodEnd | date:'dd MMM yyyy') ?? '—' }}
+                    {{ (user.subscription?.currentPeriodEnd | date:'dd MMM yyyy') ?? '-' }}
                   </td>
                   <!-- Resumes -->
                   <td class="px-3 py-3 text-center text-slate-600 dark:text-slate-400 font-medium">
@@ -402,7 +402,7 @@ type ModalType = 'grant-pro' | 'remove-pro' | 'extend' | 'suspend' | 'delete' | 
             </div>
             @if (grantForm.plan !== 'lifetime') {
               <div>
-                <label class="form-label">Expiry Date <span class="text-slate-400">(optional — defaults to 30/365 days)</span></label>
+                <label class="form-label">Expiry Date <span class="text-slate-400">(optional - defaults to 30/365 days)</span></label>
                 <input type="date" [(ngModel)]="grantForm.expiryDate" class="form-input"/>
               </div>
             }
@@ -999,7 +999,7 @@ export class UsersListComponent implements OnInit {
       { label: 'Role',           value: user.role },
       { label: 'Email',          value: user.email },
       { label: 'Account Status', value: user.isBanned ? 'Banned' : user.isSuspended ? 'Suspended' : user.isActive ? 'Active' : 'Inactive' },
-      { label: 'Joined',         value: user.createdAt ? new Date(user.createdAt).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' }) : '—' },
+      { label: 'Joined',         value: user.createdAt ? new Date(user.createdAt).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' }) : '-' },
     ];
   }
 
@@ -1008,10 +1008,10 @@ export class UsersListComponent implements OnInit {
     return [
       { label: 'Plan',         value: this.planLabel(user) },
       { label: 'Status',       value: this.subStatusLabel(user) },
-      { label: 'Started',      value: s?.currentPeriodStart ? new Date(s.currentPeriodStart).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' }) : '—' },
-      { label: 'Expires',      value: s?.currentPeriodEnd  ? new Date(s.currentPeriodEnd).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' }) : '—' },
+      { label: 'Started',      value: s?.currentPeriodStart ? new Date(s.currentPeriodStart).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' }) : '-' },
+      { label: 'Expires',      value: s?.currentPeriodEnd  ? new Date(s.currentPeriodEnd).toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' }) : '-' },
       { label: 'Admin Granted', value: s?.grantedByAdmin ? 'Yes' : 'No' },
-      { label: 'Admin Notes',  value: (s as any)?.adminNotes || '—' },
+      { label: 'Admin Notes',  value: (s as any)?.adminNotes || '-' },
     ];
   }
 

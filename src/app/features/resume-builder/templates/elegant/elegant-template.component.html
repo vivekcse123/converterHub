@@ -65,7 +65,7 @@
                   <p class="text-[9pt] whitespace-nowrap" style="color:#db2777">{{ dateRange(edu.startDate, edu.endDate, edu.current) }}</p>
                 </div>
                 <p class="text-[9pt] italic" style="color:#be185d">
-                  {{ edu.institution }}@if (edu.gpa) { — GPA: {{ edu.gpa }} }
+                  {{ edu.institution }}@if (edu.gpa) { - GPA: {{ edu.gpa }} }
                 </p>
                 @if (edu.description) {
                   <p class="text-[10pt] leading-snug mt-0.5"><app-rich-text [text]="edu.description" /></p>
@@ -81,7 +81,7 @@
             @for (proj of resume().projects; track proj.id) {
               <div class="resume-entry mb-2">
                 <p class="font-semibold text-[10.5pt]" style="color:#9d174d">
-                  {{ proj.name }}@if (proj.techStack) { <span class="font-normal" style="color:#be185d">— {{ proj.techStack }}</span> }
+                  {{ proj.name }}@if (proj.techStack) { <span class="font-normal" style="color:#be185d"> - {{ proj.techStack }}</span> }
                 </p>
                 @if (proj.link) {
                   <p class="text-[9pt]" style="color:#db2777">{{ proj.link }}</p>
@@ -120,7 +120,7 @@
             @for (cert of resume().certifications; track cert.id) {
               <p class="text-[10pt] leading-snug text-center">
                 <span class="font-semibold" style="color:#9d174d">{{ cert.name }}</span>
-                @if (cert.issuer) { — {{ cert.issuer }} }
+                @if (cert.issuer) { - {{ cert.issuer }} }
                 @if (cert.date) { <span style="color:#db2777"> ({{ monthYear(cert.date) }})</span> }
               </p>
             }

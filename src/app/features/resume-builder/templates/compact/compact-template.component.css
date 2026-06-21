@@ -1,7 +1,7 @@
 .compact-tpl {
   padding: 0;
-  font-family: Inter, Arial, sans-serif;
-  font-size: 9pt;
+  font-family: var(--r-font, Inter, Arial, sans-serif);
+  font-size: 0.857em;
 }
 
 .compact-layout {
@@ -11,7 +11,7 @@
 }
 
 .compact-sidebar {
-  background: #1d4ed8;
+  background: var(--r-accent, #1d4ed8);
   color: #ffffff;
   padding: 10mm 7mm;
 }
@@ -23,7 +23,7 @@
 }
 
 .compact-name {
-  font-size: 15pt;
+  font-size: 1.429em;
   font-weight: 700;
   color: #ffffff;
   line-height: 1.2;
@@ -31,9 +31,9 @@
 }
 
 .compact-job-title {
-  font-size: 9pt;
+  font-size: 0.857em;
   font-style: italic;
-  color: #bfdbfe;
+  color: rgba(255,255,255,0.75);
   margin-bottom: 8px;
 }
 
@@ -42,40 +42,40 @@
 }
 
 .compact-sidebar-heading {
-  font-size: 8.5pt;
+  font-size: 0.81em;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.08em;
-  color: #bfdbfe;
+  color: rgba(255,255,255,0.85);
   border-bottom: 1px solid rgba(255,255,255,0.3);
   padding-bottom: 2px;
   margin-bottom: 5px;
 }
 
 .compact-sidebar-category {
-  font-size: 7.5pt;
+  font-size: 0.714em;
   font-weight: 600;
-  color: #93c5fd;
+  color: rgba(255,255,255,0.6);
   margin-top: 3px;
   margin-bottom: 1px;
 }
 
 .compact-contact-item {
-  font-size: 8pt;
-  color: #dbeafe;
+  font-size: 0.762em;
+  color: rgba(255,255,255,0.8);
   line-height: 1.6;
   word-break: break-all;
 }
 
 .compact-sidebar-item {
-  font-size: 8.5pt;
-  color: #dbeafe;
+  font-size: 0.81em;
+  color: rgba(255,255,255,0.85);
   line-height: 1.6;
 }
 
 .compact-sidebar-muted {
-  font-size: 7.5pt;
-  color: #93c5fd;
+  font-size: 0.714em;
+  color: rgba(255,255,255,0.6);
   font-style: italic;
 }
 
@@ -84,12 +84,19 @@
 }
 
 .compact-heading {
-  color: #1d4ed8;
-  font-size: 10.5pt;
+  color: var(--r-accent, #1d4ed8);
+  font-size: 1.0em;
   font-weight: 700;
-  border-bottom: 2px solid #bfdbfe;
+  border-bottom: 2px solid var(--r-accent-25, #bfdbfe);
   margin-bottom: 5pt;
   text-transform: uppercase;
   letter-spacing: 0.04em;
   padding-bottom: 2px;
+}
+
+@media print {
+  .compact-sidebar {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
 }

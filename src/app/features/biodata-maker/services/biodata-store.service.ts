@@ -58,7 +58,7 @@ export class BiodataStoreService {
           localStorage.setItem(BIODATAS_KEY, JSON.stringify(biodatas));
           if (activeId) localStorage.setItem(ACTIVE_ID_KEY, activeId);
         } catch {
-          // localStorage quota exceeded or unavailable — fail silently
+          // localStorage quota exceeded or unavailable - fail silently
         }
       }, AUTOSAVE_DEBOUNCE_MS);
     });
@@ -82,7 +82,7 @@ export class BiodataStoreService {
         return;
       }
     } catch {
-      // corrupt storage — fall through
+      // corrupt storage - fall through
     }
     const blank = createBlankBiodata();
     this.biodatas.set([blank]);

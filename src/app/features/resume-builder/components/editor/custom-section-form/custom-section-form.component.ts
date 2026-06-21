@@ -33,7 +33,7 @@ import { BOLD_BTN_CLASS, LABEL_CLASS, applyBoldToggle, inputValue } from '../edi
               </button>
             </div>
 
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div class="grid grid-cols-1 gap-4">
               <div>
                 <label [class]="labelClass">Heading</label>
                 <input class="input" [value]="entry.heading" (input)="patchEntry(entry.id, 'heading', $event)" placeholder="e.g. Title, Role, Organization" />
@@ -46,7 +46,7 @@ import { BOLD_BTN_CLASS, LABEL_CLASS, applyBoldToggle, inputValue } from '../edi
                 <label [class]="labelClass">Date</label>
                 <input class="input" [value]="entry.date" (input)="patchEntry(entry.id, 'date', $event)" placeholder="e.g. 2023 or Jan 2023" />
               </div>
-              <div class="sm:col-span-2">
+              <div class="">
                 <div class="flex items-center justify-between mb-1">
                   <label class="text-xs font-medium text-slate-500 dark:text-slate-400">Description</label>
                   <button type="button" [class]="boldBtnClass" (click)="toggleBold(entry.id, descEl)" title="Bold selected text">B</button>

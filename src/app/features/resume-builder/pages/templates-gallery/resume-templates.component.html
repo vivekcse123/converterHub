@@ -1,67 +1,620 @@
-<div class="container-app py-6 space-y-8">
+<!-- ── Compare floating bar ─────────────────────────────────────────────────── -->
+@if (compareIds().length > 0) {
+  <div class="fixed bottom-0 left-0 right-0 z-50 bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-700 shadow-2xl">
+    <div class="container-app py-3 flex items-center justify-between gap-4">
+      <div class="flex items-center gap-3 flex-wrap">
+        <span class="text-sm font-semibold text-slate-700 dark:text-slate-200">Compare ({{ compareIds().length }}/3):</span>
+        @for (card of compareCards(); track card.meta.id) {
+          <div class="flex items-center gap-1.5 bg-slate-100 dark:bg-slate-800 rounded-lg px-3 py-1.5">
+            <div class="w-3 h-3 rounded-sm bg-gradient-to-br shrink-0" [class]="card.meta.accent"></div>
+            <span class="text-xs font-medium text-slate-700 dark:text-slate-200">{{ card.meta.name }}</span>
+            <button (click)="toggleCompare(card.meta.id)" class="text-slate-400 hover:text-red-500 transition-colors ml-1">
+              <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12"/></svg>
+            </button>
+          </div>
+        }
+      </div>
+      <div class="flex items-center gap-2 shrink-0">
+        <button (click)="clearCompare()" class="btn btn-secondary btn-sm">Clear</button>
+        @if (compareIds().length >= 2) {
+          <button (click)="openCompareTable()" class="btn btn-primary btn-sm">Compare Now</button>
+        } @else {
+          <span class="text-xs text-slate-400">Select {{ 2 - compareIds().length }} more</span>
+        }
+      </div>
+    </div>
+  </div>
+}
+
+<!-- ── Compare table modal ──────────────────────────────────────────────────── -->
+@if (showCompareTable()) {
+  <div class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-sm" (click)="showCompareTable.set(false)">
+    <div class="bg-white dark:bg-slate-900 rounded-2xl shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-auto" (click)="$event.stopPropagation()">
+      <div class="flex items-center justify-between p-6 border-b border-slate-200 dark:border-slate-700">
+        <h2 class="text-lg font-bold text-slate-900 dark:text-white">Template Comparison</h2>
+        <button (click)="showCompareTable.set(false)" class="p-2 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-500 transition-colors">
+          <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+      </div>
+      <div class="overflow-x-auto">
+        <table class="w-full text-sm">
+          <thead>
+            <tr class="border-b border-slate-200 dark:border-slate-700">
+              <th class="text-left p-4 text-slate-500 dark:text-slate-400 font-medium w-36">Feature</th>
+              @for (card of compareCards(); track card.meta.id) {
+                <th class="p-4 text-center">
+                  <div class="flex flex-col items-center gap-2">
+                    <div class="w-12 h-12 rounded-xl bg-gradient-to-br flex items-center justify-center text-white text-sm font-bold shadow-md" [class]="card.meta.accent">Aa</div>
+                    <span class="font-semibold text-slate-800 dark:text-white">{{ card.meta.name }}</span>
+                    @if (card.meta.isPremium) {
+                      <span class="text-[10px] bg-amber-100 dark:bg-amber-900/40 text-amber-700 dark:text-amber-300 px-2 py-0.5 rounded-full font-semibold">Premium</span>
+                    } @else {
+                      <span class="text-[10px] bg-emerald-100 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-300 px-2 py-0.5 rounded-full font-semibold">Free</span>
+                    }
+                  </div>
+                </th>
+              }
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="border-b border-slate-100 dark:border-slate-800">
+              <td class="p-4 text-slate-600 dark:text-slate-400 font-medium">ATS Score</td>
+              @for (card of compareCards(); track card.meta.id) {
+                <td class="p-4 text-center">
+                  <span class="inline-flex items-center gap-1 font-bold text-base"
+                    [class]="card.meta.atsScore >= 95 ? 'text-emerald-600 dark:text-emerald-400' : card.meta.atsScore >= 88 ? 'text-blue-600 dark:text-blue-400' : 'text-amber-600 dark:text-amber-400'">
+                    {{ card.meta.atsScore }}%
+                  </span>
+                </td>
+              }
+            </tr>
+            <tr class="border-b border-slate-100 dark:border-slate-800">
+              <td class="p-4 text-slate-600 dark:text-slate-400 font-medium">Category</td>
+              @for (card of compareCards(); track card.meta.id) {
+                <td class="p-4 text-center text-slate-700 dark:text-slate-300 text-xs">{{ card.meta.category }}</td>
+              }
+            </tr>
+            <tr class="border-b border-slate-100 dark:border-slate-800">
+              <td class="p-4 text-slate-600 dark:text-slate-400 font-medium">Sections</td>
+              @for (card of compareCards(); track card.meta.id) {
+                <td class="p-4 text-center font-semibold text-slate-700 dark:text-slate-200">{{ card.meta.sections.length }}</td>
+              }
+            </tr>
+            <tr class="border-b border-slate-100 dark:border-slate-800">
+              <td class="p-4 text-slate-600 dark:text-slate-400 font-medium">Rating</td>
+              @for (card of compareCards(); track card.meta.id) {
+                <td class="p-4 text-center">
+                  <span class="font-semibold text-slate-700 dark:text-slate-200">{{ card.meta.rating }}</span>
+                  <span class="text-amber-400 ml-0.5">★</span>
+                </td>
+              }
+            </tr>
+            <tr class="border-b border-slate-100 dark:border-slate-800">
+              <td class="p-4 text-slate-600 dark:text-slate-400 font-medium">Downloads</td>
+              @for (card of compareCards(); track card.meta.id) {
+                <td class="p-4 text-center text-slate-600 dark:text-slate-300">{{ formatDownloads(card.meta.downloads) }}</td>
+              }
+            </tr>
+            <tr class="border-b border-slate-100 dark:border-slate-800">
+              <td class="p-4 text-slate-600 dark:text-slate-400 font-medium">Best For</td>
+              @for (card of compareCards(); track card.meta.id) {
+                <td class="p-4 text-center">
+                  <div class="flex flex-wrap justify-center gap-1">
+                    @for (s of card.meta.suitableFor.slice(0, 2); track s) {
+                      <span class="text-[10px] bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 rounded px-1.5 py-0.5">{{ s }}</span>
+                    }
+                  </div>
+                </td>
+              }
+            </tr>
+            <tr>
+              <td class="p-4"></td>
+              @for (card of compareCards(); track card.meta.id) {
+                <td class="p-4 text-center">
+                  <a [routerLink]="['/resume-builder']" [queryParams]="{ template: card.meta.id }"
+                     class="btn btn-primary btn-sm w-full" (click)="showCompareTable.set(false)">
+                    Use Template
+                  </a>
+                </td>
+              }
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+}
+
+<div class="container-app py-6 space-y-8" [class.pb-28]="compareIds().length > 0">
 
   <app-breadcrumb [items]="breadcrumbs" />
 
-  <!-- Hero -->
-  <header class="max-w-2xl space-y-3">
-    <h1 class="text-2xl sm:text-3xl font-bold text-slate-900 dark:text-white">Free ATS-Friendly Resume Templates</h1>
-    <p class="text-sm sm:text-base text-slate-600 dark:text-slate-300">
-      Every template below is single-column, recruiter-friendly, and built to pass Applicant Tracking Systems. Preview
-      each one with live sample data, zoom in for detail, then start building your own resume for free — no sign-up
-      required.
-    </p>
-    <div class="flex flex-wrap items-center gap-2 text-xs">
-      <span class="badge bg-primary-100 dark:bg-primary-900/40 text-primary-700 dark:text-primary-300">100% Free</span>
-      <span class="badge bg-emerald-100 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-300">ATS-Friendly</span>
-      <span class="badge bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">{{ templates.length }} Templates</span>
+  <!-- ── Hero ─────────────────────────────────────────────────────────────────── -->
+  <header class="space-y-4">
+    <div class="flex flex-wrap items-start justify-between gap-4">
+      <div class="space-y-2 max-w-2xl">
+        <h1 class="text-2xl sm:text-3xl font-bold text-slate-900 dark:text-white">
+          Resume Templates - ATS-Friendly & Free
+        </h1>
+        <p class="text-sm sm:text-base text-slate-600 dark:text-slate-300">
+          {{ filteredCards().length }} templates with live previews. Browse, compare, and start building for free - no sign-up required.
+        </p>
+      </div>
+      <a routerLink="/resume-builder" class="btn btn-primary shrink-0">
+        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+        </svg>
+        Build My Resume
+      </a>
+    </div>
+
+    <!-- Trust badges -->
+    <div class="flex flex-wrap gap-2">
+      @for (badge of [
+        { icon: '✓', label: '100% ATS Optimized',   color: 'bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-300 border-emerald-200 dark:border-emerald-800' },
+        { icon: '⬇', label: 'PDF Download',          color: 'bg-blue-50 dark:bg-blue-950/40 text-blue-700 dark:text-blue-300 border-blue-200 dark:border-blue-800' },
+        { icon: '◉', label: 'Live Previews',          color: 'bg-violet-50 dark:bg-violet-950/40 text-violet-700 dark:text-violet-300 border-violet-200 dark:border-violet-800' },
+        { icon: '⚡', label: 'No Sign-up Required',  color: 'bg-amber-50 dark:bg-amber-950/40 text-amber-700 dark:text-amber-300 border-amber-200 dark:border-amber-800' }
+      ]; track badge.label) {
+        <div class="flex items-center gap-1.5 text-xs font-semibold px-3 py-1.5 rounded-full border" [class]="badge.color">
+          <span>{{ badge.icon }}</span>
+          <span>{{ badge.label }}</span>
+        </div>
+      }
     </div>
   </header>
 
   <app-ad-banner slot="horizontal" />
 
-  <!-- Template sections -->
-  <div class="space-y-10">
-    @for (item of templates; track item.meta.id; let last = $last) {
-      <section class="grid lg:grid-cols-[320px_1fr] gap-6 items-start">
-        <div class="card p-4 space-y-3 lg:sticky lg:top-20">
-          <div
-            class="aspect-[3/4] rounded-lg bg-gradient-to-br flex items-center justify-center text-white text-4xl font-bold shadow-card"
-            [class]="item.meta.accent"
-          >
-            Aa
-          </div>
-          <h2 class="text-lg font-semibold text-slate-900 dark:text-white">{{ item.meta.name }}</h2>
-          <p class="text-sm text-slate-500 dark:text-slate-400">{{ item.meta.description }}</p>
-          <p class="text-xs text-slate-400 dark:text-slate-500">{{ item.meta.bestFor }}</p>
-          <a
-            [routerLink]="['/resume-builder']"
-            [queryParams]="{ template: item.meta.id }"
-            class="btn btn-primary w-full"
-          >
-            Use This Template
-          </a>
-        </div>
-
-        <div>
-          <app-resume-preview [resume]="item.sample" [showControls]="true" />
-        </div>
-      </section>
-
-      @if (!last) {
-        <app-ad-banner slot="rectangle" />
+  <!-- ── Search & Filters ──────────────────────────────────────────────────────── -->
+  <div class="card p-4 sm:p-5 space-y-4">
+    <!-- Search bar -->
+    <div class="relative">
+      <svg class="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+      </svg>
+      <input
+        type="text"
+        placeholder='Search - "ATS", "Minimal", "Developer", "Fresher"…'
+        [ngModel]="searchQuery()"
+        (ngModelChange)="searchQuery.set($event)"
+        class="input pl-10 pr-10"
+      />
+      @if (searchQuery()) {
+        <button (click)="searchQuery.set('')"
+                class="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 transition-colors">
+          <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+          </svg>
+        </button>
       }
+    </div>
+
+    <!-- Category chips -->
+    <div class="flex flex-wrap gap-1.5">
+      @for (cat of categories; track cat) {
+        <button
+          (click)="activeCategory.set(cat)"
+          class="text-xs px-3 py-1.5 rounded-full font-medium border transition-all duration-150"
+          [class]="activeCategory() === cat
+            ? 'bg-primary-600 text-white border-primary-600 shadow-sm'
+            : 'border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 bg-white dark:bg-slate-800 hover:border-primary-400 dark:hover:border-primary-500 hover:text-primary-600 dark:hover:text-primary-400'"
+        >
+          {{ cat === 'all' ? 'All Categories' : cat }}
+        </button>
+      }
+    </div>
+
+    <!-- Industry chips -->
+    <div class="flex flex-wrap gap-1.5">
+      @for (ind of industries; track ind) {
+        <button
+          (click)="activeIndustry.set(ind)"
+          class="text-xs px-2.5 py-1 rounded-lg font-medium transition-all duration-150"
+          [class]="activeIndustry() === ind
+            ? 'bg-slate-800 dark:bg-slate-100 text-white dark:text-slate-900 shadow-sm'
+            : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700'"
+        >
+          {{ ind === 'all' ? 'All Industries' : ind }}
+        </button>
+      }
+    </div>
+
+    <!-- Second row: ATS / Premium / Sort selects -->
+    <div class="flex flex-wrap items-center gap-2">
+      <!-- ATS Score filter -->
+      @for (opt of atsOptions; track opt.value) {
+        <button
+          (click)="activeAts.set(opt.value)"
+          class="text-xs px-2.5 py-1.5 rounded-lg font-medium border transition-all duration-150"
+          [class]="activeAts() === opt.value
+            ? 'border-emerald-500 bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-300'
+            : 'border-slate-200 dark:border-slate-700 text-slate-500 dark:text-slate-400 bg-white dark:bg-slate-800 hover:border-emerald-400 hover:text-emerald-600'"
+        >{{ opt.label }}</button>
+      }
+
+      <div class="h-5 w-px bg-slate-200 dark:bg-slate-700 mx-1"></div>
+
+      <!-- Free / Premium -->
+      @for (opt of premiumOptions; track opt.value) {
+        <button
+          (click)="activePremium.set(opt.value)"
+          class="text-xs px-2.5 py-1.5 rounded-lg font-medium border transition-all duration-150"
+          [class]="activePremium() === opt.value
+            ? 'border-amber-500 bg-amber-50 dark:bg-amber-950/40 text-amber-700 dark:text-amber-300'
+            : 'border-slate-200 dark:border-slate-700 text-slate-500 dark:text-slate-400 bg-white dark:bg-slate-800 hover:border-amber-400 hover:text-amber-600'"
+        >{{ opt.label }}</button>
+      }
+
+      <!-- Sort (pushed to right) -->
+      <div class="flex items-center gap-1.5 ml-auto">
+        <span class="text-xs text-slate-400 dark:text-slate-500 font-medium">Sort:</span>
+        @for (opt of sortOptions; track opt.value) {
+          <button
+            (click)="activeSort.set(opt.value)"
+            class="text-xs px-2.5 py-1.5 rounded-lg font-medium border transition-all duration-150"
+            [class]="activeSort() === opt.value
+              ? 'border-primary-500 bg-primary-50 dark:bg-primary-950/40 text-primary-700 dark:text-primary-300'
+              : 'border-slate-200 dark:border-slate-700 text-slate-500 dark:text-slate-400 bg-white dark:bg-slate-800 hover:border-primary-400 hover:text-primary-600'"
+          >{{ opt.label }}</button>
+        }
+      </div>
+    </div>
+
+    <!-- Active filters bar -->
+    @if (hasActiveFilters()) {
+      <div class="flex items-center justify-between pt-1 border-t border-slate-100 dark:border-slate-700/50">
+        <span class="text-xs text-slate-500 dark:text-slate-400">
+          <span class="font-semibold text-slate-700 dark:text-slate-200">{{ filteredCards().length }}</span> template{{ filteredCards().length !== 1 ? 's' : '' }} match your filters
+        </span>
+        <button (click)="resetFilters()" class="text-xs text-primary-600 dark:text-primary-400 hover:underline font-medium">
+          Clear all filters
+        </button>
+      </div>
     }
   </div>
 
-  <!-- Bottom CTA -->
-  <section class="card p-6 text-center space-y-3">
-    <h2 class="text-lg font-semibold text-slate-900 dark:text-white">Not sure which template to pick?</h2>
-    <p class="text-sm text-slate-500 dark:text-slate-400">
-      Start with any template — you can switch between them anytime while editing without losing your content.
-    </p>
-    <a routerLink="/resume-builder" class="btn btn-primary">Start Building for Free</a>
-    <p class="text-xs text-slate-400 dark:text-slate-500">
-      Need inspiration? Browse <a routerLink="/resume-examples" class="text-primary-600 dark:text-primary-400 hover:underline">role-specific resume examples</a>.
-    </p>
+  <!-- ── Editor's Choice ───────────────────────────────────────────────────────── -->
+  @if (!hasActiveFilters()) {
+    <section class="space-y-3">
+      <div class="flex items-center gap-2">
+        <span class="text-xl">⭐</span>
+        <h2 class="text-base font-bold text-slate-900 dark:text-white">Editor's Choice</h2>
+      </div>
+      <div class="grid sm:grid-cols-3 gap-4">
+        @for (card of editorChoiceCards(); track card.meta.id) {
+          <a [routerLink]="['/resume-templates', card.meta.slug]"
+             class="group card p-4 hover:shadow-lg transition-all duration-300 hover:-translate-y-0.5 cursor-pointer block border-2 border-transparent hover:border-primary-200 dark:hover:border-primary-800">
+            <div class="flex items-start gap-3">
+              <!-- Color swatch -->
+              <div class="w-12 h-14 rounded-xl bg-gradient-to-br flex flex-col justify-between p-1.5 shrink-0 shadow-md group-hover:scale-105 transition-transform duration-300"
+                   [class]="card.meta.accent">
+                <div class="w-full h-1 bg-white/30 rounded-full"></div>
+                <div class="space-y-0.5">
+                  <div class="w-full h-0.5 bg-white/30 rounded-full"></div>
+                  <div class="w-3/4 h-0.5 bg-white/20 rounded-full"></div>
+                </div>
+              </div>
+              <div class="min-w-0 flex-1">
+                <div class="flex items-center gap-1.5 mb-1">
+                  <h3 class="text-sm font-bold text-slate-800 dark:text-white truncate">{{ card.meta.name }}</h3>
+                  @if (card.meta.isPremium) {
+                    <span class="text-[10px] bg-amber-100 dark:bg-amber-900/40 text-amber-700 dark:text-amber-300 px-1.5 py-0.5 rounded-full font-bold shrink-0">PRO</span>
+                  }
+                </div>
+                <p class="text-[11px] text-slate-500 dark:text-slate-400 line-clamp-2 leading-relaxed">{{ card.meta.description }}</p>
+                <div class="flex items-center gap-2 mt-2">
+                  <span class="text-[10px] font-bold px-2 py-0.5 rounded-full"
+                    [class]="card.meta.atsScore >= 95
+                      ? 'bg-emerald-100 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-300'
+                      : 'bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300'">
+                    ATS {{ card.meta.atsScore }}%
+                  </span>
+                  <span class="text-[10px] text-amber-500 font-semibold">{{ card.meta.rating }}★</span>
+                </div>
+              </div>
+            </div>
+          </a>
+        }
+      </div>
+    </section>
+
+    <!-- ── Trending This Week ──────────────────────────────────────────────────── -->
+    <section class="space-y-3">
+      <div class="flex items-center gap-2">
+        <span class="text-xl">🔥</span>
+        <h2 class="text-base font-bold text-slate-900 dark:text-white">Trending This Week</h2>
+      </div>
+      <div class="flex gap-3 overflow-x-auto pb-2 -mx-4 px-4">
+        @for (card of trendingCards(); track card.meta.id) {
+          <a [routerLink]="['/resume-templates', card.meta.slug]"
+             class="group card p-3.5 min-w-[180px] hover:shadow-md transition-all duration-300 hover:-translate-y-0.5 cursor-pointer block shrink-0">
+            <!-- Mini template visual -->
+            <div class="w-full h-20 rounded-xl bg-gradient-to-br mb-3 relative overflow-hidden shadow-sm group-hover:scale-[1.02] transition-transform duration-300"
+                 [class]="card.meta.accent">
+              <!-- Fake resume lines -->
+              <div class="absolute inset-0 p-2.5 flex flex-col gap-1.5">
+                <div class="flex items-center gap-1.5">
+                  <div class="w-6 h-6 rounded-full bg-white/20"></div>
+                  <div class="flex-1 space-y-0.5">
+                    <div class="h-1.5 bg-white/50 rounded w-3/4"></div>
+                    <div class="h-1 bg-white/30 rounded w-1/2"></div>
+                  </div>
+                </div>
+                <div class="space-y-1 mt-0.5">
+                  <div class="h-1 bg-white/25 rounded w-full"></div>
+                  <div class="h-1 bg-white/20 rounded w-5/6"></div>
+                  <div class="h-1 bg-white/15 rounded w-4/5"></div>
+                </div>
+              </div>
+            </div>
+            <p class="text-xs font-bold text-slate-700 dark:text-slate-200">{{ card.meta.name }}</p>
+            <div class="flex items-center justify-between mt-1">
+              <p class="text-[10px] text-slate-400">{{ formatDownloads(card.meta.downloads) }} downloads</p>
+              @if (card.meta.isPremium) {
+                <span class="text-[10px] text-amber-600 dark:text-amber-400 font-semibold">₹29</span>
+              } @else {
+                <span class="text-[10px] text-emerald-600 dark:text-emerald-400 font-semibold">Free</span>
+              }
+            </div>
+          </a>
+        }
+      </div>
+    </section>
+  }
+
+  <!-- ── Main Template Grid ────────────────────────────────────────────────────── -->
+  <section class="space-y-4">
+    <div class="flex items-center gap-2 flex-wrap">
+      <h2 class="text-base font-bold text-slate-900 dark:text-white">
+        {{ hasActiveFilters() ? 'Search Results' : 'All Templates' }}
+      </h2>
+      <span class="text-xs text-slate-400 bg-slate-100 dark:bg-slate-800 rounded-full px-2.5 py-0.5 font-medium">{{ filteredCards().length }}</span>
+
+      @if (!hasActiveFilters()) {
+        <button
+          (click)="compareMode.set(!compareMode())"
+          class="ml-auto text-xs font-semibold px-3 py-1.5 rounded-lg border transition-all duration-150 flex items-center gap-1.5"
+          [class]="compareMode()
+            ? 'border-primary-600 text-primary-600 dark:text-primary-400 bg-primary-50 dark:bg-primary-950/40'
+            : 'border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 bg-white dark:bg-slate-800 hover:border-primary-400 hover:text-primary-600'"
+        >
+          <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/>
+          </svg>
+          {{ compareMode() ? '✕ Exit Compare' : 'Compare Templates' }}
+        </button>
+      }
+    </div>
+
+    @if (compareMode()) {
+      <div class="text-xs text-slate-500 dark:text-slate-400 bg-primary-50 dark:bg-primary-950/30 border border-primary-200 dark:border-primary-800 rounded-xl px-4 py-2.5">
+        Select up to 3 templates to compare side-by-side.
+        @if (compareIds().length > 0) { <span class="font-semibold text-primary-700 dark:text-primary-300">{{ compareIds().length }}/3 selected.</span> }
+      </div>
+    }
+
+    <!-- No results -->
+    @if (filteredCards().length === 0) {
+      <div class="card p-12 text-center space-y-3">
+        <div class="text-4xl">🔍</div>
+        <h3 class="text-sm font-semibold text-slate-700 dark:text-slate-200">No templates match your filters</h3>
+        <p class="text-xs text-slate-400">Try adjusting the search or clearing some filters.</p>
+        <button (click)="resetFilters()" class="btn btn-secondary btn-sm">Clear Filters</button>
+      </div>
+    }
+
+    <div class="grid sm:grid-cols-2 xl:grid-cols-3 gap-5">
+      @for (card of filteredCards(); track card.meta.id) {
+        <div class="group card overflow-hidden hover:shadow-xl transition-all duration-300 hover:-translate-y-1 relative flex flex-col"
+             [class]="isInCompare(card.meta.id) ? 'ring-2 ring-primary-500 dark:ring-primary-400' : ''">
+
+          <!-- Compare checkbox overlay -->
+          @if (compareMode()) {
+            <button
+              (click)="toggleCompare(card.meta.id)"
+              class="absolute top-3 left-3 z-20 w-6 h-6 rounded-md border-2 flex items-center justify-center transition-all shadow-sm"
+              [class]="isInCompare(card.meta.id)
+                ? 'bg-primary-600 border-primary-600 text-white'
+                : compareIds().length >= 3
+                  ? 'bg-white/80 dark:bg-slate-800/80 border-slate-300 dark:border-slate-600 cursor-not-allowed opacity-50'
+                  : 'bg-white/90 dark:bg-slate-800/90 border-slate-300 dark:border-slate-600 hover:border-primary-400'"
+              [disabled]="!isInCompare(card.meta.id) && compareIds().length >= 3"
+            >
+              @if (isInCompare(card.meta.id)) {
+                <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/>
+                </svg>
+              }
+            </button>
+          }
+
+          <!-- Badges -->
+          <div class="absolute top-3 right-3 z-10 flex flex-col items-end gap-1">
+            @if (card.meta.isEditorChoice) {
+              <span class="text-[10px] bg-primary-600 text-white px-2 py-0.5 rounded-full font-bold shadow-sm">⭐ Editor's</span>
+            }
+            @if (card.meta.isPopular) {
+              <span class="text-[10px] bg-violet-600 text-white px-2 py-0.5 rounded-full font-bold shadow-sm">Popular</span>
+            }
+            @if (card.meta.isTrending) {
+              <span class="text-[10px] bg-orange-500 text-white px-2 py-0.5 rounded-full font-bold shadow-sm">🔥 Trending</span>
+            }
+          </div>
+
+          <!-- Template visual thumbnail -->
+          <div class="relative overflow-hidden bg-slate-50 dark:bg-slate-900/50" style="height:220px">
+            <!-- Gradient background matching template accent -->
+            <div class="absolute inset-0 bg-gradient-to-br opacity-10" [class]="card.meta.accent"></div>
+
+            <!-- Mock resume preview -->
+            <div class="absolute inset-0 flex items-start justify-center pt-5 px-6">
+              <div class="w-full max-w-xs bg-white dark:bg-slate-800 rounded-lg shadow-lg overflow-hidden border border-slate-200/50 dark:border-slate-700/50 scale-90 origin-top">
+                <!-- Template header strip -->
+                <div class="h-10 bg-gradient-to-br flex items-center px-3 gap-2" [class]="card.meta.accent">
+                  <div class="w-6 h-6 rounded-full bg-white/25 shrink-0"></div>
+                  <div class="flex-1 space-y-1">
+                    <div class="h-1.5 bg-white/60 rounded-full w-3/5"></div>
+                    <div class="h-1 bg-white/30 rounded-full w-2/5"></div>
+                  </div>
+                </div>
+                <!-- Body content lines -->
+                <div class="p-3 space-y-2.5">
+                  <!-- Summary section -->
+                  <div class="space-y-1">
+                    <div class="h-1.5 bg-slate-700 dark:bg-slate-300 rounded w-1/3 opacity-60"></div>
+                    <div class="h-1 bg-slate-200 dark:bg-slate-600 rounded w-full"></div>
+                    <div class="h-1 bg-slate-200 dark:bg-slate-600 rounded w-5/6"></div>
+                    <div class="h-1 bg-slate-200 dark:bg-slate-600 rounded w-4/5"></div>
+                  </div>
+                  <!-- Experience section -->
+                  <div class="space-y-1">
+                    <div class="h-1.5 bg-slate-700 dark:bg-slate-300 rounded w-2/5 opacity-60"></div>
+                    <div class="flex justify-between">
+                      <div class="h-1 bg-slate-300 dark:bg-slate-500 rounded w-2/5"></div>
+                      <div class="h-1 bg-slate-200 dark:bg-slate-600 rounded w-1/4"></div>
+                    </div>
+                    <div class="h-1 bg-slate-200 dark:bg-slate-600 rounded w-full"></div>
+                    <div class="h-1 bg-slate-200 dark:bg-slate-600 rounded w-11/12"></div>
+                  </div>
+                  <!-- Skills section -->
+                  <div class="space-y-1">
+                    <div class="h-1.5 bg-slate-700 dark:bg-slate-300 rounded w-1/4 opacity-60"></div>
+                    <div class="flex flex-wrap gap-1">
+                      <div class="h-3 bg-slate-100 dark:bg-slate-700 rounded-full w-10 border border-slate-200 dark:border-slate-600"></div>
+                      <div class="h-3 bg-slate-100 dark:bg-slate-700 rounded-full w-12 border border-slate-200 dark:border-slate-600"></div>
+                      <div class="h-3 bg-slate-100 dark:bg-slate-700 rounded-full w-8 border border-slate-200 dark:border-slate-600"></div>
+                      <div class="h-3 bg-slate-100 dark:bg-slate-700 rounded-full w-10 border border-slate-200 dark:border-slate-600"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Hover: "View Details" overlay -->
+            <a [routerLink]="['/resume-templates', card.meta.slug]"
+               class="absolute inset-0 flex items-center justify-center bg-black/0 group-hover:bg-black/30 transition-all duration-300">
+              <div class="opacity-0 group-hover:opacity-100 transition-all duration-300 translate-y-2 group-hover:translate-y-0">
+                <span class="bg-white dark:bg-slate-900 text-slate-800 dark:text-white text-xs font-bold px-4 py-2 rounded-full shadow-xl border border-slate-200 dark:border-slate-700 flex items-center gap-1.5">
+                  <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+                  </svg>
+                  View Details
+                </span>
+              </div>
+            </a>
+          </div>
+
+          <!-- Card body -->
+          <div class="p-4 flex flex-col gap-3 flex-1">
+            <!-- Name + price badge -->
+            <div class="flex items-start justify-between gap-2">
+              <div class="min-w-0">
+                <h3 class="text-sm font-bold text-slate-900 dark:text-white truncate">{{ card.meta.name }}</h3>
+                <p class="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5 leading-relaxed line-clamp-1">{{ card.meta.bestFor }}</p>
+              </div>
+              @if (card.meta.isPremium) {
+                <span class="text-[10px] bg-amber-50 dark:bg-amber-950/50 text-amber-700 dark:text-amber-300 px-2 py-1 rounded-lg font-bold shrink-0 border border-amber-200 dark:border-amber-700">₹29</span>
+              } @else {
+                <span class="text-[10px] bg-emerald-50 dark:bg-emerald-950/50 text-emerald-700 dark:text-emerald-300 px-2 py-1 rounded-lg font-bold shrink-0 border border-emerald-200 dark:border-emerald-700">Free</span>
+              }
+            </div>
+
+            <!-- ATS + rating + downloads -->
+            <div class="flex items-center gap-2.5 text-[11px]">
+              <div class="flex items-center gap-1 font-bold"
+                [class]="card.meta.atsScore >= 95 ? 'text-emerald-600 dark:text-emerald-400' : card.meta.atsScore >= 88 ? 'text-blue-600 dark:text-blue-400' : 'text-amber-600 dark:text-amber-400'">
+                <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0114 0z"/>
+                </svg>
+                ATS {{ card.meta.atsScore }}%
+              </div>
+              <span class="text-slate-200 dark:text-slate-700">|</span>
+              <span class="text-amber-500 font-semibold">{{ card.meta.rating }}★</span>
+              <span class="text-slate-200 dark:text-slate-700">|</span>
+              <span class="text-slate-400 dark:text-slate-500">{{ formatDownloads(card.meta.downloads) }}</span>
+            </div>
+
+            <!-- Tags -->
+            <div class="flex flex-wrap gap-1">
+              <span class="text-[10px] bg-slate-100 dark:bg-slate-700/60 text-slate-500 dark:text-slate-400 px-2 py-0.5 rounded font-medium">
+                {{ card.meta.category }}
+              </span>
+              @for (ind of card.meta.industries.slice(0, 2); track ind) {
+                @if (ind !== 'All Industries') {
+                  <span class="text-[10px] bg-slate-100 dark:bg-slate-700/60 text-slate-500 dark:text-slate-400 px-2 py-0.5 rounded">{{ ind }}</span>
+                }
+              }
+            </div>
+
+            <!-- Action buttons -->
+            <div class="flex gap-2 mt-auto pt-1">
+              <a [routerLink]="['/resume-templates', card.meta.slug]"
+                 class="btn btn-secondary btn-sm flex-1 text-center justify-center">
+                Details
+              </a>
+              <a [routerLink]="['/resume-builder']" [queryParams]="{ template: card.meta.id }"
+                 class="btn btn-primary btn-sm flex-1 text-center justify-center">
+                Use Template
+              </a>
+            </div>
+          </div>
+        </div>
+      }
+    </div>
   </section>
+
+  <!-- ── Premium CTA Banner ─────────────────────────────────────────────────── -->
+  <section class="relative overflow-hidden rounded-2xl bg-gradient-to-br from-primary-600 via-primary-700 to-indigo-800 p-8 text-white">
+    <div class="absolute top-0 right-0 w-72 h-72 bg-white/5 rounded-full -translate-y-1/3 translate-x-1/4 pointer-events-none"></div>
+    <div class="absolute bottom-0 left-8 w-40 h-40 bg-white/5 rounded-full translate-y-1/2 pointer-events-none"></div>
+
+    <div class="relative grid md:grid-cols-2 gap-8 items-center">
+      <div class="space-y-4">
+        <div class="inline-flex items-center gap-2 bg-white/15 rounded-full px-3 py-1.5 text-sm font-semibold">
+          ✦ ApnaConverter Pro
+        </div>
+        <h2 class="text-2xl font-bold leading-snug">Unlock All Premium Templates</h2>
+        <p class="text-primary-100 text-sm leading-relaxed">
+          Get unlimited resumes, all 3 premium templates, no watermarks, cover letter builder, job tracker, and priority support - from just ₹149/month.
+        </p>
+        <a routerLink="/resume-builder/pricing"
+           class="inline-flex items-center gap-2 bg-white text-primary-700 font-bold px-5 py-2.5 rounded-xl hover:bg-primary-50 transition-colors shadow-lg text-sm">
+          View Pro Plans
+          <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+          </svg>
+        </a>
+      </div>
+      <div class="grid grid-cols-2 gap-2">
+        @for (benefit of [
+          'All Premium Templates',
+          'No Watermark',
+          'Unlimited Resumes',
+          'Cover Letter Builder',
+          'Job Application Tracker',
+          'Portfolio Builder'
+        ]; track benefit) {
+          <div class="flex items-center gap-2 bg-white/10 hover:bg-white/15 transition-colors rounded-xl px-3 py-2.5">
+            <span class="text-emerald-300 font-bold text-sm">✓</span>
+            <span class="text-white text-xs font-medium">{{ benefit }}</span>
+          </div>
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Bottom CTA ────────────────────────────────────────────────────────────── -->
+  <section class="card p-8 text-center space-y-3">
+    <h2 class="text-lg font-bold text-slate-900 dark:text-white">Not sure which template to pick?</h2>
+    <p class="text-sm text-slate-500 dark:text-slate-400 max-w-md mx-auto">
+      Start with any template - you can switch between all of them anytime while editing without losing your content.
+    </p>
+    <div class="flex flex-wrap items-center justify-center gap-3 pt-1">
+      <a routerLink="/resume-builder" class="btn btn-primary">Start Building for Free</a>
+      <a routerLink="/resume-examples" class="btn btn-secondary">Browse Resume Examples</a>
+    </div>
+  </section>
+
 </div>

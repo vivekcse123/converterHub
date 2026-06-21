@@ -1,7 +1,10 @@
-import { Component, OnDestroy, OnInit, PLATFORM_ID, Renderer2, inject } from '@angular/core';
-import { isPlatformBrowser, DOCUMENT } from '@angular/common';
+import { Component, OnDestroy, OnInit, PLATFORM_ID, Renderer2, Type, inject } from '@angular/core';
+import { isPlatformBrowser, DOCUMENT, NgComponentOutlet, CommonModule } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
 import { AdBannerComponent } from '../../shared/components/ad-banner/ad-banner.component';
+import { RESUME_TEMPLATES } from '../resume-builder/data/resume-templates.data';
+import { createSampleResume } from '../resume-builder/data/resume-defaults';
+import { ResumeData } from '../resume-builder/models/resume.model';
 
 interface ResumeTemplateCard {
   id: string;
@@ -26,7 +29,7 @@ interface BiodataTemplateCard {
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [RouterLink, AdBannerComponent],
+  imports: [CommonModule, NgComponentOutlet, RouterLink, AdBannerComponent],
   templateUrl: './home.component.html',
 })
 export class HomeComponent implements OnInit, OnDestroy {
@@ -62,6 +65,18 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.renderer.appendChild(this.document.head, script);
     this.faqSchemaScript = script;
   }
+
+  private readonly _tplMap = new Map<string, { component: Type<unknown>; sample: ResumeData }>(
+    (['ats-professional','minimal','fresher','compact','modern-professional','tech','elegant',
+      'creative','bold','executive','photo-professional','photo-sidebar-modern','photo-teacher',
+      'photo-government','photo-executive'] as const).map(id => {
+      const meta = RESUME_TEMPLATES.find(m => m.id === id);
+      return [id, { component: meta!.component, sample: createSampleResume(id) }];
+    })
+  );
+
+  getTplComponent(id: string): Type<unknown> | null { return this._tplMap.get(id)?.component ?? null; }
+  getTplSample(id: string): ResumeData | null { return this._tplMap.get(id)?.sample ?? null; }
 
   readonly resumeTemplates: ResumeTemplateCard[] = [
     { id: 'ats-professional',    slug: 'ats-professional-resume-template',        name: 'ATS Professional',    isPremium: true,  accentColor: '#475569', headerBg: '#1e293b', layout: 'single',       atsScore: 95, category: 'ATS-Safe',    tags: ['ats'] },

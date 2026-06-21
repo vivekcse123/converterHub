@@ -444,10 +444,10 @@
 
           <!-- Template visual thumbnail — actual rendered preview -->
           <div class="relative overflow-hidden bg-white" style="height:220px">
-            <!-- Real template rendered at scale — deferred until visible for performance -->
+            <!-- Real template rendered at scale — deferred until idle for performance -->
             <div class="absolute inset-0 pointer-events-none select-none" aria-hidden="true">
-              @defer (on viewport) {
-                <div style="position:absolute;top:0;left:50%;transform-origin:top left;transform:translateX(-50%) scale(0.34);width:794px;min-height:650px;overflow:hidden;">
+              @defer (on idle; on viewport) {
+                <div style="position:absolute;top:0;left:50%;transform-origin:top left;transform:scale(0.34) translateX(-50%);width:794px;min-height:650px;overflow:hidden;">
                   <ng-container *ngComponentOutlet="card.meta.component; inputs: { resume: card.sample }" />
                 </div>
               } @placeholder {

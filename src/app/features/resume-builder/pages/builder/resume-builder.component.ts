@@ -1,6 +1,6 @@
 import {
   ChangeDetectionStrategy, Component, HostListener, OnDestroy, OnInit,
-  computed, effect, inject, signal,
+  ViewChild, computed, effect, inject, signal,
 } from '@angular/core';
 import { CommonModule, Location } from '@angular/common';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
@@ -87,6 +87,8 @@ export const BUILDER_STEPS: BuilderStep[] = [
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ResumeBuilderComponent implements OnInit, OnDestroy {
+  @ViewChild('desktopPreview') private readonly desktopPreview?: ResumePreviewComponent;
+
   readonly store             = inject(ResumeStoreService);
   private readonly pdf       = inject(ResumePdfService);
   private readonly authGate  = inject(ResumeAuthGateService);
@@ -309,8 +311,11 @@ export class ResumeBuilderComponent implements OnInit, OnDestroy {
       return;
     }
     this.downloading.set(true);
-    try { await this.pdf.download(r); }
-    finally { this.downloading.set(false); }
+    try {
+      // Pass the actual rendered preview element so the PDF captures it pixel-perfect
+      const pageHost = this.desktopPreview?.pageHost?.nativeElement;
+      await this.pdf.download(r, pageHost);
+    } finally { this.downloading.set(false); }
   }
 
   logout(): void   { this.showProfileMenu.set(false); this.auth.logout(); }

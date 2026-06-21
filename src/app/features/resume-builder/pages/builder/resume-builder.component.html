@@ -3,9 +3,10 @@
      ══════════════════════════════════════════════════════════════════ -->
 @if (showUpgrade()) {
   <app-upgrade-modal
-    triggeredBy="premium-template-download"
-    (close)="showUpgrade.set(false)"
-    (upgraded)="showUpgrade.set(false)" />
+    [triggeredBy]="upgradeTemplateId() ?? 'general'"
+    (close)="showUpgrade.set(false); upgradeTemplateId.set(null)"
+    (upgraded)="showUpgrade.set(false); upgradeTemplateId.set(null); download()"
+    (useFreeTemplate)="switchToFreeTemplateAndDownload()" />
 }
 
 <!-- ══════════════════════════════════════════════════════════════════
@@ -427,13 +428,13 @@
     <!-- ════════ TOP NAVIGATION BAR ════════ -->
     <header class="shrink-0 h-14 border-b border-slate-100 bg-white flex items-center px-5 gap-3" style="box-shadow:0 1px 0 0 rgb(0 0 0/.06)">
 
-      <!-- Back + logo -->
-      <a routerLink="/resume-builder/dashboard"
+      <!-- Back -->
+      <button type="button" (click)="goBack()"
          class="flex items-center justify-center w-8 h-8 rounded-xl hover:bg-slate-100 transition-colors text-slate-500 hover:text-slate-800 shrink-0">
         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
         </svg>
-      </a>
+      </button>
 
       <!-- Resume title inline edit -->
       <input type="text"

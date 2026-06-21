@@ -134,6 +134,75 @@ export class SubscriptionService {
     }
   }
 
+  /** Opens Razorpay checkout for a ₹29 per-template purchase. Returns true if template unlocked. */
+  async buyTemplate(templateId: string): Promise<boolean> {
+    if (!isPlatformBrowser(this.platformId)) return false;
+    if (!this.auth.isLoggedIn()) {
+      this.notify.warning('Sign in required', 'Please sign in to purchase this template.');
+      return false;
+    }
+    if (this.auth.hasPurchasedTemplate(templateId)) {
+      this.notify.warning('Already purchased', 'You already own this template.');
+      return false;
+    }
+    try {
+      const res = await firstValueFrom(this.api.post<any>('payments/create-order', { templateId }));
+      const { orderId, amount, currency, keyId } = res.data;
+      await this.loadScript();
+      return this.openTemplatePurchaseCheckout({ orderId, amount, currency, keyId, templateId });
+    } catch (err: any) {
+      const msg = err?.error?.message ?? err?.message ?? 'Something went wrong.';
+      this.notify.error('Purchase failed', msg);
+      return false;
+    }
+  }
+
+  private openTemplatePurchaseCheckout(opts: {
+    orderId: string; amount: number; currency: string; keyId: string; templateId: string;
+  }): Promise<boolean> {
+    return new Promise((resolve) => {
+      const rzpOpts = {
+        key:      opts.keyId,
+        order_id: opts.orderId,
+        amount:   opts.amount,
+        currency: opts.currency,
+        name:     'ApnaConverter',
+        description: `Resume Template — ₹29 One-Time`,
+        image:    'https://www.apnaconverter.com/favicon.ico',
+        prefill: {
+          name:  this.auth.user()?.name  ?? '',
+          email: this.auth.user()?.email ?? '',
+        },
+        theme:  { color: '#6366f1' },
+        modal:  { ondismiss: () => resolve(false) },
+        handler: async (response: any) => {
+          try {
+            await firstValueFrom(
+              this.api.post('payments/verify', {
+                razorpay_order_id:   response.razorpay_order_id,
+                razorpay_payment_id: response.razorpay_payment_id,
+                razorpay_signature:  response.razorpay_signature,
+                templateId:          opts.templateId,
+              })
+            );
+            await firstValueFrom(this.auth.getMe());
+            this.notify.success('Template Unlocked! 🎉', 'You can now download this template anytime.');
+            resolve(true);
+          } catch {
+            this.notify.error('Verification failed', 'Payment received but verification failed. Contact support.');
+            resolve(false);
+          }
+        },
+      };
+      const rzp = new (window as any).Razorpay(rzpOpts);
+      rzp.on('payment.failed', () => {
+        this.notify.error('Payment failed', 'Your payment was not completed. Please try again.');
+        resolve(false);
+      });
+      rzp.open();
+    });
+  }
+
   async cancelSubscription(): Promise<boolean> {
     try {
       await firstValueFrom(this.api.post('subscriptions/cancel', {}));

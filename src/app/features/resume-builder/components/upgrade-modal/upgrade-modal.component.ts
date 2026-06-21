@@ -3,7 +3,8 @@ import { CommonModule } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
 import { SubscriptionService } from '../../services/subscription.service';
 import { AuthService } from '../../../../core/services/auth.service';
-import { PLAN_PRICES, PRO_HIGHLIGHTS } from '../../data/plan-features';
+import { PLAN_PRICES, PRO_HIGHLIGHTS, PaidPlan } from '../../data/plan-features';
+import { PREMIUM_TEMPLATE_IDS } from '../../data/resume-templates.data';
 
 @Component({
   selector: 'app-upgrade-modal',
@@ -41,7 +42,7 @@ import { PLAN_PRICES, PRO_HIGHLIGHTS } from '../../data/plan-features';
         <div class="overflow-y-auto flex-1 min-h-0">
 
           <!-- Plans -->
-          <div class="p-5 grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div class="p-5 grid grid-cols-1 sm:grid-cols-3 gap-3">
 
             <!-- Monthly -->
             <div class="border-2 rounded-xl p-4 transition cursor-pointer"
@@ -66,7 +67,7 @@ import { PLAN_PRICES, PRO_HIGHLIGHTS } from '../../data/plan-features';
                 <button class="w-full py-2 rounded-lg bg-violet-600 hover:bg-violet-700 text-white font-semibold transition text-sm mt-1"
                         [disabled]="loading()"
                         (click)="subscribe('monthly')">
-                  {{ loading() === 'monthly' ? 'Opening...' : 'Start Monthly - ₹99/mo' }}
+                  {{ loading() === 'monthly' ? 'Opening...' : 'Start Monthly' }}
                 </button>
               }
             </div>
@@ -97,18 +98,80 @@ import { PLAN_PRICES, PRO_HIGHLIGHTS } from '../../data/plan-features';
                 <button class="w-full py-2 rounded-lg bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white font-bold transition text-sm shadow mt-1"
                         [disabled]="loading()"
                         (click)="subscribe('yearly')">
-                  {{ loading() === 'yearly' ? 'Opening...' : '⬆ Upgrade to Yearly - Save ₹489' }}
+                  {{ loading() === 'yearly' ? 'Opening...' : '⬆ Upgrade to Yearly' }}
                 </button>
               } @else {
                 <button class="w-full py-2 rounded-lg bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white font-bold transition text-sm shadow mt-1"
                         [disabled]="loading()"
                         (click)="subscribe('yearly')">
-                  {{ loading() === 'yearly' ? 'Opening...' : 'Get Yearly - ₹699/yr (Best Value)' }}
+                  {{ loading() === 'yearly' ? 'Opening...' : 'Get Yearly ₹699/yr' }}
+                </button>
+              }
+            </div>
+
+            <!-- Lifetime (one-time) -->
+            <div class="border-2 rounded-xl p-4 transition cursor-pointer relative"
+                 [class]="auth.currentPlan() === 'lifetime' ? 'border-emerald-400 bg-emerald-50 dark:bg-emerald-900/20' :
+                          (hoveredPlan() === 'lifetime' ? 'border-slate-800 dark:border-slate-300 ring-2 ring-slate-100 dark:ring-slate-800' : 'border-slate-300 dark:border-slate-600 hover:border-slate-500')"
+                 (mouseenter)="hoveredPlan.set('lifetime')" (mouseleave)="hoveredPlan.set(null)">
+              <div class="absolute -top-3 left-1/2 -translate-x-1/2">
+                <span class="bg-slate-800 dark:bg-slate-200 text-white dark:text-slate-900 text-[10px] font-extrabold px-3 py-1 rounded-full shadow whitespace-nowrap tracking-wide">♾ ONE-TIME</span>
+              </div>
+              <div class="flex items-start justify-between mb-3 mt-1">
+                <div>
+                  <p class="text-[11px] font-bold text-slate-500 uppercase tracking-wider">Lifetime</p>
+                  <p class="text-2xl font-extrabold text-slate-800 dark:text-white mt-0.5">
+                    {{ prices.lifetime.display }} <span class="text-sm font-normal text-slate-400">{{ prices.lifetime.period }}</span>
+                  </p>
+                  <p class="text-[11px] text-slate-400 mt-0.5">{{ prices.lifetime.tagline }}</p>
+                </div>
+                <span class="text-xl">♾️</span>
+              </div>
+              @if (auth.currentPlan() === 'lifetime') {
+                <div class="text-center text-xs py-2 rounded-lg bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-300 font-semibold">You own it! ♾</div>
+              } @else {
+                <button class="w-full py-2 rounded-lg bg-slate-800 hover:bg-slate-900 dark:bg-slate-200 dark:hover:bg-white text-white dark:text-slate-900 font-bold transition text-sm mt-1"
+                        [disabled]="loading()"
+                        (click)="subscribe('lifetime')">
+                  {{ loading() === 'lifetime' ? 'Opening...' : 'Buy Lifetime ₹1,499' }}
                 </button>
               }
             </div>
 
           </div>
+
+          <!-- ₹29 per-template option — shown only when triggered by a premium download -->
+          @if (isPremiumTemplateContext) {
+            <div class="mx-5 mb-4 border border-amber-200 dark:border-amber-800 rounded-xl overflow-hidden">
+              <div class="bg-amber-50 dark:bg-amber-900/20 px-4 py-3">
+                <div class="flex items-center gap-2 mb-1">
+                  <span class="text-base">💡</span>
+                  <p class="text-xs font-bold text-amber-800 dark:text-amber-300">Just want THIS template?</p>
+                </div>
+                <p class="text-[11px] text-amber-700 dark:text-amber-400 mb-3">
+                  Buy only this template once for ₹29 — no subscription needed. Download it anytime.
+                </p>
+                @if (auth.hasPurchasedTemplate(triggeredBy!)) {
+                  <div class="text-center text-xs py-2 rounded-lg bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-300 font-semibold">
+                    You already own this template ✓
+                  </div>
+                } @else {
+                  <button
+                    class="w-full py-2.5 rounded-lg bg-amber-500 hover:bg-amber-600 text-white font-bold transition text-sm"
+                    [disabled]="loadingTemplate()"
+                    (click)="purchaseTemplate()">
+                    {{ loadingTemplate() ? 'Opening payment...' : 'Buy This Template — ₹29 One-Time' }}
+                  </button>
+                }
+              </div>
+            </div>
+
+            <div class="flex items-center gap-3 px-5 mb-3">
+              <div class="flex-1 h-px bg-slate-200 dark:bg-slate-700"></div>
+              <span class="text-[11px] text-slate-400 font-medium">or get all templates with Pro</span>
+              <div class="flex-1 h-px bg-slate-200 dark:bg-slate-700"></div>
+            </div>
+          }
 
           <!-- Pricing note + link -->
           <div class="text-center pb-2 px-5">
@@ -120,6 +183,16 @@ import { PLAN_PRICES, PRO_HIGHLIGHTS } from '../../data/plan-features';
               View full pricing including Lifetime plan →
             </a>
           </div>
+
+          <!-- Switch to free template option — only when triggered from a download gate -->
+          @if (isPremiumTemplateContext) {
+            <div class="px-5 pb-3 text-center">
+              <button class="text-xs text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 underline-offset-2 hover:underline transition"
+                      (click)="useFreeTemplate.emit(); close.emit()">
+                Use a Free Template Instead — Keep All My Data
+              </button>
+            </div>
+          }
 
           <!-- Mini comparison table -->
           <div class="px-5 pb-5 mt-3">
@@ -143,15 +216,21 @@ import { PLAN_PRICES, PRO_HIGHLIGHTS } from '../../data/plan-features';
 })
 export class UpgradeModalComponent implements OnInit {
   @Input() triggeredBy?: string;
-  @Output() close    = new EventEmitter<void>();
-  @Output() upgraded = new EventEmitter<void>();
+  @Output() close             = new EventEmitter<void>();
+  @Output() upgraded          = new EventEmitter<void>();
+  @Output() useFreeTemplate   = new EventEmitter<void>();
 
   private readonly subs   = inject(SubscriptionService);
   readonly auth           = inject(AuthService);
   private readonly router = inject(Router);
 
-  readonly loading     = signal<'monthly' | 'yearly' | null>(null);
-  readonly hoveredPlan = signal<'monthly' | 'yearly' | null>(null);
+  readonly loading        = signal<PaidPlan | null>(null);
+  readonly hoveredPlan    = signal<PaidPlan | null>(null);
+  readonly loadingTemplate = signal(false);
+
+  get isPremiumTemplateContext(): boolean {
+    return !!(this.triggeredBy && PREMIUM_TEMPLATE_IDS.includes(this.triggeredBy as any));
+  }
 
   readonly prices       = PLAN_PRICES;
   readonly proHighlights = PRO_HIGHLIGHTS;
@@ -171,7 +250,15 @@ export class UpgradeModalComponent implements OnInit {
     if (this.auth.isLoggedIn()) this.subs.getStatus();
   }
 
-  async subscribe(plan: 'monthly' | 'yearly'): Promise<void> {
+  async purchaseTemplate(): Promise<void> {
+    if (!this.triggeredBy) return;
+    this.loadingTemplate.set(true);
+    const ok = await this.subs.buyTemplate(this.triggeredBy);
+    this.loadingTemplate.set(false);
+    if (ok) { this.upgraded.emit(); this.close.emit(); }
+  }
+
+  async subscribe(plan: PaidPlan): Promise<void> {
     if (!this.auth.isLoggedIn()) {
       sessionStorage.setItem('pendingUpgrade', plan);
       this.close.emit();

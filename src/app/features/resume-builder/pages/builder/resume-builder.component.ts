@@ -2,7 +2,7 @@ import {
   ChangeDetectionStrategy, Component, HostListener, OnDestroy, OnInit,
   computed, effect, inject, signal,
 } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, Location } from '@angular/common';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { JsonLdService } from '../../../../core/services/json-ld.service';
 import { NotificationService } from '../../../../core/services/notification.service';
@@ -185,6 +185,7 @@ export class ResumeBuilderComponent implements OnInit, OnDestroy {
   readonly showSectionsPanel  = signal(false);
   private _savedReorderOrder: SectionRef[] | null = null;
   readonly showUpgrade        = signal(false);
+  readonly upgradeTemplateId  = signal<string | null>(null);
   readonly showProfileMenu    = signal(false);
   readonly showVersionHistory = signal(false);
 
@@ -289,12 +290,21 @@ export class ResumeBuilderComponent implements OnInit, OnDestroy {
     if (id) { this.store.duplicateResume(id); this.notify.success('Duplicated', 'Resume copy created.'); }
   }
 
+  switchToFreeTemplateAndDownload(): void {
+    this.showUpgrade.set(false);
+    this.upgradeTemplateId.set(null);
+    this.store.setTemplate('minimal' as TemplateId);
+    // Small delay so the template switch renders before download
+    setTimeout(() => this.download(), 100);
+  }
+
   async download(): Promise<void> {
     const r = this.resume();
     if (!r || this.downloading()) return;
     if (!this.authGate.canDownload()) return;
     if (PREMIUM_TEMPLATE_IDS.includes(r.templateId as TemplateId)
         && !this.auth.isPro() && !this.auth.hasPurchasedTemplate(r.templateId)) {
+      this.upgradeTemplateId.set(r.templateId);
       this.showUpgrade.set(true);
       return;
     }
@@ -304,7 +314,17 @@ export class ResumeBuilderComponent implements OnInit, OnDestroy {
   }
 
   logout(): void   { this.showProfileMenu.set(false); this.auth.logout(); }
+  private readonly location = inject(Location);
+
   goTo(p: string): void { this.showProfileMenu.set(false); this.router.navigate([p]); }
+
+  goBack(): void {
+    if (window.history.length > 1) {
+      this.location.back();
+    } else {
+      this.router.navigate(['/resume-builder/dashboard']);
+    }
+  }
   printResume(): void { window.print(); }
 
   // ── Escape to close panels ────────────────────────────────────────────────

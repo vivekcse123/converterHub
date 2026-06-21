@@ -103,11 +103,6 @@ export class TemplateDetailComponent implements OnInit, OnDestroy {
       return;
     }
 
-    if (t.isPremium && !this.auth.isPro() && !this.auth.hasPurchasedTemplate(t.id)) {
-      this.authGate.showUpgrade.set(true);
-      return;
-    }
-
     this.router.navigate(['/resume-builder'], { queryParams: { template: t.id } });
   }
 

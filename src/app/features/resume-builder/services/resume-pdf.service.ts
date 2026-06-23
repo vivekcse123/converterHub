@@ -119,9 +119,15 @@ export class ResumePdfService {
     setTimeout(() => URL.revokeObjectURL(url), 10_000);
   }
 
-  // ─── Fallback: iframe + window.print() (browser-native, pixel-perfect) ──────
+  // ─── Style collection (cached per session) ───────────────────────────────────
+  // CSS filenames include content hashes (Angular build), so the same URLs are
+  // stable for the entire session. Cache the result to avoid re-fetching on
+  // every PDF download — the payload can be 100–200 KB of Tailwind CSS.
+  private _stylesCache: string | null = null;
 
   private async _collectStyles(): Promise<string> {
+    if (this._stylesCache !== null) return this._stylesCache;
+
     const parts: string[] = [];
     document.querySelectorAll('style').forEach(s => { parts.push(s.textContent ?? ''); });
     const jobs = Array.from(document.styleSheets)
@@ -138,7 +144,8 @@ export class ResumePdfService {
         }
       });
     parts.push(...await Promise.all(jobs));
-    return parts.join('\n');
+    this._stylesCache = parts.join('\n');
+    return this._stylesCache;
   }
 
   private async _printViaIframe(pageHost: HTMLElement, filename: string, isPro: boolean): Promise<void> {

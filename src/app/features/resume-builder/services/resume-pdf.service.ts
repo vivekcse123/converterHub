@@ -32,6 +32,12 @@ export class ResumePdfService {
   private readonly envInjector = inject(EnvironmentInjector);
   private readonly auth        = inject(AuthService);
 
+  // Holds a pre-opened blank window for iOS Safari. window.open() must be called
+  // synchronously within the user-gesture context — before any await — or iOS
+  // blocks it as a popup. We open it at the start of download() then navigate it
+  // to the blob URL once the PDF is ready. Null on non-iOS and on popup-block.
+  private _iosWin: Window | null = null;
+
   get premiumTemplateIds(): string[] { return PREMIUM_TEMPLATE_IDS; }
   isPremiumTemplate(templateId: string): boolean {
     return PREMIUM_TEMPLATE_IDS.includes(templateId as any);
@@ -45,13 +51,26 @@ export class ResumePdfService {
   async download(resume: ResumeData, captureEl?: HTMLElement): Promise<DownloadMethod> {
     if (!isPlatformBrowser(this.platformId)) return 'print-dialog';
 
-    const isPro     = this.auth.isPro() || this.auth.hasPurchasedTemplate(resume.templateId);
-    const filename  = slugify(resume.personal?.fullName || resume.name) + '-resume';
+    const isPro    = this.auth.isPro() || this.auth.hasPurchasedTemplate(resume.templateId);
+    const filename = slugify(resume.personal?.fullName || resume.name) + '-resume';
 
-    if (captureEl) {
-      return this._downloadWithFallback(captureEl, filename, isPro);
+    // iOS Safari blocks window.open() and a.click() in async callbacks. Pre-open a
+    // blank window NOW — synchronously, before any await — while the user gesture is
+    // still active. _downloadViaBackend will navigate it to the blob URL once ready.
+    this._iosWin = /iPhone|iPad|iPod/.test(navigator.userAgent)
+      ? window.open('', '_blank')
+      : null;
+
+    try {
+      if (captureEl) {
+        return await this._downloadWithFallback(captureEl, filename, isPro);
+      }
+      return await this._downloadOffScreen(resume, filename, isPro);
+    } catch (err) {
+      // Close the blank tab if PDF generation failed — don't leave it dangling.
+      if (this._iosWin) { this._iosWin.close(); this._iosWin = null; }
+      throw err;
     }
-    return this._downloadOffScreen(resume, filename, isPro);
   }
 
   // ─── Backend Puppeteer: direct PDF blob download (no print dialog) ──────────
@@ -110,13 +129,22 @@ export class ResumePdfService {
 
     const blob = await resp.blob();
     const url  = URL.createObjectURL(blob);
-    const a    = document.createElement('a');
-    a.href     = url;
-    a.download = filename + '.pdf';
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    setTimeout(() => URL.revokeObjectURL(url), 10_000);
+
+    if (this._iosWin) {
+      // Navigate the pre-opened window to the PDF blob URL. iOS Safari displays it
+      // in its PDF viewer; user saves via the Share sheet. User taps Back to return.
+      this._iosWin.location.href = url;
+      this._iosWin = null;
+      setTimeout(() => URL.revokeObjectURL(url), 60_000);
+    } else {
+      const a = document.createElement('a');
+      a.href     = url;
+      a.download = filename + '.pdf';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      setTimeout(() => URL.revokeObjectURL(url), 10_000);
+    }
   }
 
   // ─── Style collection (cached per session) ───────────────────────────────────

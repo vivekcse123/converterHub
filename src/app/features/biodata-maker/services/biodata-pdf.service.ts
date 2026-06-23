@@ -9,6 +9,11 @@ function slugify(value: string): string {
 @Injectable({ providedIn: 'root' })
 export class BiodataPdfService {
   async download(biodata: BiodataData): Promise<void> {
+    // iOS Safari blocks window.open() in async callbacks. Pre-open a blank window
+    // NOW — before the dynamic import await — while the user gesture is still active.
+    const isIOS = typeof navigator !== 'undefined' && /iPhone|iPad|iPod/.test(navigator.userAgent);
+    const iosWin = isIOS ? window.open('', '_blank') : null;
+
     const [pdfMakeModule, vfsFontsModule] = await Promise.all([
       import('pdfmake/build/pdfmake'),
       import('pdfmake/build/vfs_fonts'),
@@ -19,7 +24,18 @@ export class BiodataPdfService {
 
     const docDefinition = this.buildDoc(biodata);
     const filename = `${slugify(biodata.personal.fullName || biodata.name)}-biodata.pdf`;
-    pdfMake.createPdf(docDefinition).download(filename);
+    const doc = pdfMake.createPdf(docDefinition);
+
+    if (iosWin) {
+      // Navigate the pre-opened window to the blob URL so iOS PDF viewer handles it.
+      doc.getBlob((blob: Blob) => {
+        const url = URL.createObjectURL(blob);
+        iosWin.location.href = url;
+        setTimeout(() => URL.revokeObjectURL(url), 60_000);
+      });
+    } else {
+      doc.download(filename);
+    }
   }
 
   private buildDoc(b: BiodataData): any {

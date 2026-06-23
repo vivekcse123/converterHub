@@ -2,6 +2,8 @@ import { Injectable, signal, inject, PLATFORM_ID } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { Observable, map, filter, catchError, throwError, retry, timer } from 'rxjs';
 import { ApiService } from './api.service';
+import { AuthService } from './auth.service';
+import { NotificationService } from './notification.service';
 import { ConversionResult } from '../models/conversion.model';
 
 interface UploadEvent { progress: number; result?: { data: ConversionResult } }
@@ -25,45 +27,34 @@ export class ConverterService {
   private processingTicker?: ReturnType<typeof setInterval>;
   private stuckTimer?: ReturnType<typeof setTimeout>;
   private readonly isBrowser = isPlatformBrowser(inject(PLATFORM_ID));
+  private readonly auth      = inject(AuthService);
+  private readonly notify    = inject(NotificationService);
 
   constructor(private api: ApiService) {}
 
   downloadResult(res: ConversionResult): void {
     if (!this.isBrowser) return;
-    this.api.downloadBlob(res.downloadUrl).subscribe({
-      next: (blob) => {
-        if (blob.size === 0) {
-          // Empty blob — file has expired or is missing
-          this._notifyDownloadExpired(res.downloadUrl);
-          return;
-        }
-        const url = URL.createObjectURL(blob);
-        const a   = document.createElement('a');
-        a.href     = url;
-        a.download = res.fileName;
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        setTimeout(() => URL.revokeObjectURL(url), 10_000);
-      },
-      error: (err) => {
-        const status = err?.status ?? 0;
-        if (status === 404) {
-          this._notifyDownloadExpired(res.downloadUrl);
-        } else {
-          // Fallback to direct tab open for non-404 errors
-          window.open(res.downloadUrl, '_blank');
-        }
-      },
-    });
+    const token = this.auth.token();
+    // Direct link: avoids async blob-fetch that loses user-gesture context on
+    // iOS Safari / Android Chrome. Backend /outputs already accepts ?token= for
+    // exactly this case (token in URL is short-lived JWT, only exists briefly).
+    const href = token
+      ? `${res.downloadUrl}?token=${encodeURIComponent(token)}`
+      : res.downloadUrl;
+    const a = document.createElement('a');
+    a.href     = href;
+    a.download = res.fileName;
+    a.rel      = 'noopener';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
   }
 
-  private _notifyDownloadExpired(url: string): void {
-    // Open the URL anyway — browser will show a proper 404 page, and users
-    // can share the error to support.  A more complete implementation would
-    // dispatch a toast notification via NotificationService.
-    console.warn('[ConverterService] Download URL expired or file missing:', url);
-    window.open(url, '_blank');
+  private _notifyDownloadExpired(): void {
+    this.notify.error(
+      'Download expired',
+      'This file is no longer available. Please convert it again.',
+    );
   }
 
   imageToPdf(files: File[], options: Record<string, string> = {}): Observable<ConversionResult> {

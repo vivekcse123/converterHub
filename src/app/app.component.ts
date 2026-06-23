@@ -1,6 +1,6 @@
-import { Component, OnInit, signal, inject } from '@angular/core';
+import { Component, OnInit, signal, inject, PLATFORM_ID } from '@angular/core';
+import { isPlatformBrowser, CommonModule } from '@angular/common';
 import { RouterOutlet, Router, NavigationEnd } from '@angular/router';
-import { CommonModule } from '@angular/common';
 import { HeaderComponent } from './shared/components/header/header.component';
 import { FooterComponent } from './shared/components/footer/footer.component';
 import { NotificationComponent } from './shared/components/notification/notification.component';
@@ -8,6 +8,7 @@ import { ConfirmDialogComponent } from './shared/components/confirm-dialog/confi
 import { ThemeService } from './core/services/theme.service';
 import { SeoService } from './core/services/seo.service';
 import { ConverterService } from './core/services/converter.service';
+import { environment } from 'src/environments/environment';
 import { filter } from 'rxjs/operators';
 
 @Component({
@@ -50,12 +51,20 @@ import { filter } from 'rxjs/operators';
 export class AppComponent implements OnInit {
   readonly hideShell = signal(false);
   readonly converter = inject(ConverterService);
+  private readonly isBrowser = isPlatformBrowser(inject(PLATFORM_ID));
 
   constructor(private themeService: ThemeService, private seo: SeoService, private router: Router) {}
 
   ngOnInit(): void {
     this.themeService.initTheme();
     this.seo.init();
+
+    // Fire-and-forget warmup — wakes the Render backend the moment the page
+    // loads so cold-start latency is absorbed before the user clicks anything.
+    if (this.isBrowser) {
+      const pingUrl = environment.apiUrl.replace(/\/api$/, '') + '/ping';
+      fetch(pingUrl, { method: 'GET', cache: 'no-store' }).catch(() => {});
+    }
 
     this.router.events.pipe(filter(e => e instanceof NavigationEnd)).subscribe(() => {
       let route = this.router.routerState.snapshot.root;

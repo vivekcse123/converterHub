@@ -199,7 +199,10 @@ export class ResumePdfService {
     document.body.appendChild(iframe);
     const iDoc = iframe.contentDocument!;
 
-    const watermarkCss = isPro ? '' : `
+    // Watermark only for premium templates the user hasn't paid for.
+    // Free templates are always delivered clean, matching server-side logic.
+    const needsWatermark = !isPro && this.isPremiumTemplate(this._downloadTemplateId);
+    const watermarkCss = needsWatermark ? `
       body::after {
         content: 'ApnaConverter.com  \\2022  Upgrade to Pro';
         position: fixed; top: 50%; left: 50%;
@@ -207,7 +210,7 @@ export class ResumePdfService {
         font-size: 18pt; font-family: Arial, sans-serif;
         color: rgba(0,0,0,0.07); white-space: nowrap;
         pointer-events: none; z-index: 99999;
-      }`;
+      }` : '';
 
     iDoc.open();
     iDoc.write(`<!DOCTYPE html><html><head><meta charset="UTF-8">

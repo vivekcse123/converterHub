@@ -38,6 +38,11 @@ export class ResumePdfService {
   // to the blob URL once the PDF is ready. Null on non-iOS and on popup-block.
   private _iosWin: Window | null = null;
 
+  // Set at the start of download() so _downloadViaBackend can include it in the
+  // Puppeteer request. The server needs the templateId to decide whether to stamp
+  // a watermark (only for paid templates the user hasn't unlocked).
+  private _downloadTemplateId = '';
+
   get premiumTemplateIds(): string[] { return PREMIUM_TEMPLATE_IDS; }
   isPremiumTemplate(templateId: string): boolean {
     return PREMIUM_TEMPLATE_IDS.includes(templateId as any);
@@ -60,6 +65,10 @@ export class ResumePdfService {
     this._iosWin = /iPhone|iPad|iPod/.test(navigator.userAgent)
       ? window.open('', '_blank')
       : null;
+
+    // Capture templateId for the Puppeteer request so the server can decide
+    // whether this template warrants a watermark without trusting the client.
+    this._downloadTemplateId = resume.templateId ?? '';
 
     try {
       if (captureEl) {
@@ -111,7 +120,7 @@ export class ResumePdfService {
           'Content-Type':  'application/json',
           'Authorization': `Bearer ${token}`,
         },
-        body: JSON.stringify({ html: clone.outerHTML, inlineStyles: allStyles, cssVarsCss, filename }),
+        body: JSON.stringify({ html: clone.outerHTML, inlineStyles: allStyles, cssVarsCss, filename, templateId: this._downloadTemplateId }),
         signal: AbortSignal.timeout(90_000),
       });
     } catch {

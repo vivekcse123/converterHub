@@ -25,7 +25,7 @@ export class ToolSeoService {
 
     // ── Meta tags ────────────────────────────────────────────────────────────
     this.seo.setPage({
-      title:       document?.title || `${tool.title} | ApnaConverter`,
+      title:       `${tool.title} | ApnaConverter`,
       description: tool.description,
       canonical:   pageUrl,
     });

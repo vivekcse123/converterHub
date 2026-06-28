@@ -193,84 +193,186 @@
 </section>
 
 <!-- ─── Template Showcase ─────────────────────────────────────────── -->
-<section class="py-20 bg-white dark:bg-slate-950">
-  <div class="container-app">
+<section class="py-20 bg-white dark:bg-slate-950 overflow-hidden">
 
-    <!-- Section header -->
-    <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8">
+  <!-- Header + category tabs inside container -->
+  <div class="container-app mb-8">
+    <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-6">
       <div>
-        <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white mb-2">30+ Professional Resume Templates</h2>
-        <p class="text-slate-500 dark:text-slate-400 text-sm">ATS-friendly designs for every role: Naukri, LinkedIn, government, and more.</p>
+        <div class="inline-flex items-center gap-2 mb-3 px-3 py-1 bg-violet-100 dark:bg-violet-900/30 text-violet-700 dark:text-violet-300 rounded-full text-xs font-bold">
+          <span class="w-1.5 h-1.5 rounded-full bg-violet-500"></span>
+          30+ Templates · ATS Optimised
+        </div>
+        <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white mb-1.5">
+          Professional Resume Templates
+        </h2>
+        <p class="text-slate-500 dark:text-slate-400 text-sm">
+          Click any template to preview the full design — then use it for free.
+        </p>
       </div>
-      <a routerLink="/resume-templates" class="shrink-0 text-sm text-violet-600 dark:text-violet-400 font-semibold hover:underline">Browse all →</a>
+      <a routerLink="/resume-templates"
+         class="shrink-0 inline-flex items-center gap-1.5 text-sm text-violet-600 dark:text-violet-400 font-semibold hover:underline">
+        View all 30+ templates
+        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
+      </a>
     </div>
 
-    <!-- Category tabs -->
-    <div class="flex gap-2 flex-wrap mb-8">
+    <!-- Category filter pills -->
+    <div class="flex gap-2 flex-wrap">
       @for (cat of categories; track cat.id) {
-        <button type="button" (click)="setCategory(cat.id)"
-          class="px-3.5 py-1.5 rounded-full text-xs font-semibold transition-all"
-          [class]="activeCategory === cat.id
-            ? 'bg-violet-600 text-white shadow-md'
-            : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700'">
+        <button type="button"
+                (click)="setCategory(cat.id)"
+                class="px-3.5 py-1.5 rounded-full text-xs font-semibold transition-all duration-200"
+                [class]="activeCategory() === cat.id
+                  ? 'bg-violet-600 text-white shadow-md shadow-violet-200 dark:shadow-violet-900/30'
+                  : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700'">
           {{ cat.label }}
         </button>
       }
     </div>
+  </div>
 
-    <!-- Template grid -->
-    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-5 mb-14">
-      @for (t of filteredTemplates; track t.id) {
-        <div class="group">
+  <!-- ── Carousel ─────────────────────────────────────────────────────────── -->
+  <!-- Extends slightly beyond container to allow edge-fade overflow -->
+  <div class="relative"
+       (mouseenter)="pauseCarousel()"
+       (mouseleave)="resumeCarousel()">
 
-          <!-- Preview thumbnail — 256px tall, template rendered at 24% scale -->
-          <div class="relative h-64 rounded-xl overflow-hidden border-2 border-slate-200 dark:border-slate-700
-                      group-hover:border-violet-400 dark:group-hover:border-violet-500
-                      group-hover:shadow-2xl transition-all duration-200 cursor-pointer"
-               (click)="openTemplate(t.slug)">
+    <!-- Left gradient fade + Prev arrow -->
+    <div class="absolute left-0 top-0 h-[406px] w-20 sm:w-28 bg-gradient-to-r from-white dark:from-slate-950 to-transparent z-10 pointer-events-none"></div>
+    <button type="button"
+            class="absolute left-2 sm:left-4 top-[203px] -translate-y-1/2 z-20
+                   w-10 h-10 rounded-full bg-white dark:bg-slate-800
+                   shadow-lg border border-slate-200 dark:border-slate-700
+                   flex items-center justify-center
+                   text-slate-500 dark:text-slate-400
+                   hover:border-violet-300 dark:hover:border-violet-600
+                   hover:text-violet-600 dark:hover:text-violet-400
+                   hover:shadow-xl transition-all duration-200"
+            aria-label="Previous templates"
+            (click)="scrollCarouselPrev()">
+      <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/>
+      </svg>
+    </button>
 
-            <!-- Actual template rendered at 24% scale; centered horizontally -->
-            <div class="absolute inset-0 pointer-events-none select-none bg-white" aria-hidden="true">
-              @defer (on idle; on viewport) {
-                @if (getTplComponent(t.id) && getTplSample(t.id)) {
-                  <div [attr.style]="'position:absolute;top:0;left:50%;transform-origin:top left;transform:scale(0.24) translateX(-50%);width:794px;min-height:1123px;' + getTplDesignVars(t.id)">
-                    <ng-container *ngComponentOutlet="getTplComponent(t.id)!; inputs: { resume: getTplSample(t.id) }" />
+    <!-- Scrollable track -->
+    <div #carouselEl
+         class="overflow-x-scroll py-4 select-none"
+         style="scrollbar-width:none;-ms-overflow-style:none;scroll-snap-type:x proximity;"
+         [style.cursor]="dragActive ? 'grabbing' : 'grab'"
+         (mousedown)="onDragStart($event)"
+         (mousemove)="onDragMove($event)"
+         (mouseup)="onDragEnd()"
+         (mouseleave)="onDragEnd()">
+
+      <div class="flex gap-5 px-16 sm:px-24 min-w-max">
+
+        @for (t of loopedTemplates(); track $index) {
+          <!-- Template card (group/card scoped hover) -->
+          <div class="group/card flex-shrink-0 w-[264px]">
+
+            <!-- Preview container: 264 × 374 px renders template at 33.2% scale -->
+            <div class="relative h-[374px] rounded-xl overflow-hidden
+                        border-2 border-slate-200 dark:border-slate-700
+                        group-hover/card:border-violet-400 dark:group-hover/card:border-violet-500
+                        group-hover/card:shadow-2xl group-hover/card:shadow-violet-100/70 dark:group-hover/card:shadow-violet-900/30
+                        transition-all duration-300 bg-white dark:bg-slate-900"
+                 (click)="openTemplate(t.slug)"
+                 style="cursor:pointer">
+
+              <!-- Actual template rendered at 33.2% scale -->
+              <div class="absolute inset-0 pointer-events-none" aria-hidden="true">
+                @defer (on idle; on viewport) {
+                  @if (getTplComponent(t.id) && getTplSample(t.id)) {
+                    <div [attr.style]="'position:absolute;top:0;left:50%;transform-origin:top left;transform:scale(0.3324) translateX(-50%);width:794px;min-height:1123px;' + getTplDesignVars(t.id)">
+                      <ng-container *ngComponentOutlet="getTplComponent(t.id)!; inputs: { resume: getTplSample(t.id) }" />
+                    </div>
+                  }
+                } @placeholder {
+                  <div class="w-full h-full bg-slate-50 dark:bg-slate-900 flex items-center justify-center">
+                    <div class="w-8 h-8 border-2 border-slate-200 dark:border-slate-700 border-t-violet-500 rounded-full animate-spin"></div>
                   </div>
                 }
-              } @placeholder {
-                <div class="w-full h-full flex items-center justify-center bg-slate-50">
-                  <div class="w-6 h-6 border-2 border-slate-200 border-t-violet-400 rounded-full animate-spin"></div>
+              </div>
+
+              <!-- Free / Pro badge -->
+              @if (t.isPremium) {
+                <div class="absolute top-2.5 left-2.5 z-10 flex items-center gap-1 bg-amber-500 text-white text-[9px] font-extrabold px-2 py-0.5 rounded-full shadow">
+                  <svg class="w-2.5 h-2.5" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
+                  </svg>
+                  PRO
+                </div>
+              } @else {
+                <div class="absolute top-2.5 left-2.5 z-10 bg-emerald-500 text-white text-[9px] font-extrabold px-2 py-0.5 rounded-full shadow">
+                  FREE
                 </div>
               }
+
+              <!-- ATS score chip -->
+              <div class="absolute top-2.5 right-2.5 z-10 bg-white/90 dark:bg-slate-900/90 backdrop-blur-sm text-emerald-600 dark:text-emerald-400 text-[9px] font-bold px-2 py-0.5 rounded-full shadow border border-emerald-100 dark:border-emerald-900/50">
+                ATS {{ t.atsScore }}
+              </div>
+
+              <!-- Hover overlay: gradient + action buttons -->
+              <div class="absolute inset-0 z-20
+                          bg-gradient-to-t from-slate-900/85 via-slate-900/20 to-transparent
+                          opacity-0 group-hover/card:opacity-100 transition-opacity duration-300
+                          flex flex-col items-center justify-end gap-2 pb-5 px-4">
+                <button type="button"
+                        class="w-full py-2.5 bg-white hover:bg-slate-50 text-slate-900 rounded-lg text-xs font-bold shadow-lg transition-all duration-200 hover:shadow-xl"
+                        (click)="openTemplate(t.slug); $event.stopPropagation()">
+                  Preview Template
+                </button>
+                <button type="button"
+                        class="w-full py-2.5 bg-violet-600 hover:bg-violet-700 text-white rounded-lg text-xs font-bold shadow-lg transition-all duration-200"
+                        (click)="useTemplate(t.id); $event.stopPropagation()">
+                  Use This Template
+                </button>
+              </div>
             </div>
 
-            <!-- Hover overlay -->
-            <div class="absolute inset-0 bg-black/55 opacity-0 group-hover:opacity-100 transition-all duration-200 flex items-center justify-center z-10">
-              <span class="px-5 py-2.5 bg-white rounded-lg text-xs font-bold text-slate-800 shadow-md pointer-events-none">
-                Preview
-              </span>
+            <!-- Card label -->
+            <div class="mt-3 px-0.5">
+              <div class="flex items-center justify-between gap-2 mb-0.5">
+                <p class="text-sm font-bold text-slate-800 dark:text-white truncate">{{ t.name }}</p>
+                @if (t.isPremium) {
+                  <span class="shrink-0 text-[9px] font-bold bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-400 px-1.5 py-0.5 rounded-full">Pro</span>
+                } @else {
+                  <span class="shrink-0 text-[9px] font-bold bg-emerald-100 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-400 px-1.5 py-0.5 rounded-full">Free</span>
+                }
+              </div>
+              <p class="text-[11px] text-slate-400 dark:text-slate-500">{{ t.category }}</p>
             </div>
-          </div>
 
-          <!-- Card meta -->
-          <div class="mt-2.5 px-0.5">
-            <div class="flex items-center justify-between gap-1 mb-0.5">
-              <p class="text-xs font-bold text-slate-800 dark:text-white truncate">{{ t.name }}</p>
-              @if (t.isPremium) {
-                <span class="text-[9px] font-bold bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-400 px-1.5 py-0.5 rounded-full shrink-0">Pro</span>
-              } @else {
-                <span class="text-[9px] font-bold bg-emerald-100 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-400 px-1.5 py-0.5 rounded-full shrink-0">Free</span>
-              }
-            </div>
-            <div class="flex items-center gap-1.5">
-              <span class="text-[10px] font-semibold text-emerald-600 dark:text-emerald-400">ATS {{ t.atsScore }}/100</span>
-              <span class="text-[9px] text-slate-300 dark:text-slate-600">·</span>
-              <span class="text-[10px] text-slate-400 dark:text-slate-500">{{ t.category }}</span>
-            </div>
           </div>
-        </div>
-      }
+        }
+
+      </div>
     </div>
+
+    <!-- Right gradient fade + Next arrow -->
+    <div class="absolute right-0 top-0 h-[406px] w-20 sm:w-28 bg-gradient-to-l from-white dark:from-slate-950 to-transparent z-10 pointer-events-none"></div>
+    <button type="button"
+            class="absolute right-2 sm:right-4 top-[203px] -translate-y-1/2 z-20
+                   w-10 h-10 rounded-full bg-white dark:bg-slate-800
+                   shadow-lg border border-slate-200 dark:border-slate-700
+                   flex items-center justify-center
+                   text-slate-500 dark:text-slate-400
+                   hover:border-violet-300 dark:hover:border-violet-600
+                   hover:text-violet-600 dark:hover:text-violet-400
+                   hover:shadow-xl transition-all duration-200"
+            aria-label="Next templates"
+            (click)="scrollCarouselNext()">
+      <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/>
+      </svg>
+    </button>
+  </div>
+  <!-- ── End carousel ────────────────────────────────────────────────────── -->
+
+  <div class="container-app mt-14">
 
     <!-- Biodata Templates -->
     <div class="border-t border-slate-100 dark:border-slate-800 pt-12 mb-10">

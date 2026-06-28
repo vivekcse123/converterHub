@@ -5,11 +5,12 @@ import {
   HostListener,
   OnDestroy,
   OnInit,
+  PLATFORM_ID,
   computed,
   inject,
   signal,
 } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { JsonLdService } from '../../../../core/services/json-ld.service';
 import { BreadcrumbComponent, BreadcrumbItem } from '../../../../shared/components/breadcrumb/breadcrumb.component';
@@ -50,6 +51,7 @@ export class TemplateDetailComponent implements OnInit, OnDestroy {
   private readonly router     = inject(Router);
   private readonly jsonLd     = inject(JsonLdService);
   private readonly destroyRef = inject(DestroyRef);
+  private readonly platformId  = inject(PLATFORM_ID);
   readonly auth               = inject(AuthService);
   readonly authGate           = inject(ResumeAuthGateService);
 
@@ -168,6 +170,8 @@ export class TemplateDetailComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    document.body.style.overflow = '';
+    if (isPlatformBrowser(this.platformId)) {
+      document.body.style.overflow = '';
+    }
   }
 }

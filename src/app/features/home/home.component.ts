@@ -2,9 +2,10 @@ import { Component, OnDestroy, OnInit, PLATFORM_ID, Renderer2, Type, inject } fr
 import { isPlatformBrowser, DOCUMENT, NgComponentOutlet, CommonModule } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
 import { AdBannerComponent } from '../../shared/components/ad-banner/ad-banner.component';
-import { RESUME_TEMPLATES } from '../resume-builder/data/resume-templates.data';
+import { RESUME_TEMPLATES, getTemplateDefaultAccent } from '../resume-builder/data/resume-templates.data';
 import { createSampleResume } from '../resume-builder/data/resume-defaults';
 import { ResumeData } from '../resume-builder/models/resume.model';
+import { computeDesignVarsCss } from '../resume-builder/components/preview/resume-preview.component';
 
 interface ResumeTemplateCard {
   id: string;
@@ -77,6 +78,12 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   getTplComponent(id: string): Type<unknown> | null { return this._tplMap.get(id)?.component ?? null; }
   getTplSample(id: string): ResumeData | null { return this._tplMap.get(id)?.sample ?? null; }
+  /** CSS custom-property string derived from the template's own default accent colour (single source of truth). */
+  getTplDesignVars(templateId: string): string {
+    const meta = RESUME_TEMPLATES.find(m => m.id === templateId);
+    const accentColor = meta ? getTemplateDefaultAccent(meta) : '#1e293b';
+    return computeDesignVarsCss({ accentColor });
+  }
 
   readonly resumeTemplates: ResumeTemplateCard[] = [
     { id: 'ats-professional',    slug: 'ats-professional-resume-template',        name: 'ATS Professional',    isPremium: true,  accentColor: '#475569', headerBg: '#1e293b', layout: 'single',       atsScore: 95, category: 'ATS-Safe',    tags: ['ats'] },

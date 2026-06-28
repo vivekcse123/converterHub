@@ -1,0 +1,187 @@
+<div class="resume-page acad-tpl">
+
+  <!-- Header — centered, wide spacing -->
+  <header class="acad-header">
+    <h1 class="acad-name">{{ resume().personal.fullName || 'Your Name' }}</h1>
+    @if (resume().personal.jobTitle) {
+      <p class="acad-position">{{ resume().personal.jobTitle }}</p>
+    }
+    @if (contactParts().length) {
+      <p class="acad-contact">
+        @for (part of contactParts(); track $index; let last = $last) {
+          <span>{{ part }}</span>@if (!last) { <span class="acad-sep"> ·  </span> }
+        }
+      </p>
+    }
+  </header>
+
+  <div class="acad-rule"></div>
+
+  @for (section of visibleSections(); track section) {
+    <section class="acad-section">
+      @switch (sectionKind(section)) {
+
+        @case ('summary') {
+          @if (resume().summary) {
+            <h2 class="acad-heading">Research &amp; Professional Interests</h2>
+            <p class="acad-body"><app-rich-text [text]="resume().summary" /></p>
+          }
+        }
+
+        @case ('experience') {
+          @if (resume().experience.length) {
+            <h2 class="acad-heading">Academic &amp; Professional Experience</h2>
+            @for (exp of resume().experience; track exp.id) {
+              <div class="acad-entry">
+                <div class="acad-entry-top">
+                  <div>
+                    <p class="acad-item-title">{{ exp.role }}</p>
+                    <p class="acad-institution">
+                      {{ exp.company }}
+                      @if (exp.location) { <span class="acad-light">, {{ exp.location }}</span> }
+                    </p>
+                  </div>
+                  <p class="acad-date">{{ dateRange(exp.startDate, exp.endDate, exp.current) }}</p>
+                </div>
+                @if (exp.bullets.length) {
+                  <ul class="acad-list">
+                    @for (b of exp.bullets; track $index) {
+                      @if (b) { <li><app-rich-text [text]="b" /></li> }
+                    }
+                  </ul>
+                }
+              </div>
+            }
+          }
+        }
+
+        @case ('education') {
+          @if (resume().education.length) {
+            <h2 class="acad-heading">Education</h2>
+            @for (edu of resume().education; track edu.id) {
+              <div class="acad-entry">
+                <div class="acad-entry-top">
+                  <div>
+                    <p class="acad-item-title">{{ edu.degree }}@if (edu.field) {<span class="acad-light"> in {{ edu.field }}</span>}</p>
+                    <p class="acad-institution">{{ edu.institution }}</p>
+                    @if (edu.gpa) { <p class="acad-light acad-small">GPA: {{ edu.gpa }}</p> }
+                  </div>
+                  <p class="acad-date">{{ dateRange(edu.startDate, edu.endDate, edu.current) }}</p>
+                </div>
+                @if (edu.description) {
+                  <p class="acad-body acad-mt1"><app-rich-text [text]="edu.description" /></p>
+                }
+              </div>
+            }
+          }
+        }
+
+        @case ('projects') {
+          @if (resume().projects.length) {
+            <h2 class="acad-heading">Research Projects</h2>
+            @for (proj of resume().projects; track proj.id) {
+              <div class="acad-entry">
+                <p class="acad-item-title">
+                  {{ proj.name }}
+                  @if (proj.techStack) { <span class="acad-light"> ({{ proj.techStack }})</span> }
+                </p>
+                @if (proj.link) { <p class="acad-institution">{{ proj.link }}</p> }
+                @if (proj.bullets.length) {
+                  <ul class="acad-list">
+                    @for (b of proj.bullets; track $index) {
+                      @if (b) { <li><app-rich-text [text]="b" /></li> }
+                    }
+                  </ul>
+                }
+              </div>
+            }
+          }
+        }
+
+        @case ('achievements') {
+          @if (resume().achievements.length) {
+            <h2 class="acad-heading">Publications &amp; Awards</h2>
+            <ul class="acad-pub-list">
+              @for (item of resume().achievements; track $index) {
+                @if (item) { <li><app-rich-text [text]="item" /></li> }
+              }
+            </ul>
+          }
+        }
+
+        @case ('skills') {
+          @if (resume().skills.length) {
+            <h2 class="acad-heading">Technical Skills</h2>
+            <div class="acad-skills">
+              @for (group of resume().skills; track group.id) {
+                @if (group.items.length) {
+                  <div class="acad-skill-row">
+                    @if (group.category) {
+                      <span class="acad-skill-cat">{{ group.category }}:</span>
+                    }
+                    <span class="acad-body">{{ group.items.join(', ') }}</span>
+                  </div>
+                }
+              }
+            </div>
+          }
+        }
+
+        @case ('certifications') {
+          @if (resume().certifications.length) {
+            <h2 class="acad-heading">Certifications &amp; Training</h2>
+            @for (cert of resume().certifications; track cert.id) {
+              <p class="acad-body">
+                <span class="acad-cert-name">{{ cert.name }}</span>
+                @if (cert.issuer) { <span class="acad-light"> — {{ cert.issuer }}</span> }
+                @if (cert.date) { <span class="acad-light"> ({{ monthYear(cert.date) }})</span> }
+              </p>
+            }
+          }
+        }
+
+        @case ('languages') {
+          @if (resume().languages.length) {
+            <h2 class="acad-heading">Languages</h2>
+            <div class="acad-lang-grid">
+              @for (lang of resume().languages; track lang.id) {
+                <div class="acad-lang-item">
+                  <span class="acad-lang-name">{{ lang.name }}</span>
+                  <span class="acad-light acad-small">{{ lang.proficiency }}</span>
+                </div>
+              }
+            </div>
+          }
+        }
+
+        @case ('interests') {
+          @if (resume().interests.length) {
+            <h2 class="acad-heading">Research Interests</h2>
+            <p class="acad-body">{{ resume().interests.join(' · ') }}</p>
+          }
+        }
+
+        @case ('custom') {
+          @if (customSection(section); as cs) {
+            @if (cs.entries.length) {
+              <h2 class="acad-heading">{{ cs.title }}</h2>
+              @for (entry of cs.entries; track entry.id) {
+                <div class="acad-entry">
+                  <div class="acad-entry-top">
+                    <div>
+                      @if (entry.heading) { <p class="acad-item-title">{{ entry.heading }}</p> }
+                      @if (entry.subheading) { <p class="acad-institution">{{ entry.subheading }}</p> }
+                    </div>
+                    @if (entry.date) { <p class="acad-date">{{ entry.date }}</p> }
+                  </div>
+                  @if (entry.description) { <p class="acad-body acad-mt1"><app-rich-text [text]="entry.description" /></p> }
+                </div>
+              }
+            }
+          }
+        }
+
+      }
+    </section>
+  }
+</div>

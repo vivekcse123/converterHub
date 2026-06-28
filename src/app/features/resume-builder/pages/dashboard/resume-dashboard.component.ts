@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, OnInit, inject, signal, computed } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { firstValueFrom } from 'rxjs';
 import { environment } from '../../../../../environments/environment';
@@ -44,10 +44,10 @@ import { ResumeData, TemplateId } from '../../models/resume.model';
                 ⭐ Upgrade to Pro - ₹99/mo
               </button>
             }
-            <a routerLink="/resume-builder"
+            <button type="button" (click)="createNewResume()"
                class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 text-xs font-semibold hover:border-violet-300 transition">
               + New Resume
-            </a>
+            </button>
             <a routerLink="/" class="text-xs text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 transition hidden sm:block">← Home</a>
           </nav>
         </div>
@@ -185,7 +185,7 @@ import { ResumeData, TemplateId } from '../../models/resume.model';
           <div class="lg:col-span-2 space-y-4">
             <div class="flex items-center justify-between">
               <h2 class="text-base font-bold text-slate-800 dark:text-white">My Resumes</h2>
-              <a routerLink="/resume-builder" class="text-xs text-violet-600 dark:text-violet-400 hover:underline font-medium">+ Create new</a>
+              <button type="button" (click)="createNewResume()" class="text-xs text-violet-600 dark:text-violet-400 hover:underline font-medium">+ Create new</button>
             </div>
 
             @if (resumes().length === 0) {
@@ -193,7 +193,7 @@ import { ResumeData, TemplateId } from '../../models/resume.model';
                 <p class="text-5xl mb-4">📄</p>
                 <p class="font-semibold text-slate-700 dark:text-slate-200 mb-1">No resumes yet</p>
                 <p class="text-sm text-slate-400 mb-5">Build your first ATS-friendly resume in minutes.</p>
-                <a routerLink="/resume-builder" class="btn btn-primary text-sm px-6 py-2.5">Create Resume</a>
+                <button type="button" (click)="createNewResume()" class="btn btn-primary text-sm px-6 py-2.5">Create Resume</button>
               </div>
             }
 
@@ -435,8 +435,9 @@ export class ResumeDashboardComponent implements OnInit {
   readonly auth    = inject(AuthService);
   readonly subs    = inject(SubscriptionService);
   readonly career  = inject(CareerService);
-  private readonly store = inject(ResumeStoreService);
-  private readonly http  = inject(HttpClient);
+  private readonly store  = inject(ResumeStoreService);
+  private readonly http   = inject(HttpClient);
+  private readonly router = inject(Router);
 
   readonly showUpgrade  = signal(false);
   readonly cancelling   = signal(false);
@@ -595,5 +596,15 @@ export class ResumeDashboardComponent implements OnInit {
   async subscribeTo(plan: 'monthly' | 'yearly') {
     this.showUpgrade.set(false);
     await this.subs.subscribe(plan);
+  }
+
+  /** Navigate to the builder, or show upgrade if free-tier resume limit is reached. */
+  createNewResume(): void {
+    const FREE_LIMIT = 2;
+    if (!this.auth.isPro() && this.store.resumes().length >= FREE_LIMIT) {
+      this.showUpgrade.set(true);
+      return;
+    }
+    this.router.navigate(['/resume-builder']);
   }
 }

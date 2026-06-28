@@ -1,4 +1,5 @@
-import { DEFAULT_SECTION_ORDER, ResumeData, TemplateId } from '../models/resume.model';
+import { DEFAULT_DESIGN, DEFAULT_SECTION_ORDER, ResumeData, TemplateId } from '../models/resume.model';
+import { getDefaultAccentById } from './resume-templates.data';
 
 function uid(): string {
   return typeof crypto !== 'undefined' && crypto.randomUUID
@@ -12,6 +13,7 @@ export function createBlankResume(templateId: TemplateId = 'ats-professional', n
     id: uid(),
     name,
     templateId,
+    design: { ...DEFAULT_DESIGN, accentColor: getDefaultAccentById(templateId) },
     personal: {
       fullName: '',
       jobTitle: '',

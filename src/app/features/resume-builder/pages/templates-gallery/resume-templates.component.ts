@@ -19,8 +19,10 @@ import {
   ResumeTemplateMeta,
   TemplateCategory,
   TemplateIndustry,
+  getTemplateDefaultAccent,
 } from '../../data/resume-templates.data';
 import { ResumeData } from '../../models/resume.model';
+import { computeDesignVarsCss } from '../../components/preview/resume-preview.component';
 
 const JSON_LD_APP_KEY     = 'resume-templates-app';
 const JSON_LD_WEBPAGE_KEY = 'resume-templates-webpage';
@@ -151,6 +153,11 @@ export class ResumeTemplatesComponent implements OnInit {
   // ── Compare helpers ──────────────────────────────────────────────────────────
   isInCompare(id: string): boolean {
     return this.compareIds().includes(id);
+  }
+
+  /** CSS custom-property string for thumbnail containers — seeds accent colour and font vars. */
+  getTplDesignVars(meta: ResumeTemplateMeta): string {
+    return computeDesignVarsCss({ accentColor: getTemplateDefaultAccent(meta) });
   }
 
   toggleCompare(id: string): void {

@@ -1,8 +1,8 @@
-<div class="resume-page pe-tpl">
+<div class="resume-page pe-tpl" style="padding:0 !important">
 
-  <!-- Dark executive header with photo on right -->
+  <!-- Dark executive header — full-width naturally; .resume-page padding zeroed so no negative margins needed -->
   <header [style.background]="resume().design?.accentColor ?? '#1e293b'"
-          style="margin:-20pt -20pt 20pt -20pt;padding:22pt 24pt 20pt;display:flex;justify-content:space-between;align-items:center;gap:16pt">
+          style="padding:22pt 24pt 20pt;display:flex;justify-content:space-between;align-items:center;gap:16pt">
     <!-- Left: name + title + contact -->
     <div style="flex:1;min-width:0">
       <h1 style="color:white;font-size:21pt;font-weight:800;line-height:1.1;letter-spacing:0.5px;margin:0">
@@ -37,6 +37,7 @@
   </header>
 
   <!-- Body sections -->
+  <div style="padding:20pt 16mm 14mm">
   @for (section of visibleSections(); track section) {
     <section style="margin-bottom:12pt">
       @switch (sectionKind(section)) {
@@ -199,4 +200,5 @@
       }
     </section>
   }
+  </div>
 </div>

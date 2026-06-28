@@ -1,0 +1,172 @@
+<div class="resume-page corp-tpl">
+
+  <!-- Centered Header -->
+  <header class="corp-header">
+    <h1 class="corp-name">{{ resume().personal.fullName || 'Your Name' }}</h1>
+    @if (resume().personal.jobTitle) {
+      <p class="corp-title">{{ resume().personal.jobTitle }}</p>
+    }
+    @if (contactParts().length) {
+      <div class="corp-contact-row">
+        @for (part of contactParts(); track $index; let last = $last) {
+          <span class="corp-contact-item">{{ part }}</span>
+          @if (!last) { <span class="corp-contact-sep">|</span> }
+        }
+      </div>
+    }
+  </header>
+  <div class="corp-rule-double"></div>
+
+  @for (section of visibleSections(); track section) {
+    <section class="corp-section">
+      @switch (sectionKind(section)) {
+
+        @case ('summary') {
+          @if (resume().summary) {
+            <h2 class="corp-heading">Professional Summary</h2>
+            <p class="corp-body"><app-rich-text [text]="resume().summary" /></p>
+          }
+        }
+
+        @case ('experience') {
+          @if (resume().experience.length) {
+            <h2 class="corp-heading">Work Experience</h2>
+            @for (exp of resume().experience; track exp.id) {
+              <div class="corp-entry">
+                <div class="corp-entry-row">
+                  <p class="corp-item-title">{{ exp.role }}</p>
+                  <p class="corp-date">{{ dateRange(exp.startDate, exp.endDate, exp.current) }}</p>
+                </div>
+                <p class="corp-item-org">{{ exp.company }}@if (exp.location) { · {{ exp.location }} }</p>
+                @if (exp.bullets.length) {
+                  <ul class="corp-list">
+                    @for (b of exp.bullets; track $index) {
+                      @if (b) { <li><app-rich-text [text]="b" /></li> }
+                    }
+                  </ul>
+                }
+              </div>
+            }
+          }
+        }
+
+        @case ('education') {
+          @if (resume().education.length) {
+            <h2 class="corp-heading">Education</h2>
+            @for (edu of resume().education; track edu.id) {
+              <div class="corp-entry">
+                <div class="corp-entry-row">
+                  <p class="corp-item-title">{{ edu.degree }}@if (edu.field) {, {{ edu.field }} }</p>
+                  <p class="corp-date">{{ dateRange(edu.startDate, edu.endDate, edu.current) }}</p>
+                </div>
+                <p class="corp-item-org">{{ edu.institution }}@if (edu.gpa) { · GPA: {{ edu.gpa }} }</p>
+                @if (edu.description) {
+                  <p class="corp-body corp-mt1"><app-rich-text [text]="edu.description" /></p>
+                }
+              </div>
+            }
+          }
+        }
+
+        @case ('projects') {
+          @if (resume().projects.length) {
+            <h2 class="corp-heading">Projects</h2>
+            @for (proj of resume().projects; track proj.id) {
+              <div class="corp-entry">
+                <p class="corp-item-title">
+                  {{ proj.name }}
+                  @if (proj.techStack) { <span class="corp-muted"> — {{ proj.techStack }}</span> }
+                </p>
+                @if (proj.link) { <p class="corp-item-org">{{ proj.link }}</p> }
+                @if (proj.bullets.length) {
+                  <ul class="corp-list">
+                    @for (b of proj.bullets; track $index) {
+                      @if (b) { <li><app-rich-text [text]="b" /></li> }
+                    }
+                  </ul>
+                }
+              </div>
+            }
+          }
+        }
+
+        @case ('skills') {
+          @if (resume().skills.length) {
+            <h2 class="corp-heading">Skills</h2>
+            <div class="corp-skills">
+              @for (group of resume().skills; track group.id) {
+                @if (group.items.length) {
+                  <p class="corp-body">
+                    @if (group.category) { <span class="corp-skill-label">{{ group.category }}: </span> }
+                    {{ group.items.join(' · ') }}
+                  </p>
+                }
+              }
+            </div>
+          }
+        }
+
+        @case ('certifications') {
+          @if (resume().certifications.length) {
+            <h2 class="corp-heading">Certifications &amp; Licenses</h2>
+            @for (cert of resume().certifications; track cert.id) {
+              <p class="corp-body">
+                <span class="corp-skill-label">{{ cert.name }}</span>
+                @if (cert.issuer) { · {{ cert.issuer }} }
+                @if (cert.date) { <span class="corp-muted"> ({{ monthYear(cert.date) }})</span> }
+              </p>
+            }
+          }
+        }
+
+        @case ('achievements') {
+          @if (resume().achievements.length) {
+            <h2 class="corp-heading">Achievements</h2>
+            <ul class="corp-list">
+              @for (item of resume().achievements; track $index) {
+                @if (item) { <li class="corp-body"><app-rich-text [text]="item" /></li> }
+              }
+            </ul>
+          }
+        }
+
+        @case ('languages') {
+          @if (resume().languages.length) {
+            <h2 class="corp-heading">Languages</h2>
+            <p class="corp-body">
+              @for (lang of resume().languages; track lang.id; let last = $last) {
+                {{ lang.name }} ({{ lang.proficiency }})@if (!last) { · }
+              }
+            </p>
+          }
+        }
+
+        @case ('interests') {
+          @if (resume().interests.length) {
+            <h2 class="corp-heading">Interests</h2>
+            <p class="corp-body">{{ resume().interests.join(' · ') }}</p>
+          }
+        }
+
+        @case ('custom') {
+          @if (customSection(section); as cs) {
+            @if (cs.entries.length) {
+              <h2 class="corp-heading">{{ cs.title }}</h2>
+              @for (entry of cs.entries; track entry.id) {
+                <div class="corp-entry">
+                  <div class="corp-entry-row">
+                    @if (entry.heading) { <p class="corp-item-title">{{ entry.heading }}</p> }
+                    @if (entry.date) { <p class="corp-date">{{ entry.date }}</p> }
+                  </div>
+                  @if (entry.subheading) { <p class="corp-item-org">{{ entry.subheading }}</p> }
+                  @if (entry.description) { <p class="corp-body corp-mt1"><app-rich-text [text]="entry.description" /></p> }
+                </div>
+              }
+            }
+          }
+        }
+
+      }
+    </section>
+  }
+</div>

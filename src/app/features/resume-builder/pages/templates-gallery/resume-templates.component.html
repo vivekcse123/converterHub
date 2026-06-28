@@ -442,12 +442,12 @@
             }
           </div>
 
-          <!-- Template visual thumbnail — actual rendered preview -->
-          <div class="relative overflow-hidden bg-white" style="height:220px">
+          <!-- Template visual thumbnail — 410px tall, template rendered at 36% scale -->
+          <div class="relative overflow-hidden bg-white" style="height:410px">
             <!-- Real template rendered at scale — deferred until idle for performance -->
             <div class="absolute inset-0 pointer-events-none select-none" aria-hidden="true">
               @defer (on idle; on viewport) {
-                <div style="position:absolute;top:0;left:50%;transform-origin:top left;transform:scale(0.34) translateX(-50%);width:794px;min-height:650px;overflow:hidden;">
+                <div [attr.style]="'position:absolute;top:0;left:50%;transform-origin:top left;transform:scale(0.36) translateX(-50%);width:794px;min-height:1123px;' + getTplDesignVars(card.meta)">
                   <ng-container *ngComponentOutlet="card.meta.component; inputs: { resume: card.sample }" />
                 </div>
               } @placeholder {

@@ -1,0 +1,192 @@
+.twocol-tpl {
+  font-family: var(--r-font, 'Inter', Arial, sans-serif);
+}
+
+/* ── Header ──────────────────────────────────────────────────────── */
+.twocol-header {
+  background: var(--r-accent, #1e293b);
+  padding: 18pt 16mm 14pt;
+}
+
+.twocol-name {
+  font-size: 22pt;
+  font-weight: 800;
+  color: #ffffff;
+  margin: 0;
+  line-height: 1.1;
+  letter-spacing: 0.2px;
+}
+
+.twocol-jobtitle {
+  font-size: 10.5pt;
+  color: rgba(255,255,255,0.75);
+  font-weight: 400;
+  margin-top: 4pt;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+}
+
+.twocol-contacts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 16pt;
+  margin-top: 9pt;
+  padding-top: 8pt;
+  border-top: 1pt solid rgba(255,255,255,0.15);
+}
+
+.twocol-contact-item {
+  font-size: 8.5pt;
+  color: rgba(255,255,255,0.65);
+}
+
+/* ── Body layout ─────────────────────────────────────────────────── */
+.twocol-body {
+  display: flex;
+  gap: 0;
+}
+
+/* Left column — main content (experience, projects) */
+.twocol-main {
+  flex: 1 1 65%;
+  padding: 16pt 14pt 14mm 16mm;
+  border-right: 1pt solid #f1f5f9;
+  min-width: 0;
+}
+
+/* Right column — sidebar (summary, skills, education…) */
+.twocol-sidebar {
+  flex: 0 0 35%;
+  padding: 16pt 12pt 14mm 14pt;
+  background: #f8fafc;
+  min-width: 0;
+}
+
+/* ── Sections ────────────────────────────────────────────────────── */
+.twocol-section {
+  margin-bottom: 10pt;
+}
+
+/* Main (left) section headings */
+.twocol-main-heading {
+  font-size: 9.5pt;
+  font-weight: 700;
+  color: var(--r-accent, #1e293b);
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+  padding-bottom: 2pt;
+  border-bottom: 1.5pt solid var(--r-accent, #1e293b);
+  margin-bottom: 6pt;
+}
+
+/* Sidebar (right) section headings */
+.twocol-side-heading {
+  font-size: 8.5pt;
+  font-weight: 700;
+  color: var(--r-accent, #1e293b);
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+  margin-bottom: 5pt;
+  padding-bottom: 2pt;
+  border-bottom: 1pt solid var(--r-accent-25, rgba(30,41,59,0.2));
+}
+
+/* ── Main entries ────────────────────────────────────────────────── */
+.twocol-entry {
+  margin-bottom: 7pt;
+}
+
+.twocol-entry-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 6pt;
+}
+
+.twocol-role {
+  font-size: 10.5pt;
+  font-weight: 700;
+  color: #111827;
+  line-height: 1.3;
+}
+
+.twocol-org {
+  font-size: 9pt;
+  font-weight: 600;
+  color: var(--r-accent, #1e293b);
+  margin-top: 1pt;
+}
+
+.twocol-date {
+  font-size: 8.5pt;
+  color: #9ca3af;
+  white-space: nowrap;
+  flex-shrink: 0;
+  padding-top: 2pt;
+}
+
+.twocol-light {
+  color: #6b7280 !important;
+  font-weight: 400 !important;
+}
+
+.twocol-list {
+  list-style: disc;
+  padding-left: 13pt;
+  margin-top: 3pt;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5pt;
+}
+
+.twocol-list li {
+  font-size: 9.5pt;
+  line-height: var(--r-spacing, 1.5);
+  color: #374151;
+}
+
+.twocol-text {
+  font-size: 9pt;
+  line-height: var(--r-spacing, 1.5);
+  color: #374151;
+}
+
+/* ── Sidebar entries ─────────────────────────────────────────────── */
+.twocol-side-entry {
+  margin-bottom: 6pt;
+}
+
+.twocol-side-title {
+  font-size: 9.5pt;
+  font-weight: 700;
+  color: #111827;
+  line-height: 1.3;
+}
+
+.twocol-side-sub {
+  font-size: 8.5pt;
+  color: #374151;
+  margin-top: 0.5pt;
+}
+
+.twocol-small {
+  font-size: 8pt;
+}
+
+.twocol-skill-cat {
+  font-size: 8.5pt;
+  font-weight: 700;
+  color: #374151;
+  margin-top: 4pt;
+  margin-bottom: 1pt;
+}
+
+/* ── Print ───────────────────────────────────────────────────────── */
+@media print {
+  .twocol-header,
+  .twocol-sidebar,
+  .twocol-main-heading {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+}

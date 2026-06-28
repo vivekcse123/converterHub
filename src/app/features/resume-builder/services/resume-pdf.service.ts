@@ -42,6 +42,7 @@ export class ResumePdfService {
   // Puppeteer request. The server needs the templateId to decide whether to stamp
   // a watermark (only for paid templates the user hasn't unlocked).
   private _downloadTemplateId = '';
+  private _downloadPaperSize: 'a4' | 'letter' = 'a4';
 
   get premiumTemplateIds(): string[] { return PREMIUM_TEMPLATE_IDS; }
   isPremiumTemplate(templateId: string): boolean {
@@ -66,9 +67,9 @@ export class ResumePdfService {
       ? window.open('', '_blank')
       : null;
 
-    // Capture templateId for the Puppeteer request so the server can decide
-    // whether this template warrants a watermark without trusting the client.
+    // Capture templateId and paperSize for the Puppeteer request.
     this._downloadTemplateId = resume.templateId ?? '';
+    this._downloadPaperSize  = (resume.design?.paperSize ?? 'a4') as 'a4' | 'letter';
 
     try {
       if (captureEl) {
@@ -120,7 +121,7 @@ export class ResumePdfService {
           'Content-Type':  'application/json',
           'Authorization': `Bearer ${token}`,
         },
-        body: JSON.stringify({ html: clone.outerHTML, inlineStyles: allStyles, cssVarsCss, filename, templateId: this._downloadTemplateId }),
+        body: JSON.stringify({ html: clone.outerHTML, inlineStyles: allStyles, cssVarsCss, filename, templateId: this._downloadTemplateId, paperSize: this._downloadPaperSize }),
         signal: AbortSignal.timeout(90_000),
       });
     } catch {
@@ -156,33 +157,38 @@ export class ResumePdfService {
     }
   }
 
-  // ─── Style collection (cached per session) ───────────────────────────────────
-  // CSS filenames include content hashes (Angular build), so the same URLs are
-  // stable for the entire session. Cache the result to avoid re-fetching on
-  // every PDF download — the payload can be 100–200 KB of Tailwind CSS.
-  private _stylesCache: string | null = null;
+  // ─── Style collection ────────────────────────────────────────────────────────
+  // External stylesheet URLs include content hashes (Angular build), so they are
+  // stable for the entire session and safe to cache. Angular component <style>
+  // tags are added lazily as components mount — they must be re-read on every
+  // download so late-loaded template styles are never missing from the payload.
+  private _externalCssCache: string | null = null;
 
   private async _collectStyles(): Promise<string> {
-    if (this._stylesCache !== null) return this._stylesCache;
+    // Always re-read inline <style> tags — Angular adds them lazily per component.
+    const inlineParts: string[] = [];
+    document.querySelectorAll('style').forEach(s => { inlineParts.push(s.textContent ?? ''); });
 
-    const parts: string[] = [];
-    document.querySelectorAll('style').forEach(s => { parts.push(s.textContent ?? ''); });
-    const jobs = Array.from(document.styleSheets)
-      .filter(sheet => !!sheet.href)
-      .map(async sheet => {
-        const href = sheet.href!;
-        if (!href.startsWith(window.location.origin)) return '';
-        try {
-          const res = await fetch(href);
-          return res.ok ? res.text() : '';
-        } catch {
-          try { return Array.from(sheet.cssRules ?? []).map(r => r.cssText).join('\n'); }
-          catch { return ''; }
-        }
-      });
-    parts.push(...await Promise.all(jobs));
-    this._stylesCache = parts.join('\n');
-    return this._stylesCache;
+    // External stylesheets (Angular bundle + Tailwind) are content-hashed and
+    // stable, so cache them after the first fetch (100–200 KB of CSS).
+    if (this._externalCssCache === null) {
+      const jobs = Array.from(document.styleSheets)
+        .filter(sheet => !!sheet.href)
+        .map(async sheet => {
+          const href = sheet.href!;
+          if (!href.startsWith(window.location.origin)) return '';
+          try {
+            const res = await fetch(href);
+            return res.ok ? res.text() : '';
+          } catch {
+            try { return Array.from(sheet.cssRules ?? []).map(r => r.cssText).join('\n'); }
+            catch { return ''; }
+          }
+        });
+      this._externalCssCache = (await Promise.all(jobs)).join('\n');
+    }
+
+    return inlineParts.join('\n') + '\n' + this._externalCssCache;
   }
 
   private async _printViaIframe(pageHost: HTMLElement, filename: string, isPro: boolean): Promise<void> {

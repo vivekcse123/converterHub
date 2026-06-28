@@ -32,7 +32,10 @@
             "ssr": {
               "entry": "server.ts"
             },
-            "prerender": false,
+            "prerender": {
+              "routesFile": "prerender-routes.txt",
+              "discoverRoutes": false
+            },
             "polyfills": [
               "zone.js"
             ],

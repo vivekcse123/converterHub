@@ -182,7 +182,6 @@ export class ResumeBuilderComponent implements OnInit, OnDestroy {
 
   // ── Panels / modals ───────────────────────────────────────────────────────
   readonly showTemplateDrawer   = signal(false);
-  readonly showTemplateDropdown = signal(false);
   readonly showTemplateGallery  = signal(false);
   readonly showAiPanel          = signal(false);
   readonly showAtsPanel       = signal(false);
@@ -193,7 +192,6 @@ export class ResumeBuilderComponent implements OnInit, OnDestroy {
   readonly showUpgrade        = signal(false);
   readonly upgradeTemplateId  = signal<string | null>(null);
   readonly showProfileMenu    = signal(false);
-  readonly showVersionHistory = signal(false);
 
   // ── Mobile ────────────────────────────────────────────────────────────────
   readonly mobileTab = signal<'editor' | 'preview' | 'templates' | 'ai'>('editor');
@@ -240,12 +238,9 @@ export class ResumeBuilderComponent implements OnInit, OnDestroy {
   }
 
   // ── Save status ───────────────────────────────────────────────────────────
-  readonly saveStatus      = signal<'saved' | 'saving'>('saved');
-  readonly downloading     = signal(false);
-  readonly downloadDone    = signal(false);
-  readonly autoSaveEnabled = signal<boolean>((() => {
-    try { return localStorage.getItem('ch_auto_save') !== 'false'; } catch { return true; }
-  })());
+  readonly saveStatus   = signal<'saved' | 'saving'>('saved');
+  readonly downloading  = signal(false);
+  readonly downloadDone = signal(false);
 
   private saveTimer?: ReturnType<typeof setTimeout>;
   private readonly _trackSave = effect(() => {
@@ -300,6 +295,16 @@ export class ResumeBuilderComponent implements OnInit, OnDestroy {
     if (id) { this.store.duplicateResume(id); this.notify.success('Duplicated', 'Resume copy created.'); }
   }
 
+  /** Free-tier limit: 2 resumes. Shows upgrade modal if at limit, otherwise creates a new resume. */
+  createResumeOrUpgrade(): void {
+    const FREE_LIMIT = 2;
+    if (!this.auth.isPro() && this.store.resumes().length >= FREE_LIMIT) {
+      this.showUpgrade.set(true);
+      return;
+    }
+    this.store.createResume();
+  }
+
   switchToFreeTemplateAndDownload(): void {
     this.showUpgrade.set(false);
     this.upgradeTemplateId.set(null);
@@ -348,13 +353,15 @@ export class ResumeBuilderComponent implements OnInit, OnDestroy {
   // ── Escape to close panels ────────────────────────────────────────────────
   @HostListener('document:keydown.escape')
   onEsc(): void {
+    if (this.showProfileMenu())    { this.showProfileMenu.set(false);    return; }
     if (this.showPreviewModal())   { this.showPreviewModal.set(false);   return; }
+    if (this.showTemplateGallery()){ this.showTemplateGallery.set(false); return; }
     if (this.showTemplateDrawer()) { this.showTemplateDrawer.set(false); return; }
     if (this.showSectionsPanel())  { this.saveReorder();                  return; }
     if (this.showAiPanel())        { this.showAiPanel.set(false);        return; }
     if (this.showAtsPanel())       { this.showAtsPanel.set(false);       return; }
     if (this.showDesignPanel())    { this.showDesignPanel.set(false);    return; }
-    if (this.showProfileMenu())    { this.showProfileMenu.set(false);    return; }
+    if (this.showUpgrade())        { this.showUpgrade.set(false);        return; }
   }
 
   // ── Lifecycle ─────────────────────────────────────────────────────────────
@@ -368,10 +375,13 @@ export class ResumeBuilderComponent implements OnInit, OnDestroy {
     if (this.authGate.consumePendingDownload()) this.download();
 
     try {
-      const visited = localStorage.getItem('ch_rb_visited');
-      const r = this.store.activeResume();
-      const isBlank = !r?.personal?.fullName?.trim() && !r?.experience?.length;
-      if (!visited && isBlank) this.showOnboarding.set(true);
+      const visited    = localStorage.getItem('ch_rb_visited');
+      const r          = this.store.activeResume();
+      const isBlank    = !r?.personal?.fullName?.trim() && !r?.experience?.length;
+      // Skip onboarding if the user arrived with an explicit ?template= param — they
+      // already made their template choice from the gallery or detail page.
+      const hasExplicitTemplate = !!this.route.snapshot.queryParamMap.get('template');
+      if (!visited && isBlank && !hasExplicitTemplate) this.showOnboarding.set(true);
     } catch {}
 
     this.jsonLd.setJsonLd('rb-app', {

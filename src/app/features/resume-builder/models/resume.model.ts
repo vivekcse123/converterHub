@@ -11,7 +11,14 @@ export type TemplateId =
   | 'startup-founder' | 'modern-clean'
   | 'product-manager-pro'
   | 'photo-professional' | 'photo-sidebar-modern'
-  | 'photo-teacher' | 'photo-government' | 'photo-executive';
+  | 'photo-teacher' | 'photo-government' | 'photo-executive'
+  // New unique templates added in v2
+  | 'corporate-classic'
+  | 'left-stripe'
+  | 'two-col-classic'
+  | 'academic-cv'
+  | 'healthcare'
+  | 'sales-achiever';
 
 export interface DesignSettings {
   accentColor: string;

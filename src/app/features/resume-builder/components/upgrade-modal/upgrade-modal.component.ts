@@ -236,14 +236,15 @@ export class UpgradeModalComponent implements OnInit {
   readonly proHighlights = PRO_HIGHLIGHTS;
 
   readonly comparisonRows = [
-    { label: 'Templates',       free: '16 free',  pro: 'All 30 ✓'     },
-    { label: 'PDF watermark',   free: 'Yes',       pro: 'None ✓'       },
-    { label: 'Resumes',         free: 'Up to 2',   pro: 'Unlimited ✓'  },
-    { label: 'Downloads',       free: '3/day',     pro: 'Unlimited ✓'  },
-    { label: 'ATS sub-scores',  free: '✗',         pro: '4 metrics ✓'  },
-    { label: 'Cover Letter',    free: '✗',         pro: '✓ Full'       },
-    { label: 'Portfolio',       free: '✗',         pro: '✓ Full'       },
-    { label: 'Job Tracker',     free: '✗',         pro: '✓ Included'   },
+    { label: 'Templates',       free: '16 free',    pro: 'All 30 ✓'        },
+    { label: 'Premium templates', free: '✗',        pro: '14 unlocked ✓'   },
+    { label: 'PDF watermark',   free: 'None',        pro: 'None ✓'          },
+    { label: 'Resumes',         free: 'Up to 2',     pro: 'Unlimited ✓'     },
+    { label: 'AI credits',      free: 'Limited',     pro: 'Unlimited ✓'     },
+    { label: 'ATS analysis',    free: 'Basic',       pro: 'Full + sub-scores ✓' },
+    { label: 'Cover Letter',    free: '✗',           pro: '✓ Full'          },
+    { label: 'Portfolio',       free: '✗',           pro: '✓ Public URL'    },
+    { label: 'Job Tracker',     free: '✗',           pro: '✓ Included'      },
   ];
 
   ngOnInit(): void {

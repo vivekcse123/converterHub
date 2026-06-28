@@ -1,0 +1,151 @@
+.corp-tpl {
+  font-family: var(--r-font, 'Inter', Arial, sans-serif);
+}
+
+/* ── Header ───────────────────────────────────────────────────────── */
+.corp-header {
+  text-align: center;
+  padding-bottom: 8pt;
+}
+
+.corp-name {
+  font-size: 22pt;
+  font-weight: 800;
+  color: #111827;
+  letter-spacing: 0.3px;
+  margin: 0;
+  line-height: 1.1;
+}
+
+.corp-title {
+  font-size: 11pt;
+  color: var(--r-accent, #1e293b);
+  margin-top: 4pt;
+  font-weight: 500;
+  letter-spacing: 0.3px;
+}
+
+.corp-contact-row {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 0 4pt;
+  margin-top: 6pt;
+  font-size: 8.5pt;
+  color: #6b7280;
+}
+
+.corp-contact-sep {
+  color: #d1d5db;
+  margin: 0 1pt;
+}
+
+/* ── Double Rule ──────────────────────────────────────────────────── */
+.corp-rule-double {
+  margin: 8pt 0;
+  border-top: 2pt solid var(--r-accent, #1e293b);
+  border-bottom: 0.75pt solid var(--r-accent, #1e293b);
+  padding-bottom: 2pt;
+}
+
+/* ── Sections ─────────────────────────────────────────────────────── */
+.corp-section {
+  margin-bottom: 8pt;
+}
+
+.corp-heading {
+  font-size: 9.5pt;
+  font-weight: 700;
+  color: #1e293b;
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+  border-bottom: 0.75pt solid var(--r-accent, #1e293b);
+  padding-bottom: 2pt;
+  margin-bottom: 5pt;
+}
+
+/* ── Entries ──────────────────────────────────────────────────────── */
+.corp-entry {
+  margin-bottom: 7pt;
+}
+
+.corp-entry-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 8pt;
+}
+
+.corp-item-title {
+  font-size: 10.5pt;
+  font-weight: 700;
+  color: #111827;
+  line-height: 1.3;
+}
+
+.corp-item-org {
+  font-size: 9.5pt;
+  color: var(--r-accent, #1e293b);
+  font-weight: 500;
+  margin-top: 1pt;
+}
+
+.corp-date {
+  font-size: 9pt;
+  color: #6b7280;
+  white-space: nowrap;
+  flex-shrink: 0;
+  font-style: italic;
+  padding-top: 1pt;
+}
+
+.corp-body {
+  font-size: 9.5pt;
+  line-height: var(--r-spacing, 1.5);
+  color: #374151;
+}
+
+.corp-mt1 {
+  margin-top: 2pt;
+}
+
+.corp-muted {
+  color: #9ca3af;
+  font-weight: 400;
+}
+
+.corp-skill-label {
+  font-weight: 700;
+  color: #111827;
+}
+
+.corp-skills {
+  display: flex;
+  flex-direction: column;
+  gap: 2pt;
+}
+
+/* ── Lists ────────────────────────────────────────────────────────── */
+.corp-list {
+  list-style: disc;
+  padding-left: 14pt;
+  margin-top: 3pt;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5pt;
+}
+
+.corp-list li {
+  font-size: 9.5pt;
+  line-height: var(--r-spacing, 1.5);
+  color: #374151;
+}
+
+/* ── Print ────────────────────────────────────────────────────────── */
+@media print {
+  .corp-rule-double,
+  .corp-heading {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+}

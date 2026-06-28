@@ -10,6 +10,9 @@
 .preview-page-host {
   position: relative;
   width: 210mm;
+  /* Match the color-scheme Puppeteer uses when generating the PDF so the preview
+     never renders with system dark-mode colours that the PDF wouldn't have. */
+  color-scheme: light;
 }
 
 .page-break-line {

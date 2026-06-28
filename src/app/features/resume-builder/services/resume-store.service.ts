@@ -1,11 +1,13 @@
 import { Injectable, PLATFORM_ID, computed, effect, inject, signal } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { createBlankResume } from '../data/resume-defaults';
+import { getDefaultAccentById } from '../data/resume-templates.data';
 import {
   BuiltInSectionId,
   CertificationItem,
   CustomSection,
   CustomSectionEntry,
+  DEFAULT_DESIGN,
   DesignSettings,
   EducationItem,
   ExperienceItem,
@@ -135,7 +137,17 @@ export class ResumeStoreService {
   }
 
   setTemplate(templateId: TemplateId, id?: string): void {
-    this.patchActive(r => ({ ...r, templateId }), id);
+    this.patchActive(r => {
+      // Only reset the accent color if the user hasn't customized it (i.e. it still
+      // matches the previous template's default). If they picked a custom color,
+      // keep it when switching templates so the choice is preserved.
+      const prevDefault = getDefaultAccentById(r.templateId as TemplateId);
+      const newDefault  = getDefaultAccentById(templateId);
+      const accentColor = (r.design?.accentColor ?? prevDefault) === prevDefault
+        ? newDefault
+        : r.design?.accentColor!;
+      return { ...r, templateId, design: { ...DEFAULT_DESIGN, ...r.design, accentColor } };
+    }, id);
   }
 
   // ── Generic patch helper ─────────────────────────────────────────────────

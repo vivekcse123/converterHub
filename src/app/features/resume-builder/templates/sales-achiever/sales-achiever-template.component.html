@@ -1,0 +1,174 @@
+<div class="resume-page sales-tpl">
+
+  <!-- Header: bold, impact-focused -->
+  <header class="sales-header">
+    <div class="sales-header-left">
+      <h1 class="sales-name">{{ resume().personal.fullName || 'Your Name' }}</h1>
+      @if (resume().personal.jobTitle) {
+        <p class="sales-title">{{ resume().personal.jobTitle }}</p>
+      }
+    </div>
+    @if (contactParts().length) {
+      <div class="sales-contacts">
+        @for (part of contactParts(); track $index) {
+          <span class="sales-contact-item">{{ part }}</span>
+        }
+      </div>
+    }
+  </header>
+
+  @for (section of visibleSections(); track section) {
+    <section class="sales-section">
+      @switch (sectionKind(section)) {
+
+        @case ('summary') {
+          @if (resume().summary) {
+            <h2 class="sales-heading">Value Proposition</h2>
+            <p class="sales-body sales-intro"><app-rich-text [text]="resume().summary" /></p>
+          }
+        }
+
+        @case ('experience') {
+          @if (resume().experience.length) {
+            <h2 class="sales-heading">Revenue Impact &amp; Experience</h2>
+            @for (exp of resume().experience; track exp.id) {
+              <div class="sales-entry">
+                <div class="sales-entry-header">
+                  <div class="sales-entry-left">
+                    <p class="sales-role">{{ exp.role }}</p>
+                    <p class="sales-org">
+                      {{ exp.company }}
+                      @if (exp.location) { <span class="sales-light"> · {{ exp.location }}</span> }
+                    </p>
+                  </div>
+                  <span class="sales-date-badge">{{ dateRange(exp.startDate, exp.endDate, exp.current) }}</span>
+                </div>
+                @if (exp.bullets.length) {
+                  <ul class="sales-list">
+                    @for (b of exp.bullets; track $index) {
+                      @if (b) { <li><app-rich-text [text]="b" /></li> }
+                    }
+                  </ul>
+                }
+              </div>
+            }
+          }
+        }
+
+        @case ('skills') {
+          @if (resume().skills.length) {
+            <h2 class="sales-heading">Core Competencies</h2>
+            <div class="sales-competencies">
+              @for (group of resume().skills; track group.id) {
+                @for (item of group.items; track item) {
+                  <span class="sales-competency">{{ item }}</span>
+                }
+              }
+            </div>
+          }
+        }
+
+        @case ('achievements') {
+          @if (resume().achievements.length) {
+            <h2 class="sales-heading">Key Achievements</h2>
+            <ul class="sales-achievement-list">
+              @for (item of resume().achievements; track $index) {
+                @if (item) {
+                  <li class="sales-achievement-item">
+                    <span class="sales-achievement-bullet">★</span>
+                    <span class="sales-body"><app-rich-text [text]="item" /></span>
+                  </li>
+                }
+              }
+            </ul>
+          }
+        }
+
+        @case ('education') {
+          @if (resume().education.length) {
+            <h2 class="sales-heading">Education</h2>
+            @for (edu of resume().education; track edu.id) {
+              <div class="sales-edu-entry">
+                <div class="sales-entry-header">
+                  <div>
+                    <p class="sales-role">{{ edu.degree }}@if (edu.field) {, {{ edu.field }} }</p>
+                    <p class="sales-org sales-light">{{ edu.institution }}@if (edu.gpa) { · GPA: {{ edu.gpa }} }</p>
+                  </div>
+                  <span class="sales-date-badge">{{ dateRange(edu.startDate, edu.endDate, edu.current) }}</span>
+                </div>
+              </div>
+            }
+          }
+        }
+
+        @case ('projects') {
+          @if (resume().projects.length) {
+            <h2 class="sales-heading">Key Initiatives</h2>
+            @for (proj of resume().projects; track proj.id) {
+              <div class="sales-entry">
+                <p class="sales-role">{{ proj.name }}</p>
+                @if (proj.bullets.length) {
+                  <ul class="sales-list">
+                    @for (b of proj.bullets; track $index) {
+                      @if (b) { <li><app-rich-text [text]="b" /></li> }
+                    }
+                  </ul>
+                }
+              </div>
+            }
+          }
+        }
+
+        @case ('certifications') {
+          @if (resume().certifications.length) {
+            <h2 class="sales-heading">Certifications</h2>
+            @for (cert of resume().certifications; track cert.id) {
+              <p class="sales-body">
+                <strong>{{ cert.name }}</strong>
+                @if (cert.issuer) { · {{ cert.issuer }} }
+                @if (cert.date) { <span class="sales-light"> ({{ monthYear(cert.date) }})</span> }
+              </p>
+            }
+          }
+        }
+
+        @case ('languages') {
+          @if (resume().languages.length) {
+            <h2 class="sales-heading">Languages</h2>
+            <p class="sales-body">
+              @for (lang of resume().languages; track lang.id; let last = $last) {
+                {{ lang.name }} ({{ lang.proficiency }})@if (!last) { · }
+              }
+            </p>
+          }
+        }
+
+        @case ('interests') {
+          @if (resume().interests.length) {
+            <h2 class="sales-heading">Interests</h2>
+            <p class="sales-body">{{ resume().interests.join(' · ') }}</p>
+          }
+        }
+
+        @case ('custom') {
+          @if (customSection(section); as cs) {
+            @if (cs.entries.length) {
+              <h2 class="sales-heading">{{ cs.title }}</h2>
+              @for (entry of cs.entries; track entry.id) {
+                <div class="sales-entry">
+                  <div class="sales-entry-header">
+                    @if (entry.heading) { <p class="sales-role">{{ entry.heading }}</p> }
+                    @if (entry.date) { <span class="sales-date-badge">{{ entry.date }}</span> }
+                  </div>
+                  @if (entry.subheading) { <p class="sales-org sales-light">{{ entry.subheading }}</p> }
+                  @if (entry.description) { <p class="sales-body"><app-rich-text [text]="entry.description" /></p> }
+                </div>
+              }
+            }
+          }
+        }
+
+      }
+    </section>
+  }
+</div>

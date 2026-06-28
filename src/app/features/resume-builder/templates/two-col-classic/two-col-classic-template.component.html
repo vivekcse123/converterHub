@@ -1,0 +1,202 @@
+<div class="resume-page twocol-tpl" style="padding:0 !important">
+
+  <!-- Full-width header -->
+  <header class="twocol-header">
+    <h1 class="twocol-name">{{ resume().personal.fullName || 'Your Name' }}</h1>
+    @if (resume().personal.jobTitle) {
+      <p class="twocol-jobtitle">{{ resume().personal.jobTitle }}</p>
+    }
+    @if (contactParts().length) {
+      <div class="twocol-contacts">
+        @for (part of contactParts(); track $index) {
+          <span class="twocol-contact-item">{{ part }}</span>
+        }
+      </div>
+    }
+  </header>
+
+  <!-- Two-column body -->
+  <div class="twocol-body">
+
+    <!-- LEFT: Experience & Projects (65%) -->
+    <div class="twocol-main">
+
+      @for (section of mainSections(); track section) {
+        @switch (sectionKind(section)) {
+
+          @case ('experience') {
+            @if (resume().experience.length) {
+              <section class="twocol-section">
+                <h2 class="twocol-main-heading">Experience</h2>
+                @for (exp of resume().experience; track exp.id) {
+                  <div class="twocol-entry">
+                    <div class="twocol-entry-top">
+                      <p class="twocol-role">{{ exp.role }}</p>
+                      <span class="twocol-date">{{ dateRange(exp.startDate, exp.endDate, exp.current) }}</span>
+                    </div>
+                    <p class="twocol-org">
+                      {{ exp.company }}
+                      @if (exp.location) { <span class="twocol-light"> · {{ exp.location }}</span> }
+                    </p>
+                    @if (exp.bullets.length) {
+                      <ul class="twocol-list">
+                        @for (b of exp.bullets; track $index) {
+                          @if (b) { <li><app-rich-text [text]="b" /></li> }
+                        }
+                      </ul>
+                    }
+                  </div>
+                }
+              </section>
+            }
+          }
+
+          @case ('projects') {
+            @if (resume().projects.length) {
+              <section class="twocol-section">
+                <h2 class="twocol-main-heading">Projects</h2>
+                @for (proj of resume().projects; track proj.id) {
+                  <div class="twocol-entry">
+                    <p class="twocol-role">
+                      {{ proj.name }}
+                      @if (proj.techStack) { <span class="twocol-light"> · {{ proj.techStack }}</span> }
+                    </p>
+                    @if (proj.link) { <p class="twocol-org twocol-light">{{ proj.link }}</p> }
+                    @if (proj.bullets.length) {
+                      <ul class="twocol-list">
+                        @for (b of proj.bullets; track $index) {
+                          @if (b) { <li><app-rich-text [text]="b" /></li> }
+                        }
+                      </ul>
+                    }
+                  </div>
+                }
+              </section>
+            }
+          }
+
+          @case ('achievements') {
+            @if (resume().achievements.length) {
+              <section class="twocol-section">
+                <h2 class="twocol-main-heading">Achievements</h2>
+                <ul class="twocol-list">
+                  @for (item of resume().achievements; track $index) {
+                    @if (item) { <li><app-rich-text [text]="item" /></li> }
+                  }
+                </ul>
+              </section>
+            }
+          }
+
+          @case ('custom') {
+            @if (customSection(section); as cs) {
+              @if (cs.entries.length) {
+                <section class="twocol-section">
+                  <h2 class="twocol-main-heading">{{ cs.title }}</h2>
+                  @for (entry of cs.entries; track entry.id) {
+                    <div class="twocol-entry">
+                      <div class="twocol-entry-top">
+                        @if (entry.heading) { <p class="twocol-role">{{ entry.heading }}</p> }
+                        @if (entry.date) { <span class="twocol-date">{{ entry.date }}</span> }
+                      </div>
+                      @if (entry.subheading) { <p class="twocol-org twocol-light">{{ entry.subheading }}</p> }
+                      @if (entry.description) { <p class="twocol-text"><app-rich-text [text]="entry.description" /></p> }
+                    </div>
+                  }
+                </section>
+              }
+            }
+          }
+
+        }
+      }
+    </div>
+
+    <!-- RIGHT: Summary, Skills, Education, Certifications, Languages, Interests (35%) -->
+    <div class="twocol-sidebar">
+
+      @for (section of sidebarSections(); track section) {
+        @switch (sectionKind(section)) {
+
+          @case ('summary') {
+            @if (resume().summary) {
+              <section class="twocol-section">
+                <h2 class="twocol-side-heading">Profile</h2>
+                <p class="twocol-text"><app-rich-text [text]="resume().summary" /></p>
+              </section>
+            }
+          }
+
+          @case ('skills') {
+            @if (resume().skills.length) {
+              <section class="twocol-section">
+                <h2 class="twocol-side-heading">Skills</h2>
+                @for (group of resume().skills; track group.id) {
+                  @if (group.items.length) {
+                    @if (group.category) {
+                      <p class="twocol-skill-cat">{{ group.category }}</p>
+                    }
+                    <p class="twocol-text">{{ group.items.join(' · ') }}</p>
+                  }
+                }
+              </section>
+            }
+          }
+
+          @case ('education') {
+            @if (resume().education.length) {
+              <section class="twocol-section">
+                <h2 class="twocol-side-heading">Education</h2>
+                @for (edu of resume().education; track edu.id) {
+                  <div class="twocol-side-entry">
+                    <p class="twocol-side-title">{{ edu.degree }}@if (edu.field) {, {{ edu.field }} }</p>
+                    <p class="twocol-side-sub">{{ edu.institution }}</p>
+                    @if (edu.gpa) { <p class="twocol-light twocol-small">GPA: {{ edu.gpa }}</p> }
+                    <p class="twocol-light twocol-small">{{ dateRange(edu.startDate, edu.endDate, edu.current) }}</p>
+                  </div>
+                }
+              </section>
+            }
+          }
+
+          @case ('certifications') {
+            @if (resume().certifications.length) {
+              <section class="twocol-section">
+                <h2 class="twocol-side-heading">Certifications</h2>
+                @for (cert of resume().certifications; track cert.id) {
+                  <div class="twocol-side-entry">
+                    <p class="twocol-side-title">{{ cert.name }}</p>
+                    @if (cert.issuer) { <p class="twocol-side-sub">{{ cert.issuer }}</p> }
+                    @if (cert.date) { <p class="twocol-light twocol-small">{{ monthYear(cert.date) }}</p> }
+                  </div>
+                }
+              </section>
+            }
+          }
+
+          @case ('languages') {
+            @if (resume().languages.length) {
+              <section class="twocol-section">
+                <h2 class="twocol-side-heading">Languages</h2>
+                @for (lang of resume().languages; track lang.id) {
+                  <p class="twocol-text">{{ lang.name }} <span class="twocol-light">({{ lang.proficiency }})</span></p>
+                }
+              </section>
+            }
+          }
+
+          @case ('interests') {
+            @if (resume().interests.length) {
+              <section class="twocol-section">
+                <h2 class="twocol-side-heading">Interests</h2>
+                <p class="twocol-text">{{ resume().interests.join(' · ') }}</p>
+              </section>
+            }
+          }
+
+        }
+      }
+    </div>
+
+  </div>
+</div>

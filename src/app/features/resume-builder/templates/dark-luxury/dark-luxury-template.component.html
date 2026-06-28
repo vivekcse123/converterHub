@@ -1,8 +1,8 @@
-<div class="resume-page dark-lux-tpl">
+<div class="resume-page dark-lux-tpl" style="padding:0 !important">
 
-  <!-- Dark full-bleed header -->
+  <!-- Dark full-bleed header — no negative margins needed; .resume-page padding zeroed so header is naturally full-width -->
   <header [style.background]="resume().design?.accentColor ?? '#1e293b'"
-          style="margin:-20pt -20pt 20pt -20pt;padding:26pt 28pt 22pt">
+          style="padding:26pt 28pt 22pt">
     <h1 style="color:white;font-size:22pt;font-weight:800;letter-spacing:1px;line-height:1.1;margin:0">
       {{ resume().personal.fullName || 'Your Name' }}
     </h1>
@@ -20,6 +20,7 @@
     }
   </header>
 
+  <div style="padding:20pt 16mm 14mm">
   @for (section of visibleSections(); track section) {
     <section style="margin-bottom:12pt">
       @switch (sectionKind(section)) {
@@ -186,4 +187,5 @@
       }
     </section>
   }
+  </div>
 </div>

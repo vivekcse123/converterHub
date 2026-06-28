@@ -223,17 +223,17 @@
       @for (t of filteredTemplates; track t.id) {
         <div class="group">
 
-          <!-- Preview thumbnail -->
-          <div class="relative rounded-xl overflow-hidden border-2 border-slate-200 dark:border-slate-700
+          <!-- Preview thumbnail — 256px tall, template rendered at 24% scale -->
+          <div class="relative h-64 rounded-xl overflow-hidden border-2 border-slate-200 dark:border-slate-700
                       group-hover:border-violet-400 dark:group-hover:border-violet-500
-                      group-hover:shadow-2xl transition-all duration-200 cursor-pointer" style="height:220px"
+                      group-hover:shadow-2xl transition-all duration-200 cursor-pointer"
                (click)="openTemplate(t.slug)">
 
-            <!-- Actual template component rendered at scale -->
+            <!-- Actual template rendered at 24% scale; centered horizontally -->
             <div class="absolute inset-0 pointer-events-none select-none bg-white" aria-hidden="true">
               @defer (on idle; on viewport) {
                 @if (getTplComponent(t.id) && getTplSample(t.id)) {
-                  <div style="position:absolute;top:0;left:50%;transform-origin:top left;transform:scale(0.34) translateX(-50%);width:794px;min-height:650px;overflow:hidden;">
+                  <div [attr.style]="'position:absolute;top:0;left:50%;transform-origin:top left;transform:scale(0.24) translateX(-50%);width:794px;min-height:1123px;' + getTplDesignVars(t.id)">
                     <ng-container *ngComponentOutlet="getTplComponent(t.id)!; inputs: { resume: getTplSample(t.id) }" />
                   </div>
                 }

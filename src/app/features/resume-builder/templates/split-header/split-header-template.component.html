@@ -1,7 +1,7 @@
-<div class="resume-page split-tpl">
+<div class="resume-page split-tpl" style="padding:0 !important">
 
-  <!-- Split header -->
-  <header style="display:flex;margin:-20pt -20pt 16pt -20pt;min-height:72pt">
+  <!-- Split header — naturally full-width; .resume-page padding zeroed -->
+  <header style="display:flex;min-height:72pt">
     <div style="flex:1.1;padding:18pt 20pt 18pt 24pt;display:flex;flex-direction:column;justify-content:center"
          [style.background]="resume().design?.accentColor ?? '#7c3aed'">
       <h1 style="color:white;font-size:18pt;font-weight:800;line-height:1.1;margin:0">{{ resume().personal.fullName || 'Your Name' }}</h1>
@@ -16,6 +16,7 @@
     </div>
   </header>
 
+  <div style="padding:16pt 16mm 14mm">
   @for (section of visibleSections(); track section) {
     <section style="margin-bottom:10pt">
       @switch (sectionKind(section)) {
@@ -162,4 +163,5 @@
       }
     </section>
   }
+  </div>
 </div>

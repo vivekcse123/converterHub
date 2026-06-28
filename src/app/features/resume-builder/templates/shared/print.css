@@ -9,6 +9,9 @@
   color: #1e293b;
   font-size: calc(10.5pt * var(--r-size, 1));
   line-height: var(--r-spacing, 1.5);
+  /* Force light colour scheme so system/browser dark-mode overrides never
+     bleed into the resume page — must match Puppeteer's color-scheme:light. */
+  color-scheme: light;
 }
 
 .resume-page * {
@@ -26,9 +29,9 @@
 
 @media print {
   .resume-page {
-    width: 100%;
-    min-height: 0;
-    padding: 0;
     box-shadow: none !important;
+    /* width, min-height, and padding intentionally NOT reset here so that
+       Puppeteer's pdf() call — which may trigger print media regardless of
+       emulateMediaType("screen") — still receives the full 210mm A4 layout. */
   }
 }

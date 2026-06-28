@@ -185,7 +185,7 @@
        (click)="$event.stopPropagation()">
     <div class="shrink-0 h-14 px-5 flex items-center justify-between border-b border-slate-100">
       <h3 class="text-sm font-bold text-slate-900">Choose Template</h3>
-      <button type="button" (click)="showTemplateDrawer.set(false)"
+      <button type="button" (click)="showTemplateDrawer.set(false)" aria-label="Close template drawer"
               class="w-8 h-8 flex items-center justify-center rounded-xl hover:bg-slate-100 text-slate-400 hover:text-slate-700 transition-colors">
         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
@@ -208,7 +208,7 @@
        (click)="$event.stopPropagation()">
     <div class="shrink-0 h-14 px-5 flex items-center justify-between border-b border-slate-100">
       <h3 class="text-sm font-bold text-slate-900">ATS Score Analysis</h3>
-      <button type="button" (click)="showAtsPanel.set(false)"
+      <button type="button" (click)="showAtsPanel.set(false)" aria-label="Close ATS panel"
               class="w-8 h-8 flex items-center justify-center rounded-xl hover:bg-slate-100 text-slate-400 transition-colors">
         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
@@ -232,7 +232,7 @@
         <span class="text-base">✨</span>
         <span class="text-sm font-bold text-white">AI Assistant</span>
       </div>
-      <button type="button" (click)="showAiPanel.set(false)"
+      <button type="button" (click)="showAiPanel.set(false)" aria-label="Close AI assistant"
               class="text-white/70 hover:text-white transition-colors">
         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
@@ -304,7 +304,7 @@
        (click)="$event.stopPropagation()">
     <div class="shrink-0 h-14 px-5 flex items-center justify-between border-b border-slate-100">
       <h3 class="text-sm font-bold text-slate-900">Design & Style</h3>
-      <button type="button" (click)="showDesignPanel.set(false)"
+      <button type="button" (click)="showDesignPanel.set(false)" aria-label="Close design panel"
               class="w-8 h-8 flex items-center justify-center rounded-xl hover:bg-slate-100 text-slate-400 transition-colors">
         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
@@ -463,7 +463,7 @@
     <header class="shrink-0 h-14 border-b border-slate-100 bg-white flex items-center px-5 gap-3" style="box-shadow:0 1px 0 0 rgb(0 0 0/.06)">
 
       <!-- Back -->
-      <button type="button" (click)="goBack()"
+      <button type="button" (click)="goBack()" aria-label="Back to dashboard"
          class="flex items-center justify-center w-8 h-8 rounded-xl hover:bg-slate-100 transition-colors text-slate-500 hover:text-slate-800 shrink-0">
         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
@@ -884,7 +884,8 @@
                     {id:'certifications',label:'🏆 Certifications'},
                     {id:'achievements',label:'⭐ Achievements'},
                     {id:'languages',label:'🌐 Languages'},
-                    {id:'interests',label:'❤️ Interests'}
+                    {id:'interests',label:'❤️ Interests'},
+                    {id:'custom',label:'✏️ Custom'}
                   ]); track tab.id) {
                     <button type="button"
                             (click)="extrasTab.set($any(tab.id))"
@@ -897,36 +898,49 @@
                   }
                 </div>
 
-                <div class="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden">
-                  @switch (extrasTab()) {
-                    @case ('projects')       { <app-projects-form /> }
-                    @case ('certifications') { <app-certifications-form /> }
-                    @case ('achievements')   { <app-achievements-form /> }
-                    @case ('languages')      { <app-languages-form /> }
-                    @case ('interests')      { <app-interests-form /> }
-                  }
-                </div>
-
-                <!-- Custom sections -->
-                @if (r.customSections.length > 0) {
-                  <div class="space-y-3">
-                    <p class="text-xs font-bold text-slate-500 uppercase tracking-widest px-1">Custom Sections</p>
-                    @for (section of r.customSections; track section.id) {
-                      @if (getCustomSection(r, $any('custom:' + section.id)); as cs) {
-                        <div class="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden">
-                          <app-custom-section-form [section]="cs" />
-                        </div>
-                      }
+                @if (extrasTab() !== 'custom') {
+                  <div class="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden">
+                    @switch (extrasTab()) {
+                      @case ('projects')       { <app-projects-form /> }
+                      @case ('certifications') { <app-certifications-form /> }
+                      @case ('achievements')   { <app-achievements-form /> }
+                      @case ('languages')      { <app-languages-form /> }
+                      @case ('interests')      { <app-interests-form /> }
                     }
                   </div>
                 }
-                <button type="button" (click)="store.addCustomSection()"
-                        class="w-full flex items-center justify-center gap-2 py-3 rounded-2xl border-2 border-dashed border-slate-200 hover:border-violet-300 text-sm font-medium text-slate-500 hover:text-violet-600 transition-colors">
-                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
-                  </svg>
-                  Add Custom Section
-                </button>
+
+                <!-- Custom sections tab -->
+                @if (extrasTab() === 'custom') {
+                  <div class="space-y-3">
+                    @if (r.customSections.length === 0) {
+                      <div class="text-center py-8 text-slate-400">
+                        <div class="w-12 h-12 mx-auto mb-3 rounded-2xl bg-slate-100 flex items-center justify-center">
+                          <svg class="w-6 h-6 text-slate-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                          </svg>
+                        </div>
+                        <p class="text-sm font-medium text-slate-500 mb-1">No custom sections yet</p>
+                        <p class="text-xs text-slate-400">Add sections like Publications, Volunteering, Courses, etc.</p>
+                      </div>
+                    } @else {
+                      @for (section of r.customSections; track section.id) {
+                        @if (getCustomSection(r, $any('custom:' + section.id)); as cs) {
+                          <div class="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden">
+                            <app-custom-section-form [section]="cs" />
+                          </div>
+                        }
+                      }
+                    }
+                    <button type="button" (click)="store.addCustomSection()"
+                            class="w-full flex items-center justify-center gap-2 py-3 rounded-2xl border-2 border-dashed border-slate-200 hover:border-violet-300 text-sm font-medium text-slate-500 hover:text-violet-600 transition-colors">
+                      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                      </svg>
+                      Add Custom Section
+                    </button>
+                  </div>
+                }
               </div>
             }
 
@@ -1097,6 +1111,23 @@
                     </div>
                   </div>
 
+                  <!-- Paper size selector -->
+                  <div>
+                    <p class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2">Paper size</p>
+                    <div class="flex gap-2">
+                      <button type="button" (click)="setPaperSize('a4')"
+                              class="flex-1 py-2.5 rounded-xl border-2 text-xs font-bold transition-all"
+                              [class]="design().paperSize === 'a4' ? 'border-violet-500 bg-violet-50 text-violet-700' : 'border-slate-200 text-slate-500 hover:border-slate-300'">
+                        A4 <span class="font-normal opacity-60">210×297mm</span>
+                      </button>
+                      <button type="button" (click)="setPaperSize('letter')"
+                              class="flex-1 py-2.5 rounded-xl border-2 text-xs font-bold transition-all"
+                              [class]="design().paperSize === 'letter' ? 'border-violet-500 bg-violet-50 text-violet-700' : 'border-slate-200 text-slate-500 hover:border-slate-300'">
+                        Letter <span class="font-normal opacity-60">216×279mm</span>
+                      </button>
+                    </div>
+                  </div>
+
                   <!-- Main download button -->
                   @if (downloadDone()) {
                     <div class="w-full flex items-center justify-center gap-2.5 py-4 bg-emerald-600 text-white font-bold rounded-2xl text-base">
@@ -1123,10 +1154,10 @@
                     </button>
                   }
 
-                  <!-- Print-dialog hint — only shown when falling back to browser print -->
+                  <!-- Generating indicator -->
                   @if (downloading()) {
                     <p class="text-[11px] text-slate-400 text-center leading-snug animate-pulse">
-                      If a print dialog appears: <strong class="text-slate-600">Destination → Save as PDF</strong>
+                      Generating your PDF… this takes 5–10 seconds
                     </p>
                   }
 
@@ -1154,8 +1185,8 @@
                 <!-- Pro upsell -->
                 @if (!auth.isPro()) {
                   <div class="rounded-2xl bg-gradient-to-br from-violet-600 to-purple-700 p-5 text-white">
-                    <p class="font-bold text-base mb-1">⭐ Get more with Pro - ₹99/month</p>
-                    <p class="text-sm text-violet-200 mb-4">3 premium templates · No watermark · AI writer · Cover letter · Portfolio · Job tracker</p>
+                    <p class="font-bold text-base mb-1">⭐ Get more with Pro — ₹99/month</p>
+                    <p class="text-sm text-violet-200 mb-4">All 14 premium templates · No watermark · AI writer · Cover letter · Portfolio · Job tracker</p>
                     <button type="button" (click)="showUpgrade.set(true)"
                             class="w-full py-2.5 bg-white rounded-xl text-violet-700 text-sm font-bold hover:bg-violet-50 transition-colors">
                       Upgrade to Pro →
@@ -1169,7 +1200,7 @@
                           class="flex-1 flex items-center justify-center gap-2 py-2.5 bg-slate-100 hover:bg-slate-200 rounded-xl text-sm font-medium text-slate-700 transition-colors">
                     ⧉ Duplicate
                   </button>
-                  <button type="button" (click)="store.createResume()"
+                  <button type="button" (click)="createResumeOrUpgrade()"
                           class="flex-1 flex items-center justify-center gap-2 py-2.5 bg-slate-100 hover:bg-slate-200 rounded-xl text-sm font-medium text-slate-700 transition-colors">
                     + New Resume
                   </button>
@@ -1265,7 +1296,7 @@
           <div class="flex-1"></div>
 
           <button type="button" (click)="showPreviewModal.set(true)"
-                  title="Full-screen preview"
+                  title="Full-screen preview" aria-label="Full-screen preview"
                   class="w-7 h-7 flex items-center justify-center rounded-lg hover:bg-slate-100 text-slate-400 hover:text-slate-700 transition-colors shrink-0">
             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"/>
@@ -1390,28 +1421,132 @@
                   }
                 }
                 @case (7) {
-                  <div class="grid grid-cols-2 gap-3">
-                    @for (step of steps.slice(0, 6); track step.id) {
-                      <button (click)="goToStep(step.id)"
-                              class="text-left p-3 rounded-xl border-2 transition-all"
-                              [class]="stepDone()[step.id] ? 'border-emerald-200 bg-emerald-50' : 'border-slate-200'">
-                        <span class="text-xl block mb-1">{{ step.emoji }}</span>
-                        <p class="text-xs font-bold text-slate-800">{{ step.label }}</p>
-                        <p class="text-[10px]" [class]="stepDone()[step.id] ? 'text-emerald-600' : 'text-amber-600'">
-                          {{ stepDone()[step.id] ? '✓ Done' : '⚠ Edit' }}
-                        </p>
-                      </button>
-                    }
+                  <div class="space-y-4">
+
+                    <!-- ATS score ring (mobile) -->
+                    <div class="rounded-2xl border overflow-hidden"
+                         [class]="atsScoreColor() === 'emerald' ? 'border-emerald-200 bg-emerald-50' : atsScoreColor() === 'amber' ? 'border-amber-200 bg-amber-50' : 'border-red-200 bg-red-50'">
+                      <div class="p-4 flex items-center gap-4">
+                        <div class="relative w-14 h-14 shrink-0">
+                          <svg class="w-14 h-14 -rotate-90" viewBox="0 0 56 56">
+                            <circle cx="28" cy="28" r="22" fill="none" stroke="currentColor" stroke-width="5" class="text-white/60"></circle>
+                            <circle cx="28" cy="28" r="22" fill="none" stroke="currentColor" stroke-width="5"
+                                    [class]="atsScoreColor() === 'emerald' ? 'text-emerald-500' : atsScoreColor() === 'amber' ? 'text-amber-500' : 'text-red-500'"
+                                    stroke-linecap="round"
+                                    [attr.stroke-dasharray]="2 * 3.14159 * 22"
+                                    [attr.stroke-dashoffset]="2 * 3.14159 * 22 * (1 - atsResult().score / 100)"></circle>
+                          </svg>
+                          <div class="absolute inset-0 flex items-center justify-center">
+                            <span class="text-xs font-extrabold" [class]="atsScoreColor() === 'emerald' ? 'text-emerald-700' : atsScoreColor() === 'amber' ? 'text-amber-700' : 'text-red-700'">{{ atsResult().score }}%</span>
+                          </div>
+                        </div>
+                        <div>
+                          <p class="text-sm font-bold text-slate-900">
+                            @if (atsResult().score >= 90) { ATS Score: Excellent 🎉 }
+                            @else if (atsResult().score >= 70) { ATS Score: Good }
+                            @else { ATS Score: Needs Work }
+                          </p>
+                          <p class="text-xs text-slate-500 mt-0.5">{{ failedChecksCount() }} checks need attention</p>
+                        </div>
+                      </div>
+                      <div class="px-4 pb-3 space-y-1">
+                        @for (check of atsResult().checks.slice(0, 5); track check.label) {
+                          <div class="flex items-center gap-2">
+                            <span class="text-sm shrink-0" [class]="check.passed ? 'text-emerald-500' : 'text-red-400'">{{ check.passed ? '✓' : '✗' }}</span>
+                            <span class="text-[11px]" [class]="check.passed ? 'text-slate-600' : 'text-slate-500'">{{ check.label }}</span>
+                          </div>
+                        }
+                      </div>
+                    </div>
+
+                    <!-- Section completion grid -->
+                    <div class="grid grid-cols-2 gap-3">
+                      @for (step of steps.slice(0, 6); track step.id) {
+                        <button (click)="goToStep(step.id)"
+                                class="text-left p-3 rounded-xl border-2 transition-all"
+                                [class]="stepDone()[step.id] ? 'border-emerald-200 bg-emerald-50' : 'border-slate-200'">
+                          <span class="text-xl block mb-1">{{ step.emoji }}</span>
+                          <p class="text-xs font-bold text-slate-800">{{ step.label }}</p>
+                          <p class="text-[10px]" [class]="stepDone()[step.id] ? 'text-emerald-600' : 'text-amber-600'">
+                            {{ stepDone()[step.id] ? '✓ Done' : '⚠ Edit' }}
+                          </p>
+                        </button>
+                      }
+                    </div>
                   </div>
                 }
                 @case (8) {
-                  <div class="text-center py-4 space-y-4">
-                    <p class="text-4xl font-extrabold text-slate-900">{{ atsResult().score }}%</p>
-                    <p class="text-sm text-slate-500">ATS Score</p>
-                    <button (click)="download()" [disabled]="downloading()"
-                            class="w-full py-4 rounded-2xl bg-violet-600 text-white font-bold text-base disabled:opacity-60">
-                      ⬇ Download PDF
-                    </button>
+                  <div class="space-y-4">
+                    <!-- Score + status -->
+                    <div class="text-center py-2">
+                      <p class="text-4xl font-extrabold text-slate-900">{{ atsResult().score }}%</p>
+                      <p class="text-sm text-slate-500 mt-1">ATS Score</p>
+                    </div>
+
+                    <!-- ATS checklist (mobile) -->
+                    <div class="bg-slate-50 rounded-2xl p-3 space-y-1.5">
+                      @for (check of atsResult().checks; track check.label) {
+                        <div class="flex items-center gap-2">
+                          <div class="w-4 h-4 rounded-full flex items-center justify-center shrink-0 text-[10px]"
+                               [class]="check.passed ? 'bg-emerald-100 text-emerald-600' : 'bg-red-100 text-red-500'">
+                            {{ check.passed ? '✓' : '✗' }}
+                          </div>
+                          <span class="text-[11px] flex-1" [class]="check.passed ? 'text-slate-600' : 'text-slate-400 line-through'">{{ check.label }}</span>
+                        </div>
+                      }
+                    </div>
+
+                    <!-- Paper size selector (mobile) -->
+                    <div class="flex gap-2">
+                      <button type="button" (click)="setPaperSize('a4')"
+                              class="flex-1 py-2 rounded-xl border-2 text-xs font-bold transition-all"
+                              [class]="design().paperSize === 'a4' ? 'border-violet-500 bg-violet-50 text-violet-700' : 'border-slate-200 text-slate-500'">
+                        A4
+                      </button>
+                      <button type="button" (click)="setPaperSize('letter')"
+                              class="flex-1 py-2 rounded-xl border-2 text-xs font-bold transition-all"
+                              [class]="design().paperSize === 'letter' ? 'border-violet-500 bg-violet-50 text-violet-700' : 'border-slate-200 text-slate-500'">
+                        Letter
+                      </button>
+                    </div>
+
+                    <!-- Download button with success state -->
+                    @if (downloadDone()) {
+                      <div class="w-full flex items-center justify-center gap-2.5 py-4 bg-emerald-600 text-white font-bold rounded-2xl text-base">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/>
+                        </svg>
+                        PDF Downloaded!
+                      </div>
+                    } @else {
+                      <button (click)="download()" [disabled]="downloading()"
+                              class="w-full flex items-center justify-center gap-2 py-4 rounded-2xl bg-gradient-to-r from-violet-600 to-purple-600 text-white font-bold text-base disabled:opacity-60">
+                        @if (downloading()) {
+                          <svg class="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24">
+                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/>
+                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/>
+                          </svg>
+                          Generating PDF…
+                        } @else {
+                          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
+                          </svg>
+                          Download PDF
+                        }
+                      </button>
+                    }
+
+                    <!-- Pro upsell (mobile) -->
+                    @if (!auth.isPro()) {
+                      <div class="rounded-2xl bg-gradient-to-br from-violet-600 to-purple-700 p-4 text-white text-center">
+                        <p class="font-bold text-sm mb-0.5">⭐ Go Pro — ₹99/month</p>
+                        <p class="text-xs text-violet-200 mb-3">14 premium templates · AI writer · Cover letter · Job tracker</p>
+                        <button type="button" (click)="showUpgrade.set(true)"
+                                class="w-full py-2 bg-white rounded-xl text-violet-700 text-xs font-bold">
+                          Upgrade →
+                        </button>
+                      </div>
+                    }
                   </div>
                 }
               }

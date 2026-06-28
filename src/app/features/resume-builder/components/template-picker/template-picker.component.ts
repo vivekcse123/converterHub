@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, computed, inject, input, output } f
 import { CommonModule } from '@angular/common';
 import { ResumeStoreService } from '../../services/resume-store.service';
 import { SubscriptionService } from '../../services/subscription.service';
-import { TEMPLATE_CATEGORIES, getTemplatesByCategory } from '../../data/resume-templates.data';
+import { TEMPLATE_CATEGORIES, getTemplatesByCategory, getTemplateDefaultAccent, ResumeTemplateMeta } from '../../data/resume-templates.data';
 import { TemplateId } from '../../models/resume.model';
 
 @Component({
@@ -40,9 +40,9 @@ import { TemplateId } from '../../models/resume.model';
                 <span class="absolute left-0 top-1 bottom-1 w-0.5 bg-violet-500 rounded-full"></span>
               }
 
-              <!-- Color chip -->
-              <div class="relative shrink-0 w-8 h-8 rounded-lg bg-gradient-to-br flex items-center justify-center shadow-sm"
-                   [class]="tpl.accent">
+              <!-- Color chip — solid accent hex matches exactly what setTemplate() applies -->
+              <div class="relative shrink-0 w-8 h-8 rounded-lg flex items-center justify-center shadow-sm"
+                   [style.background]="accentHex(tpl)">
                 <span class="text-white text-[10px] font-bold leading-none">Aa</span>
                 @if (tpl.isPremium && !subs.isPro()) {
                   <span class="absolute -top-1 -right-1 w-3.5 h-3.5 bg-amber-400 rounded-full flex items-center justify-center text-[7px] border-2 border-white dark:border-slate-900">⭐</span>
@@ -152,6 +152,7 @@ export class TemplatePickerComponent {
   readonly templateSelected = output<TemplateId>();
 
   templatesFor = getTemplatesByCategory;
+  accentHex    = (tpl: ResumeTemplateMeta) => getTemplateDefaultAccent(tpl);
 
   select(id: TemplateId): void {
     this.store.setTemplate(id);

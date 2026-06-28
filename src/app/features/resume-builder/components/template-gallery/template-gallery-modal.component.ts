@@ -10,9 +10,9 @@ import {
 } from '@angular/core';
 import { CommonModule, NgComponentOutlet } from '@angular/common';
 import { ResumeData, TemplateId } from '../../models/resume.model';
-import { RESUME_TEMPLATES } from '../../data/resume-templates.data';
+import { RESUME_TEMPLATES, getTemplateDefaultAccent } from '../../data/resume-templates.data';
 import { SubscriptionService } from '../../services/subscription.service';
-import { ResumePreviewComponent } from '../preview/resume-preview.component';
+import { ResumePreviewComponent, computeDesignVarsCss } from '../preview/resume-preview.component';
 
 type FilterId =
   | 'all'
@@ -145,9 +145,7 @@ const FILTERS: { id: FilterId; label: string }[] = [
                     <div class="relative bg-white overflow-hidden" style="height:226px">
 
                       <!-- Scaled full-size template component (live preview with user data) -->
-                      <div style="position:absolute;top:0;left:0;width:794px;height:1123px;
-                                  transform:scale(0.2015);transform-origin:top left;
-                                  pointer-events:none;overflow:hidden">
+                      <div [attr.style]="'position:absolute;top:0;left:0;width:794px;height:1123px;transform:scale(0.2015);transform-origin:top left;pointer-events:none;overflow:hidden;' + thumbnailVars()">
                         <ng-container *ngComponentOutlet="tpl.component; inputs: { resume: thumbnailResumes()[tpl.id] }" />
                       </div>
 
@@ -214,8 +212,8 @@ const FILTERS: { id: FilterId; label: string }[] = [
             <div class="shrink-0 px-5 py-4 bg-white border-b border-slate-100">
               <div class="flex items-start gap-3">
                 <!-- Color chip -->
-                <div class="w-10 h-10 rounded-xl bg-gradient-to-br flex items-center justify-center shrink-0 shadow-sm"
-                     [class]="tpl.accent">
+                <div class="w-10 h-10 rounded-xl flex items-center justify-center shrink-0 shadow-sm"
+                     [style.background]="accentHex(tpl)">
                   <span class="text-white font-bold text-sm drop-shadow">Aa</span>
                 </div>
                 <div class="flex-1 min-w-0">
@@ -312,8 +310,9 @@ export class TemplateGalleryModalComponent {
   readonly close             = output<void>();
   readonly templateApplied   = output<TemplateId>();
 
-  readonly filters     = FILTERS;
+  readonly filters      = FILTERS;
   readonly allTemplates = RESUME_TEMPLATES;
+  accentHex = getTemplateDefaultAccent;
 
   readonly searchQuery  = signal('');
   readonly activeFilter = signal<FilterId>('all');
@@ -328,6 +327,9 @@ export class TemplateGalleryModalComponent {
     }
     return map;
   });
+
+  /** CSS custom-property string using the user's actual design settings. */
+  readonly thumbnailVars = computed(() => computeDesignVarsCss(this.resume().design));
 
   readonly filteredTemplates = computed(() => {
     const q = this.searchQuery().toLowerCase().trim();
@@ -360,7 +362,14 @@ export class TemplateGalleryModalComponent {
     this.searchQuery.set((e.target as HTMLInputElement).value);
   }
 
-  select(id: TemplateId): void { this.selectedId.set(id); }
+  select(id: TemplateId): void {
+    if (this.selectedId() === id) {
+      // Second click on the already-selected card = confirm and apply.
+      this.apply();
+    } else {
+      this.selectedId.set(id);
+    }
+  }
 
   apply(): void {
     const id = this.selectedId();

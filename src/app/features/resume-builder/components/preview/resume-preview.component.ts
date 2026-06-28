@@ -37,6 +37,32 @@ const SPACING_MAP: Record<DesignSettings['lineHeight'], string> = {
   spacious:  '1.75',
 };
 
+/**
+ * Computes the inline CSS string that sets all template design tokens
+ * (`--r-accent`, `--r-font`, `--r-size`, `--r-spacing`, etc.) from a partial
+ * design object.  Exported so thumbnails outside `ResumePreviewComponent` can
+ * apply the same tokens without duplicating the logic.
+ */
+export function computeDesignVarsCss(design?: Partial<DesignSettings>): string {
+  const d: DesignSettings = { ...DEFAULT_DESIGN, ...(design ?? {}) };
+  const hex = (d.accentColor || '#1e293b').replace(/^#/, '').padEnd(6, '0');
+  const r   = parseInt(hex.slice(0, 2), 16) || 0;
+  const g   = parseInt(hex.slice(2, 4), 16) || 0;
+  const b   = parseInt(hex.slice(4, 6), 16) || 0;
+  const basePt    = typeof d.baseFontPt === 'number' && d.baseFontPt > 0
+    ? d.baseFontPt
+    : (LEGACY_SIZE_SCALES[d.fontSize ?? 'medium'] ?? BASE_PT);
+  const sizeScale = (basePt / BASE_PT).toFixed(4);
+  return [
+    `--r-accent:${d.accentColor}`,
+    `--r-accent-12:rgba(${r},${g},${b},0.12)`,
+    `--r-accent-25:rgba(${r},${g},${b},0.25)`,
+    `--r-font:${FONT_FAMILIES[d.fontFamily] ?? FONT_FAMILIES['inter']}`,
+    `--r-size:${sizeScale}`,
+    `--r-spacing:${SPACING_MAP[d.lineHeight ?? 'standard']}`,
+  ].join(';');
+}
+
 const A4_HEIGHT_MM = 297;
 const A4_WIDTH_MM = 210;
 
@@ -77,25 +103,7 @@ export class ResumePreviewComponent implements AfterViewInit, OnDestroy {
   readonly templateInputs = computed(() => ({ resume: this.resume() }));
 
   /** CSS custom properties passed to the template wrapper so all child CSS can use var(--r-accent) etc. */
-  readonly designVars = computed<string>(() => {
-    const d: DesignSettings = { ...DEFAULT_DESIGN, ...this.resume().design };
-    const hex = (d.accentColor || '#1e293b').replace(/^#/, '').padEnd(6, '0');
-    const r = parseInt(hex.slice(0, 2), 16) || 0;
-    const g = parseInt(hex.slice(2, 4), 16) || 0;
-    const b = parseInt(hex.slice(4, 6), 16) || 0;
-    const basePt = typeof d.baseFontPt === 'number' && d.baseFontPt > 0
-      ? d.baseFontPt
-      : (LEGACY_SIZE_SCALES[d.fontSize ?? 'medium'] ?? BASE_PT);
-    const sizeScale = (basePt / BASE_PT).toFixed(4);
-    return [
-      `--r-accent:${d.accentColor}`,
-      `--r-accent-12:rgba(${r},${g},${b},0.12)`,
-      `--r-accent-25:rgba(${r},${g},${b},0.25)`,
-      `--r-font:${FONT_FAMILIES[d.fontFamily] ?? FONT_FAMILIES['inter']}`,
-      `--r-size:${sizeScale}`,
-      `--r-spacing:${SPACING_MAP[d.lineHeight ?? 'standard']}`,
-    ].join(';');
-  });
+  readonly designVars = computed<string>(() => computeDesignVarsCss(this.resume().design));
 
   ngAfterViewInit(): void {
     if (!isPlatformBrowser(this.platformId) || !this.pageHost || !this.scrollHost) return;

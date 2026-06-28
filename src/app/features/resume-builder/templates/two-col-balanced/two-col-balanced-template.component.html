@@ -1,0 +1,165 @@
+<article class="resume-page tcb-tpl">
+  <!-- Full-width header -->
+  <header class="tcb-header">
+    <h1 class="tcb-name">{{ resume().personal.fullName || 'Your Name' }}</h1>
+    @if (resume().personal.jobTitle) {
+      <p class="tcb-title">{{ resume().personal.jobTitle }}</p>
+    }
+    @if (contactParts().length) {
+      <p class="tcb-contacts">
+        @for (part of contactParts(); track $index; let last = $last) {
+          <span>{{ part }}</span>@if (!last) { <span class="tcb-sep"> | </span> }
+        }
+      </p>
+    }
+  </header>
+
+  <!-- True 50/50 two-column body -->
+  <div class="tcb-body">
+
+    <!-- LEFT: Summary, Education, Skills, Languages, Certifications -->
+    <div class="tcb-col">
+      @for (section of leftSections(); track section) {
+        <section class="tcb-section resume-section">
+          @switch (sectionKind(section)) {
+
+            @case ('summary') {
+              @if (resume().summary) {
+                <h2 class="tcb-heading">Summary</h2>
+                <p class="tcb-text"><app-rich-text [text]="resume().summary" /></p>
+              }
+            }
+
+            @case ('education') {
+              @if (resume().education.length) {
+                <h2 class="tcb-heading">Education</h2>
+                @for (edu of resume().education; track edu.id) {
+                  <div class="tcb-entry resume-entry">
+                    <p class="tcb-role">{{ edu.degree }}@if (edu.field) {, {{ edu.field }}}</p>
+                    <p class="tcb-sub">{{ edu.institution }}</p>
+                    <p class="tcb-date">{{ dateRange(edu.startDate, edu.endDate, edu.current) }}@if (edu.gpa) { · GPA {{ edu.gpa }} }</p>
+                    @if (edu.description) { <p class="tcb-text"><app-rich-text [text]="edu.description" /></p> }
+                  </div>
+                }
+              }
+            }
+
+            @case ('skills') {
+              @if (resume().skills.length) {
+                <h2 class="tcb-heading">Skills</h2>
+                @for (group of resume().skills; track group.id) {
+                  @if (group.items.length) {
+                    @if (group.category) { <p class="tcb-skill-cat">{{ group.category }}</p> }
+                    <p class="tcb-text">{{ group.items.join(' · ') }}</p>
+                  }
+                }
+              }
+            }
+
+            @case ('certifications') {
+              @if (resume().certifications.length) {
+                <h2 class="tcb-heading">Certifications</h2>
+                @for (cert of resume().certifications; track cert.id) {
+                  <p class="tcb-text"><strong>{{ cert.name }}</strong>@if (cert.issuer) { — {{ cert.issuer }}}@if (cert.date) { ({{ monthYear(cert.date) }})}</p>
+                }
+              }
+            }
+
+            @case ('languages') {
+              @if (resume().languages.length) {
+                <h2 class="tcb-heading">Languages</h2>
+                @for (lang of resume().languages; track lang.id) {
+                  <p class="tcb-text">{{ lang.name }} — {{ lang.proficiency }}</p>
+                }
+              }
+            }
+
+            @case ('interests') {
+              @if (resume().interests.length) {
+                <h2 class="tcb-heading">Interests</h2>
+                <p class="tcb-text">{{ resume().interests.join(' · ') }}</p>
+              }
+            }
+          }
+        </section>
+      }
+    </div>
+
+    <!-- RIGHT: Experience, Projects, Achievements -->
+    <div class="tcb-col tcb-col-right">
+      @for (section of rightSections(); track section) {
+        <section class="tcb-section resume-section">
+          @switch (sectionKind(section)) {
+
+            @case ('experience') {
+              @if (resume().experience.length) {
+                <h2 class="tcb-heading">Experience</h2>
+                @for (exp of resume().experience; track exp.id) {
+                  <div class="tcb-entry resume-entry">
+                    <p class="tcb-role">{{ exp.role }}</p>
+                    @if (exp.company) { <p class="tcb-sub">{{ exp.company }}@if (exp.location) {, {{ exp.location }}}</p> }
+                    <p class="tcb-date">{{ dateRange(exp.startDate, exp.endDate, exp.current) }}</p>
+                    @if (exp.bullets.length) {
+                      <ul class="tcb-bullets">
+                        @for (b of exp.bullets; track $index) {
+                          @if (b) { <li><app-rich-text [text]="b" /></li> }
+                        }
+                      </ul>
+                    }
+                  </div>
+                }
+              }
+            }
+
+            @case ('projects') {
+              @if (resume().projects.length) {
+                <h2 class="tcb-heading">Projects</h2>
+                @for (proj of resume().projects; track proj.id) {
+                  <div class="tcb-entry resume-entry">
+                    <p class="tcb-role">{{ proj.name }}@if (proj.techStack) { <span class="tcb-sub"> — {{ proj.techStack }}</span>}</p>
+                    @if (proj.link) { <p class="tcb-sub">{{ proj.link }}</p> }
+                    @if (proj.bullets.length) {
+                      <ul class="tcb-bullets">
+                        @for (b of proj.bullets; track $index) {
+                          @if (b) { <li><app-rich-text [text]="b" /></li> }
+                        }
+                      </ul>
+                    }
+                  </div>
+                }
+              }
+            }
+
+            @case ('achievements') {
+              @if (resume().achievements.length) {
+                <h2 class="tcb-heading">Achievements</h2>
+                <ul class="tcb-bullets">
+                  @for (a of resume().achievements; track $index) {
+                    @if (a) { <li><app-rich-text [text]="a" /></li> }
+                  }
+                </ul>
+              }
+            }
+
+            @case ('custom') {
+              @if (customSection(section); as cs) {
+                @if (cs.entries.length) {
+                  <h2 class="tcb-heading">{{ cs.title }}</h2>
+                  @for (entry of cs.entries; track entry.id) {
+                    <div class="tcb-entry resume-entry">
+                      @if (entry.heading) { <p class="tcb-role">{{ entry.heading }}</p> }
+                      @if (entry.subheading || entry.date) {
+                        <p class="tcb-sub">@if (entry.subheading) {{{ entry.subheading }}}@if (entry.date) { · {{ entry.date }}}</p>
+                      }
+                      @if (entry.description) { <p class="tcb-text"><app-rich-text [text]="entry.description" /></p> }
+                    </div>
+                  }
+                }
+              }
+            }
+          }
+        </section>
+      }
+    </div>
+  </div>
+</article>

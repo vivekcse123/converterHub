@@ -1,0 +1,179 @@
+<article class="resume-page sr-tpl">
+  <!-- Full-width header -->
+  <header class="sr-header">
+    <h1 class="sr-name">{{ resume().personal.fullName || 'Your Name' }}</h1>
+    @if (resume().personal.jobTitle) {
+      <p class="sr-title">{{ resume().personal.jobTitle }}</p>
+    }
+  </header>
+
+  <!-- Two-column body: main left, sidebar right -->
+  <div class="sr-body">
+
+    <!-- LEFT: experience, projects, achievements, etc. -->
+    <main class="sr-main">
+      @for (section of mainSections(); track section) {
+        <section class="sr-section">
+          @switch (sectionKind(section)) {
+
+            @case ('summary') {
+              @if (resume().summary) {
+                <h2 class="sr-heading">Summary</h2>
+                <p class="sr-text"><app-rich-text [text]="resume().summary" /></p>
+              }
+            }
+
+            @case ('experience') {
+              @if (resume().experience.length) {
+                <h2 class="sr-heading">Experience</h2>
+                @for (exp of resume().experience; track exp.id) {
+                  <div class="sr-entry">
+                    <div class="sr-entry-head">
+                      <span class="sr-role">{{ exp.role }}@if (exp.company) {, <em>{{ exp.company }}</em>}</span>
+                      <span class="sr-date">{{ dateRange(exp.startDate, exp.endDate, exp.current) }}</span>
+                    </div>
+                    @if (exp.location) { <p class="sr-loc">{{ exp.location }}</p> }
+                    @if (exp.bullets.length) {
+                      <ul class="sr-bullets">
+                        @for (b of exp.bullets; track $index) {
+                          @if (b) { <li><app-rich-text [text]="b" /></li> }
+                        }
+                      </ul>
+                    }
+                  </div>
+                }
+              }
+            }
+
+            @case ('education') {
+              @if (resume().education.length) {
+                <h2 class="sr-heading">Education</h2>
+                @for (edu of resume().education; track edu.id) {
+                  <div class="sr-entry">
+                    <div class="sr-entry-head">
+                      <span class="sr-role">{{ edu.degree }}@if (edu.field) {, {{ edu.field }}}</span>
+                      <span class="sr-date">{{ dateRange(edu.startDate, edu.endDate, edu.current) }}</span>
+                    </div>
+                    <p class="sr-loc">{{ edu.institution }}@if (edu.gpa) { · GPA: {{ edu.gpa }} }</p>
+                    @if (edu.description) { <p class="sr-text"><app-rich-text [text]="edu.description" /></p> }
+                  </div>
+                }
+              }
+            }
+
+            @case ('projects') {
+              @if (resume().projects.length) {
+                <h2 class="sr-heading">Projects</h2>
+                @for (proj of resume().projects; track proj.id) {
+                  <div class="sr-entry">
+                    <p class="sr-role">{{ proj.name }}@if (proj.techStack) { <span class="sr-loc"> — {{ proj.techStack }}</span>}</p>
+                    @if (proj.link) { <p class="sr-loc">{{ proj.link }}</p> }
+                    @if (proj.bullets.length) {
+                      <ul class="sr-bullets">
+                        @for (b of proj.bullets; track $index) {
+                          @if (b) { <li><app-rich-text [text]="b" /></li> }
+                        }
+                      </ul>
+                    }
+                  </div>
+                }
+              }
+            }
+
+            @case ('achievements') {
+              @if (resume().achievements.length) {
+                <h2 class="sr-heading">Achievements</h2>
+                <ul class="sr-bullets">
+                  @for (a of resume().achievements; track $index) {
+                    @if (a) { <li><app-rich-text [text]="a" /></li> }
+                  }
+                </ul>
+              }
+            }
+
+            @case ('custom') {
+              @if (customSection(section); as cs) {
+                @if (cs.entries.length) {
+                  <h2 class="sr-heading">{{ cs.title }}</h2>
+                  @for (entry of cs.entries; track entry.id) {
+                    <div class="sr-entry">
+                      <div class="sr-entry-head">
+                        @if (entry.heading) { <span class="sr-role">{{ entry.heading }}</span> }
+                        @if (entry.date)    { <span class="sr-date">{{ entry.date }}</span> }
+                      </div>
+                      @if (entry.subheading)  { <p class="sr-loc">{{ entry.subheading }}</p> }
+                      @if (entry.description) { <p class="sr-text"><app-rich-text [text]="entry.description" /></p> }
+                    </div>
+                  }
+                }
+              }
+            }
+          }
+        </section>
+      }
+    </main>
+
+    <!-- RIGHT sidebar -->
+    <aside class="sr-sidebar">
+      <!-- Contact block always shown in sidebar -->
+      @if (contactParts().length) {
+        <div class="sr-sidebar-section">
+          <h3 class="sr-sidebar-heading">Contact</h3>
+          @for (part of contactParts(); track $index) {
+            <p class="sr-contact-item">{{ part }}</p>
+          }
+        </div>
+      }
+
+      @for (section of sidebarSections(); track section) {
+        <div class="sr-sidebar-section">
+          @switch (sectionKind(section)) {
+
+            @case ('skills') {
+              @if (resume().skills.length) {
+                <h3 class="sr-sidebar-heading">Skills</h3>
+                @for (group of resume().skills; track group.id) {
+                  @if (group.items.length) {
+                    @if (group.category) { <p class="sr-skill-cat">{{ group.category }}</p> }
+                    @for (item of group.items; track $index) {
+                      <p class="sr-skill-item">{{ item }}</p>
+                    }
+                  }
+                }
+              }
+            }
+
+            @case ('certifications') {
+              @if (resume().certifications.length) {
+                <h3 class="sr-sidebar-heading">Certifications</h3>
+                @for (cert of resume().certifications; track cert.id) {
+                  <p class="sr-cert">
+                    <span class="sr-cert-name">{{ cert.name }}</span>
+                    @if (cert.issuer) { <span class="sr-loc"> · {{ cert.issuer }}</span> }
+                    @if (cert.date)   { <span class="sr-loc"> ({{ monthYear(cert.date) }})</span> }
+                  </p>
+                }
+              }
+            }
+
+            @case ('languages') {
+              @if (resume().languages.length) {
+                <h3 class="sr-sidebar-heading">Languages</h3>
+                @for (lang of resume().languages; track lang.id) {
+                  <p class="sr-skill-item">{{ lang.name }} <span class="sr-loc">({{ lang.proficiency }})</span></p>
+                }
+              }
+            }
+
+            @case ('interests') {
+              @if (resume().interests.length) {
+                <h3 class="sr-sidebar-heading">Interests</h3>
+                <p class="sr-text">{{ resume().interests.join(' · ') }}</p>
+              }
+            }
+          }
+        </div>
+      }
+    </aside>
+  </div>
+</article>

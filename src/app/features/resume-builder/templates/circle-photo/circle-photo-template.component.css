@@ -1,0 +1,72 @@
+.cp-tpl { }
+
+.cp-header {
+  text-align: center;
+  padding-bottom: 6mm;
+  margin-bottom: 4mm;
+  border-bottom: 2px solid var(--r-accent, #2563eb);
+}
+.cp-photo-wrap {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  overflow: hidden;
+  margin: 0 auto 3mm;
+  border: 3px solid var(--r-accent, #2563eb);
+}
+.cp-photo { width: 100%; height: 100%; object-fit: cover; }
+.cp-photo-placeholder {
+  background: color-mix(in srgb, var(--r-accent, #2563eb) 15%, white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.cp-initials {
+  font-size: 18pt;
+  font-weight: 700;
+  color: var(--r-accent, #2563eb);
+}
+.cp-name { font-size: 20pt; font-weight: 700; color: #1e293b; }
+.cp-title { font-size: 10.5pt; color: var(--r-accent, #2563eb); margin-top: 2px; }
+.cp-contacts {
+  font-size: 8.5pt;
+  color: #64748b;
+  margin-top: 3mm;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 2px 4px;
+}
+.cp-sep { color: #cbd5e1; }
+
+.cp-body { }
+.cp-section { margin-bottom: 5mm; }
+
+.cp-heading {
+  font-size: 9pt;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--r-accent, #2563eb);
+  border-bottom: 2px solid var(--r-accent, #2563eb);
+  padding-bottom: 1.5px;
+  margin-bottom: 3mm;
+}
+
+.cp-entry { margin-bottom: 3mm; }
+.cp-entry-head { display: flex; justify-content: space-between; align-items: baseline; gap: 4px; }
+.cp-role { font-size: 10.5pt; font-weight: 600; }
+.cp-sub { font-size: 8.5pt; color: #64748b; font-style: italic; margin-top: 1px; }
+.cp-date { font-size: 8.5pt; color: #64748b; white-space: nowrap; }
+.cp-text { font-size: 9.5pt; line-height: 1.4; margin-top: 2px; }
+.cp-bullets { list-style: disc; padding-left: 14px; margin-top: 2px; }
+.cp-bullets li { font-size: 9.5pt; line-height: 1.35; margin-bottom: 1px; }
+.cp-tags { display: flex; flex-wrap: wrap; gap: 4px; }
+.cp-tag {
+  font-size: 8.5pt;
+  background: color-mix(in srgb, var(--r-accent, #2563eb) 10%, white);
+  color: var(--r-accent, #2563eb);
+  border: 1px solid color-mix(in srgb, var(--r-accent, #2563eb) 25%, white);
+  padding: 2px 8px;
+  border-radius: 10px;
+}

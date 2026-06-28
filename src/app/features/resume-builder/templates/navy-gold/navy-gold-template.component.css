@@ -1,0 +1,82 @@
+.ng-tpl { padding: 0; overflow: hidden; }
+
+.ng-layout { display: flex; min-height: 297mm; }
+
+/* LEFT sidebar: dark navy */
+.ng-sidebar {
+  flex: 0 0 33%;
+  background: #0f172a;
+  color: #e2e8f0;
+  padding: 8mm 7mm 8mm 10mm;
+}
+
+.ng-name-block {
+  padding-bottom: 5mm;
+  margin-bottom: 5mm;
+  border-bottom: 1px solid #1e293b;
+}
+.ng-name {
+  font-size: 16pt;
+  font-weight: 700;
+  color: #f1f5f9;
+  line-height: 1.2;
+}
+.ng-title {
+  font-size: 9pt;
+  color: var(--r-accent, #d97706);
+  margin-top: 3px;
+  font-weight: 500;
+}
+
+.ng-side-section { margin-bottom: 5mm; }
+.ng-side-heading {
+  font-size: 7.5pt;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--r-accent, #d97706);
+  border-bottom: 1px solid #1e293b;
+  padding-bottom: 1.5px;
+  margin-bottom: 2.5mm;
+}
+.ng-side-item { font-size: 8.5pt; color: #94a3b8; margin-bottom: 1.5mm; line-height: 1.3; }
+.ng-skill-cat { font-size: 8pt; font-weight: 600; color: #475569; margin-top: 2px; }
+.ng-cert-date { font-size: 8pt; color: #475569; }
+
+/* RIGHT main: white */
+.ng-main { flex: 1; padding: 8mm 12mm 8mm 10mm; }
+.ng-section { margin-bottom: 5mm; }
+
+.ng-heading {
+  font-size: 9pt;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--r-accent, #d97706);
+  border-bottom: 2px solid var(--r-accent, #d97706);
+  padding-bottom: 1.5px;
+  margin-bottom: 3mm;
+}
+
+.ng-entry { margin-bottom: 3mm; }
+.ng-entry-head { display: flex; justify-content: space-between; align-items: baseline; gap: 4px; }
+.ng-role { font-size: 10.5pt; font-weight: 600; color: #1e293b; }
+.ng-company { font-size: 8.5pt; color: #64748b; font-style: italic; margin-top: 1px; }
+.ng-date { font-size: 8pt; color: #64748b; white-space: nowrap; }
+.ng-text { font-size: 9.5pt; line-height: 1.4; margin-top: 2px; }
+.ng-bullets { list-style: none; padding-left: 0; margin-top: 2px; }
+.ng-bullets li {
+  font-size: 9.5pt;
+  line-height: 1.35;
+  padding-left: 12px;
+  position: relative;
+  margin-bottom: 1px;
+}
+.ng-bullets li::before {
+  content: '◆';
+  position: absolute;
+  left: 0;
+  color: var(--r-accent, #d97706);
+  font-size: 5pt;
+  top: 4px;
+}

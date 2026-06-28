@@ -1,0 +1,169 @@
+<article class="resume-page bx-tpl">
+  <!-- Header box -->
+  <header class="bx-header">
+    <h1 class="bx-name">{{ resume().personal.fullName || 'Your Name' }}</h1>
+    @if (resume().personal.jobTitle) {
+      <p class="bx-title">{{ resume().personal.jobTitle }}</p>
+    }
+    @if (contactParts().length) {
+      <p class="bx-contacts">
+        @for (part of contactParts(); track $index; let last = $last) {
+          <span>{{ part }}</span>@if (!last) { <span class="bx-sep"> | </span> }
+        }
+      </p>
+    }
+  </header>
+
+  <!-- Sections in boxed cards -->
+  @for (section of visibleSections(); track section) {
+    <div class="bx-card resume-section">
+      @switch (sectionKind(section)) {
+
+        @case ('summary') {
+          @if (resume().summary) {
+            <h2 class="bx-heading">Summary</h2>
+            <p class="bx-text"><app-rich-text [text]="resume().summary" /></p>
+          }
+        }
+
+        @case ('experience') {
+          @if (resume().experience.length) {
+            <h2 class="bx-heading">Experience</h2>
+            @for (exp of resume().experience; track exp.id) {
+              <div class="bx-entry resume-entry">
+                <div class="bx-entry-head">
+                  <div>
+                    <p class="bx-role">{{ exp.role }}</p>
+                    @if (exp.company) { <p class="bx-company">{{ exp.company }}@if (exp.location) {, {{ exp.location }}}</p> }
+                  </div>
+                  <span class="bx-date">{{ dateRange(exp.startDate, exp.endDate, exp.current) }}</span>
+                </div>
+                @if (exp.bullets.length) {
+                  <ul class="bx-bullets">
+                    @for (b of exp.bullets; track $index) {
+                      @if (b) { <li><app-rich-text [text]="b" /></li> }
+                    }
+                  </ul>
+                }
+              </div>
+            }
+          }
+        }
+
+        @case ('education') {
+          @if (resume().education.length) {
+            <h2 class="bx-heading">Education</h2>
+            @for (edu of resume().education; track edu.id) {
+              <div class="bx-entry resume-entry">
+                <div class="bx-entry-head">
+                  <div>
+                    <p class="bx-role">{{ edu.degree }}@if (edu.field) {, {{ edu.field }}}</p>
+                    <p class="bx-company">{{ edu.institution }}@if (edu.gpa) { · GPA {{ edu.gpa }} }</p>
+                  </div>
+                  <span class="bx-date">{{ dateRange(edu.startDate, edu.endDate, edu.current) }}</span>
+                </div>
+                @if (edu.description) { <p class="bx-text mt-1"><app-rich-text [text]="edu.description" /></p> }
+              </div>
+            }
+          }
+        }
+
+        @case ('skills') {
+          @if (resume().skills.length) {
+            <h2 class="bx-heading">Skills</h2>
+            <div class="bx-tags">
+              @for (group of resume().skills; track group.id) {
+                @for (item of group.items; track $index) {
+                  <span class="bx-tag">{{ item }}</span>
+                }
+              }
+            </div>
+          }
+        }
+
+        @case ('projects') {
+          @if (resume().projects.length) {
+            <h2 class="bx-heading">Projects</h2>
+            @for (proj of resume().projects; track proj.id) {
+              <div class="bx-entry resume-entry">
+                <p class="bx-role">{{ proj.name }}@if (proj.techStack) { <span class="bx-company"> — {{ proj.techStack }}</span>}</p>
+                @if (proj.link) { <p class="bx-company">{{ proj.link }}</p> }
+                @if (proj.bullets.length) {
+                  <ul class="bx-bullets">
+                    @for (b of proj.bullets; track $index) {
+                      @if (b) { <li><app-rich-text [text]="b" /></li> }
+                    }
+                  </ul>
+                }
+              </div>
+            }
+          }
+        }
+
+        @case ('certifications') {
+          @if (resume().certifications.length) {
+            <h2 class="bx-heading">Certifications</h2>
+            <div class="bx-tags">
+              @for (cert of resume().certifications; track cert.id) {
+                <span class="bx-tag bx-tag-cert">
+                  <strong>{{ cert.name }}</strong>@if (cert.issuer) { · {{ cert.issuer }}}
+                </span>
+              }
+            </div>
+          }
+        }
+
+        @case ('achievements') {
+          @if (resume().achievements.length) {
+            <h2 class="bx-heading">Achievements</h2>
+            <ul class="bx-bullets">
+              @for (a of resume().achievements; track $index) {
+                @if (a) { <li><app-rich-text [text]="a" /></li> }
+              }
+            </ul>
+          }
+        }
+
+        @case ('languages') {
+          @if (resume().languages.length) {
+            <h2 class="bx-heading">Languages</h2>
+            <div class="bx-tags">
+              @for (lang of resume().languages; track lang.id) {
+                <span class="bx-tag">{{ lang.name }} ({{ lang.proficiency }})</span>
+              }
+            </div>
+          }
+        }
+
+        @case ('interests') {
+          @if (resume().interests.length) {
+            <h2 class="bx-heading">Interests</h2>
+            <div class="bx-tags">
+              @for (i of resume().interests; track $index) {
+                <span class="bx-tag">{{ i }}</span>
+              }
+            </div>
+          }
+        }
+
+        @case ('custom') {
+          @if (customSection(section); as cs) {
+            @if (cs.entries.length) {
+              <h2 class="bx-heading">{{ cs.title }}</h2>
+              @for (entry of cs.entries; track entry.id) {
+                <div class="bx-entry resume-entry">
+                  <div class="bx-entry-head">
+                    @if (entry.heading) { <p class="bx-role">{{ entry.heading }}</p> }
+                    @if (entry.date)    { <span class="bx-date">{{ entry.date }}</span> }
+                  </div>
+                  @if (entry.subheading)  { <p class="bx-company">{{ entry.subheading }}</p> }
+                  @if (entry.description) { <p class="bx-text mt-1"><app-rich-text [text]="entry.description" /></p> }
+                </div>
+              }
+            }
+          }
+        }
+      }
+    </div>
+  }
+</article>

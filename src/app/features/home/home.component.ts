@@ -62,7 +62,10 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
   private readonly _tplMap = new Map<string, { component: Type<unknown>; sample: ResumeData }>(
     (['ats-professional','minimal','fresher','compact','modern-professional','tech','elegant',
       'creative','bold','executive','photo-professional','photo-sidebar-modern','photo-teacher',
-      'photo-government','photo-executive'] as const).map(id => {
+      'photo-government','photo-executive',
+      'sidebar-right','dark-matter','centered-cv','timeline-left','header-split',
+      'two-col-balanced','boxed-cv','circle-photo','minimal-serif','gradient-header',
+      'skills-bar','navy-gold'] as const).map(id => {
       const meta = RESUME_TEMPLATES.find(m => m.id === id);
       return [id, { component: meta!.component, sample: createSampleResume(id) }];
     })
@@ -94,6 +97,19 @@ export class HomeComponent implements OnInit, AfterViewInit, OnDestroy {
     { id: 'photo-teacher',       slug: 'photo-teacher-resume-template',        name: 'Photo Teacher',       isPremium: false, accentColor: '#059669', headerBg: '#ffffff', layout: 'photo-center',  atsScore: 87, category: 'Photo Resume',      tags: ['photo', 'professional', 'student'] },
     { id: 'photo-government',    slug: 'photo-government-resume-template',     name: 'Photo Government',    isPremium: true,  accentColor: '#374151', headerBg: '#111827', layout: 'single',        atsScore: 95, category: 'Photo Resume',      tags: ['photo', 'professional'] },
     { id: 'photo-executive',     slug: 'photo-executive-resume-template',      name: 'Photo Executive',     isPremium: true,  accentColor: '#94a3b8', headerBg: '#0f172a', layout: 'photo-dark',    atsScore: 86, category: 'Photo Resume',      tags: ['photo', 'executive'] },
+    // v3 new templates
+    { id: 'sidebar-right',       slug: 'sidebar-right-resume-template',        name: 'Sidebar Right',       isPremium: false, accentColor: '#1e40af', headerBg: '#1e40af', layout: 'two-col',       atsScore: 85, category: 'Executive',         tags: ['executive', 'professional'] },
+    { id: 'dark-matter',         slug: 'dark-matter-resume-template',          name: 'Dark Matter',         isPremium: true,  accentColor: '#10b981', headerBg: '#0f172a', layout: 'dark',          atsScore: 78, category: 'Engineering',       tags: ['engineering', 'creative', 'modern'] },
+    { id: 'centered-cv',         slug: 'centered-cv-resume-template',          name: 'Centered CV',         isPremium: false, accentColor: '#334155', headerBg: '#ffffff', layout: 'single-white',  atsScore: 89, category: 'ATS Friendly',      tags: ['ats', 'minimal', 'professional'] },
+    { id: 'timeline-left',       slug: 'timeline-left-resume-template',        name: 'Timeline Left',       isPremium: false, accentColor: '#1d4ed8', headerBg: '#1d4ed8', layout: 'single',        atsScore: 83, category: 'Professional',      tags: ['professional', 'modern'] },
+    { id: 'header-split',        slug: 'header-split-resume-template',         name: 'Header Split',        isPremium: false, accentColor: '#0f766e', headerBg: '#0f766e', layout: 'single',        atsScore: 87, category: 'Professional',      tags: ['professional', 'modern'] },
+    { id: 'two-col-balanced',    slug: 'two-col-balanced-resume-template',     name: 'Two-Col Balanced',    isPremium: false, accentColor: '#1e3a5f', headerBg: '#1e3a5f', layout: 'two-col',       atsScore: 84, category: 'Executive',         tags: ['executive', 'professional'] },
+    { id: 'boxed-cv',            slug: 'boxed-cv-resume-template',             name: 'Boxed CV',            isPremium: false, accentColor: '#0f172a', headerBg: '#0f172a', layout: 'single',        atsScore: 88, category: 'Professional',      tags: ['professional', 'minimal', 'modern'] },
+    { id: 'circle-photo',        slug: 'circle-photo-resume-template',         name: 'Circle Photo',        isPremium: false, accentColor: '#2563eb', headerBg: '#ffffff', layout: 'photo-center',  atsScore: 82, category: 'Photo Resume',      tags: ['photo', 'professional'] },
+    { id: 'minimal-serif',       slug: 'minimal-serif-resume-template',        name: 'Minimal Serif',       isPremium: false, accentColor: '#1e293b', headerBg: '#ffffff', layout: 'single-white',  atsScore: 91, category: 'ATS Friendly',      tags: ['ats', 'minimal', 'professional'] },
+    { id: 'gradient-header',     slug: 'gradient-header-resume-template',      name: 'Gradient Header',     isPremium: false, accentColor: '#7c3aed', headerBg: '#7c3aed', layout: 'single',        atsScore: 86, category: 'Creative',          tags: ['creative', 'modern'] },
+    { id: 'skills-bar',          slug: 'skills-bar-resume-template',           name: 'Skills Bar',          isPremium: true,  accentColor: '#0f4c81', headerBg: '#0f4c81', layout: 'two-col',       atsScore: 81, category: 'Engineering',       tags: ['engineering', 'executive', 'professional'] },
+    { id: 'navy-gold',           slug: 'navy-gold-resume-template',            name: 'Navy Gold',           isPremium: true,  accentColor: '#d97706', headerBg: '#0f172a', layout: 'two-col',       atsScore: 84, category: 'Executive',         tags: ['executive', 'professional'] },
   ];
 
   readonly categories = [

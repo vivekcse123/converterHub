@@ -1,0 +1,160 @@
+<article class="resume-page gh-tpl">
+  <!-- Gradient header band -->
+  <header class="gh-header">
+    <h1 class="gh-name">{{ resume().personal.fullName || 'Your Name' }}</h1>
+    @if (resume().personal.jobTitle) {
+      <p class="gh-title">{{ resume().personal.jobTitle }}</p>
+    }
+    @if (contactParts().length) {
+      <div class="gh-contacts">
+        @for (part of contactParts(); track $index; let last = $last) {
+          <span class="gh-contact">{{ part }}</span>
+          @if (!last) { <span class="gh-pipe">|</span> }
+        }
+      </div>
+    }
+  </header>
+
+  <!-- Single-column body -->
+  <div class="gh-body">
+    @for (section of visibleSections(); track section) {
+      <section class="gh-section resume-section">
+        @switch (sectionKind(section)) {
+
+          @case ('summary') {
+            @if (resume().summary) {
+              <h2 class="gh-heading"><span class="gh-head-line"></span>Summary<span class="gh-head-line"></span></h2>
+              <p class="gh-text"><app-rich-text [text]="resume().summary" /></p>
+            }
+          }
+
+          @case ('experience') {
+            @if (resume().experience.length) {
+              <h2 class="gh-heading"><span class="gh-head-line"></span>Experience<span class="gh-head-line"></span></h2>
+              @for (exp of resume().experience; track exp.id) {
+                <div class="gh-entry resume-entry">
+                  <div class="gh-entry-head">
+                    <p class="gh-role">{{ exp.role }}@if (exp.company) {, <span class="gh-company">{{ exp.company }}</span>}</p>
+                    <span class="gh-date">{{ dateRange(exp.startDate, exp.endDate, exp.current) }}</span>
+                  </div>
+                  @if (exp.location) { <p class="gh-sub">{{ exp.location }}</p> }
+                  @if (exp.bullets.length) {
+                    <ul class="gh-bullets">
+                      @for (b of exp.bullets; track $index) {
+                        @if (b) { <li><app-rich-text [text]="b" /></li> }
+                      }
+                    </ul>
+                  }
+                </div>
+              }
+            }
+          }
+
+          @case ('education') {
+            @if (resume().education.length) {
+              <h2 class="gh-heading"><span class="gh-head-line"></span>Education<span class="gh-head-line"></span></h2>
+              @for (edu of resume().education; track edu.id) {
+                <div class="gh-entry resume-entry">
+                  <div class="gh-entry-head">
+                    <p class="gh-role">{{ edu.degree }}@if (edu.field) {, {{ edu.field }}}</p>
+                    <span class="gh-date">{{ dateRange(edu.startDate, edu.endDate, edu.current) }}</span>
+                  </div>
+                  <p class="gh-sub">{{ edu.institution }}@if (edu.gpa) { · GPA {{ edu.gpa }} }</p>
+                  @if (edu.description) { <p class="gh-text"><app-rich-text [text]="edu.description" /></p> }
+                </div>
+              }
+            }
+          }
+
+          @case ('skills') {
+            @if (resume().skills.length) {
+              <h2 class="gh-heading"><span class="gh-head-line"></span>Skills<span class="gh-head-line"></span></h2>
+              <div class="gh-tags">
+                @for (group of resume().skills; track group.id) {
+                  @for (item of group.items; track $index) {
+                    <span class="gh-tag">{{ item }}</span>
+                  }
+                }
+              </div>
+            }
+          }
+
+          @case ('projects') {
+            @if (resume().projects.length) {
+              <h2 class="gh-heading"><span class="gh-head-line"></span>Projects<span class="gh-head-line"></span></h2>
+              @for (proj of resume().projects; track proj.id) {
+                <div class="gh-entry resume-entry">
+                  <p class="gh-role">{{ proj.name }}@if (proj.techStack) {<span class="gh-company"> — {{ proj.techStack }}</span>}</p>
+                  @if (proj.link) { <p class="gh-sub">{{ proj.link }}</p> }
+                  @if (proj.bullets.length) {
+                    <ul class="gh-bullets">
+                      @for (b of proj.bullets; track $index) {
+                        @if (b) { <li><app-rich-text [text]="b" /></li> }
+                      }
+                    </ul>
+                  }
+                </div>
+              }
+            }
+          }
+
+          @case ('certifications') {
+            @if (resume().certifications.length) {
+              <h2 class="gh-heading"><span class="gh-head-line"></span>Certifications<span class="gh-head-line"></span></h2>
+              @for (cert of resume().certifications; track cert.id) {
+                <p class="gh-text"><strong>{{ cert.name }}</strong>@if (cert.issuer) { — {{ cert.issuer }}}@if (cert.date) { ({{ monthYear(cert.date) }})}</p>
+              }
+            }
+          }
+
+          @case ('achievements') {
+            @if (resume().achievements.length) {
+              <h2 class="gh-heading"><span class="gh-head-line"></span>Achievements<span class="gh-head-line"></span></h2>
+              <ul class="gh-bullets">
+                @for (a of resume().achievements; track $index) {
+                  @if (a) { <li><app-rich-text [text]="a" /></li> }
+                }
+              </ul>
+            }
+          }
+
+          @case ('languages') {
+            @if (resume().languages.length) {
+              <h2 class="gh-heading"><span class="gh-head-line"></span>Languages<span class="gh-head-line"></span></h2>
+              <p class="gh-text">
+                @for (lang of resume().languages; track lang.id; let last = $last) {
+                  {{ lang.name }} ({{ lang.proficiency }})@if (!last) {, }
+                }
+              </p>
+            }
+          }
+
+          @case ('interests') {
+            @if (resume().interests.length) {
+              <h2 class="gh-heading"><span class="gh-head-line"></span>Interests<span class="gh-head-line"></span></h2>
+              <p class="gh-text">{{ resume().interests.join(', ') }}</p>
+            }
+          }
+
+          @case ('custom') {
+            @if (customSection(section); as cs) {
+              @if (cs.entries.length) {
+                <h2 class="gh-heading"><span class="gh-head-line"></span>{{ cs.title }}<span class="gh-head-line"></span></h2>
+                @for (entry of cs.entries; track entry.id) {
+                  <div class="gh-entry resume-entry">
+                    <div class="gh-entry-head">
+                      @if (entry.heading) { <p class="gh-role">{{ entry.heading }}</p> }
+                      @if (entry.date)    { <span class="gh-date">{{ entry.date }}</span> }
+                    </div>
+                    @if (entry.subheading)  { <p class="gh-sub">{{ entry.subheading }}</p> }
+                    @if (entry.description) { <p class="gh-text"><app-rich-text [text]="entry.description" /></p> }
+                  </div>
+                }
+              }
+            }
+          }
+        }
+      </section>
+    }
+  </div>
+</article>

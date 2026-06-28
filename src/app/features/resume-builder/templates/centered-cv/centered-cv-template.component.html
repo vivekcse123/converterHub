@@ -1,0 +1,153 @@
+<article class="resume-page cc-tpl">
+  <!-- Centered header: name with flanking lines, contact inline -->
+  <header class="cc-header">
+    <h1 class="cc-name">{{ resume().personal.fullName || 'Your Name' }}</h1>
+    @if (resume().personal.jobTitle) {
+      <p class="cc-title">{{ resume().personal.jobTitle }}</p>
+    }
+    @if (contactParts().length) {
+      <p class="cc-contacts">
+        @for (part of contactParts(); track $index; let last = $last) {
+          <span>{{ part }}</span>@if (!last) { <span class="cc-dot"> &bull; </span> }
+        }
+      </p>
+    }
+  </header>
+
+  @for (section of visibleSections(); track section) {
+    <section class="cc-section">
+      @switch (sectionKind(section)) {
+
+        @case ('summary') {
+          @if (resume().summary) {
+            <div class="cc-rule-head"><h2 class="cc-heading">Summary</h2></div>
+            <p class="cc-text text-center"><app-rich-text [text]="resume().summary" /></p>
+          }
+        }
+
+        @case ('experience') {
+          @if (resume().experience.length) {
+            <div class="cc-rule-head"><h2 class="cc-heading">Experience</h2></div>
+            @for (exp of resume().experience; track exp.id) {
+              <div class="cc-entry">
+                <p class="cc-role">{{ exp.role }}@if (exp.company) {, <span class="cc-company">{{ exp.company }}</span>}</p>
+                <p class="cc-meta">{{ dateRange(exp.startDate, exp.endDate, exp.current) }}@if (exp.location) { · {{ exp.location }} }</p>
+                @if (exp.bullets.length) {
+                  <ul class="cc-bullets">
+                    @for (b of exp.bullets; track $index) {
+                      @if (b) { <li class="cc-text"><app-rich-text [text]="b" /></li> }
+                    }
+                  </ul>
+                }
+              </div>
+            }
+          }
+        }
+
+        @case ('education') {
+          @if (resume().education.length) {
+            <div class="cc-rule-head"><h2 class="cc-heading">Education</h2></div>
+            @for (edu of resume().education; track edu.id) {
+              <div class="cc-entry">
+                <p class="cc-role">{{ edu.degree }}@if (edu.field) {, {{ edu.field }}}</p>
+                <p class="cc-meta">{{ edu.institution }}@if (edu.gpa) { · GPA {{ edu.gpa }} } · {{ dateRange(edu.startDate, edu.endDate, edu.current) }}</p>
+              </div>
+            }
+          }
+        }
+
+        @case ('skills') {
+          @if (resume().skills.length) {
+            <div class="cc-rule-head"><h2 class="cc-heading">Skills</h2></div>
+            <div class="cc-skills-wrap">
+              @for (group of resume().skills; track group.id) {
+                @if (group.items.length) {
+                  <p class="cc-text">
+                    @if (group.category) { <span class="cc-company">{{ group.category }}: </span> }
+                    {{ group.items.join(' · ') }}
+                  </p>
+                }
+              }
+            </div>
+          }
+        }
+
+        @case ('projects') {
+          @if (resume().projects.length) {
+            <div class="cc-rule-head"><h2 class="cc-heading">Projects</h2></div>
+            @for (proj of resume().projects; track proj.id) {
+              <div class="cc-entry">
+                <p class="cc-role">{{ proj.name }}@if (proj.techStack) { <span class="cc-meta"> — {{ proj.techStack }}</span>}</p>
+                @if (proj.link) { <p class="cc-meta">{{ proj.link }}</p> }
+                @if (proj.bullets.length) {
+                  <ul class="cc-bullets">
+                    @for (b of proj.bullets; track $index) {
+                      @if (b) { <li class="cc-text"><app-rich-text [text]="b" /></li> }
+                    }
+                  </ul>
+                }
+              </div>
+            }
+          }
+        }
+
+        @case ('certifications') {
+          @if (resume().certifications.length) {
+            <div class="cc-rule-head"><h2 class="cc-heading">Certifications</h2></div>
+            <div class="cc-skills-wrap">
+              @for (cert of resume().certifications; track cert.id) {
+                <p class="cc-text"><span class="cc-role">{{ cert.name }}</span>@if (cert.issuer) { · {{ cert.issuer }}}@if (cert.date) { ({{ monthYear(cert.date) }})}</p>
+              }
+            </div>
+          }
+        }
+
+        @case ('achievements') {
+          @if (resume().achievements.length) {
+            <div class="cc-rule-head"><h2 class="cc-heading">Achievements</h2></div>
+            <ul class="cc-bullets">
+              @for (a of resume().achievements; track $index) {
+                @if (a) { <li class="cc-text"><app-rich-text [text]="a" /></li> }
+              }
+            </ul>
+          }
+        }
+
+        @case ('languages') {
+          @if (resume().languages.length) {
+            <div class="cc-rule-head"><h2 class="cc-heading">Languages</h2></div>
+            <p class="cc-text text-center">
+              @for (lang of resume().languages; track lang.id; let last = $last) {
+                {{ lang.name }} ({{ lang.proficiency }})@if (!last) { · }
+              }
+            </p>
+          }
+        }
+
+        @case ('interests') {
+          @if (resume().interests.length) {
+            <div class="cc-rule-head"><h2 class="cc-heading">Interests</h2></div>
+            <p class="cc-text text-center">{{ resume().interests.join(' · ') }}</p>
+          }
+        }
+
+        @case ('custom') {
+          @if (customSection(section); as cs) {
+            @if (cs.entries.length) {
+              <div class="cc-rule-head"><h2 class="cc-heading">{{ cs.title }}</h2></div>
+              @for (entry of cs.entries; track entry.id) {
+                <div class="cc-entry">
+                  @if (entry.heading) { <p class="cc-role">{{ entry.heading }}</p> }
+                  @if (entry.date || entry.subheading) {
+                    <p class="cc-meta">@if (entry.subheading) {{{ entry.subheading }}}@if (entry.date) { · {{ entry.date }}}</p>
+                  }
+                  @if (entry.description) { <p class="cc-text"><app-rich-text [text]="entry.description" /></p> }
+                </div>
+              }
+            }
+          }
+        }
+      }
+    </section>
+  }
+</article>

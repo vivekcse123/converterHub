@@ -1,0 +1,160 @@
+<article class="resume-page hs-tpl">
+  <!-- Split header: accent-colored left half (name/title), white right half (contact) -->
+  <header class="hs-header">
+    <div class="hs-left">
+      <h1 class="hs-name">{{ resume().personal.fullName || 'Your Name' }}</h1>
+      @if (resume().personal.jobTitle) {
+        <p class="hs-title">{{ resume().personal.jobTitle }}</p>
+      }
+    </div>
+    <div class="hs-right">
+      @for (part of contactParts(); track $index) {
+        <p class="hs-contact">{{ part }}</p>
+      }
+    </div>
+  </header>
+
+  <!-- Single-column body -->
+  <div class="hs-body">
+    @for (section of visibleSections(); track section) {
+      <section class="hs-section resume-section">
+        @switch (sectionKind(section)) {
+
+          @case ('summary') {
+            @if (resume().summary) {
+              <h2 class="hs-heading">Summary</h2>
+              <p class="hs-text"><app-rich-text [text]="resume().summary" /></p>
+            }
+          }
+
+          @case ('experience') {
+            @if (resume().experience.length) {
+              <h2 class="hs-heading">Experience</h2>
+              @for (exp of resume().experience; track exp.id) {
+                <div class="hs-entry resume-entry">
+                  <div class="hs-entry-head">
+                    <p class="hs-role">{{ exp.role }}@if (exp.company) {, <span class="hs-company">{{ exp.company }}</span>}</p>
+                    <span class="hs-date">{{ dateRange(exp.startDate, exp.endDate, exp.current) }}</span>
+                  </div>
+                  @if (exp.location) { <p class="hs-sub">{{ exp.location }}</p> }
+                  @if (exp.bullets.length) {
+                    <ul class="hs-bullets">
+                      @for (b of exp.bullets; track $index) {
+                        @if (b) { <li><app-rich-text [text]="b" /></li> }
+                      }
+                    </ul>
+                  }
+                </div>
+              }
+            }
+          }
+
+          @case ('education') {
+            @if (resume().education.length) {
+              <h2 class="hs-heading">Education</h2>
+              @for (edu of resume().education; track edu.id) {
+                <div class="hs-entry resume-entry">
+                  <div class="hs-entry-head">
+                    <p class="hs-role">{{ edu.degree }}@if (edu.field) {, {{ edu.field }}}</p>
+                    <span class="hs-date">{{ dateRange(edu.startDate, edu.endDate, edu.current) }}</span>
+                  </div>
+                  <p class="hs-sub">{{ edu.institution }}@if (edu.gpa) { · GPA {{ edu.gpa }} }</p>
+                  @if (edu.description) { <p class="hs-text"><app-rich-text [text]="edu.description" /></p> }
+                </div>
+              }
+            }
+          }
+
+          @case ('skills') {
+            @if (resume().skills.length) {
+              <h2 class="hs-heading">Skills</h2>
+              @for (group of resume().skills; track group.id) {
+                @if (group.items.length) {
+                  <p class="hs-text">
+                    @if (group.category) { <span class="hs-company">{{ group.category }}: </span> }
+                    {{ group.items.join(', ') }}
+                  </p>
+                }
+              }
+            }
+          }
+
+          @case ('projects') {
+            @if (resume().projects.length) {
+              <h2 class="hs-heading">Projects</h2>
+              @for (proj of resume().projects; track proj.id) {
+                <div class="hs-entry resume-entry">
+                  <p class="hs-role">{{ proj.name }}@if (proj.techStack) { <span class="hs-sub"> — {{ proj.techStack }}</span>}</p>
+                  @if (proj.link) { <p class="hs-sub">{{ proj.link }}</p> }
+                  @if (proj.bullets.length) {
+                    <ul class="hs-bullets">
+                      @for (b of proj.bullets; track $index) {
+                        @if (b) { <li><app-rich-text [text]="b" /></li> }
+                      }
+                    </ul>
+                  }
+                </div>
+              }
+            }
+          }
+
+          @case ('certifications') {
+            @if (resume().certifications.length) {
+              <h2 class="hs-heading">Certifications</h2>
+              @for (cert of resume().certifications; track cert.id) {
+                <p class="hs-text"><strong>{{ cert.name }}</strong>@if (cert.issuer) { — {{ cert.issuer }}}@if (cert.date) { ({{ monthYear(cert.date) }})}</p>
+              }
+            }
+          }
+
+          @case ('achievements') {
+            @if (resume().achievements.length) {
+              <h2 class="hs-heading">Achievements</h2>
+              <ul class="hs-bullets">
+                @for (a of resume().achievements; track $index) {
+                  @if (a) { <li><app-rich-text [text]="a" /></li> }
+                }
+              </ul>
+            }
+          }
+
+          @case ('languages') {
+            @if (resume().languages.length) {
+              <h2 class="hs-heading">Languages</h2>
+              <p class="hs-text">
+                @for (lang of resume().languages; track lang.id; let last = $last) {
+                  {{ lang.name }} ({{ lang.proficiency }})@if (!last) {, }
+                }
+              </p>
+            }
+          }
+
+          @case ('interests') {
+            @if (resume().interests.length) {
+              <h2 class="hs-heading">Interests</h2>
+              <p class="hs-text">{{ resume().interests.join(', ') }}</p>
+            }
+          }
+
+          @case ('custom') {
+            @if (customSection(section); as cs) {
+              @if (cs.entries.length) {
+                <h2 class="hs-heading">{{ cs.title }}</h2>
+                @for (entry of cs.entries; track entry.id) {
+                  <div class="hs-entry resume-entry">
+                    <div class="hs-entry-head">
+                      @if (entry.heading) { <p class="hs-role">{{ entry.heading }}</p> }
+                      @if (entry.date)    { <span class="hs-date">{{ entry.date }}</span> }
+                    </div>
+                    @if (entry.subheading)  { <p class="hs-sub">{{ entry.subheading }}</p> }
+                    @if (entry.description) { <p class="hs-text"><app-rich-text [text]="entry.description" /></p> }
+                  </div>
+                }
+              }
+            }
+          }
+        }
+      </section>
+    }
+  </div>
+</article>

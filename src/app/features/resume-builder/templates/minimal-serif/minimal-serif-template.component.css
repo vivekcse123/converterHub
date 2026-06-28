@@ -1,0 +1,73 @@
+.ms-tpl {
+  font-family: Georgia, 'Times New Roman', serif;
+}
+
+.ms-header {
+  text-align: left;
+  margin-bottom: 5mm;
+}
+.ms-name {
+  font-size: 22pt;
+  font-weight: 400;
+  letter-spacing: 0.03em;
+  color: #1e293b;
+}
+.ms-title {
+  font-size: 11pt;
+  color: #64748b;
+  font-style: italic;
+  margin-top: 2px;
+}
+.ms-rule {
+  height: 2px;
+  background: var(--r-accent, #1e293b);
+  margin: 3mm 0 2mm;
+}
+.ms-contacts { font-size: 8.5pt; color: #475569; }
+.ms-sep { color: #94a3b8; }
+
+.ms-section { margin-bottom: 5mm; }
+
+.ms-sec-head {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 3mm;
+}
+.ms-heading {
+  font-size: 9pt;
+  font-weight: 700;
+  font-family: Georgia, serif;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--r-accent, #1e293b);
+  white-space: nowrap;
+}
+.ms-sec-rule {
+  flex: 1;
+  height: 1px;
+  background: var(--r-accent, #1e293b);
+  opacity: 0.3;
+}
+
+.ms-entry { margin-bottom: 3mm; }
+.ms-entry-row { display: flex; justify-content: space-between; align-items: baseline; gap: 4px; }
+.ms-role { font-size: 10.5pt; font-weight: 700; font-family: Georgia, serif; }
+.ms-date { font-size: 8.5pt; color: #64748b; font-style: italic; white-space: nowrap; }
+.ms-loc { font-size: 8.5pt; color: #64748b; font-style: italic; margin-top: 1px; }
+.ms-text { font-size: 9.5pt; line-height: 1.5; margin-top: 2px; }
+.ms-bullets { list-style: none; padding-left: 0; margin-top: 3px; }
+.ms-bullets li {
+  font-size: 9.5pt;
+  line-height: 1.4;
+  padding-left: 12px;
+  position: relative;
+  margin-bottom: 2px;
+}
+.ms-bullets li::before {
+  content: '–';
+  position: absolute;
+  left: 0;
+  color: var(--r-accent, #1e293b);
+}
+.ms-skills { }

@@ -1,0 +1,90 @@
+.dm-tpl {
+  background: #0f172a !important;
+  color: #e2e8f0;
+  padding: 0;
+}
+
+.dm-header {
+  background: #0f172a;
+  padding: 10mm 14mm 8mm;
+  border-bottom: 2px solid var(--r-accent, #10b981);
+}
+.dm-name {
+  font-size: 22pt;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  color: #f1f5f9;
+}
+.dm-title {
+  font-size: 11pt;
+  color: var(--r-accent, #10b981);
+  margin-top: 2px;
+  font-weight: 500;
+}
+.dm-contacts {
+  font-size: 8.5pt;
+  color: #94a3b8;
+  margin-top: 3mm;
+}
+.dm-sep { color: #334155; }
+
+.dm-body { padding: 8mm 14mm; }
+.dm-section { margin-bottom: 5mm; }
+
+.dm-heading {
+  font-size: 8.5pt;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--r-accent, #10b981);
+  margin-bottom: 3mm;
+  padding-bottom: 1.5px;
+  border-bottom: 1px solid #1e293b;
+}
+
+.dm-entry { margin-bottom: 3mm; }
+.dm-entry-row { display: flex; justify-content: space-between; align-items: baseline; gap: 4px; }
+.dm-role { font-size: 10pt; font-weight: 600; color: #f1f5f9; }
+.dm-company { font-weight: 400; color: var(--r-accent, #10b981); }
+.dm-sub { font-size: 8.5pt; color: #64748b; }
+.dm-text { font-size: 9.5pt; color: #cbd5e1; line-height: 1.45; }
+.dm-badge {
+  font-size: 8pt;
+  background: #1e293b;
+  color: var(--r-accent, #10b981);
+  padding: 1px 6px;
+  border-radius: 3px;
+  white-space: nowrap;
+  border: 1px solid #334155;
+}
+.dm-badge-sm { display: inline-block; margin-left: 4px; }
+.dm-bullets { list-style: none; padding-left: 0; margin-top: 2px; }
+.dm-bullets li {
+  font-size: 9.5pt;
+  color: #cbd5e1;
+  padding-left: 12px;
+  position: relative;
+  margin-bottom: 1px;
+  line-height: 1.4;
+}
+.dm-bullets li::before {
+  content: '▸';
+  position: absolute;
+  left: 0;
+  color: var(--r-accent, #10b981);
+  font-size: 8pt;
+}
+
+.dm-skills-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+.dm-skill-tag {
+  font-size: 8.5pt;
+  background: #1e293b;
+  color: #94a3b8;
+  border: 1px solid #334155;
+  padding: 2px 8px;
+  border-radius: 3px;
+}

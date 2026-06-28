@@ -18,7 +18,20 @@ export type TemplateId =
   | 'two-col-classic'
   | 'academic-cv'
   | 'healthcare'
-  | 'sales-achiever';
+  | 'sales-achiever'
+  // v3 expansion — 12 unique new layouts
+  | 'sidebar-right'
+  | 'dark-matter'
+  | 'centered-cv'
+  | 'timeline-left'
+  | 'header-split'
+  | 'two-col-balanced'
+  | 'boxed-cv'
+  | 'circle-photo'
+  | 'minimal-serif'
+  | 'gradient-header'
+  | 'skills-bar'
+  | 'navy-gold';
 
 export interface DesignSettings {
   accentColor: string;

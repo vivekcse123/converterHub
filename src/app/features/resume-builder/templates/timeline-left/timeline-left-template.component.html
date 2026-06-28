@@ -1,0 +1,197 @@
+<article class="resume-page tl-tpl">
+  <!-- Header: name left, contact right -->
+  <header class="tl-header">
+    <div class="tl-name-block">
+      <h1 class="tl-name">{{ resume().personal.fullName || 'Your Name' }}</h1>
+      @if (resume().personal.jobTitle) {
+        <p class="tl-title">{{ resume().personal.jobTitle }}</p>
+      }
+    </div>
+    @if (contactParts().length) {
+      <div class="tl-contact-block">
+        @for (part of contactParts(); track $index) {
+          <p class="tl-contact">{{ part }}</p>
+        }
+      </div>
+    }
+  </header>
+
+  @for (section of visibleSections(); track section) {
+    <section class="tl-section">
+      @switch (sectionKind(section)) {
+
+        @case ('summary') {
+          @if (resume().summary) {
+            <h2 class="tl-heading">Summary</h2>
+            <div class="tl-plain">
+              <p class="tl-text"><app-rich-text [text]="resume().summary" /></p>
+            </div>
+          }
+        }
+
+        @case ('experience') {
+          @if (resume().experience.length) {
+            <h2 class="tl-heading">Experience</h2>
+            @for (exp of resume().experience; track exp.id) {
+              <!-- Timeline row: date column | line+dot | content column -->
+              <div class="tl-row resume-entry">
+                <div class="tl-date-col">
+                  <span class="tl-date">{{ dateRange(exp.startDate, exp.endDate, exp.current) }}</span>
+                </div>
+                <div class="tl-line-col">
+                  <span class="tl-dot"></span>
+                  <span class="tl-connector"></span>
+                </div>
+                <div class="tl-content-col">
+                  <p class="tl-role">{{ exp.role }}</p>
+                  @if (exp.company) { <p class="tl-company">{{ exp.company }}@if (exp.location) {, {{ exp.location }}}</p> }
+                  @if (exp.bullets.length) {
+                    <ul class="tl-bullets">
+                      @for (b of exp.bullets; track $index) {
+                        @if (b) { <li><app-rich-text [text]="b" /></li> }
+                      }
+                    </ul>
+                  }
+                </div>
+              </div>
+            }
+          }
+        }
+
+        @case ('education') {
+          @if (resume().education.length) {
+            <h2 class="tl-heading">Education</h2>
+            @for (edu of resume().education; track edu.id) {
+              <div class="tl-row resume-entry">
+                <div class="tl-date-col">
+                  <span class="tl-date">{{ dateRange(edu.startDate, edu.endDate, edu.current) }}</span>
+                </div>
+                <div class="tl-line-col">
+                  <span class="tl-dot"></span>
+                  <span class="tl-connector"></span>
+                </div>
+                <div class="tl-content-col">
+                  <p class="tl-role">{{ edu.degree }}@if (edu.field) {, {{ edu.field }}}</p>
+                  <p class="tl-company">{{ edu.institution }}@if (edu.gpa) { · GPA {{ edu.gpa }} }</p>
+                  @if (edu.description) { <p class="tl-text"><app-rich-text [text]="edu.description" /></p> }
+                </div>
+              </div>
+            }
+          }
+        }
+
+        @case ('projects') {
+          @if (resume().projects.length) {
+            <h2 class="tl-heading">Projects</h2>
+            @for (proj of resume().projects; track proj.id) {
+              <div class="tl-row resume-entry">
+                <div class="tl-date-col"></div>
+                <div class="tl-line-col">
+                  <span class="tl-dot tl-dot-sm"></span>
+                  <span class="tl-connector"></span>
+                </div>
+                <div class="tl-content-col">
+                  <p class="tl-role">{{ proj.name }}@if (proj.techStack) { <span class="tl-company"> — {{ proj.techStack }}</span>}</p>
+                  @if (proj.link) { <p class="tl-company">{{ proj.link }}</p> }
+                  @if (proj.bullets.length) {
+                    <ul class="tl-bullets">
+                      @for (b of proj.bullets; track $index) {
+                        @if (b) { <li><app-rich-text [text]="b" /></li> }
+                      }
+                    </ul>
+                  }
+                </div>
+              </div>
+            }
+          }
+        }
+
+        @case ('skills') {
+          @if (resume().skills.length) {
+            <h2 class="tl-heading">Skills</h2>
+            <div class="tl-plain">
+              @for (group of resume().skills; track group.id) {
+                @if (group.items.length) {
+                  <p class="tl-text">
+                    @if (group.category) { <strong>{{ group.category }}: </strong> }
+                    {{ group.items.join(', ') }}
+                  </p>
+                }
+              }
+            </div>
+          }
+        }
+
+        @case ('certifications') {
+          @if (resume().certifications.length) {
+            <h2 class="tl-heading">Certifications</h2>
+            <div class="tl-plain">
+              @for (cert of resume().certifications; track cert.id) {
+                <p class="tl-text"><strong>{{ cert.name }}</strong>@if (cert.issuer) { — {{ cert.issuer }}}@if (cert.date) { ({{ monthYear(cert.date) }})}</p>
+              }
+            </div>
+          }
+        }
+
+        @case ('achievements') {
+          @if (resume().achievements.length) {
+            <h2 class="tl-heading">Achievements</h2>
+            <div class="tl-plain">
+              <ul class="tl-bullets">
+                @for (a of resume().achievements; track $index) {
+                  @if (a) { <li><app-rich-text [text]="a" /></li> }
+                }
+              </ul>
+            </div>
+          }
+        }
+
+        @case ('languages') {
+          @if (resume().languages.length) {
+            <h2 class="tl-heading">Languages</h2>
+            <div class="tl-plain">
+              <p class="tl-text">
+                @for (lang of resume().languages; track lang.id; let last = $last) {
+                  {{ lang.name }} ({{ lang.proficiency }})@if (!last) {, }
+                }
+              </p>
+            </div>
+          }
+        }
+
+        @case ('interests') {
+          @if (resume().interests.length) {
+            <h2 class="tl-heading">Interests</h2>
+            <div class="tl-plain">
+              <p class="tl-text">{{ resume().interests.join(', ') }}</p>
+            </div>
+          }
+        }
+
+        @case ('custom') {
+          @if (customSection(section); as cs) {
+            @if (cs.entries.length) {
+              <h2 class="tl-heading">{{ cs.title }}</h2>
+              @for (entry of cs.entries; track entry.id) {
+                <div class="tl-row resume-entry">
+                  <div class="tl-date-col">
+                    @if (entry.date) { <span class="tl-date">{{ entry.date }}</span> }
+                  </div>
+                  <div class="tl-line-col">
+                    <span class="tl-dot tl-dot-sm"></span>
+                    <span class="tl-connector"></span>
+                  </div>
+                  <div class="tl-content-col">
+                    @if (entry.heading)     { <p class="tl-role">{{ entry.heading }}</p> }
+                    @if (entry.subheading)  { <p class="tl-company">{{ entry.subheading }}</p> }
+                    @if (entry.description) { <p class="tl-text"><app-rich-text [text]="entry.description" /></p> }
+                  </div>
+                </div>
+              }
+            }
+          }
+        }
+      }
+    </section>
+  }
+</article>

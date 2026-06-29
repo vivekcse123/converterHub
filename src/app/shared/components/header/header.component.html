@@ -1,4 +1,4 @@
-<header class="sticky top-0 z-50 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md border-b border-slate-200 dark:border-slate-700 shadow-sm">
+<header class="sticky top-0 z-50 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md border-b border-slate-200 dark:border-slate-700 shadow-sm" role="banner">
   <div class="container-app">
 
     <!-- Search overlay row (desktop) -->
@@ -28,12 +28,14 @@
       </a>
 
       <!-- Desktop Nav -->
-      <nav class="hidden md:flex items-center gap-0.5">
+      <nav class="hidden md:flex items-center gap-0.5" aria-label="Main navigation">
 
         <!-- Templates mega menu -->
         <div class="relative templates-menu-root">
           <button (click)="toggleTemplates()" type="button"
             class="flex items-center gap-1 px-3 py-2 rounded-lg text-sm font-medium transition-colors"
+            [attr.aria-expanded]="templatesOpen()"
+            aria-haspopup="true"
             [class]="templatesOpen() ? 'bg-primary-50 dark:bg-primary-950 text-primary-600' : 'text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800'">
             Templates
             <svg class="w-3.5 h-3.5 transition-transform duration-200" [class.rotate-180]="templatesOpen()" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -43,9 +45,9 @@
 
           @if (templatesOpen()) {
           <div class="absolute top-full left-0 mt-2 w-72 bg-white dark:bg-slate-800 rounded-2xl shadow-2xl border border-slate-200 dark:border-slate-700 z-50 overflow-hidden animate-slide-down p-2">
-            <a routerLink="/resume-templates" (click)="closeTemplates()" class="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-violet-50 dark:hover:bg-violet-900/30 transition group">
-              <span class="w-8 h-8 rounded-lg bg-violet-100 dark:bg-violet-900/40 flex items-center justify-center text-sm shrink-0">📄</span>
-              <div><p class="text-sm font-semibold text-slate-800 dark:text-white group-hover:text-violet-700 dark:group-hover:text-violet-300">Resume Templates</p><p class="text-xs text-slate-400">30+ professional designs</p></div>
+            <a routerLink="/resume-templates" (click)="closeTemplates()" class="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-primary-50 dark:hover:bg-primary-900/30 transition group">
+              <span class="w-8 h-8 rounded-lg bg-primary-100 dark:bg-primary-900/40 flex items-center justify-center text-sm shrink-0">📄</span>
+              <div><p class="text-sm font-semibold text-slate-800 dark:text-white group-hover:text-primary-700 dark:group-hover:text-primary-300">Resume Templates</p><p class="text-xs text-slate-400">30+ professional designs</p></div>
             </a>
             <a routerLink="/biodata-maker" (click)="closeTemplates()" class="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-rose-50 dark:hover:bg-rose-900/30 transition group">
               <span class="w-8 h-8 rounded-lg bg-rose-100 dark:bg-rose-900/40 flex items-center justify-center text-sm shrink-0">💍</span>
@@ -75,27 +77,27 @@
           }
         </div>
 
-        <a routerLink="/resume-builder" routerLinkActive="bg-primary-50 dark:bg-primary-950 text-primary-600" [routerLinkActiveOptions]="{exact:true}"
+        <a routerLink="/resume-builder" routerLinkActive="bg-primary-50 dark:bg-primary-950 text-primary-600" [routerLinkActiveOptions]="{exact:true}" ariaCurrentWhenActive="page"
            class="px-3 py-2 rounded-lg text-sm font-medium text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
           Resume Builder
         </a>
-        <a routerLink="/ats-resume-checker" routerLinkActive="bg-primary-50 dark:bg-primary-950 text-primary-600"
+        <a routerLink="/ats-resume-checker" routerLinkActive="bg-primary-50 dark:bg-primary-950 text-primary-600" ariaCurrentWhenActive="page"
            class="px-3 py-2 rounded-lg text-sm font-medium text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
           ATS Checker
         </a>
-        <a routerLink="/biodata-maker" routerLinkActive="bg-primary-50 dark:bg-primary-950 text-primary-600"
+        <a routerLink="/biodata-maker" routerLinkActive="bg-primary-50 dark:bg-primary-950 text-primary-600" ariaCurrentWhenActive="page"
            class="px-3 py-2 rounded-lg text-sm font-medium text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
           Biodata
         </a>
-        <a routerLink="/resume-builder/cover-letter" routerLinkActive="bg-primary-50 dark:bg-primary-950 text-primary-600"
+        <a routerLink="/resume-builder/cover-letter" routerLinkActive="bg-primary-50 dark:bg-primary-950 text-primary-600" ariaCurrentWhenActive="page"
            class="px-3 py-2 rounded-lg text-sm font-medium text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
           Cover Letter
         </a>
-        <a routerLink="/resume-builder/pricing" routerLinkActive="bg-primary-50 dark:bg-primary-950 text-primary-600"
+        <a routerLink="/resume-builder/pricing" routerLinkActive="bg-primary-50 dark:bg-primary-950 text-primary-600" ariaCurrentWhenActive="page"
            class="px-3 py-2 rounded-lg text-sm font-medium text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
           Pricing
         </a>
-        <a routerLink="/tools" routerLinkActive="bg-primary-50 dark:bg-primary-950 text-primary-600"
+        <a routerLink="/tools" routerLinkActive="bg-primary-50 dark:bg-primary-950 text-primary-600" ariaCurrentWhenActive="page"
            class="px-3 py-2 rounded-lg text-sm font-medium text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
           Tools
         </a>
@@ -192,7 +194,9 @@
 
         <!-- Mobile hamburger -->
         <button (click)="toggleMobile()" class="md:hidden p-2 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
-          aria-label="Open menu">
+          [attr.aria-label]="mobileOpen() ? 'Close menu' : 'Open menu'"
+          [attr.aria-expanded]="mobileOpen()"
+          aria-controls="mobile-nav">
           <svg class="w-5 h-5 text-slate-600 dark:text-slate-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             @if (!mobileOpen()) {
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
@@ -208,31 +212,31 @@
 
     <!-- Mobile Nav -->
     @if (mobileOpen()) {
-    <div class="md:hidden pb-4 animate-slide-down border-t border-slate-100 dark:border-slate-800 mt-1">
+    <div id="mobile-nav" class="md:hidden pb-4 animate-slide-down border-t border-slate-100 dark:border-slate-800 mt-1" role="navigation" aria-label="Mobile navigation">
       <!-- Mobile Search -->
       <div class="px-4 pt-3 pb-2">
         <app-global-search />
       </div>
       <nav class="flex flex-col gap-1 pt-2">
-        <a routerLink="/resume-builder"              (click)="closeMobile()" class="px-4 py-2.5 rounded-xl text-sm font-medium text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800">📄 Resume Builder</a>
-        <a routerLink="/ats-resume-checker"          (click)="closeMobile()" class="px-4 py-2.5 rounded-xl text-sm font-medium text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800">🎯 ATS Checker</a>
-        <a routerLink="/resume-templates"            (click)="closeMobile()" class="px-4 py-2.5 rounded-xl text-sm font-medium text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800">📚 Resume Templates</a>
-        <a routerLink="/biodata-maker"               (click)="closeMobile()" class="px-4 py-2.5 rounded-xl text-sm font-medium text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800">💍 Biodata Maker</a>
-        <a routerLink="/resume-builder/cover-letter" (click)="closeMobile()" class="px-4 py-2.5 rounded-xl text-sm font-medium text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800">✉️ Cover Letter</a>
-        <a routerLink="/government-resume-builder"   (click)="closeMobile()" class="px-4 py-2.5 rounded-xl text-sm font-medium text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800">🏛️ Govt Resume</a>
-        <a routerLink="/fresher-resume-builder"      (click)="closeMobile()" class="px-4 py-2.5 rounded-xl text-sm font-medium text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800">🎓 Fresher Resume</a>
-        <a routerLink="/resume-builder/pricing"      (click)="closeMobile()" class="px-4 py-2.5 rounded-xl text-sm font-medium text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800">💳 Pricing</a>
-        <a routerLink="/tools"                       (click)="closeMobile()" class="px-4 py-2.5 rounded-xl text-sm font-medium text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800">🛠 All Tools</a>
+        <a routerLink="/resume-builder"              routerLinkActive="bg-primary-50 dark:bg-primary-950 !text-primary-600" ariaCurrentWhenActive="page" [routerLinkActiveOptions]="{exact:true}" (click)="closeMobile()" class="px-4 py-2.5 rounded-xl text-sm font-medium text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">Resume Builder</a>
+        <a routerLink="/ats-resume-checker"          routerLinkActive="bg-primary-50 dark:bg-primary-950 !text-primary-600" ariaCurrentWhenActive="page" (click)="closeMobile()" class="px-4 py-2.5 rounded-xl text-sm font-medium text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">ATS Checker</a>
+        <a routerLink="/resume-templates"            routerLinkActive="bg-primary-50 dark:bg-primary-950 !text-primary-600" ariaCurrentWhenActive="page" (click)="closeMobile()" class="px-4 py-2.5 rounded-xl text-sm font-medium text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">Resume Templates</a>
+        <a routerLink="/biodata-maker"               routerLinkActive="bg-primary-50 dark:bg-primary-950 !text-primary-600" ariaCurrentWhenActive="page" (click)="closeMobile()" class="px-4 py-2.5 rounded-xl text-sm font-medium text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">Biodata Maker</a>
+        <a routerLink="/resume-builder/cover-letter" routerLinkActive="bg-primary-50 dark:bg-primary-950 !text-primary-600" ariaCurrentWhenActive="page" (click)="closeMobile()" class="px-4 py-2.5 rounded-xl text-sm font-medium text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">Cover Letter</a>
+        <a routerLink="/government-resume-builder"   routerLinkActive="bg-primary-50 dark:bg-primary-950 !text-primary-600" ariaCurrentWhenActive="page" (click)="closeMobile()" class="px-4 py-2.5 rounded-xl text-sm font-medium text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">Govt Resume</a>
+        <a routerLink="/fresher-resume-builder"      routerLinkActive="bg-primary-50 dark:bg-primary-950 !text-primary-600" ariaCurrentWhenActive="page" (click)="closeMobile()" class="px-4 py-2.5 rounded-xl text-sm font-medium text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">Fresher Resume</a>
+        <a routerLink="/resume-builder/pricing"      routerLinkActive="bg-primary-50 dark:bg-primary-950 !text-primary-600" ariaCurrentWhenActive="page" (click)="closeMobile()" class="px-4 py-2.5 rounded-xl text-sm font-medium text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">Pricing</a>
+        <a routerLink="/tools"                       routerLinkActive="bg-primary-50 dark:bg-primary-950 !text-primary-600" ariaCurrentWhenActive="page" (click)="closeMobile()" class="px-4 py-2.5 rounded-xl text-sm font-medium text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">All Tools</a>
         <hr class="my-1 border-slate-200 dark:border-slate-700">
         @if (!auth.isLoggedIn()) {
-          <a routerLink="/login"    (click)="closeMobile()" class="px-4 py-2.5 rounded-xl text-sm font-medium text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800">Login</a>
-          <a routerLink="/register" (click)="closeMobile()" class="px-4 py-2.5 rounded-xl text-sm font-medium text-primary-600 hover:bg-primary-50 dark:hover:bg-primary-950">Sign up free</a>
+          <a routerLink="/login"    (click)="closeMobile()" class="px-4 py-2.5 rounded-xl text-sm font-medium text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">Login</a>
+          <a routerLink="/register" (click)="closeMobile()" class="px-4 py-2.5 rounded-xl text-sm font-medium text-primary-600 hover:bg-primary-50 dark:hover:bg-primary-950 transition-colors">Sign up free</a>
         } @else {
           @if (auth.isAdmin()) {
-            <a routerLink="/admin" (click)="closeMobile()" class="px-4 py-2.5 rounded-xl text-sm font-medium text-rose-600 dark:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/20">⚙ Admin Panel</a>
+            <a routerLink="/admin" (click)="closeMobile()" class="px-4 py-2.5 rounded-xl text-sm font-medium text-rose-600 dark:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/20 transition-colors">Admin Panel</a>
           }
-          <a routerLink="/dashboard" (click)="closeMobile()" class="px-4 py-2.5 rounded-xl text-sm font-medium text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800">Dashboard</a>
-          <button (click)="auth.logout(); closeMobile()" class="text-left px-4 py-2.5 rounded-xl text-sm font-medium text-red-500 hover:bg-red-50 dark:hover:bg-red-950/20">Logout</button>
+          <a routerLink="/dashboard" routerLinkActive="bg-primary-50 dark:bg-primary-950 !text-primary-600" ariaCurrentWhenActive="page" (click)="closeMobile()" class="px-4 py-2.5 rounded-xl text-sm font-medium text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">Dashboard</a>
+          <button (click)="auth.logout(); closeMobile()" class="text-left px-4 py-2.5 rounded-xl text-sm font-medium text-red-500 hover:bg-red-50 dark:hover:bg-red-950/20 transition-colors">Logout</button>
         }
       </nav>
     </div>

@@ -1,4 +1,4 @@
-<div class="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-50 to-blue-50 dark:from-slate-900 dark:to-slate-800 px-4 py-12">
+<div class="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-50 via-violet-50/30 to-indigo-50/50 dark:from-slate-900 dark:via-slate-900 dark:to-slate-800 px-4 py-12">
   <div class="w-full max-w-md">
 
     <!-- Card -->
@@ -6,29 +6,33 @@
 
       <!-- Logo -->
       <div class="text-center mb-8">
-        <div class="w-14 h-14 bg-gradient-to-br from-primary-500 to-primary-700 rounded-2xl mx-auto mb-4 flex items-center justify-center text-2xl shadow-md">⚡</div>
+        <a routerLink="/" aria-label="ApnaConverter home" class="inline-block">
+          <div class="w-14 h-14 bg-gradient-to-br from-primary-500 to-primary-700 rounded-2xl mx-auto mb-4 flex items-center justify-center shadow-md shadow-primary-200 dark:shadow-primary-900/30">
+            <span class="text-white font-extrabold text-xl tracking-tight">A</span>
+          </div>
+        </a>
         <h1 class="text-2xl font-bold text-slate-900 dark:text-white">Welcome back</h1>
-        <p class="text-slate-500 dark:text-slate-400 text-sm mt-1">Sign in to your account</p>
+        <p class="text-slate-500 dark:text-slate-400 text-sm mt-1">Sign in to your ApnaConverter account</p>
       </div>
 
       <!-- Form -->
       <form (ngSubmit)="onSubmit()" #loginForm="ngForm" class="space-y-4">
 
         <div>
-          <label class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">Email address</label>
-          <input type="email" [(ngModel)]="email" name="email" required
+          <label for="login-email" class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">Email address</label>
+          <input id="login-email" type="email" [(ngModel)]="email" name="email" required
             placeholder="you@example.com" class="input" autocomplete="email">
         </div>
 
         <div>
           <div class="flex items-center justify-between mb-1.5">
-            <label class="text-sm font-medium text-slate-700 dark:text-slate-300">Password</label>
+            <label for="login-password" class="text-sm font-medium text-slate-700 dark:text-slate-300">Password</label>
             <a routerLink="/forgot-password" class="text-xs text-primary-600 dark:text-primary-400 hover:underline">
               Forgot password?
             </a>
           </div>
           <div class="relative">
-            <input [type]="showPassword() ? 'text' : 'password'" [(ngModel)]="password" name="password" required
+            <input id="login-password" [type]="showPassword() ? 'text' : 'password'" [(ngModel)]="password" name="password" required
               placeholder="••••••••" class="input pr-10" autocomplete="current-password">
             <button type="button" (click)="showPassword.set(!showPassword())"
               class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 transition-colors"
@@ -50,15 +54,16 @@
           </div>
         </div>
 
-        <button type="submit" [disabled]="loading() || loginForm.invalid"
+        <button type="submit" [disabled]="loading() || loginForm.invalid" [attr.aria-busy]="loading()"
           class="btn btn-primary w-full py-3 text-base font-semibold mt-2">
           @if (loading()) {
-          <svg class="w-5 h-5 animate-spin" fill="none" viewBox="0 0 24 24">
+          <svg class="w-5 h-5 animate-spin" fill="none" viewBox="0 0 24 24" aria-hidden="true">
             <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/>
             <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"/>
           </svg>
+          <span class="sr-only">Signing in, please wait</span>
           }
-          {{ loading() ? 'Signing in…' : 'Sign in' }}
+          <span [class.sr-only]="loading()">Sign in</span>
         </button>
 
       </form>

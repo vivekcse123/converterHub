@@ -16,7 +16,7 @@ import { ConfirmDialogService } from './confirm-dialog.service';
           <!-- Icon -->
           @if (svc.options().icon) {
             <div class="w-14 h-14 rounded-2xl mx-auto mb-4 flex items-center justify-center text-3xl"
-                 [class]="svc.options().danger ? 'bg-red-100 dark:bg-red-900/30' : 'bg-violet-100 dark:bg-violet-900/30'">
+                 [class]="svc.options().danger ? 'bg-red-100 dark:bg-red-900/30' : 'bg-primary-100 dark:bg-primary-900/30'">
               {{ svc.options().icon }}
             </div>
           }
@@ -36,7 +36,7 @@ import { ConfirmDialogService } from './confirm-dialog.service';
             <button class="flex-1 py-2.5 rounded-xl text-sm font-semibold text-white transition"
                     [class]="svc.options().danger
                       ? 'bg-red-500 hover:bg-red-600'
-                      : 'bg-gradient-to-r from-violet-600 to-indigo-600 hover:opacity-90'"
+                      : 'bg-gradient-to-r from-primary-600 to-indigo-600 hover:opacity-90'"
                     (click)="svc.confirm()">
               {{ svc.options().confirmLabel ?? 'Confirm' }}
             </button>

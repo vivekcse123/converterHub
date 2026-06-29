@@ -48,7 +48,7 @@ import { RouterLink } from '@angular/router';
             <li>Refund requests made after the eligibility window has passed.</li>
             <li>Subscriptions that have been used to download 5 or more premium templates or generate 5 or more cover letters.</li>
             <li>Subscription renewals where we sent a renewal reminder email at least 7 days before the charge.</li>
-            <li>Accounts found to be in violation of our <a routerLink="/terms" class="text-violet-600 hover:text-violet-700 underline">Terms of Service</a>.</li>
+            <li>Accounts found to be in violation of our <a routerLink="/terms" class="text-primary-600 hover:text-primary-700 underline">Terms of Service</a>.</li>
           </ul>
         </section>
 
@@ -74,7 +74,7 @@ import { RouterLink } from '@angular/router';
           <p class="leading-relaxed mb-4">To request a refund, please contact us using one of the following methods:</p>
           <ul class="list-disc pl-5 space-y-2">
             <li>Email: <strong>support&#64;apnaconverter.com</strong></li>
-            <li>Contact form: <a routerLink="/contact" class="text-violet-600 hover:text-violet-700 underline">apnaconverter.com/contact</a></li>
+            <li>Contact form: <a routerLink="/contact" class="text-primary-600 hover:text-primary-700 underline">apnaconverter.com/contact</a></li>
           </ul>
           <p class="leading-relaxed mt-4">
             Please include the following in your refund request:
@@ -107,7 +107,7 @@ import { RouterLink } from '@angular/router';
         <section>
           <h2 class="text-xl font-bold text-slate-900 dark:text-white mb-3">9. Contact</h2>
           <p class="leading-relaxed">
-            If you have questions about this Refund Policy or a specific purchase, please reach out via our <a routerLink="/contact" class="text-violet-600 hover:text-violet-700 underline">Contact page</a> or email <strong>support&#64;apnaconverter.com</strong>. We are committed to resolving all concerns promptly and fairly.
+            If you have questions about this Refund Policy or a specific purchase, please reach out via our <a routerLink="/contact" class="text-primary-600 hover:text-primary-700 underline">Contact page</a> or email <strong>support&#64;apnaconverter.com</strong>. We are committed to resolving all concerns promptly and fairly.
           </p>
         </section>
 

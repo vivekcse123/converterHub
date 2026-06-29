@@ -55,8 +55,8 @@ const CATEGORIES: { id: ToolCategory | 'all'; label: string }[] = [
             type="button"
             class="px-4 py-1.5 rounded-full text-sm font-medium transition-colors border"
             [class]="activeCategory() === cat.id
-              ? 'bg-violet-600 text-white border-violet-600 shadow-sm'
-              : 'bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 border-slate-200 dark:border-slate-700 hover:border-violet-400 hover:text-violet-600'"
+              ? 'bg-primary-600 text-white border-primary-600 shadow-sm'
+              : 'bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 border-slate-200 dark:border-slate-700 hover:border-primary-400 hover:text-primary-600'"
             (click)="activeCategory.set(cat.id)">
             {{ cat.label }}
           </button>
@@ -76,7 +76,7 @@ const CATEGORIES: { id: ToolCategory | 'all'; label: string }[] = [
         <div class="text-center py-16 text-slate-400 dark:text-slate-500">
           <p class="text-4xl mb-3">🔍</p>
           <p class="font-medium">No tools found for "{{ query() }}"</p>
-          <button type="button" class="mt-3 text-sm text-violet-600 hover:underline" (click)="query.set(''); activeCategory.set('all')">
+          <button type="button" class="mt-3 text-sm text-primary-600 hover:underline" (click)="query.set(''); activeCategory.set('all')">
             Clear search
           </button>
         </div>

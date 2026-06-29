@@ -105,13 +105,13 @@ type PanelView = 'score' | 'jd' | 'ai-summary' | 'ai-bullet';
           <button type="button"
                   class="flex-1 py-1.5 text-[11px] font-semibold rounded-lg border transition-colors"
                   [class]="view() === 'score'
-                    ? 'bg-violet-600 text-white border-violet-600'
+                    ? 'bg-primary-600 text-white border-primary-600'
                     : 'text-slate-600 border-slate-200 hover:bg-slate-50'"
                   (click)="view.set('score')">ATS Check</button>
           <button type="button"
                   class="flex-1 py-1.5 text-[11px] font-semibold rounded-lg border transition-colors"
                   [class]="view() === 'jd'
-                    ? 'bg-violet-600 text-white border-violet-600'
+                    ? 'bg-primary-600 text-white border-primary-600'
                     : 'text-slate-600 border-slate-200 hover:bg-slate-50'"
                   (click)="view.set('jd')">JD Match</button>
         </div>
@@ -190,7 +190,7 @@ type PanelView = 'score' | 'jd' | 'ai-summary' | 'ai-bullet';
           <textarea [(ngModel)]="jdText" (ngModelChange)="runJdMatch()"
                     rows="4"
                     placeholder="Paste the job description to see keyword match..."
-                    class="w-full text-xs px-3 py-2 rounded-xl border border-slate-200 bg-white text-slate-700 resize-none focus:outline-none focus:ring-2 focus:ring-violet-500 leading-relaxed">
+                    class="w-full text-xs px-3 py-2 rounded-xl border border-slate-200 bg-white text-slate-700 resize-none focus:outline-none focus:ring-2 focus:ring-primary-500 leading-relaxed">
           </textarea>
         </div>
 
@@ -252,31 +252,31 @@ type PanelView = 'score' | 'jd' | 'ai-summary' | 'ai-bullet';
       <div class="px-4 pt-3 pb-2">
         <div class="flex items-center gap-2 mb-2.5">
           <p class="text-[10px] font-bold uppercase tracking-widest text-slate-400">AI Assistant</p>
-          <span class="text-[9px] font-bold px-1.5 py-0.5 rounded-full bg-violet-100 text-violet-600">BETA</span>
+          <span class="text-[9px] font-bold px-1.5 py-0.5 rounded-full bg-primary-100 text-primary-600">BETA</span>
         </div>
 
         <div class="space-y-1.5">
           <!-- Improve with AI -->
           <button type="button"
-                  class="w-full flex items-center gap-3 p-2.5 rounded-xl border border-slate-100 hover:border-violet-200 hover:bg-violet-50 transition-all group text-left"
+                  class="w-full flex items-center gap-3 p-2.5 rounded-xl border border-slate-100 hover:border-primary-200 hover:bg-primary-50 transition-all group text-left"
                   (click)="view.set('ai-bullet')">
-            <div class="w-8 h-8 bg-violet-100 rounded-lg flex items-center justify-center shrink-0">
-              <svg class="w-4 h-4 text-violet-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div class="w-8 h-8 bg-primary-100 rounded-lg flex items-center justify-center shrink-0">
+              <svg class="w-4 h-4 text-primary-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
               </svg>
             </div>
             <div class="flex-1 min-w-0">
-              <p class="text-xs font-semibold text-slate-800 group-hover:text-violet-700">Improve with AI</p>
+              <p class="text-xs font-semibold text-slate-800 group-hover:text-primary-700">Improve with AI</p>
               <p class="text-[10px] text-slate-400 mt-0.5">Get AI suggestions to improve your resume</p>
             </div>
-            <svg class="w-3.5 h-3.5 text-slate-300 group-hover:text-violet-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg class="w-3.5 h-3.5 text-slate-300 group-hover:text-primary-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
             </svg>
           </button>
 
           <!-- Generate Summary -->
           <button type="button"
-                  class="w-full flex items-center gap-3 p-2.5 rounded-xl border border-slate-100 hover:border-violet-200 hover:bg-violet-50 transition-all group text-left"
+                  class="w-full flex items-center gap-3 p-2.5 rounded-xl border border-slate-100 hover:border-primary-200 hover:bg-primary-50 transition-all group text-left"
                   (click)="view.set('ai-summary')">
             <div class="w-8 h-8 bg-blue-100 rounded-lg flex items-center justify-center shrink-0">
               <svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -284,17 +284,17 @@ type PanelView = 'score' | 'jd' | 'ai-summary' | 'ai-bullet';
               </svg>
             </div>
             <div class="flex-1 min-w-0">
-              <p class="text-xs font-semibold text-slate-800 group-hover:text-violet-700">Generate Summary</p>
+              <p class="text-xs font-semibold text-slate-800 group-hover:text-primary-700">Generate Summary</p>
               <p class="text-[10px] text-slate-400 mt-0.5">Create a professional summary with AI</p>
             </div>
-            <svg class="w-3.5 h-3.5 text-slate-300 group-hover:text-violet-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg class="w-3.5 h-3.5 text-slate-300 group-hover:text-primary-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
             </svg>
           </button>
 
           <!-- Keyword Optimizer -->
           <button type="button"
-                  class="w-full flex items-center gap-3 p-2.5 rounded-xl border border-slate-100 hover:border-violet-200 hover:bg-violet-50 transition-all group text-left"
+                  class="w-full flex items-center gap-3 p-2.5 rounded-xl border border-slate-100 hover:border-primary-200 hover:bg-primary-50 transition-all group text-left"
                   (click)="view.set('jd')">
             <div class="w-8 h-8 bg-amber-100 rounded-lg flex items-center justify-center shrink-0">
               <svg class="w-4 h-4 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -302,17 +302,17 @@ type PanelView = 'score' | 'jd' | 'ai-summary' | 'ai-bullet';
               </svg>
             </div>
             <div class="flex-1 min-w-0">
-              <p class="text-xs font-semibold text-slate-800 group-hover:text-violet-700">Keyword Optimizer</p>
+              <p class="text-xs font-semibold text-slate-800 group-hover:text-primary-700">Keyword Optimizer</p>
               <p class="text-[10px] text-slate-400 mt-0.5">Find and add relevant keywords</p>
             </div>
-            <svg class="w-3.5 h-3.5 text-slate-300 group-hover:text-violet-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg class="w-3.5 h-3.5 text-slate-300 group-hover:text-primary-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
             </svg>
           </button>
 
           <!-- Check ATS Score -->
           <button type="button"
-                  class="w-full flex items-center gap-3 p-2.5 rounded-xl border border-slate-100 hover:border-violet-200 hover:bg-violet-50 transition-all group text-left"
+                  class="w-full flex items-center gap-3 p-2.5 rounded-xl border border-slate-100 hover:border-primary-200 hover:bg-primary-50 transition-all group text-left"
                   (click)="view.set('score')">
             <div class="w-8 h-8 bg-red-100 rounded-lg flex items-center justify-center shrink-0">
               <svg class="w-4 h-4 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -320,10 +320,10 @@ type PanelView = 'score' | 'jd' | 'ai-summary' | 'ai-bullet';
               </svg>
             </div>
             <div class="flex-1 min-w-0">
-              <p class="text-xs font-semibold text-slate-800 group-hover:text-violet-700">Check ATS Score</p>
+              <p class="text-xs font-semibold text-slate-800 group-hover:text-primary-700">Check ATS Score</p>
               <p class="text-[10px] text-slate-400 mt-0.5">Recalculate your ATS score</p>
             </div>
-            <svg class="w-3.5 h-3.5 text-slate-300 group-hover:text-violet-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg class="w-3.5 h-3.5 text-slate-300 group-hover:text-primary-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
             </svg>
           </button>
@@ -335,20 +335,23 @@ type PanelView = 'score' | 'jd' | 'ai-summary' | 'ai-bullet';
         <div class="px-4 py-3 border-t border-slate-100">
           @if (!auth.isPro()) {
             <div class="text-center py-4">
-              <p class="text-2xl mb-2">🔒</p>
+              <div class="w-10 h-10 mx-auto mb-2 bg-slate-100 dark:bg-slate-800 rounded-full flex items-center justify-center" aria-hidden="true">
+                <svg class="w-5 h-5 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+              </div>
               <p class="text-xs font-semibold text-slate-700">Pro Feature</p>
               <p class="text-[11px] text-slate-400 mt-1">Upgrade to generate AI-powered summaries.</p>
             </div>
           } @else {
             <p class="text-xs font-semibold text-slate-700 mb-2">Generate Summary</p>
-            <button class="w-full py-2 rounded-xl bg-gradient-to-r from-violet-600 to-purple-600 text-white text-xs font-bold hover:opacity-90 transition mb-3"
+            <button class="w-full py-2 rounded-xl bg-gradient-to-r from-primary-600 to-purple-600 text-white text-xs font-bold hover:opacity-90 transition mb-3"
                     (click)="generateSummary()">
-              ✨ Generate
+              <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"/></svg>
+              Generate
             </button>
             @for (v of summaryVariants(); track $index) {
               <div class="bg-slate-50 rounded-xl p-2.5 text-[11px] text-slate-700 leading-relaxed border border-slate-200 mb-2">
                 <p class="mb-1.5">{{ v }}</p>
-                <button class="text-violet-600 font-semibold text-[10px] hover:underline"
+                <button class="text-primary-600 font-semibold text-[10px] hover:underline"
                         (click)="applySummary(v)">Use this →</button>
               </div>
             }
@@ -361,7 +364,9 @@ type PanelView = 'score' | 'jd' | 'ai-summary' | 'ai-bullet';
         <div class="px-4 py-3 border-t border-slate-100">
           @if (!auth.isPro()) {
             <div class="text-center py-4">
-              <p class="text-2xl mb-2">🔒</p>
+              <div class="w-10 h-10 mx-auto mb-2 bg-slate-100 dark:bg-slate-800 rounded-full flex items-center justify-center" aria-hidden="true">
+                <svg class="w-5 h-5 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+              </div>
               <p class="text-xs font-semibold text-slate-700">Pro Feature</p>
               <p class="text-[11px] text-slate-400 mt-1">Upgrade to rewrite bullets with AI.</p>
             </div>
@@ -369,17 +374,18 @@ type PanelView = 'score' | 'jd' | 'ai-summary' | 'ai-bullet';
             <p class="text-xs font-semibold text-slate-700 mb-2">Rewrite Bullet Point</p>
             <textarea [(ngModel)]="bulletInput" rows="2"
                       placeholder='e.g. "worked on reporting feature"'
-                      class="w-full text-xs px-3 py-2 rounded-xl border border-slate-200 bg-white text-slate-700 resize-none focus:outline-none focus:ring-2 focus:ring-violet-500 mb-2">
+                      class="w-full text-xs px-3 py-2 rounded-xl border border-slate-200 bg-white text-slate-700 resize-none focus:outline-none focus:ring-2 focus:ring-primary-500 mb-2">
             </textarea>
-            <button class="w-full py-2 rounded-xl bg-gradient-to-r from-violet-600 to-purple-600 text-white text-xs font-bold hover:opacity-90 transition disabled:opacity-50 mb-2"
+            <button class="w-full py-2 rounded-xl bg-gradient-to-r from-primary-600 to-purple-600 text-white text-xs font-bold hover:opacity-90 transition disabled:opacity-50 mb-2"
                     [disabled]="!bulletInput.trim()"
                     (click)="rewriteBullet()">
-              ✨ Rewrite
+              <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"/></svg>
+              Rewrite
             </button>
             @for (v of bulletVariants(); track $index) {
               <div class="bg-slate-50 rounded-xl p-2.5 text-[11px] text-slate-700 leading-relaxed border border-slate-200 mb-1.5">
                 <p class="mb-1.5">• {{ v }}</p>
-                <button class="text-violet-600 font-semibold text-[10px] hover:underline"
+                <button class="text-primary-600 font-semibold text-[10px] hover:underline"
                         (click)="copyText(v)">Copy</button>
               </div>
             }

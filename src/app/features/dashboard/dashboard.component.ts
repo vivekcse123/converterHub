@@ -34,16 +34,16 @@ type Section = 'overview' | 'resumes' | 'jobs' | 'subscription' | 'payments' | '
         <div class="px-5 py-4 border-b border-slate-100 dark:border-slate-800">
           <a routerLink="/" class="flex items-center gap-2.5 group" title="Back to home">
             <img src="assets/web-app-manifest-192x192.png" alt="ApnaConverter" class="w-8 h-8 object-contain group-hover:scale-105 transition-transform" width="32" height="32">
-            <span class="font-bold text-slate-900 dark:text-white text-sm tracking-tight">Apna<span class="text-violet-600">Converter</span></span>
+            <span class="font-bold text-slate-900 dark:text-white text-sm tracking-tight">Apna<span class="text-primary-600">Converter</span></span>
           </a>
-          <a routerLink="/" class="mt-2 flex items-center gap-1 text-[11px] text-slate-400 hover:text-violet-600 dark:hover:text-violet-400 transition-colors font-medium">
+          <a routerLink="/" class="mt-2 flex items-center gap-1 text-[11px] text-slate-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors font-medium">
             <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
             Back to Home
           </a>
         </div>
         <div class="px-4 py-4 border-b border-slate-100 dark:border-slate-800">
           <div class="flex items-center gap-3">
-            <div class="w-9 h-9 rounded-full bg-gradient-to-br from-violet-500 to-indigo-600 flex items-center justify-center text-white font-bold text-xs shrink-0">{{ initials() }}</div>
+            <div class="w-9 h-9 rounded-full bg-gradient-to-br from-primary-500 to-indigo-600 flex items-center justify-center text-white font-bold text-xs shrink-0">{{ initials() }}</div>
             <div class="min-w-0">
               <p class="text-xs font-semibold text-slate-800 dark:text-white truncate">{{ auth.user()?.name }}</p>
               <p class="text-[10px] font-medium" [class]="auth.isPro() ? 'text-emerald-500' : 'text-slate-400'">{{ auth.isPro() ? planLabel() : 'Free Plan' }}</p>
@@ -53,19 +53,19 @@ type Section = 'overview' | 'resumes' | 'jobs' | 'subscription' | 'payments' | '
         <nav class="flex-1 px-3 py-4 space-y-0.5">
           @for (item of navItems; track item.id) {
             <button class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all text-left"
-                    [class]="activeSection() === item.id ? 'bg-violet-100 dark:bg-violet-900/30 text-violet-700 dark:text-violet-300' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800'"
+                    [class]="activeSection() === item.id ? 'bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800'"
                     (click)="setSection(item.id)">
               <span class="text-base">{{ item.icon }}</span>
               <span>{{ item.label }}</span>
               @if (item.id === 'jobs' && career.totalJobs() > 0) {
-                <span class="ml-auto text-[10px] font-bold bg-violet-200 dark:bg-violet-900 text-violet-700 dark:text-violet-300 px-1.5 py-0.5 rounded-full">{{ career.totalJobs() }}</span>
+                <span class="ml-auto text-[10px] font-bold bg-primary-200 dark:bg-primary-900 text-primary-700 dark:text-primary-300 px-1.5 py-0.5 rounded-full">{{ career.totalJobs() }}</span>
               }
             </button>
           }
         </nav>
         <div class="px-3 py-4 border-t border-slate-100 dark:border-slate-800 space-y-0.5">
           @if (!auth.isPro()) {
-            <button class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold bg-gradient-to-r from-violet-600 to-indigo-600 text-white hover:opacity-90 transition"
+            <button class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold bg-gradient-to-r from-primary-600 to-indigo-600 text-white hover:opacity-90 transition"
                     (click)="showUpgrade.set(true)">
               <span>⭐</span><span>Upgrade to Pro</span>
             </button>
@@ -84,14 +84,14 @@ type Section = 'overview' | 'resumes' | 'jobs' | 'subscription' | 'payments' | '
         <div class="md:hidden bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 px-4 py-3 flex items-center justify-between sticky top-0 z-10">
           <p class="font-bold text-slate-800 dark:text-white text-sm">{{ activeSectionLabel() }}</p>
           @if (!auth.isPro()) {
-            <button class="text-xs font-bold px-3 py-1.5 rounded-lg bg-gradient-to-r from-violet-600 to-indigo-600 text-white" (click)="showUpgrade.set(true)">⭐ Pro</button>
+            <button class="text-xs font-bold px-3 py-1.5 rounded-lg bg-gradient-to-r from-primary-600 to-indigo-600 text-white" (click)="showUpgrade.set(true)">⭐ Pro</button>
           }
         </div>
         <div class="md:hidden overflow-x-auto bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 px-3 pb-2">
           <div class="flex gap-1 pt-2">
             @for (item of navItems; track item.id) {
               <button class="flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap transition shrink-0"
-                      [class]="activeSection() === item.id ? 'bg-violet-100 dark:bg-violet-900/30 text-violet-700 dark:text-violet-300' : 'text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800'"
+                      [class]="activeSection() === item.id ? 'bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300' : 'text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800'"
                       (click)="setSection(item.id)">
                 {{ item.icon }} {{ item.label }}
               </button>
@@ -117,7 +117,7 @@ type Section = 'overview' | 'resumes' | 'jobs' | 'subscription' | 'payments' | '
             </div>
 
             <!-- Plan card -->
-            <div class="rounded-2xl p-5 border" [class]="auth.isPro() ? 'bg-gradient-to-r from-violet-600 to-indigo-600 border-transparent text-white' : 'bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800'">
+            <div class="rounded-2xl p-5 border" [class]="auth.isPro() ? 'bg-gradient-to-r from-primary-600 to-indigo-600 border-transparent text-white' : 'bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800'">
               <div class="flex items-center justify-between flex-wrap gap-4">
                 <div>
                   <p class="text-xs font-semibold opacity-80 mb-1">{{ auth.isPro() ? 'Active Plan' : 'Current Plan' }}</p>
@@ -141,7 +141,7 @@ type Section = 'overview' | 'resumes' | 'jobs' | 'subscription' | 'payments' | '
                       <p class="text-xl font-extrabold">{{ auth.user()?.subscription?.totalDownloads ?? 0 }}</p>
                     </div>
                   } @else {
-                    <button class="px-4 py-2 rounded-xl bg-gradient-to-r from-violet-600 to-indigo-600 text-white text-sm font-bold hover:opacity-90 transition shadow-md"
+                    <button class="px-4 py-2 rounded-xl bg-gradient-to-r from-primary-600 to-indigo-600 text-white text-sm font-bold hover:opacity-90 transition shadow-md"
                             (click)="showUpgrade.set(true)">
                       Upgrade ⭐
                     </button>
@@ -160,7 +160,7 @@ type Section = 'overview' | 'resumes' | 'jobs' | 'subscription' | 'payments' | '
             <!-- Stats grid -->
             <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
               @for (stat of overviewStats(); track stat.label) {
-                <div class="bg-white dark:bg-slate-900 rounded-2xl p-4 border border-slate-200 dark:border-slate-800 hover:border-violet-300 dark:hover:border-violet-700 transition cursor-pointer"
+                <div class="bg-white dark:bg-slate-900 rounded-2xl p-4 border border-slate-200 dark:border-slate-800 hover:border-primary-300 dark:hover:border-primary-700 transition cursor-pointer"
                      (click)="setSection(stat.section)">
                   <div class="text-2xl mb-2">{{ stat.icon }}</div>
                   <p class="text-2xl font-extrabold" [class]="stat.color">{{ stat.value }}</p>
@@ -173,8 +173,8 @@ type Section = 'overview' | 'resumes' | 'jobs' | 'subscription' | 'payments' | '
             <div>
               <h2 class="text-sm font-bold text-slate-700 dark:text-slate-300 mb-3">Quick Actions</h2>
               <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
-                <a routerLink="/resume-builder" class="group bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 flex flex-col items-center gap-2 hover:border-violet-300 hover:shadow-md transition text-center">
-                  <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-violet-500 to-indigo-600 flex items-center justify-center text-xl group-hover:scale-110 transition-transform">📄</div>
+                <a routerLink="/resume-builder" class="group bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 flex flex-col items-center gap-2 hover:border-primary-300 hover:shadow-md transition text-center">
+                  <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-primary-500 to-indigo-600 flex items-center justify-center text-xl group-hover:scale-110 transition-transform">📄</div>
                   <p class="text-xs font-semibold text-slate-700 dark:text-slate-200">Create Resume</p>
                   <p class="text-[10px] text-slate-400">ATS-optimized</p>
                 </a>
@@ -211,16 +211,16 @@ type Section = 'overview' | 'resumes' | 'jobs' | 'subscription' | 'payments' | '
                 </div>
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
                   @for (r of store.resumes().slice(0, 2); track r.id) {
-                    <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 flex items-center gap-3 hover:border-violet-200 hover:shadow-sm transition group">
-                      <div class="w-10 h-12 rounded-xl bg-gradient-to-br from-violet-500 to-indigo-600 flex items-center justify-center text-white text-xs font-bold shrink-0">{{ (r.name || 'R').substring(0,2).toUpperCase() }}</div>
+                    <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 flex items-center gap-3 hover:border-primary-200 hover:shadow-sm transition group">
+                      <div class="w-10 h-12 rounded-xl bg-gradient-to-br from-primary-500 to-indigo-600 flex items-center justify-center text-white text-xs font-bold shrink-0">{{ (r.name || 'R').substring(0,2).toUpperCase() }}</div>
                       <div class="flex-1 min-w-0">
                         <p class="font-semibold text-slate-800 dark:text-white text-sm truncate">{{ r.name || 'Untitled' }}</p>
                         <div class="flex items-center gap-2 mt-0.5">
-                          <span class="text-[10px] font-medium bg-violet-100 dark:bg-violet-900/40 text-violet-600 dark:text-violet-400 px-1.5 py-0.5 rounded">📄 Resume</span>
+                          <span class="text-[10px] font-medium bg-primary-100 dark:bg-primary-900/40 text-primary-600 dark:text-primary-400 px-1.5 py-0.5 rounded">📄 Resume</span>
                           <p class="text-[11px] text-slate-400">{{ r.updatedAt | date:'dd MMM' }}</p>
                         </div>
                       </div>
-                      <a routerLink="/resume-builder" [queryParams]="{id: r.id}" class="text-xs text-violet-600 opacity-0 group-hover:opacity-100 transition font-medium shrink-0">Edit →</a>
+                      <a routerLink="/resume-builder" [queryParams]="{id: r.id}" class="text-xs text-primary-600 opacity-0 group-hover:opacity-100 transition font-medium shrink-0">Edit →</a>
                     </div>
                   }
                   @for (b of biodataStore.biodatas().slice(0, 1); track b.id) {
@@ -238,7 +238,7 @@ type Section = 'overview' | 'resumes' | 'jobs' | 'subscription' | 'payments' | '
                 </div>
                 <div class="flex gap-3 mt-3">
                   @if (store.resumes().length > 2) {
-                    <button class="text-xs text-violet-600 dark:text-violet-400 hover:underline" (click)="setSection('resumes')">View all {{ store.resumes().length }} resumes →</button>
+                    <button class="text-xs text-primary-600 dark:text-primary-400 hover:underline" (click)="setSection('resumes')">View all {{ store.resumes().length }} resumes →</button>
                   }
                   @if (biodataStore.biodatas().length > 1) {
                     <button class="text-xs text-rose-600 dark:text-rose-400 hover:underline" (click)="setSection('biodata')">View all {{ biodataStore.biodatas().length }} biodatas →</button>
@@ -252,7 +252,7 @@ type Section = 'overview' | 'resumes' | 'jobs' | 'subscription' | 'payments' | '
               <div>
                 <div class="flex items-center justify-between mb-3">
                   <h2 class="text-sm font-bold text-slate-700 dark:text-slate-300">Job Applications</h2>
-                  <button class="text-xs text-violet-600 dark:text-violet-400 hover:underline" (click)="setSection('jobs')">View all →</button>
+                  <button class="text-xs text-primary-600 dark:text-primary-400 hover:underline" (click)="setSection('jobs')">View all →</button>
                 </div>
                 <div class="grid grid-cols-3 sm:grid-cols-6 gap-2">
                   @for (s of jobStatusList; track s) {
@@ -268,15 +268,15 @@ type Section = 'overview' | 'resumes' | 'jobs' | 'subscription' | 'payments' | '
 
             <!-- Pro upsell if free -->
             @if (!auth.isPro()) {
-              <div class="bg-gradient-to-r from-violet-50 to-indigo-50 dark:from-violet-900/20 dark:to-indigo-900/20 border border-violet-200 dark:border-violet-800 rounded-2xl p-5">
+              <div class="bg-gradient-to-r from-primary-50 to-indigo-50 dark:from-primary-900/20 dark:to-indigo-900/20 border border-primary-200 dark:border-primary-800 rounded-2xl p-5">
                 <div class="flex items-center justify-between flex-wrap gap-4">
                   <div>
-                    <p class="font-bold text-violet-900 dark:text-violet-200 text-base">Unlock the Full Career Platform</p>
-                    <p class="text-xs text-violet-700 dark:text-violet-400 mt-1">Unlimited resumes, AI tools, version history, job tracker, portfolio, ATS checker + more.</p>
+                    <p class="font-bold text-primary-900 dark:text-primary-200 text-base">Unlock the Full Career Platform</p>
+                    <p class="text-xs text-primary-700 dark:text-primary-400 mt-1">Unlimited resumes, AI tools, version history, job tracker, portfolio, ATS checker + more.</p>
                   </div>
-                  <button class="px-5 py-2.5 rounded-xl bg-gradient-to-r from-violet-600 to-indigo-600 text-white text-sm font-bold hover:opacity-90 transition shadow-lg whitespace-nowrap"
+                  <button class="px-5 py-2.5 rounded-xl bg-gradient-to-r from-primary-600 to-indigo-600 text-white text-sm font-bold hover:opacity-90 transition shadow-lg whitespace-nowrap"
                           (click)="showUpgrade.set(true)">
-                    Upgrade from ₹9/mo
+                    Upgrade from ₹99/mo
                   </button>
                 </div>
               </div>
@@ -293,11 +293,11 @@ type Section = 'overview' | 'resumes' | 'jobs' | 'subscription' | 'payments' | '
                 </div>
                 <div class="flex items-center gap-2">
                   @if (!auth.isPro() && store.resumes().length >= 1) {
-                    <button class="text-xs font-bold px-3 py-2 rounded-xl border border-violet-300 dark:border-violet-700 text-violet-600 dark:text-violet-400 hover:bg-violet-50 dark:hover:bg-violet-900/20 transition"
+                    <button class="text-xs font-bold px-3 py-2 rounded-xl border border-primary-300 dark:border-primary-700 text-primary-600 dark:text-primary-400 hover:bg-primary-50 dark:hover:bg-primary-900/20 transition"
                             (click)="showUpgrade.set(true)">🔒 Unlock More</button>
                   }
                   @if (auth.isPro() || store.resumes().length === 0) {
-                    <a routerLink="/resume-builder" class="text-xs font-semibold px-4 py-2 rounded-xl bg-gradient-to-r from-violet-600 to-indigo-600 text-white hover:opacity-90 transition">+ New Resume</a>
+                    <a routerLink="/resume-builder" class="text-xs font-semibold px-4 py-2 rounded-xl bg-gradient-to-r from-primary-600 to-indigo-600 text-white hover:opacity-90 transition">+ New Resume</a>
                   }
                 </div>
               </div>
@@ -306,14 +306,14 @@ type Section = 'overview' | 'resumes' | 'jobs' | 'subscription' | 'payments' | '
                 <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-12 text-center">
                   <p class="text-5xl mb-4">📄</p>
                   <p class="font-semibold text-slate-700 dark:text-slate-200 mb-2">No resumes yet</p>
-                  <a routerLink="/resume-builder" class="inline-block mt-2 px-6 py-2.5 rounded-xl bg-gradient-to-r from-violet-600 to-indigo-600 text-white text-sm font-bold">Create Resume</a>
+                  <a routerLink="/resume-builder" class="inline-block mt-2 px-6 py-2.5 rounded-xl bg-gradient-to-r from-primary-600 to-indigo-600 text-white text-sm font-bold">Create Resume</a>
                 </div>
               }
 
               <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                 @for (r of store.resumes(); track r.id) {
-                  <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 flex flex-col gap-4 hover:border-violet-200 dark:hover:border-violet-700 hover:shadow-md transition group">
-                    <div class="h-28 rounded-xl bg-gradient-to-br from-violet-500 to-indigo-600 flex items-center justify-center relative overflow-hidden">
+                  <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5 flex flex-col gap-4 hover:border-primary-200 dark:hover:border-primary-700 hover:shadow-md transition group">
+                    <div class="h-28 rounded-xl bg-gradient-to-br from-primary-500 to-indigo-600 flex items-center justify-center relative overflow-hidden">
                       <span class="text-white font-extrabold text-4xl opacity-20">Aa</span>
                       <div class="absolute bottom-2 right-2 text-[9px] font-bold bg-white/20 text-white px-1.5 py-0.5 rounded capitalize">{{ r.templateId }}</div>
                       @if (r.atsScore) {
@@ -327,12 +327,12 @@ type Section = 'overview' | 'resumes' | 'jobs' | 'subscription' | 'payments' | '
                       <p class="font-bold text-slate-800 dark:text-white text-sm truncate">{{ r.name || 'Untitled Resume' }}</p>
                       <p class="text-[11px] text-slate-400 mt-0.5">Updated {{ r.updatedAt | date:'dd MMM yyyy' }}</p>
                       @if ((r.versions?.length ?? 0) > 0) {
-                        <p class="text-[10px] text-violet-500 mt-0.5">{{ r.versions!.length }} version{{ r.versions!.length !== 1 ? 's' : '' }} saved</p>
+                        <p class="text-[10px] text-primary-500 mt-0.5">{{ r.versions!.length }} version{{ r.versions!.length !== 1 ? 's' : '' }} saved</p>
                       }
                     </div>
                     <div class="flex items-center gap-2 flex-wrap">
                       <a [routerLink]="['/resume-builder']" [queryParams]="{id: r.id}"
-                         class="flex-1 text-center text-xs py-2 rounded-xl bg-violet-100 dark:bg-violet-900/30 text-violet-700 dark:text-violet-300 font-semibold hover:bg-violet-200 transition">Edit</a>
+                         class="flex-1 text-center text-xs py-2 rounded-xl bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300 font-semibold hover:bg-primary-200 transition">Edit</a>
                       @if (auth.isPro()) {
                         <button class="flex-1 text-center text-xs py-2 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 font-semibold hover:bg-slate-200 transition"
                                 (click)="duplicateResume(r)">Copy</button>
@@ -354,14 +354,14 @@ type Section = 'overview' | 'resumes' | 'jobs' | 'subscription' | 'payments' | '
                             <div>
                               <p class="font-medium text-slate-700 dark:text-slate-200">{{ v.label }}</p>
                             </div>
-                            <button class="text-violet-600 dark:text-violet-400 hover:underline whitespace-nowrap"
+                            <button class="text-primary-600 dark:text-primary-400 hover:underline whitespace-nowrap"
                                     (click)="restoreVersion(r.id, v.versionId)">Restore</button>
                           </div>
                         }
                       </div>
                     }
                     @if (auth.isPro() && (r.versions?.length ?? 0) > 0) {
-                      <button class="text-[11px] text-center text-slate-400 hover:text-violet-600 transition"
+                      <button class="text-[11px] text-center text-slate-400 hover:text-primary-600 transition"
                               (click)="toggleVersions(r.id)">
                         {{ expandedVersions() === r.id ? '▲ Hide history' : '▼ Version history (' + r.versions!.length + ')' }}
                       </button>
@@ -373,7 +373,7 @@ type Section = 'overview' | 'resumes' | 'jobs' | 'subscription' | 'payments' | '
               @if (!auth.isPro() && store.resumes().length >= 1) {
                 <div class="mt-4 bg-amber-50 dark:bg-amber-900/10 border border-dashed border-amber-300 dark:border-amber-700 rounded-2xl p-4 text-center">
                   <p class="text-sm font-semibold text-amber-800 dark:text-amber-300 mb-1">🔒 Free plan: 1 resume limit</p>
-                  <button class="text-xs font-bold text-violet-600 hover:underline" (click)="showUpgrade.set(true)">Upgrade to Pro for unlimited →</button>
+                  <button class="text-xs font-bold text-primary-600 hover:underline" (click)="showUpgrade.set(true)">Upgrade to Pro for unlimited →</button>
                 </div>
               }
             </div>
@@ -387,18 +387,18 @@ type Section = 'overview' | 'resumes' | 'jobs' | 'subscription' | 'payments' | '
                   <h1 class="text-lg font-extrabold text-slate-900 dark:text-white">Job Tracker</h1>
                   <p class="text-xs text-slate-400 mt-0.5">Track your job applications in one place</p>
                 </div>
-                <button class="text-xs font-semibold px-4 py-2 rounded-xl bg-gradient-to-r from-violet-600 to-indigo-600 text-white hover:opacity-90 transition"
+                <button class="text-xs font-semibold px-4 py-2 rounded-xl bg-gradient-to-r from-primary-600 to-indigo-600 text-white hover:opacity-90 transition"
                         (click)="openAddJob()">+ Add Application</button>
               </div>
 
               <!-- Status filter tabs -->
               <div class="flex gap-2 overflow-x-auto pb-1 mb-4">
                 <button class="text-xs font-semibold px-3 py-1.5 rounded-lg whitespace-nowrap transition"
-                        [class]="jobFilter() === '' ? 'bg-violet-600 text-white' : 'bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-400'"
+                        [class]="jobFilter() === '' ? 'bg-primary-600 text-white' : 'bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-400'"
                         (click)="jobFilter.set(''); loadJobs()">All ({{ career.totalJobs() }})</button>
                 @for (s of jobStatusList; track s) {
                   <button class="text-xs font-semibold px-3 py-1.5 rounded-lg whitespace-nowrap transition"
-                          [class]="jobFilter() === s ? 'bg-violet-600 text-white' : 'bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-400'"
+                          [class]="jobFilter() === s ? 'bg-primary-600 text-white' : 'bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-400'"
                           (click)="jobFilter.set(s); loadJobs()">
                     {{ jobConfig(s).icon }} {{ jobConfig(s).label }} ({{ career.jobStats()[s] || 0 }})
                   </button>
@@ -412,12 +412,12 @@ type Section = 'overview' | 'resumes' | 'jobs' | 'subscription' | 'payments' | '
                   <p class="text-5xl mb-4">🎯</p>
                   <p class="font-semibold text-slate-700 dark:text-slate-200 mb-1">No applications yet</p>
                   <p class="text-sm text-slate-400 mb-5">Start tracking your job search journey.</p>
-                  <button class="px-6 py-2.5 rounded-xl bg-gradient-to-r from-violet-600 to-indigo-600 text-white text-sm font-bold" (click)="openAddJob()">Add First Application</button>
+                  <button class="px-6 py-2.5 rounded-xl bg-gradient-to-r from-primary-600 to-indigo-600 text-white text-sm font-bold" (click)="openAddJob()">Add First Application</button>
                 </div>
               } @else {
                 <div class="space-y-2">
                   @for (job of career.jobs(); track job._id) {
-                    <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 flex items-center gap-4 hover:border-violet-200 dark:hover:border-violet-700 transition group">
+                    <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 flex items-center gap-4 hover:border-primary-200 dark:hover:border-primary-700 transition group">
                       <div class="text-2xl shrink-0">{{ jobConfig(job.status).icon }}</div>
                       <div class="flex-1 min-w-0">
                         <div class="flex items-center gap-2 flex-wrap">
@@ -477,15 +477,15 @@ type Section = 'overview' | 'resumes' | 'jobs' | 'subscription' | 'payments' | '
                   <p class="font-bold text-slate-800 dark:text-white text-lg mb-2">Upgrade to Pro</p>
                   <p class="text-sm text-slate-500 dark:text-slate-400 mb-5">Unlock the full career platform.</p>
                   <div class="flex gap-3">
-                    <button class="flex-1 py-3 rounded-xl bg-violet-100 dark:bg-violet-900/30 text-violet-700 dark:text-violet-300 font-bold text-sm hover:bg-violet-200 transition" (click)="subscribeTo('monthly')">₹9/month</button>
-                    <button class="flex-1 py-3 rounded-xl bg-gradient-to-r from-violet-600 to-indigo-600 text-white font-bold text-sm hover:opacity-90 transition shadow-md" (click)="subscribeTo('yearly')">₹99/year ⭐</button>
+                    <button class="flex-1 py-3 rounded-xl bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300 font-bold text-sm hover:bg-primary-200 transition" (click)="subscribeTo('monthly')">₹99/month</button>
+                    <button class="flex-1 py-3 rounded-xl bg-gradient-to-r from-primary-600 to-indigo-600 text-white font-bold text-sm hover:opacity-90 transition shadow-md" (click)="subscribeTo('yearly')">₹699/year ⭐</button>
                   </div>
                 </div>
                 <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-5">
                   <h3 class="text-sm font-bold text-slate-800 dark:text-white mb-3">🔒 Pro Features</h3>
                   <div class="grid grid-cols-1 sm:grid-cols-2 gap-1.5">
                     @for (f of allProFeatures; track f) {
-                      <button class="flex items-center gap-2 p-2 rounded-xl hover:bg-violet-50 dark:hover:bg-violet-900/20 transition text-left" (click)="showUpgrade.set(true)">
+                      <button class="flex items-center gap-2 p-2 rounded-xl hover:bg-primary-50 dark:hover:bg-primary-900/20 transition text-left" (click)="showUpgrade.set(true)">
                         <span class="text-sm">✓</span><span class="text-xs text-slate-600 dark:text-slate-300">{{ f }}</span>
                       </button>
                     }
@@ -562,21 +562,21 @@ type Section = 'overview' | 'resumes' | 'jobs' | 'subscription' | 'payments' | '
                   <p class="text-4xl">🌐</p>
                   <p class="font-bold text-slate-800 dark:text-white">Portfolio Page - Pro Only</p>
                   <p class="text-xs text-slate-500 dark:text-slate-400">Create a public profile with your bio, skills, and projects.</p>
-                  <button class="px-5 py-2.5 rounded-xl bg-gradient-to-r from-violet-600 to-indigo-600 text-white text-sm font-bold" (click)="showUpgrade.set(true)">Upgrade to Pro ⭐</button>
+                  <button class="px-5 py-2.5 rounded-xl bg-gradient-to-r from-primary-600 to-indigo-600 text-white text-sm font-bold" (click)="showUpgrade.set(true)">Upgrade to Pro ⭐</button>
                 </div>
               } @else if (career.portfolio()) {
                 <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 space-y-4">
                   <div class="flex items-center gap-3">
-                    <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-violet-500 to-indigo-600 flex items-center justify-center text-white font-bold text-xl">{{ initials() }}</div>
+                    <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-primary-500 to-indigo-600 flex items-center justify-center text-white font-bold text-xl">{{ initials() }}</div>
                     <div>
                       <p class="font-bold text-slate-800 dark:text-white">{{ career.portfolio()!.displayName || career.portfolio()!.username }}</p>
                       <p class="text-xs text-slate-400">{{ career.portfolio()!.tagline }}</p>
                     </div>
                     <a [routerLink]="['/p', career.portfolio()!.username]" target="_blank"
-                       class="ml-auto text-xs font-semibold text-violet-600 dark:text-violet-400 hover:underline">View public →</a>
+                       class="ml-auto text-xs font-semibold text-primary-600 dark:text-primary-400 hover:underline">View public →</a>
                   </div>
                   <div class="flex gap-3">
-                    <a routerLink="/resume-builder/portfolio" class="flex-1 text-center py-2.5 rounded-xl bg-violet-100 dark:bg-violet-900/30 text-violet-700 dark:text-violet-300 text-xs font-bold hover:bg-violet-200 transition">Edit Portfolio</a>
+                    <a routerLink="/resume-builder/portfolio" class="flex-1 text-center py-2.5 rounded-xl bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300 text-xs font-bold hover:bg-primary-200 transition">Edit Portfolio</a>
                     <a routerLink="/resume-builder/cover-letter" class="flex-1 text-center py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 text-xs font-bold hover:bg-slate-200 transition">Cover Letter</a>
                   </div>
                 </div>
@@ -584,7 +584,7 @@ type Section = 'overview' | 'resumes' | 'jobs' | 'subscription' | 'payments' | '
                 <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-8 text-center space-y-3">
                   <p class="text-4xl">🌐</p>
                   <p class="font-bold text-slate-800 dark:text-white">No portfolio yet</p>
-                  <a routerLink="/resume-builder/portfolio" class="inline-block mt-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-violet-600 to-indigo-600 text-white text-sm font-bold">Create Portfolio</a>
+                  <a routerLink="/resume-builder/portfolio" class="inline-block mt-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-primary-600 to-indigo-600 text-white text-sm font-bold">Create Portfolio</a>
                 </div>
               }
             </div>
@@ -650,7 +650,7 @@ type Section = 'overview' | 'resumes' | 'jobs' | 'subscription' | 'payments' | '
               <h1 class="text-lg font-extrabold text-slate-900 dark:text-white mb-5">Profile</h1>
               <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 space-y-5">
                 <div class="flex items-center gap-4">
-                  <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-violet-500 to-indigo-600 flex items-center justify-center text-white font-extrabold text-xl">{{ initials() }}</div>
+                  <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-primary-500 to-indigo-600 flex items-center justify-center text-white font-extrabold text-xl">{{ initials() }}</div>
                   <div>
                     <p class="font-bold text-slate-800 dark:text-white">{{ auth.user()?.name }}</p>
                     <p class="text-sm text-slate-500">{{ auth.user()?.email }}</p>
@@ -677,8 +677,8 @@ type Section = 'overview' | 'resumes' | 'jobs' | 'subscription' | 'payments' | '
         <div class="w-full max-w-md bg-white dark:bg-slate-900 rounded-2xl shadow-2xl p-6" (click)="$event.stopPropagation()">
           <h3 class="text-base font-bold text-slate-800 dark:text-white mb-4">Add Job Application</h3>
           <div class="space-y-3">
-            <div><label class="text-xs font-semibold text-slate-500 block mb-1">Job Title *</label><input type="text" [(ngModel)]="jobForm.jobTitle" class="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-violet-500"/></div>
-            <div><label class="text-xs font-semibold text-slate-500 block mb-1">Company *</label><input type="text" [(ngModel)]="jobForm.company" class="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-violet-500"/></div>
+            <div><label class="text-xs font-semibold text-slate-500 block mb-1">Job Title *</label><input type="text" [(ngModel)]="jobForm.jobTitle" class="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-primary-500"/></div>
+            <div><label class="text-xs font-semibold text-slate-500 block mb-1">Company *</label><input type="text" [(ngModel)]="jobForm.company" class="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-primary-500"/></div>
             <div class="grid grid-cols-2 gap-3">
               <div><label class="text-xs font-semibold text-slate-500 block mb-1">Location</label><input type="text" [(ngModel)]="jobForm.location" class="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-white text-sm focus:outline-none"/></div>
               <div><label class="text-xs font-semibold text-slate-500 block mb-1">Status</label>
@@ -692,7 +692,7 @@ type Section = 'overview' | 'resumes' | 'jobs' | 'subscription' | 'payments' | '
           </div>
           <div class="flex gap-3 mt-5">
             <button class="flex-1 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 text-sm font-semibold text-slate-600 dark:text-slate-300 hover:bg-slate-50 transition" (click)="showAddJob.set(false)">Cancel</button>
-            <button class="flex-1 py-2.5 rounded-xl bg-gradient-to-r from-violet-600 to-indigo-600 text-sm font-semibold text-white hover:opacity-90 transition" [disabled]="savingJob()" (click)="submitJob()">{{ savingJob() ? 'Adding...' : 'Add Application' }}</button>
+            <button class="flex-1 py-2.5 rounded-xl bg-gradient-to-r from-primary-600 to-indigo-600 text-sm font-semibold text-white hover:opacity-90 transition" [disabled]="savingJob()" (click)="submitJob()">{{ savingJob() ? 'Adding...' : 'Add Application' }}</button>
           </div>
         </div>
       </div>
@@ -701,7 +701,7 @@ type Section = 'overview' | 'resumes' | 'jobs' | 'subscription' | 'payments' | '
     <!-- Mobile sticky CTA -->
     @if (!auth.isPro()) {
       <div class="fixed bottom-0 left-0 right-0 md:hidden z-30 p-3 bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800 shadow-2xl">
-        <button class="w-full py-3 rounded-xl bg-gradient-to-r from-violet-600 to-indigo-600 text-white text-sm font-bold" (click)="showUpgrade.set(true)">⭐ Upgrade to Pro - ₹9/month</button>
+        <button class="w-full py-3 rounded-xl bg-gradient-to-r from-primary-600 to-indigo-600 text-white text-sm font-bold" (click)="showUpgrade.set(true)">⭐ Upgrade to Pro — ₹99/month</button>
       </div>
     }
   `,
@@ -787,7 +787,7 @@ export class DashboardComponent implements OnInit {
 
   overviewStats() {
     return [
-      { icon: '📄', label: 'Resumes',      value: String(this.store.resumes().length),   color: 'text-violet-600',  section: 'resumes' as Section },
+      { icon: '📄', label: 'Resumes',      value: String(this.store.resumes().length),   color: 'text-primary-600', section: 'resumes' as Section },
       { icon: '🎯', label: 'Applications', value: String(this.career.totalJobs()),        color: 'text-amber-500',   section: 'jobs' as Section },
       { icon: '📋', label: 'Biodatas',     value: String(this.biodataStore.biodatas().length), color: 'text-rose-500', section: 'biodata' as Section },
       { icon: '🔄', label: 'Conversions',  value: String(this.history().length),          color: 'text-blue-600',    section: 'history' as Section },

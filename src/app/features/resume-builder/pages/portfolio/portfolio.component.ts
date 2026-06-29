@@ -22,7 +22,7 @@ type Tab = 'basic' | 'social' | 'skills' | 'projects';
     <div class="container-app py-8 max-w-3xl flex flex-col gap-6 min-h-[calc(100vh-5rem)]">
       <!-- Header -->
       <div class="flex items-center gap-3 flex-wrap">
-        <a routerLink="/dashboard" class="text-xs text-slate-400 hover:text-violet-600 transition">← Dashboard</a>
+        <a routerLink="/dashboard" class="text-xs text-slate-400 hover:text-primary-600 transition">← Dashboard</a>
         <span class="text-slate-300 dark:text-slate-700">|</span>
         <h1 class="text-xl font-extrabold text-slate-900 dark:text-white">Portfolio Builder</h1>
         @if (portfolio()?.isPublic && portfolio()?.username) {
@@ -39,7 +39,7 @@ type Tab = 'basic' | 'social' | 'skills' | 'projects';
             <p class="text-5xl">🌐</p>
             <p class="text-lg font-bold text-slate-800 dark:text-white">Portfolio Page - Pro Only</p>
             <p class="text-sm text-slate-500 dark:text-slate-400 max-w-md mx-auto">Create a beautiful public profile page with your bio, skills, projects, and pinned resume. Available on Pro.</p>
-            <button class="px-6 py-3 rounded-xl bg-gradient-to-r from-violet-600 to-indigo-600 text-white font-bold hover:opacity-90 transition shadow-md"
+            <button class="px-6 py-3 rounded-xl bg-gradient-to-r from-primary-600 to-indigo-600 text-white font-bold hover:opacity-90 transition shadow-md"
                     (click)="showUpgrade.set(true)">Upgrade to Pro ⭐</button>
           </div>
         </div>
@@ -49,7 +49,7 @@ type Tab = 'basic' | 'social' | 'skills' | 'projects';
         <div class="flex gap-0 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl overflow-hidden">
           @for (t of tabs; track t.id) {
             <button class="flex-1 py-2.5 text-xs font-semibold transition"
-                    [class]="tab() === t.id ? 'bg-violet-600 text-white' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800'"
+                    [class]="tab() === t.id ? 'bg-primary-600 text-white' : 'text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800'"
                     (click)="tab.set(t.id)">{{ t.icon }} {{ t.label }}</button>
           }
         </div>
@@ -66,7 +66,7 @@ type Tab = 'basic' | 'social' | 'skills' | 'projects';
                 <span class="text-xs text-slate-400 shrink-0">apnaconverter.com/p/</span>
                 <input type="text" [(ngModel)]="form.username" (input)="normalizeUsername()" (blur)="checkUsername()"
                        placeholder="yourname" maxlength="50"
-                       class="flex-1 px-3 py-2.5 rounded-xl border text-sm bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-violet-500"
+                       class="flex-1 px-3 py-2.5 rounded-xl border text-sm bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-primary-500"
                        [style.border-color]="usernameStatus() === 'available' ? '#34d399' : (usernameStatus() === 'taken' || usernameStatus() === 'invalid') ? '#f87171' : ''" />
               </div>
               @if (usernameStatus() === 'available') { <p class="text-xs text-emerald-600 mt-1">✅ Username available</p> }
@@ -78,12 +78,12 @@ type Tab = 'basic' | 'social' | 'skills' | 'projects';
               <div>
                 <label class="text-xs font-semibold text-slate-500 block mb-1">Display Name</label>
                 <input type="text" [(ngModel)]="form.displayName" placeholder="Priya Sharma"
-                       class="w-full px-3 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-sm text-slate-700 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-violet-500" />
+                       class="w-full px-3 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-sm text-slate-700 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-primary-500" />
               </div>
               <div>
                 <label class="text-xs font-semibold text-slate-500 block mb-1">Tagline</label>
                 <input type="text" [(ngModel)]="form.tagline" placeholder="Full-Stack Developer"
-                       class="w-full px-3 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-sm text-slate-700 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-violet-500" />
+                       class="w-full px-3 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-sm text-slate-700 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-primary-500" />
               </div>
             </div>
 
@@ -91,25 +91,25 @@ type Tab = 'basic' | 'social' | 'skills' | 'projects';
               <label class="text-xs font-semibold text-slate-500 block mb-1">About</label>
               <textarea [(ngModel)]="form.about" rows="3"
                         placeholder="Write a short bio about yourself..."
-                        class="w-full px-3 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-sm text-slate-700 dark:text-slate-200 resize-none focus:outline-none focus:ring-2 focus:ring-violet-500"></textarea>
+                        class="w-full px-3 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-sm text-slate-700 dark:text-slate-200 resize-none focus:outline-none focus:ring-2 focus:ring-primary-500"></textarea>
             </div>
 
             <div class="grid grid-cols-2 gap-3">
               <div>
                 <label class="text-xs font-semibold text-slate-500 block mb-1">Location</label>
                 <input type="text" [(ngModel)]="form.location" placeholder="Bangalore, India"
-                       class="w-full px-3 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-sm focus:outline-none focus:ring-2 focus:ring-violet-500" />
+                       class="w-full px-3 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500" />
               </div>
               <div>
                 <label class="text-xs font-semibold text-slate-500 block mb-1">Contact Email</label>
                 <input type="email" [(ngModel)]="form.email" placeholder="hello@example.com"
-                       class="w-full px-3 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-sm focus:outline-none focus:ring-2 focus:ring-violet-500" />
+                       class="w-full px-3 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-sm focus:outline-none focus:ring-2 focus:ring-primary-500" />
               </div>
             </div>
             <div>
               <label class="text-xs font-semibold text-slate-500 block mb-1">Mobile Number <span class="font-normal text-slate-400">(optional)</span></label>
               <input type="tel" [(ngModel)]="form.phone" placeholder="+91 98765 43210"
-                     class="w-full px-3 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-sm text-slate-700 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-violet-500" />
+                     class="w-full px-3 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-sm text-slate-700 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-primary-500" />
               <p class="text-[11px] text-slate-400 mt-1">Only shown on your public portfolio if you choose to display it.</p>
             </div>
 
@@ -131,7 +131,7 @@ type Tab = 'basic' | 'social' | 'skills' | 'projects';
               <div>
                 <label class="text-xs font-semibold text-slate-500 block mb-1">{{ link.icon }} {{ link.label }}</label>
                 <input type="url" [(ngModel)]="form.social![link.key]" [placeholder]="link.placeholder"
-                       class="w-full px-3 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-sm text-slate-700 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-violet-500" />
+                       class="w-full px-3 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-sm text-slate-700 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-primary-500" />
               </div>
             }
           }
@@ -140,7 +140,7 @@ type Tab = 'basic' | 'social' | 'skills' | 'projects';
           @if (tab() === 'skills') {
             <div class="flex items-center justify-between mb-3">
               <h2 class="text-sm font-bold text-slate-700 dark:text-slate-300">Skills</h2>
-              <button class="text-xs font-bold text-violet-600 dark:text-violet-400 hover:underline" (click)="addSkill()">+ Add</button>
+              <button class="text-xs font-bold text-primary-600 dark:text-primary-400 hover:underline" (click)="addSkill()">+ Add</button>
             </div>
             @for (skill of form.skills ?? []; track skill; let i = $index) {
               <div class="flex items-center gap-2">
@@ -159,7 +159,7 @@ type Tab = 'basic' | 'social' | 'skills' | 'projects';
           @if (tab() === 'projects') {
             <div class="flex items-center justify-between mb-3">
               <h2 class="text-sm font-bold text-slate-700 dark:text-slate-300">Projects</h2>
-              <button class="text-xs font-bold text-violet-600 dark:text-violet-400 hover:underline" (click)="addProject()">+ Add</button>
+              <button class="text-xs font-bold text-primary-600 dark:text-primary-400 hover:underline" (click)="addProject()">+ Add</button>
             </div>
             @for (proj of form.projects ?? []; track proj; let i = $index) {
               <div class="border border-slate-200 dark:border-slate-700 rounded-xl p-4 space-y-2">
@@ -187,7 +187,7 @@ type Tab = 'basic' | 'social' | 'skills' | 'projects';
 
           <!-- Save button -->
           <div class="pt-2 border-t border-slate-100 dark:border-slate-800 flex items-center gap-3">
-            <button class="flex-1 py-3 rounded-xl bg-gradient-to-r from-violet-600 to-indigo-600 text-white font-bold text-sm hover:opacity-90 transition shadow-md"
+            <button class="flex-1 py-3 rounded-xl bg-gradient-to-r from-primary-600 to-indigo-600 text-white font-bold text-sm hover:opacity-90 transition shadow-md"
                     [disabled]="saving()"
                     (click)="save()">
               {{ saving() ? 'Saving...' : '💾 Save Portfolio' }}

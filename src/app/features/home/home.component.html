@@ -9,8 +9,8 @@
       <!-- Left: Copy -->
       <div>
         <!-- Badge -->
-        <div class="inline-flex items-center gap-2 mb-6 px-3.5 py-1.5 bg-violet-100 dark:bg-violet-900/40 text-violet-700 dark:text-violet-300 rounded-full text-xs font-bold">
-          <span class="w-1.5 h-1.5 rounded-full bg-violet-500 animate-pulse"></span>
+        <div class="inline-flex items-center gap-2 mb-6 px-3.5 py-1.5 bg-primary-100 dark:bg-primary-900/40 text-primary-700 dark:text-primary-300 rounded-full text-xs font-bold">
+          <span class="w-1.5 h-1.5 rounded-full bg-primary-500 animate-pulse"></span>
           India's Complete Career Platform
         </div>
 
@@ -29,7 +29,7 @@
         <!-- CTAs -->
         <div class="flex flex-col sm:flex-row gap-3 mb-10">
           <a routerLink="/resume-builder"
-             class="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl bg-violet-600 hover:bg-violet-700 text-white font-bold shadow-lg shadow-violet-200 dark:shadow-violet-900/30 transition text-base">
+             class="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl bg-primary-600 hover:bg-primary-700 text-white font-bold shadow-lg shadow-primary-200 dark:shadow-primary-900/30 transition text-base">
             Create Resume Free →
           </a>
           <a routerLink="/resume-templates"
@@ -40,9 +40,9 @@
 
         <!-- Trust bullets -->
         <div class="flex flex-wrap gap-x-6 gap-y-2 text-sm text-slate-400 dark:text-slate-500">
-          <span class="flex items-center gap-1.5"><span class="text-emerald-500 font-bold">✓</span> No credit card required</span>
-          <span class="flex items-center gap-1.5"><span class="text-emerald-500 font-bold">✓</span> ATS-optimized PDFs</span>
-          <span class="flex items-center gap-1.5"><span class="text-emerald-500 font-bold">✓</span> 50,000+ resumes created</span>
+          <span class="flex items-center gap-1.5"><span class="text-emerald-500 font-bold" aria-hidden="true">✓</span> No credit card required</span>
+          <span class="flex items-center gap-1.5"><span class="text-emerald-500 font-bold" aria-hidden="true">✓</span> ATS-optimized PDFs</span>
+          <span class="flex items-center gap-1.5"><span class="text-emerald-500 font-bold" aria-hidden="true">✓</span> 50,000+ resumes created</span>
         </div>
       </div>
 
@@ -91,11 +91,11 @@
           </div>
 
           <!-- Floating stats -->
-          <div class="absolute -top-4 -right-4 bg-white border border-slate-100 rounded-xl shadow-lg px-3 py-2 z-20">
+          <div class="absolute -top-4 -right-4 bg-white border border-slate-100 rounded-xl shadow-lg px-3 py-2 z-20" aria-hidden="true">
             <p class="text-[11px] font-bold text-slate-700">🚀 50,000+ resumes</p>
             <p class="text-[10px] text-slate-400">created on ApnaConverter</p>
           </div>
-          <div class="absolute -bottom-4 -left-4 bg-emerald-500 rounded-xl shadow-lg px-3 py-2 z-20">
+          <div class="absolute -bottom-4 -left-4 bg-emerald-500 rounded-xl shadow-lg px-3 py-2 z-20" aria-hidden="true">
             <p class="text-[11px] font-bold text-white">✓ ATS Friendly</p>
           </div>
 
@@ -138,17 +138,17 @@
       <div class="hidden sm:block absolute top-8 left-1/6 right-1/6 h-px bg-gradient-to-r from-violet-200 via-violet-400 to-violet-200 dark:from-violet-800 dark:via-violet-600 dark:to-violet-800" style="left:22%;right:22%;top:2rem"></div>
       @for (step of howItWorks; track step.step) {
         <div class="flex flex-col items-center text-center relative">
-          <div class="w-16 h-16 rounded-2xl bg-violet-50 dark:bg-violet-900/30 border-2 border-violet-200 dark:border-violet-700 flex items-center justify-center text-2xl mb-4 relative z-10">
+          <div class="w-16 h-16 rounded-2xl bg-primary-50 dark:bg-primary-900/30 border-2 border-primary-200 dark:border-primary-700 flex items-center justify-center text-2xl mb-4 relative z-10" aria-hidden="true">
             {{ step.icon }}
           </div>
-          <span class="text-xs font-bold text-violet-400 dark:text-violet-500 mb-1">STEP {{ step.step }}</span>
+          <span class="text-xs font-bold text-primary-400 dark:text-primary-500 mb-1">STEP {{ step.step }}</span>
           <h3 class="font-bold text-slate-800 dark:text-white text-base mb-2">{{ step.title }}</h3>
           <p class="text-sm text-slate-500 dark:text-slate-400 leading-relaxed">{{ step.desc }}</p>
         </div>
       }
     </div>
     <div class="text-center mt-10">
-      <a routerLink="/resume-builder" class="inline-flex items-center gap-2 px-7 py-3.5 rounded-xl bg-violet-600 hover:bg-violet-700 text-white font-bold text-sm shadow-md shadow-violet-200 dark:shadow-violet-900/20 transition">
+      <a routerLink="/resume-builder" class="inline-flex items-center gap-2 px-7 py-3.5 rounded-xl bg-primary-600 hover:bg-primary-700 text-white font-bold text-sm shadow-md shadow-primary-200 dark:shadow-primary-900/20 transition">
         Start Building Free →
       </a>
     </div>
@@ -164,8 +164,8 @@
     </div>
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 max-w-6xl mx-auto">
       @for (p of products; track p.title) {
-        <a [routerLink]="p.route" class="group flex items-start gap-4 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-2xl p-5 hover:border-violet-300 dark:hover:border-violet-600 hover:shadow-lg transition-all">
-          <div class="w-11 h-11 rounded-xl flex items-center justify-center text-xl shrink-0" [class]="p.iconBg">{{ p.icon }}</div>
+        <a [routerLink]="p.route" class="group flex items-start gap-4 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-2xl p-5 hover:border-primary-300 dark:hover:border-primary-600 hover:shadow-lg transition-all">
+          <div class="w-11 h-11 rounded-xl flex items-center justify-center text-xl shrink-0" [class]="p.iconBg" aria-hidden="true">{{ p.icon }}</div>
           <div class="flex-1 min-w-0">
             <div class="flex items-center gap-2 mb-1.5">
               <p class="font-bold text-slate-800 dark:text-white text-sm">{{ p.title }}</p>
@@ -199,8 +199,8 @@
   <div class="container-app mb-8">
     <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-6">
       <div>
-        <div class="inline-flex items-center gap-2 mb-3 px-3 py-1 bg-violet-100 dark:bg-violet-900/30 text-violet-700 dark:text-violet-300 rounded-full text-xs font-bold">
-          <span class="w-1.5 h-1.5 rounded-full bg-violet-500"></span>
+        <div class="inline-flex items-center gap-2 mb-3 px-3 py-1 bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300 rounded-full text-xs font-bold">
+          <span class="w-1.5 h-1.5 rounded-full bg-primary-500"></span>
           30+ Templates · ATS Optimised
         </div>
         <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white mb-1.5">
@@ -211,7 +211,7 @@
         </p>
       </div>
       <a routerLink="/resume-templates"
-         class="shrink-0 inline-flex items-center gap-1.5 text-sm text-violet-600 dark:text-violet-400 font-semibold hover:underline">
+         class="shrink-0 inline-flex items-center gap-1.5 text-sm text-primary-600 dark:text-primary-400 font-semibold hover:underline">
         View all 30+ templates
         <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
       </a>
@@ -222,9 +222,10 @@
       @for (cat of categories; track cat.id) {
         <button type="button"
                 (click)="setCategory(cat.id)"
+                [attr.aria-pressed]="activeCategory() === cat.id"
                 class="px-3.5 py-1.5 rounded-full text-xs font-semibold transition-all duration-200"
                 [class]="activeCategory() === cat.id
-                  ? 'bg-violet-600 text-white shadow-md shadow-violet-200 dark:shadow-violet-900/30'
+                  ? 'bg-primary-600 text-white shadow-md shadow-primary-200 dark:shadow-primary-900/30'
                   : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700'">
           {{ cat.label }}
         </button>
@@ -246,8 +247,8 @@
                    shadow-lg border border-slate-200 dark:border-slate-700
                    flex items-center justify-center
                    text-slate-500 dark:text-slate-400
-                   hover:border-violet-300 dark:hover:border-violet-600
-                   hover:text-violet-600 dark:hover:text-violet-400
+                   hover:border-primary-300 dark:hover:border-primary-600
+                   hover:text-primary-600 dark:hover:text-primary-400
                    hover:shadow-xl transition-all duration-200"
             aria-label="Previous templates"
             (click)="scrollCarouselPrev()">
@@ -275,8 +276,8 @@
             <!-- Preview container: 264 × 374 px renders template at 33.2% scale -->
             <div class="relative h-[374px] rounded-xl overflow-hidden
                         border-2 border-slate-200 dark:border-slate-700
-                        group-hover/card:border-violet-400 dark:group-hover/card:border-violet-500
-                        group-hover/card:shadow-2xl group-hover/card:shadow-violet-100/70 dark:group-hover/card:shadow-violet-900/30
+                        group-hover/card:border-primary-400 dark:group-hover/card:border-primary-500
+                        group-hover/card:shadow-2xl group-hover/card:shadow-primary-100/70 dark:group-hover/card:shadow-primary-900/30
                         transition-all duration-300 bg-white dark:bg-slate-900"
                  (click)="openTemplate(t.slug)"
                  style="cursor:pointer">
@@ -291,7 +292,7 @@
                   }
                 } @placeholder {
                   <div class="w-full h-full bg-slate-50 dark:bg-slate-900 flex items-center justify-center">
-                    <div class="w-8 h-8 border-2 border-slate-200 dark:border-slate-700 border-t-violet-500 rounded-full animate-spin"></div>
+                    <div class="w-8 h-8 border-2 border-slate-200 dark:border-slate-700 border-t-primary-500 rounded-full animate-spin"></div>
                   </div>
                 }
               </div>
@@ -326,7 +327,7 @@
                   Preview Template
                 </button>
                 <button type="button"
-                        class="w-full py-2.5 bg-violet-600 hover:bg-violet-700 text-white rounded-lg text-xs font-bold shadow-lg transition-all duration-200"
+                        class="w-full py-2.5 bg-primary-600 hover:bg-primary-700 text-white rounded-lg text-xs font-bold shadow-lg transition-all duration-200"
                         (click)="useTemplate(t.id); $event.stopPropagation()">
                   Use This Template
                 </button>
@@ -360,8 +361,8 @@
                    shadow-lg border border-slate-200 dark:border-slate-700
                    flex items-center justify-center
                    text-slate-500 dark:text-slate-400
-                   hover:border-violet-300 dark:hover:border-violet-600
-                   hover:text-violet-600 dark:hover:text-violet-400
+                   hover:border-primary-300 dark:hover:border-primary-600
+                   hover:text-primary-600 dark:hover:text-primary-400
                    hover:shadow-xl transition-all duration-200"
             aria-label="Next templates"
             (click)="scrollCarouselNext()">
@@ -381,7 +382,7 @@
           <h3 class="text-xl font-extrabold text-slate-900 dark:text-white">Marriage & Personal Biodata Templates</h3>
           <p class="text-slate-500 dark:text-slate-400 text-sm mt-1">All free · Photo support · Instant PDF download</p>
         </div>
-        <a routerLink="/biodata-maker" class="shrink-0 text-sm text-violet-600 dark:text-violet-400 font-semibold hover:underline">Browse all →</a>
+        <a routerLink="/biodata-maker" class="shrink-0 text-sm text-primary-600 dark:text-primary-400 font-semibold hover:underline">Browse all →</a>
       </div>
       <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-5">
         @for (tpl of biodataTemplates; track tpl.name) {
@@ -437,7 +438,7 @@
 
     <!-- Section CTA -->
     <div class="text-center">
-      <a routerLink="/resume-builder" class="inline-flex items-center gap-2 px-8 py-3.5 rounded-xl bg-violet-600 hover:bg-violet-700 text-white font-bold text-sm shadow-md shadow-violet-200 dark:shadow-violet-900/20 transition">
+      <a routerLink="/resume-builder" class="inline-flex items-center gap-2 px-8 py-3.5 rounded-xl bg-primary-600 hover:bg-primary-700 text-white font-bold text-sm shadow-md shadow-primary-200 dark:shadow-primary-900/20 transition">
         Start Building Free →
       </a>
     </div>
@@ -450,12 +451,15 @@
   <div class="container-app">
     <div class="text-center mb-12">
       <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 dark:text-white mb-3">Trusted by Job Seekers Across India</h2>
-      <div class="flex items-center justify-center gap-1 text-amber-400 text-sm mt-2">★★★★★ <span class="text-slate-500 dark:text-slate-400 text-xs ml-1">4.9/5 from 500+ reviews</span></div>
+      <div class="flex items-center justify-center gap-1 text-amber-400 text-sm mt-2" role="img" aria-label="4.9 out of 5 stars from 500+ reviews">
+        <span aria-hidden="true">★★★★★</span>
+        <span class="text-slate-500 dark:text-slate-400 text-xs ml-1">4.9/5 from 500+ reviews</span>
+      </div>
     </div>
     <div class="grid grid-cols-1 sm:grid-cols-3 gap-5 max-w-4xl mx-auto">
       @for (t of testimonials.slice(0, 3); track $index) {
         <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 flex flex-col gap-4">
-          <div class="flex gap-0.5 text-amber-400 text-sm">★★★★★</div>
+          <div class="flex gap-0.5 text-amber-400 text-sm" role="img" aria-label="5 stars">★★★★★</div>
           <p class="text-sm text-slate-600 dark:text-slate-300 leading-relaxed flex-1">"{{ t.quote }}"</p>
           <div class="flex items-center gap-3 pt-4 border-t border-slate-100 dark:border-slate-800">
             <div class="w-9 h-9 rounded-full flex items-center justify-center text-sm font-bold text-white shrink-0" [class]="t.avatarBg">{{ t.initials }}</div>
@@ -485,11 +489,11 @@
         <p class="text-3xl font-extrabold text-slate-800 dark:text-white mb-1">₹0</p>
         <p class="text-xs text-slate-400 mb-5">Forever free · No card</p>
         <ul class="space-y-1.5 text-xs text-slate-500 dark:text-slate-400 mb-6 flex-1">
-          <li class="flex items-center gap-2"><span class="text-emerald-500">✓</span> Resume Builder</li>
-          <li class="flex items-center gap-2"><span class="text-emerald-500">✓</span> 7 free templates</li>
-          <li class="flex items-center gap-2"><span class="text-emerald-500">✓</span> ATS score checker</li>
-          <li class="flex items-center gap-2"><span class="text-emerald-500">✓</span> Biodata Maker</li>
-          <li class="flex items-center gap-2"><span class="text-slate-300 dark:text-slate-600">✗</span> <span class="text-slate-400">Premium features</span></li>
+          <li class="flex items-center gap-2"><span class="text-emerald-500" aria-hidden="true">✓</span> Resume Builder</li>
+          <li class="flex items-center gap-2"><span class="text-emerald-500" aria-hidden="true">✓</span> 7 free templates</li>
+          <li class="flex items-center gap-2"><span class="text-emerald-500" aria-hidden="true">✓</span> ATS score checker</li>
+          <li class="flex items-center gap-2"><span class="text-emerald-500" aria-hidden="true">✓</span> Biodata Maker</li>
+          <li class="flex items-center gap-2"><span class="text-slate-300 dark:text-slate-600" aria-hidden="true">✗</span> <span class="text-slate-400">Premium features</span></li>
         </ul>
         <a routerLink="/resume-builder" class="block text-center py-2.5 rounded-xl border border-slate-300 dark:border-slate-600 text-xs font-semibold text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-800 transition">
           Get Started Free
@@ -497,26 +501,26 @@
       </div>
 
       <!-- Monthly -->
-      <div class="bg-white dark:bg-slate-900 border-2 border-violet-300 dark:border-violet-700 rounded-2xl p-6 flex flex-col">
-        <p class="text-xs font-bold text-violet-600 dark:text-violet-400 uppercase tracking-wider mb-2">Pro Monthly</p>
+      <div class="bg-white dark:bg-slate-900 border-2 border-primary-300 dark:border-primary-700 rounded-2xl p-6 flex flex-col">
+        <p class="text-xs font-bold text-primary-600 dark:text-primary-400 uppercase tracking-wider mb-2">Pro Monthly</p>
         <p class="text-3xl font-extrabold text-slate-800 dark:text-white mb-1">₹99 <span class="text-sm font-normal text-slate-400">/mo</span></p>
         <p class="text-xs text-slate-400 mb-5">Cancel anytime</p>
         <ul class="space-y-1.5 text-xs text-slate-500 dark:text-slate-400 mb-6 flex-1">
-          <li class="flex items-center gap-2"><span class="text-emerald-500">✓</span> All 25+ templates</li>
-          <li class="flex items-center gap-2"><span class="text-emerald-500">✓</span> No watermark</li>
-          <li class="flex items-center gap-2"><span class="text-emerald-500">✓</span> Cover Letter Builder</li>
-          <li class="flex items-center gap-2"><span class="text-emerald-500">✓</span> Portfolio + Job Tracker</li>
-          <li class="flex items-center gap-2"><span class="text-emerald-500">✓</span> AI writing assistant</li>
+          <li class="flex items-center gap-2"><span class="text-emerald-500" aria-hidden="true">✓</span> All 25+ templates</li>
+          <li class="flex items-center gap-2"><span class="text-emerald-500" aria-hidden="true">✓</span> No watermark</li>
+          <li class="flex items-center gap-2"><span class="text-emerald-500" aria-hidden="true">✓</span> Cover Letter Builder</li>
+          <li class="flex items-center gap-2"><span class="text-emerald-500" aria-hidden="true">✓</span> Portfolio + Job Tracker</li>
+          <li class="flex items-center gap-2"><span class="text-emerald-500" aria-hidden="true">✓</span> AI writing assistant</li>
         </ul>
-        <a routerLink="/resume-builder/pricing" class="block text-center py-2.5 rounded-xl bg-violet-600 hover:bg-violet-700 text-white text-xs font-bold transition">
+        <a routerLink="/resume-builder/pricing" class="block text-center py-2.5 rounded-xl bg-primary-600 hover:bg-primary-700 text-white text-xs font-bold transition">
           Get Monthly Plan
         </a>
       </div>
 
       <!-- Yearly (highlighted) -->
-      <div class="relative bg-gradient-to-b from-violet-600 to-indigo-700 rounded-2xl p-6 flex flex-col text-white shadow-xl shadow-violet-200 dark:shadow-violet-900/30">
+      <div class="relative bg-gradient-to-b from-violet-600 to-indigo-700 rounded-2xl p-6 flex flex-col text-white shadow-xl shadow-primary-200 dark:shadow-primary-900/30">
         <div class="absolute -top-3 right-6">
-          <span class="bg-gradient-to-r from-amber-400 to-orange-500 text-white text-[10px] font-extrabold px-3 py-1 rounded-full shadow whitespace-nowrap">⭐ BEST VALUE</span>
+          <span class="bg-gradient-to-r from-amber-400 to-orange-500 text-white text-[10px] font-extrabold px-3 py-1 rounded-full shadow whitespace-nowrap"><span aria-hidden="true">⭐ </span>BEST VALUE</span>
         </div>
         <p class="text-xs font-bold text-violet-200 uppercase tracking-wider mb-2">Pro Yearly</p>
         <div class="flex items-baseline gap-2 mb-1">
@@ -525,10 +529,10 @@
         </div>
         <p class="text-xs text-emerald-300 font-semibold mb-5">₹58/mo · Save ₹489 (41%)</p>
         <ul class="space-y-1.5 text-xs text-violet-100 mb-6 flex-1">
-          <li class="flex items-center gap-2"><span class="text-emerald-300">✓</span> Everything in Monthly</li>
-          <li class="flex items-center gap-2"><span class="text-emerald-300">✓</span> 5 months free</li>
-          <li class="flex items-center gap-2"><span class="text-emerald-300">✓</span> Early template access</li>
-          <li class="flex items-center gap-2"><span class="text-emerald-300">✓</span> All future features</li>
+          <li class="flex items-center gap-2"><span class="text-emerald-300" aria-hidden="true">✓</span> Everything in Monthly</li>
+          <li class="flex items-center gap-2"><span class="text-emerald-300" aria-hidden="true">✓</span> 5 months free</li>
+          <li class="flex items-center gap-2"><span class="text-emerald-300" aria-hidden="true">✓</span> Early template access</li>
+          <li class="flex items-center gap-2"><span class="text-emerald-300" aria-hidden="true">✓</span> All future features</li>
         </ul>
         <a routerLink="/resume-builder/pricing" class="block text-center py-2.5 rounded-xl bg-white text-violet-700 font-bold text-xs hover:bg-violet-50 transition shadow-md">
           Get Yearly Plan →
@@ -538,7 +542,7 @@
     </div>
 
     <p class="text-center text-xs text-slate-400 mt-4">
-      Also available: <a routerLink="/resume-builder/pricing" class="text-violet-500 hover:underline">Lifetime plan at ₹1,499</a> · Pay once, use forever.
+      Also available: <a routerLink="/resume-builder/pricing" class="text-primary-500 hover:underline">Lifetime plan at ₹1,499</a> · Pay once, use forever.
     </p>
   </div>
 </section>
@@ -562,18 +566,21 @@
         <div class="border border-slate-200 dark:border-slate-700 rounded-2xl overflow-hidden">
           <button type="button"
                   (click)="toggleFaq(i)"
-                  class="w-full flex items-center justify-between gap-4 px-6 py-4 text-left hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors"
-                  [class]="openFaqIdx === i ? 'bg-slate-50 dark:bg-slate-800/50' : ''"
-                  >
+                  [attr.aria-expanded]="openFaqIdx === i"
+                  [attr.aria-controls]="'faq-panel-' + i"
+                  [id]="'faq-btn-' + i"
+                  class="w-full flex items-center justify-between gap-4 px-6 py-4 text-left hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-inset"
+                  [class]="openFaqIdx === i ? 'bg-slate-50 dark:bg-slate-800/50' : ''">
             <span class="font-semibold text-slate-800 dark:text-white text-sm">{{ faq.q }}</span>
             <svg class="w-5 h-5 text-slate-400 shrink-0 transition-transform duration-200"
                  [class.rotate-180]="openFaqIdx === i"
-                 fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                 fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
             </svg>
           </button>
           @if (openFaqIdx === i) {
-            <div class="px-6 pb-5 text-sm text-slate-500 dark:text-slate-400 leading-relaxed border-t border-slate-100 dark:border-slate-700 pt-4 animate-slide-down">
+            <div [id]="'faq-panel-' + i" [attr.aria-labelledby]="'faq-btn-' + i" role="region"
+                 class="px-6 pb-5 text-sm text-slate-500 dark:text-slate-400 leading-relaxed border-t border-slate-100 dark:border-slate-700 pt-4 animate-slide-down">
               {{ faq.a }}
             </div>
           }
@@ -586,7 +593,7 @@
 <!-- ─── Final CTA ─────────────────────────────────────────────────── -->
 <section class="py-24 bg-slate-50 dark:bg-slate-900/50">
   <div class="container-app text-center max-w-2xl mx-auto">
-    <div class="text-5xl mb-6">🚀</div>
+    <div class="text-5xl mb-6" aria-hidden="true">🚀</div>
     <h2 class="text-3xl sm:text-4xl font-extrabold text-slate-900 dark:text-white mb-4 leading-tight">
       Start Building Your Career Today
     </h2>
@@ -596,7 +603,7 @@
     </p>
     <div class="flex flex-col sm:flex-row gap-3 justify-center">
       <a routerLink="/resume-builder"
-         class="inline-flex items-center gap-2 px-10 py-4 rounded-xl bg-violet-600 hover:bg-violet-700 text-white font-bold text-base shadow-xl shadow-violet-200 dark:shadow-violet-900/30 transition">
+         class="inline-flex items-center gap-2 px-10 py-4 rounded-xl bg-primary-600 hover:bg-primary-700 text-white font-bold text-base shadow-xl shadow-primary-200 dark:shadow-primary-900/30 transition">
         Create Resume Free →
       </a>
       <a routerLink="/tools"

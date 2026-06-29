@@ -12,7 +12,7 @@ import { ToolInfoSectionComponent } from '../../shared/components/tool-info-sect
   standalone: true,
   imports: [FileUploadComponent, ProgressBarComponent, AdBannerComponent, ToolInfoSectionComponent],
   template: `
-    <div class="bg-gradient-to-r from-violet-600 to-purple-600 text-white py-14">
+    <div class="bg-gradient-to-r from-primary-600 to-purple-600 text-white py-14">
       <div class="container-app text-center">
         <div class="w-16 h-16 mx-auto mb-5 bg-white/20 rounded-2xl flex items-center justify-center text-3xl">📄</div>
         <h1 class="text-3xl md:text-4xl font-extrabold mb-3">PDF to Word</h1>

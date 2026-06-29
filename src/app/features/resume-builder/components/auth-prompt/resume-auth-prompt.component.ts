@@ -18,10 +18,12 @@ import { ResumeAuthGateService } from '../../services/resume-auth-gate.service';
             (click)="gate.dismiss()"
             aria-label="Close"
           >
-            ✕
+            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12"/></svg>
           </button>
 
-          <div class="text-4xl">🔐</div>
+          <div class="w-16 h-16 mx-auto bg-primary-100 dark:bg-primary-900/40 rounded-2xl flex items-center justify-center" aria-hidden="true">
+            <svg class="w-8 h-8 text-primary-600 dark:text-primary-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+          </div>
           <h3 class="text-lg font-semibold text-slate-800 dark:text-slate-100">Log in to download your resume</h3>
           <p class="text-sm text-slate-500 dark:text-slate-400">
             Create a free account (or log in) to save your resume and download the PDF - it only takes a few seconds,

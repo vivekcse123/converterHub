@@ -10,14 +10,14 @@ import { firstValueFrom } from 'rxjs';
 const SITE_URL = 'https://www.apnaconverter.com';
 
 const LEVEL_STYLE: Record<string, string> = {
-  expert:       'bg-violet-600 text-white',
+  expert:       'bg-primary-600 text-white',
   advanced:     'bg-indigo-500 text-white',
   intermediate: 'bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300',
   beginner:     'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400',
 };
 
 const PROJECT_GRADIENTS = [
-  'from-violet-500 to-indigo-600',
+  'from-primary-500 to-indigo-600',
   'from-blue-500 to-cyan-500',
   'from-emerald-500 to-teal-500',
   'from-rose-500 to-pink-500',
@@ -33,7 +33,7 @@ const PROJECT_GRADIENTS = [
     @if (loading()) {
       <div class="min-h-screen bg-slate-950 flex items-center justify-center">
         <div class="flex flex-col items-center gap-4">
-          <div class="w-12 h-12 border-4 border-violet-500 border-t-transparent rounded-full animate-spin"></div>
+          <div class="w-12 h-12 border-4 border-primary-500 border-t-transparent rounded-full animate-spin"></div>
           <p class="text-slate-400 text-sm">Loading portfolio…</p>
         </div>
       </div>
@@ -43,7 +43,7 @@ const PROJECT_GRADIENTS = [
           <p class="text-7xl mb-6">👤</p>
           <h1 class="text-2xl font-bold text-white mb-2">Portfolio Not Found</h1>
           <p class="text-slate-400 text-sm mb-8">This portfolio doesn't exist or has been made private.</p>
-          <a routerLink="/" class="inline-block px-6 py-3 rounded-xl bg-gradient-to-r from-violet-600 to-indigo-600 text-white text-sm font-bold hover:opacity-90 transition">Go Home</a>
+          <a routerLink="/" class="inline-block px-6 py-3 rounded-xl bg-gradient-to-r from-primary-600 to-indigo-600 text-white text-sm font-bold hover:opacity-90 transition">Go Home</a>
         </div>
       </div>
     } @else {
@@ -70,7 +70,7 @@ const PROJECT_GRADIENTS = [
                  class="w-8 h-8 flex items-center justify-center rounded-lg text-slate-400 hover:text-white hover:bg-white/10 transition text-sm">🌐</a>
             }
             <a routerLink="/resume-builder"
-               class="ml-2 px-3 py-1.5 rounded-lg bg-violet-600 hover:bg-violet-500 text-white text-xs font-semibold transition">
+               class="ml-2 px-3 py-1.5 rounded-lg bg-primary-600 hover:bg-primary-500 text-white text-xs font-semibold transition">
               Build Yours →
             </a>
           </div>
@@ -81,12 +81,12 @@ const PROJECT_GRADIENTS = [
       <section class="bg-slate-950 pt-16 pb-20 px-4 sm:px-6 relative overflow-hidden">
         <!-- Background glow -->
         <div class="absolute inset-0 pointer-events-none">
-          <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[400px] bg-violet-600/20 rounded-full blur-[100px]"></div>
+          <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[400px] bg-primary-600/20 rounded-full blur-[100px]"></div>
         </div>
         <div class="max-w-5xl mx-auto relative">
           <div class="flex flex-col sm:flex-row items-center sm:items-start gap-7">
             <!-- Avatar -->
-            <div class="w-24 h-24 sm:w-28 sm:h-28 rounded-2xl bg-gradient-to-br from-violet-500 to-indigo-600 flex items-center justify-center text-white text-4xl font-extrabold shrink-0 shadow-2xl shadow-violet-500/30">
+            <div class="w-24 h-24 sm:w-28 sm:h-28 rounded-2xl bg-gradient-to-br from-primary-500 to-indigo-600 flex items-center justify-center text-white text-4xl font-extrabold shrink-0 shadow-2xl shadow-primary-500/30">
               {{ initials() }}
             </div>
             <!-- Info -->
@@ -95,13 +95,13 @@ const PROJECT_GRADIENTS = [
                 {{ portfolio()!.displayName || portfolio()!.username }}
               </h1>
               @if (portfolio()!.tagline) {
-                <p class="text-violet-400 font-medium text-lg mt-1">{{ portfolio()!.tagline }}</p>
+                <p class="text-primary-400 font-medium text-lg mt-1">{{ portfolio()!.tagline }}</p>
               }
               @if (portfolio()!.location || portfolio()!.email || portfolio()!.phone) {
                 <p class="text-slate-400 text-sm mt-2 flex items-center justify-center sm:justify-start gap-3 flex-wrap">
                   @if (portfolio()!.location) { <span>📍 {{ portfolio()!.location }}</span> }
-                  @if (portfolio()!.email) { <a [href]="'mailto:' + portfolio()!.email" class="hover:text-violet-400 transition">✉️ {{ portfolio()!.email }}</a> }
-                  @if (portfolio()!.phone) { <a [href]="'tel:' + portfolio()!.phone" class="hover:text-violet-400 transition">📱 {{ portfolio()!.phone }}</a> }
+                  @if (portfolio()!.email) { <a [href]="'mailto:' + portfolio()!.email" class="hover:text-primary-400 transition">✉️ {{ portfolio()!.email }}</a> }
+                  @if (portfolio()!.phone) { <a [href]="'tel:' + portfolio()!.phone" class="hover:text-primary-400 transition">📱 {{ portfolio()!.phone }}</a> }
                 </p>
               }
               <!-- Social pills -->
@@ -151,7 +151,7 @@ const PROJECT_GRADIENTS = [
           <!-- About -->
           @if (portfolio()!.about) {
             <section>
-              <h2 class="text-xs font-bold text-violet-600 dark:text-violet-400 uppercase tracking-widest mb-4">About</h2>
+              <h2 class="text-xs font-bold text-primary-600 dark:text-primary-400 uppercase tracking-widest mb-4">About</h2>
               <p class="text-slate-700 dark:text-slate-200 text-base leading-relaxed max-w-3xl">{{ portfolio()!.about }}</p>
             </section>
           }
@@ -159,7 +159,7 @@ const PROJECT_GRADIENTS = [
           <!-- Skills -->
           @if ((portfolio()!.skills ?? []).length > 0) {
             <section>
-              <h2 class="text-xs font-bold text-violet-600 dark:text-violet-400 uppercase tracking-widest mb-5">Skills</h2>
+              <h2 class="text-xs font-bold text-primary-600 dark:text-primary-400 uppercase tracking-widest mb-5">Skills</h2>
               <div class="flex flex-wrap gap-2.5">
                 @for (skill of portfolio()!.skills; track skill.name) {
                   <span class="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-semibold"
@@ -184,7 +184,7 @@ const PROJECT_GRADIENTS = [
           <!-- Projects -->
           @if ((portfolio()!.projects ?? []).length > 0) {
             <section>
-              <h2 class="text-xs font-bold text-violet-600 dark:text-violet-400 uppercase tracking-widest mb-5">Projects</h2>
+              <h2 class="text-xs font-bold text-primary-600 dark:text-primary-400 uppercase tracking-widest mb-5">Projects</h2>
               <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
                 @for (proj of portfolio()!.projects; track proj.title; let i = $index) {
                   <div class="group bg-white dark:bg-slate-800 rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1 border border-slate-200 dark:border-slate-700 flex flex-col">
@@ -206,7 +206,7 @@ const PROJECT_GRADIENTS = [
                       <div class="flex items-center gap-3 mt-auto pt-2 border-t border-slate-100 dark:border-slate-700">
                         @if (proj.url) {
                           <a [href]="proj.url" target="_blank" rel="noopener noreferrer"
-                             class="inline-flex items-center gap-1 text-xs font-semibold text-violet-600 dark:text-violet-400 hover:underline">
+                             class="inline-flex items-center gap-1 text-xs font-semibold text-primary-600 dark:text-primary-400 hover:underline">
                             <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
                             Live Demo
                           </a>
@@ -233,11 +233,11 @@ const PROJECT_GRADIENTS = [
       <footer class="bg-slate-950 border-t border-white/5 py-8 px-4 text-center">
         <p class="text-slate-500 text-xs">
           Built with
-          <a routerLink="/" class="text-violet-400 hover:text-violet-300 font-semibold transition">ApnaConverter</a>
+          <a routerLink="/" class="text-primary-400 hover:text-primary-300 font-semibold transition">ApnaConverter</a>
           - Free Resume & Portfolio Builder
         </p>
         <a routerLink="/resume-builder/portfolio"
-           class="mt-3 inline-block text-xs font-bold px-5 py-2.5 rounded-xl bg-gradient-to-r from-violet-600 to-indigo-600 text-white hover:opacity-90 transition">
+           class="mt-3 inline-block text-xs font-bold px-5 py-2.5 rounded-xl bg-gradient-to-r from-primary-600 to-indigo-600 text-white hover:opacity-90 transition">
           Create Your Portfolio - Free
         </a>
       </footer>
@@ -255,7 +255,7 @@ export class PublicPortfolioComponent implements OnInit, OnDestroy {
   readonly portfolio = signal<Portfolio | null>(null);
 
   readonly levelLegend = [
-    { label: 'Expert',       cls: 'bg-violet-600 text-white' },
+    { label: 'Expert',       cls: 'bg-primary-600 text-white' },
     { label: 'Advanced',     cls: 'bg-indigo-500 text-white' },
     { label: 'Intermediate', cls: 'bg-blue-100 text-blue-700' },
     { label: 'Beginner',     cls: 'bg-slate-100 text-slate-600' },

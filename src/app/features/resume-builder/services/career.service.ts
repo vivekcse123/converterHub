@@ -45,7 +45,7 @@ export interface Portfolio {
 export const JOB_STATUS_CONFIG: Record<JobStatus, { label: string; color: string; icon: string }> = {
   saved:        { label: 'Saved',        color: 'bg-slate-100 text-slate-600 dark:bg-slate-700 dark:text-slate-300',       icon: '🔖' },
   applied:      { label: 'Applied',      color: 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300',          icon: '📤' },
-  interviewing: { label: 'Interviewing', color: 'bg-violet-100 text-violet-700 dark:bg-violet-900/30 dark:text-violet-300',  icon: '🎯' },
+  interviewing: { label: 'Interviewing', color: 'bg-primary-100 text-primary-700 dark:bg-primary-900/30 dark:text-primary-300',  icon: '🎯' },
   offer:        { label: 'Offer',        color: 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-300', icon: '🎉' },
   rejected:     { label: 'Rejected',     color: 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400',              icon: '❌' },
   withdrawn:    { label: 'Withdrawn',    color: 'bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-300',      icon: '↩' },

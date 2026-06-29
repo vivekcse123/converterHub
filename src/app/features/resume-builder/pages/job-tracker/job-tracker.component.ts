@@ -98,7 +98,8 @@ const EMPTY_FORM = (): Partial<JobApplication> => ({
             <a routerLink="/resume-builder/dashboard" class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 transition text-sm">← Dashboard</a>
             <span class="text-slate-300 dark:text-slate-700">|</span>
             <h1 class="font-bold text-slate-800 dark:text-white text-sm flex items-center gap-1.5">
-              📋 Job Tracker
+              <svg class="w-4 h-4 text-primary-600 dark:text-primary-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"/></svg>
+              Job Tracker
               @if (auth.isPro()) {
                 <span class="text-[10px] bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-300 px-1.5 py-0.5 rounded font-bold">PRO</span>
               }
@@ -117,7 +118,9 @@ const EMPTY_FORM = (): Partial<JobApplication> => ({
         @if (!auth.isPro()) {
           <!-- Pro gate -->
           <div class="max-w-lg mx-auto text-center py-20">
-            <div class="text-6xl mb-5">📋</div>
+            <div class="w-20 h-20 mx-auto mb-5 bg-primary-50 dark:bg-primary-950/40 rounded-2xl flex items-center justify-center" aria-hidden="true">
+              <svg class="w-10 h-10 text-primary-600 dark:text-primary-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"/></svg>
+            </div>
             <h2 class="text-2xl font-extrabold text-slate-900 dark:text-white mb-3">Job Application Tracker</h2>
             <p class="text-slate-500 dark:text-slate-400 mb-8 leading-relaxed">
               Track every job application, interview, and offer in one place.
@@ -126,7 +129,7 @@ const EMPTY_FORM = (): Partial<JobApplication> => ({
             <div class="grid grid-cols-2 gap-3 text-sm text-left mb-8 max-w-sm mx-auto">
               @for (f of trackerFeatures; track f) {
                 <div class="flex items-center gap-2 text-slate-600 dark:text-slate-300">
-                  <span class="text-emerald-500">✓</span> {{ f }}
+                  <span class="text-emerald-500" aria-hidden="true">✓</span> {{ f }}
                 </div>
               }
             </div>
@@ -156,8 +159,8 @@ const EMPTY_FORM = (): Partial<JobApplication> => ({
                 type="button"
                 class="px-3 py-1.5 rounded-full text-xs font-semibold transition border"
                 [class]="activeStatus() === s.id
-                  ? 'bg-violet-600 text-white border-violet-600'
-                  : 'bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 border-slate-200 dark:border-slate-700 hover:border-violet-400'"
+                  ? 'bg-primary-600 text-white border-primary-600'
+                  : 'bg-white dark:bg-slate-800 text-slate-600 dark:text-slate-300 border-slate-200 dark:border-slate-700 hover:border-primary-400'"
                 (click)="activeStatus.set(s.id)">
                 {{ s.icon }} {{ s.label }}
                 @if (s.id !== 'all' && jobStats()[s.id]) {
@@ -186,7 +189,7 @@ const EMPTY_FORM = (): Partial<JobApplication> => ({
           } @else {
             <div class="space-y-3">
               @for (job of filteredJobs(); track job._id) {
-                <div class="card p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center gap-4 hover:border-violet-200 dark:hover:border-violet-700 hover:shadow-sm transition-all group">
+                <div class="card p-4 sm:p-5 flex flex-col sm:flex-row sm:items-center gap-4 hover:border-primary-200 dark:hover:border-primary-700 hover:shadow-sm transition-all group">
                   <!-- Status badge -->
                   <div class="shrink-0">
                     <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold" [class]="statusConfig[job.status].color">
@@ -214,11 +217,11 @@ const EMPTY_FORM = (): Partial<JobApplication> => ({
                   <div class="flex items-center gap-2 shrink-0 sm:opacity-0 group-hover:opacity-100 transition-opacity">
                     @if (job.jobUrl) {
                       <a [href]="job.jobUrl" target="_blank" rel="noopener"
-                         class="text-xs px-2.5 py-1.5 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-500 hover:text-violet-600 transition">
+                         class="text-xs px-2.5 py-1.5 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-500 hover:text-primary-600 transition">
                         🔗 Link
                       </a>
                     }
-                    <button class="text-xs px-2.5 py-1.5 rounded-lg bg-violet-100 dark:bg-violet-900/30 text-violet-700 dark:text-violet-300 hover:bg-violet-200 transition"
+                    <button class="text-xs px-2.5 py-1.5 rounded-lg bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300 hover:bg-primary-200 transition"
                             (click)="openEdit(job)">
                       Edit
                     </button>

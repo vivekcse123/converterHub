@@ -65,7 +65,7 @@ ${candidateName || 'Your Name'}`;
 
       <!-- Header -->
       <div class="flex items-center gap-3 flex-wrap">
-        <a routerLink="/resume-builder" class="text-xs text-slate-400 hover:text-violet-600 transition flex items-center gap-1">← Resume Builder</a>
+        <a routerLink="/resume-builder" class="text-xs text-slate-400 hover:text-primary-600 transition flex items-center gap-1">← Resume Builder</a>
         <span class="text-slate-300 dark:text-slate-700">|</span>
         <h1 class="text-xl font-extrabold text-slate-900 dark:text-white">Cover Letter Builder</h1>
         @if (!auth.isPro()) {
@@ -78,11 +78,11 @@ ${candidateName || 'Your Name'}`;
           <!-- Sample preview (blurred teaser) -->
           <div class="relative rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900">
             <div class="absolute inset-0 bg-white/80 dark:bg-slate-900/85 backdrop-blur-sm z-10 flex flex-col items-center justify-center gap-3 p-6 text-center">
-              <p class="text-4xl">🔒</p>
+              <div class="w-16 h-16 mx-auto bg-slate-100 dark:bg-slate-800 rounded-full flex items-center justify-center" aria-hidden="true"><svg class="w-8 h-8 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg></div>
               <p class="text-base font-bold text-slate-800 dark:text-white">Cover Letter Builder - Pro Only</p>
               <p class="text-sm text-slate-500 dark:text-slate-400 max-w-xs">Generate tailored, professional cover letters from your resume in seconds.</p>
-              <button class="px-6 py-2.5 rounded-xl bg-gradient-to-r from-violet-600 to-indigo-600 text-white font-bold text-sm hover:opacity-90 transition shadow-md"
-                      (click)="showUpgrade.set(true)">Upgrade to Pro ⭐</button>
+              <button class="px-6 py-2.5 rounded-xl bg-gradient-to-r from-primary-600 to-indigo-600 text-white font-bold text-sm hover:opacity-90 transition shadow-md"
+                      (click)="showUpgrade.set(true)">Upgrade to Pro</button>
             </div>
             <!-- Blurred sample letter content -->
             <div class="p-6 pointer-events-none select-none" aria-hidden="true">
@@ -101,7 +101,7 @@ ${candidateName || 'Your Name'}`;
               <div>
                 <label class="text-xs font-semibold text-slate-500 block mb-1">Based on Resume</label>
                 <select [(ngModel)]="form.resumeId" (ngModelChange)="onResumeChange()"
-                        class="w-full px-3 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-sm text-slate-700 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-violet-500">
+                        class="w-full px-3 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-sm text-slate-700 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-primary-500">
                   @for (r of store.resumes(); track r.id) {
                     <option [value]="r.id">{{ r.name || 'Untitled Resume' }}</option>
                   }
@@ -112,19 +112,19 @@ ${candidateName || 'Your Name'}`;
                 <div>
                   <label class="text-xs font-semibold text-slate-500 block mb-1">Role Applying For *</label>
                   <input type="text" [(ngModel)]="form.role" placeholder="e.g. Senior Developer"
-                         class="w-full px-3 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-sm text-slate-700 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-violet-500" />
+                         class="w-full px-3 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-sm text-slate-700 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-primary-500" />
                 </div>
                 <div>
                   <label class="text-xs font-semibold text-slate-500 block mb-1">Company Name *</label>
                   <input type="text" [(ngModel)]="form.company" placeholder="e.g. Google"
-                         class="w-full px-3 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-sm text-slate-700 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-violet-500" />
+                         class="w-full px-3 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-sm text-slate-700 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-primary-500" />
                 </div>
               </div>
 
               <div>
                 <label class="text-xs font-semibold text-slate-500 block mb-1">Hiring Manager Name (optional)</label>
                 <input type="text" [(ngModel)]="form.hiringManager" placeholder="e.g. Ms. Priya Sharma"
-                       class="w-full px-3 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-sm text-slate-700 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-violet-500" />
+                       class="w-full px-3 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-sm text-slate-700 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-primary-500" />
               </div>
 
               <div>
@@ -132,7 +132,7 @@ ${candidateName || 'Your Name'}`;
                 <div class="grid grid-cols-3 gap-2">
                   @for (t of tones; track t.value) {
                     <button class="py-2 rounded-xl text-xs font-semibold border transition"
-                            [class]="form.tone === t.value ? 'bg-violet-100 dark:bg-violet-900/30 border-violet-400 text-violet-700 dark:text-violet-300' : 'border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-400 hover:border-violet-300'"
+                            [class]="form.tone === t.value ? 'bg-primary-100 dark:bg-primary-900/30 border-primary-400 text-primary-700 dark:text-primary-300' : 'border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-400 hover:border-primary-300'"
                             (click)="form.tone = t.value">{{ t.label }}</button>
                   }
                 </div>
@@ -142,7 +142,7 @@ ${candidateName || 'Your Name'}`;
                 <label class="text-xs font-semibold text-slate-500 block mb-1">Custom Highlight (optional)</label>
                 <textarea [(ngModel)]="form.highlight" rows="2"
                           placeholder="Add a specific achievement or why you're excited about this company..."
-                          class="w-full px-3 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-sm text-slate-700 dark:text-slate-200 resize-none focus:outline-none focus:ring-2 focus:ring-violet-500"></textarea>
+                          class="w-full px-3 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-sm text-slate-700 dark:text-slate-200 resize-none focus:outline-none focus:ring-2 focus:ring-primary-500"></textarea>
               </div>
 
               <!-- Generate buttons -->
@@ -150,24 +150,27 @@ ${candidateName || 'Your Name'}`;
                 <!-- AI generate — Pro only -->
                 <button class="w-full py-3 rounded-xl font-bold text-sm transition shadow-md flex items-center justify-center gap-2 disabled:opacity-60"
                         [class]="auth.isPro()
-                          ? 'bg-gradient-to-r from-violet-600 to-indigo-600 text-white hover:opacity-90'
-                          : 'bg-gradient-to-r from-violet-600 to-indigo-600 text-white hover:opacity-90'"
+                          ? 'bg-gradient-to-r from-primary-600 to-indigo-600 text-white hover:opacity-90'
+                          : 'bg-gradient-to-r from-primary-600 to-indigo-600 text-white hover:opacity-90'"
                         [disabled]="!form.role || !form.company || generating()"
                         (click)="generateWithAI()">
                   @if (generating()) {
                     <span class="w-4 h-4 border-2 border-white/40 border-t-white rounded-full animate-spin"></span>
                     Generating with AI…
                   } @else if (!auth.isPro()) {
-                    🔒 Generate with AI — Pro Only
+                    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+                    Generate with AI — Pro Only
                   } @else {
-                    🤖 Generate with AI
+                    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"/></svg>
+                    Generate with AI
                   }
                 </button>
                 <!-- Quick template — always free -->
                 <button class="w-full py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300 font-semibold text-xs hover:bg-slate-50 dark:hover:bg-slate-800 transition"
                         [disabled]="!form.role || !form.company"
                         (click)="generate()">
-                  ✍️ Quick Template
+                  <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/></svg>
+                  Quick Template
                 </button>
               </div>
             </div>
@@ -181,16 +184,21 @@ ${candidateName || 'Your Name'}`;
                   <h2 class="text-sm font-bold text-slate-700 dark:text-slate-300">Preview</h2>
                   <div class="flex items-center gap-2">
                     <button class="text-xs font-semibold px-3 py-1.5 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 transition"
-                            (click)="copy()">📋 Copy</button>
-                    <button class="text-xs font-semibold px-3 py-1.5 rounded-lg bg-gradient-to-r from-violet-600 to-indigo-600 text-white hover:opacity-90 transition"
-                            (click)="downloadTxt()">⬇️ Download .txt</button>
+                            (click)="copy()">Copy</button>
+                    <button class="text-xs font-semibold px-3 py-1.5 rounded-lg bg-gradient-to-r from-primary-600 to-indigo-600 text-white hover:opacity-90 transition flex items-center gap-1"
+                            (click)="downloadTxt()">
+                      <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                      Download .txt
+                    </button>
                   </div>
                 </div>
                 <pre class="whitespace-pre-wrap text-xs text-slate-700 dark:text-slate-200 leading-relaxed font-sans border border-slate-100 dark:border-slate-800 rounded-xl p-4 bg-slate-50 dark:bg-slate-800/50 max-h-[600px] overflow-y-auto">{{ letterText() }}</pre>
               </div>
             } @else {
               <div class="bg-white dark:bg-slate-900 border border-dashed border-slate-300 dark:border-slate-700 rounded-2xl p-12 text-center">
-                <p class="text-5xl mb-4">✉️</p>
+                <div class="w-16 h-16 mx-auto mb-4 text-slate-300 dark:text-slate-600" aria-hidden="true">
+                  <svg fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-full h-full"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+                </div>
                 <p class="font-semibold text-slate-600 dark:text-slate-300 mb-1">Your cover letter will appear here</p>
                 <p class="text-xs text-slate-400">Fill in the job details and click Generate.</p>
               </div>

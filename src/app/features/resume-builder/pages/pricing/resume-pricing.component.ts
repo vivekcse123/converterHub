@@ -15,7 +15,7 @@ import { PLAN_PRICES, FEATURE_TABLE, FREE_PLAN_BULLETS, PRO_FULL_LIST, YEARLY_EX
 
       <!-- Hero -->
       <div class="container-app pt-14 pb-12 text-center max-w-3xl mx-auto">
-        <span class="inline-block text-[11px] font-bold uppercase tracking-widest text-violet-600 dark:text-violet-400 bg-violet-100 dark:bg-violet-900/40 px-4 py-1.5 rounded-full mb-5">India's Complete Career Platform</span>
+        <span class="inline-block text-[11px] font-bold uppercase tracking-widest text-primary-600 dark:text-primary-400 bg-primary-100 dark:bg-primary-900/40 px-4 py-1.5 rounded-full mb-5">India's Complete Career Platform</span>
         <h1 class="text-3xl sm:text-5xl font-extrabold text-slate-900 dark:text-white mb-5 leading-tight">
           More Features.<br>Cheaper Than Every Competitor.
         </h1>
@@ -36,8 +36,12 @@ import { PLAN_PRICES, FEATURE_TABLE, FREE_PLAN_BULLETS, PRO_FULL_LIST, YEARLY_EX
         <!-- Why upgrade - 4 value cards -->
         <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-14">
           @for (v of whyCards; track v.title) {
-            <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-2xl p-5 text-center hover:border-violet-300 hover:shadow-md transition-all">
-              <div class="text-3xl mb-2.5">{{ v.icon }}</div>
+            <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-2xl p-5 text-center hover:border-primary-300 hover:shadow-md transition-all">
+              <div class="w-10 h-10 mx-auto mb-2.5 text-primary-500 dark:text-primary-400" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" class="w-full h-full">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" [attr.d]="v.svgPath"/>
+                </svg>
+              </div>
               <p class="font-bold text-slate-800 dark:text-white text-sm mb-1.5 leading-tight">{{ v.title }}</p>
               <p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">{{ v.desc }}</p>
             </div>
@@ -57,7 +61,7 @@ import { PLAN_PRICES, FEATURE_TABLE, FREE_PLAN_BULLETS, PRO_FULL_LIST, YEARLY_EX
             <ul class="space-y-1.5 text-xs flex-1 mb-5">
               @for (f of freeBullets; track f.text) {
                 <li class="flex items-center gap-1.5">
-                  <span [class]="f.ok ? 'text-emerald-500' : 'text-slate-300 dark:text-slate-600'">{{ f.ok ? '✓' : '✗' }}</span>
+                  <span [class]="f.ok ? 'text-emerald-500' : 'text-slate-300 dark:text-slate-600'" aria-hidden="true">{{ f.ok ? '✓' : '✗' }}</span>
                   <span [class]="f.ok ? 'text-slate-700 dark:text-slate-200' : 'text-slate-400 dark:text-slate-500'">{{ f.text }}</span>
                 </li>
               }
@@ -69,17 +73,17 @@ import { PLAN_PRICES, FEATURE_TABLE, FREE_PLAN_BULLETS, PRO_FULL_LIST, YEARLY_EX
 
           <!-- Monthly -->
           <div class="bg-white dark:bg-slate-900 border-2 rounded-2xl p-5 flex flex-col"
-               [class]="(auth.isPro() && auth.currentPlan() === 'monthly') ? 'border-emerald-400' : 'border-violet-300 dark:border-violet-700'">
+               [class]="(auth.isPro() && auth.currentPlan() === 'monthly') ? 'border-emerald-400' : 'border-primary-300 dark:border-primary-700'">
             <div class="mb-5">
               <p class="text-[11px] font-bold uppercase tracking-widest mb-1"
-                 [class]="(auth.isPro() && auth.currentPlan() === 'monthly') ? 'text-emerald-600 dark:text-emerald-400' : 'text-violet-600 dark:text-violet-400'">Monthly</p>
+                 [class]="(auth.isPro() && auth.currentPlan() === 'monthly') ? 'text-emerald-600 dark:text-emerald-400' : 'text-primary-600 dark:text-primary-400'">Monthly</p>
               <p class="text-3xl font-extrabold text-slate-800 dark:text-white">{{ prices.monthly.display }} <span class="text-sm font-normal text-slate-400">{{ prices.monthly.period }}</span></p>
               <p class="text-xs text-slate-400 mt-1">{{ prices.monthly.tagline }}</p>
             </div>
             <ul class="space-y-1.5 text-xs flex-1 mb-5">
               @for (f of proList; track f) {
                 <li class="flex items-start gap-1.5">
-                  <span class="text-emerald-500 shrink-0 mt-0.5">✓</span>
+                  <span class="text-emerald-500 shrink-0 mt-0.5" aria-hidden="true">✓</span>
                   <span class="text-slate-700 dark:text-slate-200">{{ f }}</span>
                 </li>
               }
@@ -87,9 +91,12 @@ import { PLAN_PRICES, FEATURE_TABLE, FREE_PLAN_BULLETS, PRO_FULL_LIST, YEARLY_EX
             @if (auth.isPro() && auth.currentPlan() === 'monthly') {
               <div class="text-center text-xs py-2.5 rounded-xl bg-emerald-50 dark:bg-emerald-900/20 text-emerald-700 dark:text-emerald-300 font-semibold border border-emerald-200 dark:border-emerald-800">Current Plan ✓</div>
             } @else if (auth.currentPlan() === 'yearly' || auth.currentPlan() === 'lifetime') {
-              <div class="text-center text-xs py-2.5 border border-dashed border-slate-300 dark:border-slate-700 rounded-xl text-slate-400">🔒 Higher plan active</div>
+              <div class="text-center text-xs py-2.5 border border-dashed border-slate-300 dark:border-slate-700 rounded-xl text-slate-400 flex items-center justify-center gap-1.5">
+                <svg class="w-3.5 h-3.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+                Higher plan active
+              </div>
             } @else {
-              <button class="w-full py-2.5 rounded-xl bg-violet-600 hover:bg-violet-700 text-white font-semibold text-xs transition"
+              <button class="w-full py-2.5 rounded-xl bg-primary-600 hover:bg-primary-700 text-white font-semibold text-xs transition"
                       [disabled]="loading() === 'monthly'" (click)="subscribe('monthly')">
                 {{ loading() === 'monthly' ? 'Opening...' : 'Get Monthly Plan' }}
               </button>
@@ -99,7 +106,10 @@ import { PLAN_PRICES, FEATURE_TABLE, FREE_PLAN_BULLETS, PRO_FULL_LIST, YEARLY_EX
           <!-- Yearly (most popular) -->
           <div class="relative bg-gradient-to-b from-amber-50 to-white dark:from-amber-900/20 dark:to-slate-900 border-2 border-amber-400 rounded-2xl p-5 flex flex-col shadow-xl shadow-amber-100/50 dark:shadow-amber-900/10">
             <div class="absolute -top-3.5 left-1/2 -translate-x-1/2 whitespace-nowrap">
-              <span class="bg-gradient-to-r from-amber-400 to-orange-500 text-white text-[10px] font-extrabold px-3 py-1 rounded-full shadow tracking-wide">⭐ MOST POPULAR</span>
+              <span class="inline-flex items-center gap-1 bg-gradient-to-r from-amber-400 to-orange-500 text-white text-[10px] font-extrabold px-3 py-1 rounded-full shadow tracking-wide">
+                <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                MOST POPULAR
+              </span>
             </div>
             <div class="mb-5 mt-2">
               <p class="text-[11px] font-bold text-amber-600 dark:text-amber-400 uppercase tracking-widest mb-1">Yearly</p>
@@ -113,7 +123,7 @@ import { PLAN_PRICES, FEATURE_TABLE, FREE_PLAN_BULLETS, PRO_FULL_LIST, YEARLY_EX
             <ul class="space-y-1.5 text-xs flex-1 mb-5">
               @for (f of yearlyExtra; track f) {
                 <li class="flex items-start gap-1.5">
-                  <span class="text-emerald-500 shrink-0 mt-0.5">✓</span>
+                  <span class="text-emerald-500 shrink-0 mt-0.5" aria-hidden="true">✓</span>
                   <span class="text-slate-700 dark:text-slate-200">{{ f }}</span>
                 </li>
               }
@@ -121,11 +131,14 @@ import { PLAN_PRICES, FEATURE_TABLE, FREE_PLAN_BULLETS, PRO_FULL_LIST, YEARLY_EX
             @if (auth.currentPlan() === 'yearly') {
               <div class="text-center text-xs py-2.5 rounded-xl bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-300 font-semibold">Current Plan ✓</div>
             } @else if (auth.currentPlan() === 'lifetime') {
-              <div class="text-center text-xs py-2.5 border border-dashed border-slate-300 dark:border-slate-700 rounded-xl text-slate-400">🔒 Lifetime plan active</div>
+              <div class="text-center text-xs py-2.5 border border-dashed border-slate-300 dark:border-slate-700 rounded-xl text-slate-400 flex items-center justify-center gap-1.5">
+                <svg class="w-3.5 h-3.5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+                Lifetime plan active
+              </div>
             } @else if (auth.currentPlan() === 'monthly') {
               <button class="w-full py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white font-bold text-xs transition shadow"
                       [disabled]="loading() === 'yearly'" (click)="subscribe('yearly')">
-                {{ loading() === 'yearly' ? 'Opening...' : '⬆ Upgrade to Yearly - Save ₹489' }}
+                {{ loading() === 'yearly' ? 'Opening...' : 'Upgrade to Yearly — Save ₹489' }}
               </button>
             } @else {
               <button class="w-full py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white font-bold text-xs transition shadow"
@@ -138,7 +151,10 @@ import { PLAN_PRICES, FEATURE_TABLE, FREE_PLAN_BULLETS, PRO_FULL_LIST, YEARLY_EX
           <!-- Lifetime -->
           <div class="relative bg-gradient-to-b from-slate-900 to-slate-800 dark:from-slate-800 dark:to-slate-900 border-2 border-slate-600 rounded-2xl p-5 flex flex-col text-white shadow-xl">
             <div class="absolute -top-3.5 left-1/2 -translate-x-1/2 whitespace-nowrap">
-              <span class="bg-slate-700 text-slate-200 text-[10px] font-extrabold px-3 py-1 rounded-full shadow tracking-wide">🔥 LIFETIME DEAL</span>
+              <span class="inline-flex items-center gap-1 bg-slate-700 text-slate-200 text-[10px] font-extrabold px-3 py-1 rounded-full shadow tracking-wide">
+                <svg class="w-3 h-3 text-orange-400" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true"><path fill-rule="evenodd" d="M12.395 2.553a1 1 0 00-1.45-.385c-.345.23-.614.558-.822.88-.214.33-.403.713-.57 1.116-.334.804-.614 1.768-.84 2.734a31.365 31.365 0 00-.613 3.58 2.64 2.64 0 01-.945-1.067c-.328-.68-.398-1.534-.398-2.654A1 1 0 005.05 6.05 6.981 6.981 0 003 11a7 7 0 1011.95-4.95c-.592-.591-.98-.985-1.348-1.467-.363-.476-.724-1.063-1.207-2.03zM12.12 15.12A3 3 0 017 13s.879.5 2.5.5c0-1 .5-4 1.25-4.5.5 1 .786 1.293 1.371 1.879A2.99 2.99 0 0113 13a2.99 2.99 0 01-.879 2.121z" clip-rule="evenodd"/></svg>
+                LIFETIME DEAL
+              </span>
             </div>
             <div class="mb-5 mt-2">
               <p class="text-[11px] font-bold text-slate-300 uppercase tracking-widest mb-1">Lifetime</p>
@@ -147,11 +163,11 @@ import { PLAN_PRICES, FEATURE_TABLE, FREE_PLAN_BULLETS, PRO_FULL_LIST, YEARLY_EX
               <p class="text-xs text-slate-400">{{ prices.lifetime.equiv }}</p>
             </div>
             <ul class="space-y-1.5 text-xs flex-1 mb-5">
-              <li class="flex items-start gap-1.5"><span class="text-emerald-400 shrink-0 mt-0.5">✓</span><span class="text-slate-200">Everything in Yearly</span></li>
-              <li class="flex items-start gap-1.5"><span class="text-emerald-400 shrink-0 mt-0.5">✓</span><span class="text-slate-200">Pay once, no renewals ever</span></li>
-              <li class="flex items-start gap-1.5"><span class="text-emerald-400 shrink-0 mt-0.5">✓</span><span class="text-slate-200">All future Pro features free</span></li>
-              <li class="flex items-start gap-1.5"><span class="text-emerald-400 shrink-0 mt-0.5">✓</span><span class="text-slate-200">VIP priority support</span></li>
-              <li class="flex items-start gap-1.5"><span class="text-emerald-400 shrink-0 mt-0.5">✓</span><span class="text-slate-200">Best lifetime value in India</span></li>
+              <li class="flex items-start gap-1.5"><span class="text-emerald-400 shrink-0 mt-0.5" aria-hidden="true">✓</span><span class="text-slate-200">Everything in Yearly</span></li>
+              <li class="flex items-start gap-1.5"><span class="text-emerald-400 shrink-0 mt-0.5" aria-hidden="true">✓</span><span class="text-slate-200">Pay once, no renewals ever</span></li>
+              <li class="flex items-start gap-1.5"><span class="text-emerald-400 shrink-0 mt-0.5" aria-hidden="true">✓</span><span class="text-slate-200">All future Pro features free</span></li>
+              <li class="flex items-start gap-1.5"><span class="text-emerald-400 shrink-0 mt-0.5" aria-hidden="true">✓</span><span class="text-slate-200">VIP priority support</span></li>
+              <li class="flex items-start gap-1.5"><span class="text-emerald-400 shrink-0 mt-0.5" aria-hidden="true">✓</span><span class="text-slate-200">Best lifetime value in India</span></li>
             </ul>
             @if (auth.isPro() && auth.currentPlan() === 'lifetime') {
               <div class="text-center text-xs py-2.5 rounded-xl bg-emerald-900/30 text-emerald-400 font-semibold">Current Plan ✓</div>
@@ -179,7 +195,7 @@ import { PLAN_PRICES, FEATURE_TABLE, FREE_PLAN_BULLETS, PRO_FULL_LIST, YEARLY_EX
             @for (row of competitorTable; track row.feature) {
               <div class="grid grid-cols-5 border-t border-slate-100 dark:border-slate-800 text-center">
                 <div class="px-3 py-2.5 text-left text-slate-700 dark:text-slate-200 font-medium">{{ row.feature }}</div>
-                <div class="px-2 py-2.5 bg-violet-50/40 dark:bg-violet-900/10 font-semibold text-violet-700 dark:text-violet-300">{{ row.us }}</div>
+                <div class="px-2 py-2.5 bg-primary-50/40 dark:bg-primary-900/10 font-semibold text-primary-700 dark:text-primary-300">{{ row.us }}</div>
                 <div class="px-2 py-2.5 text-slate-400">{{ row.a }}</div>
                 <div class="px-2 py-2.5 text-slate-400">{{ row.b }}</div>
                 <div class="px-2 py-2.5 text-slate-400">{{ row.c }}</div>
@@ -206,7 +222,7 @@ import { PLAN_PRICES, FEATURE_TABLE, FREE_PLAN_BULLETS, PRO_FULL_LIST, YEARLY_EX
                 <div class="grid grid-cols-3 text-xs border-t border-slate-100 dark:border-slate-800">
                   <div class="px-4 py-3 text-slate-700 dark:text-slate-200 font-medium">{{ row.label }}</div>
                   <div class="px-4 py-3 text-center" [class]="row.freeOk ? 'text-slate-600 dark:text-slate-300' : 'text-slate-300 dark:text-slate-600'">{{ row.freeVal }}</div>
-                  <div class="px-4 py-3 text-center bg-violet-50/40 dark:bg-violet-900/10 font-semibold" [class]="row.proOk ? 'text-violet-700 dark:text-violet-300' : 'text-slate-400'">{{ row.proVal }}</div>
+                  <div class="px-4 py-3 text-center bg-primary-50/40 dark:bg-primary-900/10 font-semibold" [class]="row.proOk ? 'text-primary-700 dark:text-primary-300' : 'text-slate-400'">{{ row.proVal }}</div>
                 </div>
               }
             }
@@ -231,14 +247,18 @@ import { PLAN_PRICES, FEATURE_TABLE, FREE_PLAN_BULLETS, PRO_FULL_LIST, YEARLY_EX
 
         <!-- Final CTA -->
         <div class="max-w-2xl mx-auto text-center bg-gradient-to-br from-violet-600 to-indigo-700 rounded-2xl p-10 text-white">
-          <div class="text-4xl mb-4">🚀</div>
+          <div class="w-14 h-14 mx-auto mb-4 bg-white/20 rounded-2xl flex items-center justify-center" aria-hidden="true">
+            <svg class="w-7 h-7 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+            </svg>
+          </div>
           <h2 class="text-2xl font-extrabold mb-3">Start Your Career Journey Today</h2>
           <p class="text-violet-200 mb-2 text-sm">Complete career platform · ₹99/month · Cheaper than every competitor</p>
           <p class="text-violet-300 mb-8 text-xs">10,000+ students & professionals already using ApnaConverter</p>
           <div class="flex flex-col sm:flex-row gap-3 justify-center">
-            <button class="px-7 py-3 rounded-xl bg-white text-violet-700 font-bold text-sm hover:bg-violet-50 transition shadow-lg"
+            <button class="px-7 py-3 rounded-xl bg-white text-primary-700 font-bold text-sm hover:bg-primary-50 transition shadow-lg"
                     (click)="subscribe('yearly')">
-              ⭐ Get Pro Yearly - ₹699/yr
+              Get Pro Yearly — ₹699/yr
             </button>
             <a routerLink="/resume-builder" class="px-7 py-3 rounded-xl bg-white/10 border border-white/20 text-white font-semibold text-sm hover:bg-white/20 transition">
               Start Free →
@@ -279,10 +299,10 @@ export class ResumePricingComponent implements OnInit {
   }
 
   readonly whyCards = [
-    { icon: '💰', title: 'Cheapest in India',    desc: '₹99/mo vs ₹500–₹1,333 charged by international platforms. Same or better features.' },
-    { icon: '🤖', title: 'AI Writing Assistant', desc: 'Rewrite bullets, generate summaries, surface recruiter keywords - built right in.' },
-    { icon: '🚫', title: 'Zero Watermark',        desc: 'Download clean PDFs every time. No ApnaConverter branding. Professional output.' },
-    { icon: '📋', title: '6 Career Tools',        desc: 'Resume · Cover Letter · Portfolio · Job Tracker · Biodata · File Converter in one plan.' },
+    { svgPath: 'M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z', title: 'Cheapest in India',    desc: '₹99/mo vs ₹500–₹1,333 charged by international platforms. Same or better features.' },
+    { svgPath: 'M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17H3a2 2 0 01-2-2V5a2 2 0 012-2h14a2 2 0 012 2v10a2 2 0 01-2 2h-2', title: 'AI Writing Assistant', desc: 'Rewrite bullets, generate summaries, surface recruiter keywords - built right in.' },
+    { svgPath: 'M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636', title: 'Zero Watermark',        desc: 'Download clean PDFs every time. No ApnaConverter branding. Professional output.' },
+    { svgPath: 'M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2', title: '6 Career Tools',        desc: 'Resume · Cover Letter · Portfolio · Job Tracker · Biodata · File Converter in one plan.' },
   ];
 
   readonly competitorTable = [

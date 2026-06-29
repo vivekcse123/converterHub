@@ -66,7 +66,7 @@ import { JsonLdService } from '../../core/services/json-ld.service';
               </div>
               <div class="mt-4 flex gap-2">
                 <span class="text-[9px] font-bold bg-emerald-100 text-emerald-700 px-2 py-0.5 rounded-full">ATS ✓</span>
-                <span class="text-[9px] font-bold bg-violet-100 text-violet-700 px-2 py-0.5 rounded-full">Fresher Template</span>
+                <span class="text-[9px] font-bold bg-primary-100 text-primary-700 px-2 py-0.5 rounded-full">Fresher Template</span>
               </div>
             </div>
           </div>
@@ -82,7 +82,7 @@ import { JsonLdService } from '../../core/services/json-ld.service';
       </div>
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
         @for (tip of tips; track $index) {
-          <div class="bg-white dark:bg-slate-900 rounded-2xl p-5 border border-slate-200 dark:border-slate-800 hover:border-violet-300 hover:shadow-md transition-all">
+          <div class="bg-white dark:bg-slate-900 rounded-2xl p-5 border border-slate-200 dark:border-slate-800 hover:border-primary-300 hover:shadow-md transition-all">
             <div class="w-10 h-10 rounded-xl flex items-center justify-center text-xl mb-3" [class]="tip.bg">{{ tip.icon }}</div>
             <h3 class="font-bold text-slate-800 dark:text-white text-sm mb-1">{{ tip.title }}</h3>
             <p class="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">{{ tip.desc }}</p>
@@ -120,7 +120,7 @@ import { JsonLdService } from '../../core/services/json-ld.service';
     </section>
 
     <!-- CTA -->
-    <section class="bg-gradient-to-r from-violet-600 to-indigo-600 py-16 text-white text-center">
+    <section class="bg-gradient-to-r from-primary-600 to-indigo-600 py-16 text-white text-center">
       <div class="container-app max-w-2xl mx-auto">
         <h2 class="text-2xl sm:text-3xl font-extrabold mb-4">Land Your First Job - Start Today!</h2>
         <p class="text-indigo-100 mb-8">Create a professional fresher resume in under 10 minutes. ATS-optimized, downloadable as PDF, completely free.</p>
@@ -139,7 +139,7 @@ export class FresherResumeBuilderComponent implements OnInit, OnDestroy {
   readonly resumeMock = ['Education', 'Projects', 'Skills', 'Internships'];
 
   readonly tips = [
-    { icon: '🎓', bg: 'bg-violet-100 dark:bg-violet-900/30',   title: 'Education First',        desc: 'Lead with your degree, CGPA, and relevant coursework. For freshers, education is your biggest selling point.' },
+    { icon: '🎓', bg: 'bg-primary-100 dark:bg-primary-900/30',   title: 'Education First',        desc: 'Lead with your degree, CGPA, and relevant coursework. For freshers, education is your biggest selling point.' },
     { icon: '💡', bg: 'bg-indigo-100 dark:bg-indigo-900/30',   title: 'Academic Projects',       desc: 'Showcase 2-3 strong projects with tech stack, your role, and the impact or result achieved.' },
     { icon: '🛠', bg: 'bg-blue-100 dark:bg-blue-900/30',       title: 'Technical Skills',        desc: 'List programming languages, tools, frameworks, and certifications. Be honest about your proficiency level.' },
     { icon: '🤝', bg: 'bg-emerald-100 dark:bg-emerald-900/30', title: 'Internships & Training',  desc: 'Include any internships, industrial training, or part-time work - even if they were short or unpaid.' },

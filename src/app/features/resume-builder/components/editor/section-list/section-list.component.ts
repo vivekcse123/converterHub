@@ -45,12 +45,12 @@ import { CustomSectionFormComponent } from '../custom-section-form/custom-sectio
 
         <!-- Reorder mode hint banner -->
         @if (reorderMode()) {
-          <div class="flex items-center gap-2.5 px-3 py-2.5 bg-violet-50 border border-violet-200 rounded-xl">
-            <svg class="w-4 h-4 text-violet-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <div class="flex items-center gap-2.5 px-3 py-2.5 bg-primary-50 border border-primary-200 rounded-xl">
+            <svg class="w-4 h-4 text-primary-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                     d="M4 6h16M4 10h16M4 14h16M4 18h16"/>
             </svg>
-            <p class="text-xs text-violet-700 font-medium leading-snug">
+            <p class="text-xs text-primary-700 font-medium leading-snug">
               Drag sections to reorder · click <span class="font-bold">👁</span> to hide/show
             </p>
           </div>
@@ -84,7 +84,7 @@ import { CustomSectionFormComponent } from '../custom-section-form/custom-sectio
                  [class]="reorderMode()
                    ? 'border-slate-200 dark:border-slate-700 opacity-60'
                    : personalExpanded()
-                     ? 'border-violet-200 dark:border-violet-800'
+                     ? 'border-primary-200 dark:border-primary-800'
                      : 'border-slate-200 dark:border-slate-700'">
           <div class="flex items-center gap-2.5 px-3 py-2.5"
                [class.cursor-default]="reorderMode()">
@@ -141,7 +141,7 @@ import { CustomSectionFormComponent } from '../custom-section-form/custom-sectio
             <section cdkDrag cdkDragLockAxis="y"
                      class="bg-white dark:bg-slate-900 rounded-xl border overflow-hidden transition-colors"
                      [class]="isExpanded(section) && !reorderMode()
-                       ? 'border-violet-200 dark:border-violet-800'
+                       ? 'border-primary-200 dark:border-primary-800'
                        : reorderMode()
                          ? 'border-slate-200 dark:border-slate-700 shadow-sm'
                          : 'border-slate-200 dark:border-slate-700'">
@@ -154,7 +154,7 @@ import { CustomSectionFormComponent } from '../custom-section-form/custom-sectio
                 <span cdkDragHandle
                       class="select-none shrink-0 mr-1.5 leading-none transition-colors"
                       [class]="reorderMode()
-                        ? 'cursor-grab active:cursor-grabbing text-slate-400 dark:text-slate-500 hover:text-violet-500 dark:hover:text-violet-400 text-base'
+                        ? 'cursor-grab active:cursor-grabbing text-slate-400 dark:text-slate-500 hover:text-primary-500 dark:hover:text-primary-400 text-base'
                         : 'cursor-grab active:cursor-grabbing text-slate-300 dark:text-slate-600 hover:text-slate-500 dark:hover:text-slate-400 text-base'"
                       title="Drag to reorder">⠿</span>
 
@@ -241,7 +241,7 @@ import { CustomSectionFormComponent } from '../custom-section-form/custom-sectio
 
               <!-- CDK drag placeholder -->
               <div *cdkDragPlaceholder
-                   class="h-12 rounded-xl bg-violet-50 dark:bg-violet-900/20 border-2 border-dashed border-violet-300 dark:border-violet-700"></div>
+                   class="h-12 rounded-xl bg-primary-50 dark:bg-primary-900/20 border-2 border-dashed border-primary-300 dark:border-primary-700"></div>
             </section>
           }
         </div>
@@ -249,7 +249,7 @@ import { CustomSectionFormComponent } from '../custom-section-form/custom-sectio
         <!-- Add Section button (normal editing mode only) -->
         @if (!reorderMode()) {
           <button type="button"
-                  class="w-full text-xs font-medium text-slate-500 dark:text-slate-400 hover:text-violet-600 dark:hover:text-violet-400 py-2 border border-dashed border-slate-300 dark:border-slate-600 hover:border-violet-400 dark:hover:border-violet-600 rounded-xl transition-colors"
+                  class="w-full text-xs font-medium text-slate-500 dark:text-slate-400 hover:text-primary-600 dark:hover:text-primary-400 py-2 border border-dashed border-slate-300 dark:border-slate-600 hover:border-primary-400 dark:hover:border-primary-600 rounded-xl transition-colors"
                   (click)="addCustomSection()">
             + Add Section
           </button>

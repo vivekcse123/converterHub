@@ -31,13 +31,13 @@ import { TemplateId } from '../../models/resume.model';
               type="button"
               class="w-full flex items-center gap-2.5 px-3 py-2 transition-all text-left relative"
               [class]="activeId() === tpl.id
-                ? 'bg-violet-50 dark:bg-violet-900/20'
+                ? 'bg-primary-50 dark:bg-primary-900/20'
                 : 'hover:bg-slate-50 dark:hover:bg-slate-800/50'"
               (click)="select(tpl.id)">
 
               <!-- Active left bar -->
               @if (activeId() === tpl.id) {
-                <span class="absolute left-0 top-1 bottom-1 w-0.5 bg-violet-500 rounded-full"></span>
+                <span class="absolute left-0 top-1 bottom-1 w-0.5 bg-primary-500 rounded-full"></span>
               }
 
               <!-- Color chip — solid accent hex matches exactly what setTemplate() applies -->
@@ -52,7 +52,7 @@ import { TemplateId } from '../../models/resume.model';
               <!-- Name -->
               <span class="flex-1 min-w-0 text-xs font-medium truncate"
                     [class]="activeId() === tpl.id
-                      ? 'text-violet-700 dark:text-violet-300'
+                      ? 'text-primary-700 dark:text-primary-300'
                       : 'text-slate-700 dark:text-slate-200'">
                 {{ tpl.name }}
               </span>
@@ -61,7 +61,7 @@ import { TemplateId } from '../../models/resume.model';
               @if (tpl.isPremium && !subs.isPro()) {
                 <span class="text-[9px] font-bold text-amber-600 dark:text-amber-400 shrink-0">PRO</span>
               } @else if (activeId() === tpl.id) {
-                <svg class="w-3.5 h-3.5 text-violet-500 shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                <svg class="w-3.5 h-3.5 text-primary-500 shrink-0" fill="currentColor" viewBox="0 0 20 20">
                   <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
                 </svg>
               }
@@ -105,8 +105,8 @@ import { TemplateId } from '../../models/resume.model';
                   type="button"
                   class="relative flex items-center gap-3 text-left rounded-xl border-2 transition-all p-3"
                   [class]="activeId() === tpl.id
-                    ? 'border-violet-500 ring-2 ring-violet-200 dark:ring-violet-900/50 bg-violet-50/50 dark:bg-violet-900/10'
-                    : 'border-slate-200 dark:border-slate-700 hover:border-violet-300 hover:bg-slate-50 dark:hover:bg-slate-800/50'"
+                    ? 'border-primary-500 ring-2 ring-primary-200 dark:ring-primary-900/50 bg-primary-50/50 dark:bg-primary-900/10'
+                    : 'border-slate-200 dark:border-slate-700 hover:border-primary-300 hover:bg-slate-50 dark:hover:bg-slate-800/50'"
                   (click)="select(tpl.id)">
 
                   <div class="relative w-10 h-10 rounded-lg bg-gradient-to-br flex items-center justify-center shrink-0 shadow-sm" [class]="tpl.accent">
@@ -129,7 +129,7 @@ import { TemplateId } from '../../models/resume.model';
                   </div>
 
                   @if (activeId() === tpl.id) {
-                    <svg class="w-4 h-4 text-violet-500 shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                    <svg class="w-4 h-4 text-primary-500 shrink-0" fill="currentColor" viewBox="0 0 20 20">
                       <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
                     </svg>
                   }

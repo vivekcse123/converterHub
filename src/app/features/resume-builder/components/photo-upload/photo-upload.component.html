@@ -9,7 +9,7 @@
   <!-- ── STATE 1: No photo, not editing ── -->
   @if (!photo() && !editMode()) {
     <div (click)="triggerUpload()"
-         class="border-2 border-dashed border-slate-200 rounded-xl p-5 text-center cursor-pointer hover:border-violet-300 hover:bg-violet-50/40 transition-all">
+         class="border-2 border-dashed border-slate-200 rounded-xl p-5 text-center cursor-pointer hover:border-primary-300 hover:bg-primary-50/40 transition-all">
       <div class="w-11 h-11 bg-slate-100 rounded-full flex items-center justify-center mx-auto mb-2.5">
         <svg class="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
@@ -54,7 +54,7 @@
       <!-- Action buttons -->
       <div class="flex gap-2">
         <button type="button" (click)="applyCrop()"
-                class="flex-1 py-2 bg-violet-600 text-white text-sm font-semibold rounded-xl hover:bg-violet-700 transition-colors">
+                class="flex-1 py-2 bg-primary-600 text-white text-sm font-semibold rounded-xl hover:bg-primary-700 transition-colors">
           Apply Crop
         </button>
         <button type="button" (click)="cancelEdit()"

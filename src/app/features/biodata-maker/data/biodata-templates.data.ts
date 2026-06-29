@@ -35,7 +35,7 @@ export const BIODATA_TEMPLATES: BiodataTemplateMeta[] = [
     name: 'Modern Card',
     description: 'Contemporary card-style design with a vibrant header and circular photo.',
     badge: 'Eye-catching',
-    gradient: 'from-violet-500 to-purple-600',
+    gradient: 'from-primary-500 to-purple-600',
     component: ModernCardTemplateComponent,
   },
 ];

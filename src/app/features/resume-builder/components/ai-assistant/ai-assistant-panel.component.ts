@@ -20,7 +20,7 @@ type Tab = 'summary' | 'bullet' | 'suggest';
 
       <!-- Header -->
       <div class="flex items-center gap-2">
-        <span class="text-base">🤖</span>
+        <svg class="w-4 h-4 text-indigo-600 dark:text-indigo-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg>
         <h3 class="font-semibold text-slate-800 dark:text-slate-100 text-sm">AI Writing Assistant</h3>
         @if (auth.isPro()) {
           <span class="ml-auto text-[10px] font-bold px-1.5 py-0.5 rounded-full bg-emerald-100 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-300">Pro</span>
@@ -31,7 +31,9 @@ type Tab = 'summary' | 'bullet' | 'suggest';
 
       @if (!auth.isPro()) {
         <div class="text-center py-6 space-y-2">
-          <p class="text-3xl">🔒</p>
+          <div class="w-12 h-12 mx-auto bg-slate-100 dark:bg-slate-800 rounded-full flex items-center justify-center" aria-hidden="true">
+            <svg class="w-6 h-6 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+          </div>
           <p class="text-sm font-semibold text-slate-700 dark:text-slate-200">AI Assistant is a Pro feature</p>
           <p class="text-xs text-slate-400 leading-relaxed">Generate professional summaries, rewrite weak bullets with Gemini AI, and get fresh bullet suggestions — upgrade to unlock.</p>
         </div>
@@ -51,12 +53,15 @@ type Tab = 'summary' | 'bullet' | 'suggest';
         @if (tab() === 'summary') {
           <div class="space-y-3">
             <p class="text-xs text-slate-500 dark:text-slate-400">Gemini will write a professional summary from your resume data.</p>
-            <button class="w-full py-2.5 rounded-xl bg-gradient-to-r from-indigo-600 to-violet-600 text-white text-xs font-bold hover:opacity-90 transition flex items-center justify-center gap-2 disabled:opacity-60"
+            <button class="w-full py-2.5 rounded-xl bg-gradient-to-r from-indigo-600 to-primary-600 text-white text-xs font-bold hover:opacity-90 transition flex items-center justify-center gap-2 disabled:opacity-60"
                     [disabled]="loading()"
                     (click)="generateSummary()">
               @if (loading()) {
                 <span class="w-3.5 h-3.5 border-2 border-white/40 border-t-white rounded-full animate-spin"></span> Generating…
-              } @else { ✨ Generate Summary }
+              } @else {
+                <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"/></svg>
+                Generate Summary
+              }
             </button>
             @for (v of summaryVariants(); track $index) {
               <div class="bg-slate-50 dark:bg-slate-800 rounded-xl p-3 text-xs text-slate-700 dark:text-slate-200 leading-relaxed border border-slate-200 dark:border-slate-700">
@@ -69,7 +74,7 @@ type Tab = 'summary' | 'bullet' | 'suggest';
             }
             @if (summaryVariants().length > 0) {
               <button class="w-full py-2 rounded-xl border border-dashed border-slate-300 dark:border-slate-700 text-xs text-slate-500 hover:border-indigo-400 hover:text-indigo-600 transition"
-                      (click)="generateSummary()">🔄 Regenerate</button>
+                      (click)="generateSummary()">Regenerate</button>
             }
           </div>
         }
@@ -81,12 +86,15 @@ type Tab = 'summary' | 'bullet' | 'suggest';
             <textarea [(ngModel)]="bulletInput" rows="2"
                       placeholder='e.g. "worked on reporting feature" or "helped with testing"'
                       class="w-full text-xs px-3 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 resize-none focus:outline-none focus:ring-2 focus:ring-indigo-500"></textarea>
-            <button class="w-full py-2.5 rounded-xl bg-gradient-to-r from-indigo-600 to-violet-600 text-white text-xs font-bold hover:opacity-90 transition flex items-center justify-center gap-2 disabled:opacity-60"
+            <button class="w-full py-2.5 rounded-xl bg-gradient-to-r from-indigo-600 to-primary-600 text-white text-xs font-bold hover:opacity-90 transition flex items-center justify-center gap-2 disabled:opacity-60"
                     [disabled]="!bulletInput.trim() || loading()"
                     (click)="rewriteBullet()">
               @if (loading()) {
                 <span class="w-3.5 h-3.5 border-2 border-white/40 border-t-white rounded-full animate-spin"></span> Rewriting…
-              } @else { ✨ Rewrite with AI }
+              } @else {
+                <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"/></svg>
+                Rewrite with AI
+              }
             </button>
             @for (v of bulletVariants(); track $index) {
               <div class="bg-slate-50 dark:bg-slate-800 rounded-xl p-3 text-xs text-slate-700 dark:text-slate-200 leading-relaxed border border-slate-200 dark:border-slate-700">
@@ -105,12 +113,15 @@ type Tab = 'summary' | 'bullet' | 'suggest';
                    class="w-full text-xs px-3 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500" />
             <input [(ngModel)]="suggestCompany" type="text" placeholder="Company (optional)"
                    class="w-full text-xs px-3 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500" />
-            <button class="w-full py-2.5 rounded-xl bg-gradient-to-r from-indigo-600 to-violet-600 text-white text-xs font-bold hover:opacity-90 transition flex items-center justify-center gap-2 disabled:opacity-60"
+            <button class="w-full py-2.5 rounded-xl bg-gradient-to-r from-indigo-600 to-primary-600 text-white text-xs font-bold hover:opacity-90 transition flex items-center justify-center gap-2 disabled:opacity-60"
                     [disabled]="!suggestJobTitle.trim() || loading()"
                     (click)="suggestBullets()">
               @if (loading()) {
                 <span class="w-3.5 h-3.5 border-2 border-white/40 border-t-white rounded-full animate-spin"></span> Generating…
-              } @else { 🚀 Generate Bullets }
+              } @else {
+                <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+                Generate Bullets
+              }
             </button>
             @for (v of suggestedBullets(); track $index) {
               <div class="bg-slate-50 dark:bg-slate-800 rounded-xl p-3 text-xs text-slate-700 dark:text-slate-200 leading-relaxed border border-slate-200 dark:border-slate-700">
@@ -120,7 +131,7 @@ type Tab = 'summary' | 'bullet' | 'suggest';
             }
             @if (suggestedBullets().length > 0) {
               <button class="w-full py-2 rounded-xl border border-dashed border-slate-300 dark:border-slate-700 text-xs text-slate-500 hover:border-indigo-400 hover:text-indigo-600 transition"
-                      (click)="suggestBullets()">🔄 Regenerate</button>
+                      (click)="suggestBullets()">Regenerate</button>
             }
           </div>
         }
@@ -146,9 +157,9 @@ export class AiAssistantPanelComponent {
   suggestCompany  = '';
 
   readonly tabs: { id: Tab; label: string }[] = [
-    { id: 'summary', label: '📝 Summary' },
-    { id: 'bullet',  label: '✨ Rewrite' },
-    { id: 'suggest', label: '🚀 Suggest' },
+    { id: 'summary', label: 'Summary' },
+    { id: 'bullet',  label: 'Rewrite' },
+    { id: 'suggest', label: 'Suggest' },
   ];
 
   async generateSummary(): Promise<void> {

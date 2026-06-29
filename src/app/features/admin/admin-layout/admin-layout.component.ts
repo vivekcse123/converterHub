@@ -13,7 +13,7 @@ import { AuthService } from '../../../core/services/auth.service';
       <header class="lg:hidden flex items-center justify-between bg-slate-900 text-white px-4 py-3 sticky top-0 z-40">
         <a routerLink="/" (click)="sidebarOpen.set(false)" class="flex items-center gap-2">
           <img src="assets/web-app-manifest-192x192.png" alt="ApnaConverter" class="w-8 h-8 object-contain">
-          <span class="font-bold text-sm tracking-tight">Apna<span class="text-violet-400">Converter</span> <span class="text-slate-400 font-normal">Admin</span></span>
+          <span class="font-bold text-sm tracking-tight">Apna<span class="text-primary-400">Converter</span> <span class="text-slate-400 font-normal">Admin</span></span>
         </a>
         <button (click)="sidebarOpen.set(!sidebarOpen())" class="p-2 rounded-lg hover:bg-slate-700 transition-colors">
           @if (sidebarOpen()) {
@@ -37,11 +37,11 @@ import { AuthService } from '../../../core/services/auth.service';
             <a routerLink="/" class="flex items-center gap-2.5 group" title="Back to ApnaConverter">
               <img src="assets/web-app-manifest-192x192.png" alt="ApnaConverter" class="w-9 h-9 object-contain group-hover:scale-105 transition-transform">
               <div>
-                <p class="font-bold text-sm tracking-tight leading-tight">Apna<span class="text-violet-400">Converter</span></p>
+                <p class="font-bold text-sm tracking-tight leading-tight">Apna<span class="text-primary-400">Converter</span></p>
                 <p class="text-[10px] text-slate-400 font-medium uppercase tracking-widest">Admin Panel</p>
               </div>
             </a>
-            <a routerLink="/" class="mt-2.5 flex items-center gap-1 text-[11px] text-slate-400 hover:text-violet-400 transition-colors font-medium">
+            <a routerLink="/" class="mt-2.5 flex items-center gap-1 text-[11px] text-slate-400 hover:text-primary-400 transition-colors font-medium">
               <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/></svg>
               Back to Home
             </a>

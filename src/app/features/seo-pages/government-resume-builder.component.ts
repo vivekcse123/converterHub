@@ -178,7 +178,7 @@ export class GovernmentResumeBuilderComponent implements OnInit, OnDestroy {
     { icon: '📋', bg: 'bg-slate-100 dark:bg-slate-800',   title: 'Plain Text Format',         desc: 'Government resumes must use simple, plain formatting without borders, tables, or decorative elements.' },
     { icon: '📸', bg: 'bg-blue-100 dark:bg-blue-900/30',  title: 'Passport Size Photo',        desc: 'A recent passport-size photograph is mandatory for most government job applications.' },
     { icon: '📅', bg: 'bg-indigo-100 dark:bg-indigo-900/30', title: 'Date of Birth',           desc: 'Must be clearly mentioned with proof reference (10th marksheet or birth certificate).' },
-    { icon: '🆔', bg: 'bg-violet-100 dark:bg-violet-900/30', title: 'Category & Reservation',  desc: 'Clearly state General/OBC/SC/ST/EWS category as it affects eligibility and cut-offs.' },
+    { icon: '🆔', bg: 'bg-primary-100 dark:bg-primary-900/30', title: 'Category & Reservation',  desc: 'Clearly state General/OBC/SC/ST/EWS category as it affects eligibility and cut-offs.' },
     { icon: '📜', bg: 'bg-amber-100 dark:bg-amber-900/30', title: 'Declarations',              desc: 'Government resumes often require a declaration: "I hereby declare that the above information is true to the best of my knowledge."' },
     { icon: '🖊️', bg: 'bg-emerald-100 dark:bg-emerald-900/30', title: 'Signature & Date',     desc: 'Physical signature with place and date is required at the bottom of the government resume.' },
   ];

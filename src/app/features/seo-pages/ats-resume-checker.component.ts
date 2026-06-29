@@ -313,13 +313,13 @@ function analyzeResumeText(text: string): AtsAnalysis {
               </div>
 
               <!-- CTA to builder -->
-              <div class="mt-5 p-4 bg-violet-50 dark:bg-violet-900/20 border border-violet-200 dark:border-violet-800 rounded-xl flex items-center justify-between gap-4 flex-wrap">
+              <div class="mt-5 p-4 bg-primary-50 dark:bg-primary-900/20 border border-primary-200 dark:border-primary-800 rounded-xl flex items-center justify-between gap-4 flex-wrap">
                 <div>
-                  <p class="text-sm font-bold text-violet-800 dark:text-violet-200">Build an ATS-optimized resume</p>
-                  <p class="text-xs text-violet-600 dark:text-violet-400 mt-0.5">Our builder shows your live ATS score as you type.</p>
+                  <p class="text-sm font-bold text-primary-800 dark:text-primary-200">Build an ATS-optimized resume</p>
+                  <p class="text-xs text-primary-600 dark:text-primary-400 mt-0.5">Our builder shows your live ATS score as you type.</p>
                 </div>
                 <a routerLink="/resume-builder"
-                   class="shrink-0 px-4 py-2 rounded-xl bg-violet-600 text-white text-xs font-bold hover:bg-violet-700 transition shadow">
+                   class="shrink-0 px-4 py-2 rounded-xl bg-primary-600 text-white text-xs font-bold hover:bg-primary-700 transition shadow">
                   Try Free Builder →
                 </a>
               </div>
@@ -530,7 +530,7 @@ export class AtsResumeCheckerComponent implements OnInit, OnDestroy {
     { icon: '📊', bg: 'bg-teal-100 dark:bg-teal-900/30',     title: 'Real-Time Score',           desc: 'See your ATS score update live as you fill in your resume sections.' },
     { icon: '📋', bg: 'bg-cyan-100 dark:bg-cyan-900/30',     title: 'Section Detection',         desc: 'Verifies your resume has all standard ATS-recognized sections.' },
     { icon: '🎯', bg: 'bg-blue-100 dark:bg-blue-900/30',     title: 'Actionable Tips',           desc: 'Get specific suggestions to fix issues and improve your score immediately.' },
-    { icon: '⚡', bg: 'bg-violet-100 dark:bg-violet-900/30', title: 'Instant Results',           desc: 'No waiting. Score appears as soon as you add content to your resume.' },
+    { icon: '⚡', bg: 'bg-primary-100 dark:bg-primary-900/30', title: 'Instant Results',           desc: 'No waiting. Score appears as soon as you add content to your resume.' },
     { icon: '🆓', bg: 'bg-amber-100 dark:bg-amber-900/30',   title: 'Completely Free',           desc: 'Basic ATS score is free forever. Pro plan unlocks full detailed analysis.' },
   ];
 

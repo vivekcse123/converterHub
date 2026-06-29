@@ -23,7 +23,9 @@ import { PREMIUM_TEMPLATE_IDS } from '../../data/resume-templates.data';
             </svg>
           </button>
           <div class="text-center mb-4">
-            <span class="inline-block text-3xl mb-2">🚀</span>
+            <div class="w-12 h-12 mx-auto mb-2 bg-white/20 rounded-xl flex items-center justify-center" aria-hidden="true">
+              <svg class="w-6 h-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+            </div>
             <h2 class="text-xl font-extrabold leading-tight">Unlock Your Complete Career Toolkit</h2>
             <p class="text-white/70 text-xs mt-1.5">₹99/month · Cheaper than every international competitor</p>
           </div>
@@ -31,7 +33,9 @@ import { PREMIUM_TEMPLATE_IDS } from '../../data/resume-templates.data';
           <div class="grid grid-cols-2 gap-1.5">
             @for (f of proHighlights; track f.label) {
               <div class="flex items-center gap-2 bg-white/10 rounded-lg px-2.5 py-1.5">
-                <span class="text-base shrink-0">{{ f.icon }}</span>
+                <svg class="w-4 h-4 shrink-0 text-white/80" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" [attr.d]="f.svgPath"/>
+                </svg>
                 <span class="text-xs font-medium leading-tight">{{ f.label }}</span>
               </div>
             }
@@ -47,7 +51,7 @@ import { PREMIUM_TEMPLATE_IDS } from '../../data/resume-templates.data';
             <!-- Monthly -->
             <div class="border-2 rounded-xl p-4 transition cursor-pointer"
                  [class]="(auth.currentPlan() === 'yearly' || auth.currentPlan() === 'lifetime') ? 'border-slate-200 dark:border-slate-700 opacity-50' :
-                          (hoveredPlan() === 'monthly' ? 'border-violet-400 ring-2 ring-violet-100 dark:ring-violet-900' : 'border-slate-200 dark:border-slate-700 hover:border-violet-300')"
+                          (hoveredPlan() === 'monthly' ? 'border-primary-400 ring-2 ring-primary-100 dark:ring-primary-900' : 'border-slate-200 dark:border-slate-700 hover:border-primary-300')"
                  (mouseenter)="hoveredPlan.set('monthly')" (mouseleave)="hoveredPlan.set(null)">
               <div class="flex items-start justify-between mb-3">
                 <div>
@@ -57,14 +61,17 @@ import { PREMIUM_TEMPLATE_IDS } from '../../data/resume-templates.data';
                   </p>
                   <p class="text-[11px] text-slate-400 mt-0.5">{{ prices.monthly.tagline }}</p>
                 </div>
-                <span class="text-xl">📅</span>
+                <svg class="w-5 h-5 shrink-0 text-slate-400 dark:text-slate-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
               </div>
               @if (auth.currentPlan() === 'monthly') {
                 <div class="text-center text-xs py-2 rounded-lg bg-emerald-50 dark:bg-emerald-900/20 text-emerald-600 dark:text-emerald-300 font-semibold border border-emerald-200 dark:border-emerald-800">Current Plan ✓</div>
               } @else if (auth.currentPlan() === 'yearly' || auth.currentPlan() === 'lifetime') {
-                <div class="text-center text-xs py-2 text-slate-400">🔒 Higher plan active</div>
+                <div class="text-center text-xs py-2 text-slate-400 flex items-center justify-center gap-1">
+                  <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+                  Higher plan active
+                </div>
               } @else {
-                <button class="w-full py-2 rounded-lg bg-violet-600 hover:bg-violet-700 text-white font-semibold transition text-sm mt-1"
+                <button class="w-full py-2 rounded-lg bg-primary-600 hover:bg-primary-700 text-white font-semibold transition text-sm mt-1"
                         [disabled]="loading()"
                         (click)="subscribe('monthly')">
                   {{ loading() === 'monthly' ? 'Opening...' : 'Start Monthly' }}
@@ -75,7 +82,10 @@ import { PREMIUM_TEMPLATE_IDS } from '../../data/resume-templates.data';
             <!-- Yearly (highlighted) -->
             <div class="border-2 border-amber-400 rounded-xl p-4 bg-gradient-to-b from-amber-50 to-white dark:from-amber-900/20 dark:to-slate-800/50 relative cursor-pointer shadow-md shadow-amber-100 dark:shadow-amber-900/10">
               <div class="absolute -top-3 left-1/2 -translate-x-1/2">
-                <span class="bg-gradient-to-r from-amber-400 to-orange-500 text-white text-[10px] font-extrabold px-3 py-1 rounded-full shadow whitespace-nowrap tracking-wide">⭐ BEST VALUE</span>
+                <span class="inline-flex items-center gap-1 bg-gradient-to-r from-amber-400 to-orange-500 text-white text-[10px] font-extrabold px-3 py-1 rounded-full shadow whitespace-nowrap tracking-wide">
+                  <svg class="w-2.5 h-2.5" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                  BEST VALUE
+                </span>
               </div>
               <div class="flex items-start justify-between mb-3 mt-1">
                 <div>
@@ -88,17 +98,17 @@ import { PREMIUM_TEMPLATE_IDS } from '../../data/resume-templates.data';
                   </div>
                   <p class="text-[11px] text-emerald-600 dark:text-emerald-400 font-semibold mt-0.5">{{ prices.yearly.tagline }}</p>
                 </div>
-                <span class="text-xl">🏆</span>
+                <svg class="w-5 h-5 shrink-0 text-amber-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"/></svg>
               </div>
               @if (auth.currentPlan() === 'lifetime') {
-                <div class="text-center text-xs py-2 rounded-lg bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-300 font-semibold">Lifetime Plan Active ♾</div>
+                <div class="text-center text-xs py-2 rounded-lg bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-300 font-semibold">Lifetime Plan Active</div>
               } @else if (auth.currentPlan() === 'yearly') {
                 <div class="text-center text-xs py-2 rounded-lg bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-300 font-semibold">Current Plan ✓</div>
               } @else if (auth.currentPlan() === 'monthly') {
                 <button class="w-full py-2 rounded-lg bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white font-bold transition text-sm shadow mt-1"
                         [disabled]="loading()"
                         (click)="subscribe('yearly')">
-                  {{ loading() === 'yearly' ? 'Opening...' : '⬆ Upgrade to Yearly' }}
+                  {{ loading() === 'yearly' ? 'Opening...' : 'Upgrade to Yearly' }}
                 </button>
               } @else {
                 <button class="w-full py-2 rounded-lg bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white font-bold transition text-sm shadow mt-1"
@@ -115,7 +125,7 @@ import { PREMIUM_TEMPLATE_IDS } from '../../data/resume-templates.data';
                           (hoveredPlan() === 'lifetime' ? 'border-slate-800 dark:border-slate-300 ring-2 ring-slate-100 dark:ring-slate-800' : 'border-slate-300 dark:border-slate-600 hover:border-slate-500')"
                  (mouseenter)="hoveredPlan.set('lifetime')" (mouseleave)="hoveredPlan.set(null)">
               <div class="absolute -top-3 left-1/2 -translate-x-1/2">
-                <span class="bg-slate-800 dark:bg-slate-200 text-white dark:text-slate-900 text-[10px] font-extrabold px-3 py-1 rounded-full shadow whitespace-nowrap tracking-wide">♾ ONE-TIME</span>
+                <span class="bg-slate-800 dark:bg-slate-200 text-white dark:text-slate-900 text-[10px] font-extrabold px-3 py-1 rounded-full shadow whitespace-nowrap tracking-wide">ONE-TIME</span>
               </div>
               <div class="flex items-start justify-between mb-3 mt-1">
                 <div>
@@ -125,10 +135,10 @@ import { PREMIUM_TEMPLATE_IDS } from '../../data/resume-templates.data';
                   </p>
                   <p class="text-[11px] text-slate-400 mt-0.5">{{ prices.lifetime.tagline }}</p>
                 </div>
-                <span class="text-xl">♾️</span>
+                <svg class="w-5 h-5 shrink-0 text-slate-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
               </div>
               @if (auth.currentPlan() === 'lifetime') {
-                <div class="text-center text-xs py-2 rounded-lg bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-300 font-semibold">You own it! ♾</div>
+                <div class="text-center text-xs py-2 rounded-lg bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-300 font-semibold">You own it!</div>
               } @else {
                 <button class="w-full py-2 rounded-lg bg-slate-800 hover:bg-slate-900 dark:bg-slate-200 dark:hover:bg-white text-white dark:text-slate-900 font-bold transition text-sm mt-1"
                         [disabled]="loading()"
@@ -145,7 +155,7 @@ import { PREMIUM_TEMPLATE_IDS } from '../../data/resume-templates.data';
             <div class="mx-5 mb-4 border border-amber-200 dark:border-amber-800 rounded-xl overflow-hidden">
               <div class="bg-amber-50 dark:bg-amber-900/20 px-4 py-3">
                 <div class="flex items-center gap-2 mb-1">
-                  <span class="text-base">💡</span>
+                  <svg class="w-4 h-4 text-amber-600 dark:text-amber-400 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg>
                   <p class="text-xs font-bold text-amber-800 dark:text-amber-300">Just want THIS template?</p>
                 </div>
                 <p class="text-[11px] text-amber-700 dark:text-amber-400 mb-3">
@@ -179,7 +189,7 @@ import { PREMIUM_TEMPLATE_IDS } from '../../data/resume-templates.data';
               International resume platforms charge ₹500–₹1,333/mo for the same features
             </p>
             <a routerLink="/resume-builder/pricing" (click)="close.emit()"
-               class="text-xs text-violet-500 dark:text-violet-400 hover:underline">
+               class="text-xs text-primary-500 dark:text-primary-400 hover:underline">
               View full pricing including Lifetime plan →
             </a>
           </div>
@@ -204,7 +214,7 @@ import { PREMIUM_TEMPLATE_IDS } from '../../data/resume-templates.data';
               @for (row of comparisonRows; track row.label) {
                 <div class="border-t border-slate-200 dark:border-slate-700 p-2 text-left text-slate-600 dark:text-slate-300">{{ row.label }}</div>
                 <div class="border-t border-slate-200 dark:border-slate-700 p-2 text-slate-400">{{ row.free }}</div>
-                <div class="border-t border-violet-100 dark:border-violet-900/50 bg-violet-50/30 dark:bg-violet-900/10 p-2 text-violet-700 dark:text-violet-300 font-semibold">{{ row.pro }}</div>
+                <div class="border-t border-primary-100 dark:border-primary-900/50 bg-primary-50/30 dark:bg-primary-900/10 p-2 text-primary-700 dark:text-primary-300 font-semibold">{{ row.pro }}</div>
               }
             </div>
           </div>

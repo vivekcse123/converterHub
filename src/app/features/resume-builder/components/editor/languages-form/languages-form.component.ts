@@ -27,7 +27,7 @@ const PROFICIENCY_LEVELS: LanguageItem['proficiency'][] = ['Basic', 'Conversatio
               }
             </select>
           </div>
-          <button type="button" class="text-slate-400 hover:text-red-500 transition-colors mb-2" (click)="store.removeLanguage(lang.id)" aria-label="Remove language">✕</button>
+          <button type="button" class="text-slate-400 dark:text-slate-500 hover:text-red-500 dark:hover:text-red-400 transition-colors mb-2" (click)="store.removeLanguage(lang.id)" aria-label="Remove language">✕</button>
         </div>
       }
     </div>

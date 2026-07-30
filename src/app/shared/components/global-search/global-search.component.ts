@@ -25,7 +25,12 @@ import { SearchService } from '../../../core/services/search.service';
           (ngModelChange)="search.setQuery($event)"
           (focus)="search.open()"
           placeholder="Search tools…"
+          aria-label="Search tools"
           autocomplete="off"
+          role="combobox"
+          aria-haspopup="listbox"
+          [attr.aria-expanded]="search.isOpen() && search.results().length > 0"
+          aria-controls="global-search-results"
           class="w-full pl-9 pr-8 py-2 text-sm rounded-xl border border-slate-200 dark:border-slate-700
                  bg-slate-50 dark:bg-slate-800 text-slate-800 dark:text-white
                  placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-primary-500
@@ -43,15 +48,16 @@ import { SearchService } from '../../../core/services/search.service';
 
       <!-- Results Dropdown -->
       @if (search.isOpen() && search.results().length > 0) {
-        <div class="absolute top-full left-0 right-0 mt-1.5 bg-white dark:bg-slate-900 rounded-xl
+        <div id="global-search-results" role="listbox" aria-label="Search results"
+             class="absolute top-full left-0 right-0 mt-1.5 bg-white dark:bg-slate-900 rounded-xl
                     shadow-xl border border-slate-200 dark:border-slate-700 z-50 overflow-hidden
                     animate-slide-down">
           @for (tool of search.results(); track tool.id) {
-            <a [routerLink]="tool.route" (click)="search.close()"
+            <a [routerLink]="tool.route" (click)="search.close()" role="option" [attr.aria-label]="tool.title"
                class="flex items-center gap-3 px-4 py-3 hover:bg-slate-50 dark:hover:bg-slate-800
                       transition-colors border-b border-slate-100 dark:border-slate-800 last:border-0">
               <div [class]="'w-8 h-8 rounded-lg bg-gradient-to-br ' + tool.color +
-                            ' flex items-center justify-center text-sm flex-shrink-0'">
+                            ' flex items-center justify-center text-sm flex-shrink-0'" aria-hidden="true">
                 {{ tool.icon }}
               </div>
               <div class="flex-1 min-w-0">
@@ -65,7 +71,8 @@ import { SearchService } from '../../../core/services/search.service';
       }
 
       @if (search.isOpen() && search.query() && search.results().length === 0) {
-        <div class="absolute top-full left-0 right-0 mt-1.5 bg-white dark:bg-slate-900 rounded-xl
+        <div role="status" aria-live="polite"
+             class="absolute top-full left-0 right-0 mt-1.5 bg-white dark:bg-slate-900 rounded-xl
                     shadow-xl border border-slate-200 dark:border-slate-700 z-50 p-4 text-center
                     animate-slide-down">
           <p class="text-sm text-slate-500 dark:text-slate-400">No tools found for "<strong>{{ search.query() }}</strong>"</p>

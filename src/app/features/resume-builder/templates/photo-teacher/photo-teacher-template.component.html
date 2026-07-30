@@ -5,7 +5,7 @@
           [style.border-color]="resume().design?.accentColor ?? '#059669'">
 
     <!-- Circular photo centered -->
-    @if (resume().personal.photoUrl) {
+    @if (resume().personal.photoUrl && (resume().design?.showPhoto ?? true)) {
       <div style="display:flex;justify-content:center;margin-bottom:8pt">
         <img [src]="resume().personal.photoUrl" alt="Profile"
              style="width:70pt;height:70pt;border-radius:50%;object-fit:cover;border:3pt solid"

@@ -16,9 +16,13 @@ import { filter } from 'rxjs/operators';
   standalone: true,
   imports: [CommonModule, RouterOutlet, HeaderComponent, FooterComponent, NotificationComponent, ConfirmDialogComponent],
   template: `
+    <a href="#main-content"
+       class="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-[9999] focus:rounded-lg focus:bg-primary-600 focus:px-4 focus:py-2 focus:text-sm focus:font-semibold focus:text-white focus:shadow-lg">
+      Skip to main content
+    </a>
     <div [class]="hideShell() ? 'contents' : 'min-h-screen flex flex-col bg-white dark:bg-slate-900 transition-colors duration-300'">
       @if (!hideShell()) { <app-header /> }
-      <main [class]="hideShell() ? '' : 'flex-1'">
+      <main id="main-content" tabindex="-1" [class]="hideShell() ? '' : 'flex-1'">
         <router-outlet />
       </main>
       @if (!hideShell()) { <app-footer /> }

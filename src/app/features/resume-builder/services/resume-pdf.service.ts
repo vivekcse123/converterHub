@@ -1,20 +1,12 @@
 import { EnvironmentInjector, Injectable, PLATFORM_ID, createComponent, inject } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
-import { DEFAULT_DESIGN, DesignSettings, ResumeData } from '../models/resume.model';
+import { ResumeData } from '../models/resume.model';
 import { PREMIUM_TEMPLATE_IDS, getTemplateMeta } from '../data/resume-templates.data';
 import { AuthService } from '../../../core/services/auth.service';
+import { computeDesignVarsCss } from '../components/preview/resume-preview.component';
 import { environment } from 'src/environments/environment';
 
-const FONT_FAMILIES: Record<DesignSettings['fontFamily'], string> = {
-  inter:   "'Inter', Arial, Helvetica, sans-serif",
-  roboto:  "'Roboto', Arial, Helvetica, sans-serif",
-  georgia: "Georgia, 'Times New Roman', serif",
-};
-const SPACING_MAP: Record<DesignSettings['lineHeight'], string> = {
-  compact: '1.3', standard: '1.5', spacious: '1.75',
-};
-const BASE_PT = 10.5;
-const CSS_VAR_NAMES = ['--r-accent','--r-accent-12','--r-accent-25','--r-font','--r-size','--r-spacing'] as const;
+const CSS_VAR_NAMES = ['--r-accent','--r-accent-12','--r-accent-25','--r-font','--r-size','--r-spacing','--r-page-width','--r-page-height'] as const;
 const GOOGLE_FONTS_URL =
   'https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900' +
   '&family=Roboto:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400' +
@@ -81,6 +73,48 @@ export class ResumePdfService {
       if (this._iosWin) { this._iosWin.close(); this._iosWin = null; }
       throw err;
     }
+  }
+
+  // ─── Word (.docx) export — structured data, not the rendered HTML ───────────
+
+  /** Downloads a clean, ATS-friendly Word (.docx) copy of the resume, built
+   *  server-side from the resume's structured data (see `resume-docx.service.js`)
+   *  — a separate, simpler flow from the Puppeteer PDF path since it needs no
+   *  live DOM capture, just the resume JSON. */
+  async downloadDocx(resume: ResumeData): Promise<void> {
+    if (!isPlatformBrowser(this.platformId)) return;
+    const token = this.auth.token();
+    if (!token) throw new Error('Please log in to download your resume.');
+
+    const filename = slugify(resume.personal?.fullName || resume.name) + '-resume';
+    let resp: Response;
+    try {
+      resp = await fetch(`${environment.apiUrl}/resume/docx`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+        body: JSON.stringify({ resume, templateId: resume.templateId, resumeName: filename }),
+        signal: AbortSignal.timeout(60_000),
+      });
+    } catch {
+      throw new Error('Could not reach the server. Check your connection and try again.');
+    }
+
+    if (resp.status === 429) throw new Error('Too many downloads. Please wait a few minutes and try again.');
+    if (!resp.ok) {
+      let msg = `Server error (${resp.status}).`;
+      try { const body = await resp.json(); if (body?.message) msg = body.message; } catch {}
+      throw new Error(msg);
+    }
+
+    const blob = await resp.blob();
+    const url  = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = filename + '.docx';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    setTimeout(() => URL.revokeObjectURL(url), 10_000);
   }
 
   // ─── Backend Puppeteer: direct PDF blob download (no print dialog) ──────────
@@ -261,27 +295,24 @@ export class ResumePdfService {
     const templateMeta = getTemplateMeta(resume.templateId);
     if (!templateMeta?.component) throw new Error('Template component not found');
 
-    const d     = { ...DEFAULT_DESIGN, ...resume.design } as DesignSettings;
-    const hex   = (d.accentColor || '#1e293b').replace(/^#/, '').padEnd(6, '0');
-    const rC    = parseInt(hex.slice(0, 2), 16) || 0;
-    const gC    = parseInt(hex.slice(2, 4), 16) || 0;
-    const bC    = parseInt(hex.slice(4, 6), 16) || 0;
-    const scale = ((d.baseFontPt ?? BASE_PT) / BASE_PT).toFixed(4);
-
+    // Same token computation the live preview uses (`computeDesignVarsCss`) — sharing
+    // it here is what keeps this off-screen render path from drifting out of sync
+    // with the preview, which is exactly how the paper-size mismatch bug happened.
     const wrapper = document.createElement('div');
-    wrapper.style.cssText = 'position:fixed;top:0;left:-9999px;width:210mm;background:#fff;z-index:2147483647';
-    wrapper.style.setProperty('--r-accent',    d.accentColor ?? '#1e293b');
-    wrapper.style.setProperty('--r-accent-12', `rgba(${rC},${gC},${bC},0.12)`);
-    wrapper.style.setProperty('--r-accent-25', `rgba(${rC},${gC},${bC},0.25)`);
-    wrapper.style.setProperty('--r-font',      FONT_FAMILIES[d.fontFamily] ?? FONT_FAMILIES['inter']);
-    wrapper.style.setProperty('--r-size',      scale);
-    wrapper.style.setProperty('--r-spacing',   SPACING_MAP[d.lineHeight ?? 'standard']);
+    wrapper.style.cssText = 'position:fixed;top:0;left:-9999px;background:#fff;z-index:2147483647;'
+      + computeDesignVarsCss(resume.design);
+    wrapper.style.setProperty('width', `var(--r-page-width, 210mm)`);
     document.body.appendChild(wrapper);
 
     const ref = createComponent(templateMeta.component, { environmentInjector: this.envInjector, hostElement: wrapper });
     ref.setInput('resume', resume);
     ref.changeDetectorRef.detectChanges();
-    await new Promise<void>(r => setTimeout(r, 500));
+    // Wait for real readiness instead of a blind delay: every <img> the fresh
+    // off-screen template mounted (photos, icons) finishes decoding, then two
+    // animation frames elapse so the browser has committed an actual layout +
+    // paint before we clone the DOM for upload.
+    await this._waitForImages(wrapper);
+    await this._waitForPaint();
     ref.changeDetectorRef.detectChanges();
 
     try {
@@ -290,5 +321,20 @@ export class ResumePdfService {
       ref.destroy();
       try { document.body.removeChild(wrapper); } catch {}
     }
+  }
+
+  /** Resolves after the browser has committed a real layout + paint (two animation frames). */
+  private _waitForPaint(): Promise<void> {
+    return new Promise<void>(resolve => {
+      requestAnimationFrame(() => requestAnimationFrame(() => resolve()));
+    });
+  }
+
+  /** Waits for every <img> under `root` to finish decoding (or error), so captured/uploaded
+   *  DOM never contains an image mid-load. `decode()` resolves immediately for already-loaded
+   *  images, so this is cheap when nothing is pending. */
+  private _waitForImages(root: HTMLElement): Promise<void[]> {
+    const imgs = Array.from(root.querySelectorAll('img'));
+    return Promise.all(imgs.map(img => img.decode().catch(() => {})));
   }
 }

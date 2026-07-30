@@ -1,5 +1,35 @@
 import { BuiltInSectionId, CustomSection, ResumeData, SectionRef } from '../../models/resume.model';
 
+/** Shared icon glyph per section kind — used by section-management UI (not by templates). */
+export const SECTION_ICONS: Record<BuiltInSectionId | 'custom' | 'personal', string> = {
+  personal: '👤',
+  summary: '📝',
+  experience: '💼',
+  education: '🎓',
+  projects: '🚀',
+  skills: '🛠️',
+  certifications: '📜',
+  achievements: '🏆',
+  languages: '🌐',
+  interests: '✨',
+  custom: '📌',
+};
+
+/** Short one-line description shown under each section card in the manage-sections panel. */
+export const SECTION_DESCRIPTIONS: Record<BuiltInSectionId | 'custom' | 'personal', string> = {
+  personal: 'Your name, position & contact',
+  summary: 'Your professional story',
+  experience: 'Jobs & work history',
+  education: 'Degrees & institutions',
+  projects: 'Showcase your best work',
+  skills: 'Technical & soft skills',
+  certifications: 'Licenses & credentials',
+  achievements: 'Awards & recognitions',
+  languages: 'Languages you know',
+  interests: 'Hobbies & interests',
+  custom: 'Your custom section',
+};
+
 /** Returns the resume's sections in display order, skipping hidden ones. */
 export function getVisibleSections(resume: ResumeData): SectionRef[] {
   return resume.sectionOrder.filter(s => resume.sectionVisibility[s] !== false);

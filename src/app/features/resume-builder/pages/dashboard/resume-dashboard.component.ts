@@ -607,7 +607,7 @@ export class ResumeDashboardComponent implements OnInit {
   readonly careerTools = [
     { icon: '📄', label: 'Resume Builder',    route: '/resume-builder',              bg: 'bg-primary-100 dark:bg-primary-900/30',  proOnly: false },
     { icon: '✉️', label: 'Cover Letter',       route: '/resume-builder/cover-letter', bg: 'bg-emerald-100 dark:bg-emerald-900/30', proOnly: true  },
-    { icon: '🌐', label: 'Portfolio',          route: '/resume-builder/portfolio',    bg: 'bg-indigo-100 dark:bg-indigo-900/30',  proOnly: true  },
+    { icon: '🌐', label: 'Portfolio',          route: '/portfolio',    bg: 'bg-indigo-100 dark:bg-indigo-900/30',  proOnly: true  },
     { icon: '📋', label: 'Job Tracker',        route: '/resume-builder/job-tracker',  bg: 'bg-amber-100 dark:bg-amber-900/30',    proOnly: true  },
     { icon: '💍', label: 'Biodata Maker',      route: '/biodata-maker',               bg: 'bg-rose-100 dark:bg-rose-900/30',      proOnly: false },
     { icon: '⚡', label: 'File Converters',    route: '/tools',                       bg: 'bg-slate-100 dark:bg-slate-800',       proOnly: false },

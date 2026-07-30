@@ -6,7 +6,7 @@
 
     <!-- Photo or initials avatar -->
     <div style="display:flex;justify-content:center">
-      @if (resume().personal.photoUrl) {
+      @if (resume().personal.photoUrl && (resume().design?.showPhoto ?? true)) {
         <img [src]="resume().personal.photoUrl" alt="Profile"
              style="width:80pt;height:80pt;border-radius:50%;object-fit:cover;border:3pt solid rgba(255,255,255,0.4)" />
       } @else {

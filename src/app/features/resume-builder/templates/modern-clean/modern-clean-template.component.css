@@ -6,7 +6,14 @@
 .mclean-top-bar {
   height: 4pt;
   background: var(--r-accent, #0ea5e9);
-  margin: -14mm -16mm 14pt;
+  /* Spans the full content width (not a true page-edge bleed): PDF export
+     applies the page margin via Puppeteer's page.pdf({ margin }) option
+     rather than .resume-page padding, and content pushed outside that
+     margin via a negative CSS margin is not painted in the export at all —
+     so a bleed here would render in the live preview but vanish from the
+     downloaded PDF. Keeping this flush with .resume-page's own box keeps
+     preview and export identical. */
+  margin: 0 0 14pt;
 }
 
 /* ── Header ──────────────────────────────────────────────────────── */

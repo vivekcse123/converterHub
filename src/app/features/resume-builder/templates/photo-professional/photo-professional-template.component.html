@@ -22,7 +22,7 @@
       }
     </div>
     <!-- Right: photo -->
-    @if (resume().personal.photoUrl) {
+    @if (resume().personal.photoUrl && (resume().design?.showPhoto ?? true)) {
       <div style="flex-shrink:0">
         <img [src]="resume().personal.photoUrl" alt="Profile"
              style="width:68pt;height:80pt;object-fit:cover;border-radius:4pt;border:1pt solid #e5e7eb" />

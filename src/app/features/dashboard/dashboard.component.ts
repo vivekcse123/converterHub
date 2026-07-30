@@ -9,6 +9,8 @@ import { ConfirmDialogService } from '../../shared/components/confirm-dialog/con
 import { SubscriptionService } from '../resume-builder/services/subscription.service';
 import { ResumeStoreService } from '../resume-builder/services/resume-store.service';
 import { CareerService, JOB_STATUS_CONFIG, JobStatus } from '../resume-builder/services/career.service';
+import { PortfolioStoreService } from '../portfolio-builder/services/portfolio-store.service';
+import { getDisplayName, getTagline } from '../portfolio-builder/models/portfolio.model';
 import { UpgradeModalComponent } from '../resume-builder/components/upgrade-modal/upgrade-modal.component';
 import { ConversionHistory, PaginatedResponse } from '../../core/models/conversion.model';
 import { ResumeData } from '../resume-builder/models/resume.model';
@@ -192,7 +194,7 @@ type Section = 'overview' | 'resumes' | 'jobs' | 'subscription' | 'payments' | '
                   <p class="text-xs font-semibold text-slate-700 dark:text-slate-200">Cover Letter</p>
                   <p class="text-[10px] text-slate-400">{{ auth.isPro() ? 'Pro feature' : 'Pro only' }}</p>
                 </a>
-                <a routerLink="/resume-builder/portfolio" class="group bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 flex flex-col items-center gap-2 hover:border-amber-300 hover:shadow-md transition text-center">
+                <a routerLink="/portfolio" class="group bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-4 flex flex-col items-center gap-2 hover:border-amber-300 hover:shadow-md transition text-center">
                   <div class="w-12 h-12 rounded-xl flex items-center justify-center text-xl group-hover:scale-110 transition-transform"
                        [class]="auth.isPro() ? 'bg-gradient-to-br from-amber-400 to-orange-500' : 'bg-gradient-to-br from-slate-400 to-slate-500'">
                     {{ auth.isPro() ? '🌐' : '🔒' }}
@@ -564,19 +566,19 @@ type Section = 'overview' | 'resumes' | 'jobs' | 'subscription' | 'payments' | '
                   <p class="text-xs text-slate-500 dark:text-slate-400">Create a public profile with your bio, skills, and projects.</p>
                   <button class="px-5 py-2.5 rounded-xl bg-gradient-to-r from-primary-600 to-indigo-600 text-white text-sm font-bold" (click)="showUpgrade.set(true)">Upgrade to Pro ⭐</button>
                 </div>
-              } @else if (career.portfolio()) {
+              } @else if (portfolioStore.portfolio()?._id) {
                 <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-6 space-y-4">
                   <div class="flex items-center gap-3">
                     <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-primary-500 to-indigo-600 flex items-center justify-center text-white font-bold text-xl">{{ initials() }}</div>
                     <div>
-                      <p class="font-bold text-slate-800 dark:text-white">{{ career.portfolio()!.displayName || career.portfolio()!.username }}</p>
-                      <p class="text-xs text-slate-400">{{ career.portfolio()!.tagline }}</p>
+                      <p class="font-bold text-slate-800 dark:text-white">{{ portfolioDisplayName() }}</p>
+                      <p class="text-xs text-slate-400">{{ portfolioTagline() }}</p>
                     </div>
-                    <a [routerLink]="['/p', career.portfolio()!.username]" target="_blank"
+                    <a [routerLink]="['/p', portfolioStore.portfolio()!.username]" target="_blank"
                        class="ml-auto text-xs font-semibold text-primary-600 dark:text-primary-400 hover:underline">View public →</a>
                   </div>
                   <div class="flex gap-3">
-                    <a routerLink="/resume-builder/portfolio" class="flex-1 text-center py-2.5 rounded-xl bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300 text-xs font-bold hover:bg-primary-200 transition">Edit Portfolio</a>
+                    <a routerLink="/portfolio" class="flex-1 text-center py-2.5 rounded-xl bg-primary-100 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300 text-xs font-bold hover:bg-primary-200 transition">Edit Portfolio</a>
                     <a routerLink="/resume-builder/cover-letter" class="flex-1 text-center py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 text-xs font-bold hover:bg-slate-200 transition">Cover Letter</a>
                   </div>
                 </div>
@@ -584,7 +586,7 @@ type Section = 'overview' | 'resumes' | 'jobs' | 'subscription' | 'payments' | '
                 <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-8 text-center space-y-3">
                   <p class="text-4xl">🌐</p>
                   <p class="font-bold text-slate-800 dark:text-white">No portfolio yet</p>
-                  <a routerLink="/resume-builder/portfolio" class="inline-block mt-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-primary-600 to-indigo-600 text-white text-sm font-bold">Create Portfolio</a>
+                  <a routerLink="/portfolio" class="inline-block mt-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-primary-600 to-indigo-600 text-white text-sm font-bold">Create Portfolio</a>
                 </div>
               }
             </div>
@@ -711,6 +713,7 @@ export class DashboardComponent implements OnInit {
   readonly subs          = inject(SubscriptionService);
   readonly store         = inject(ResumeStoreService);
   readonly career        = inject(CareerService);
+  readonly portfolioStore = inject(PortfolioStoreService);
   readonly biodataStore  = inject(BiodataStoreService);
   private  biodataPdf    = inject(BiodataPdfService);
   private  api           = inject(ApiService);
@@ -762,17 +765,19 @@ export class DashboardComponent implements OnInit {
     if (this.auth.isLoggedIn()) {
       this.subs.getPaymentHistory().then(p => this.payments.set(p));
       this.subs.syncResumeCount(this.store.resumes().length);
-      if (this.auth.isPro()) this.career.loadPortfolio();
+      if (this.auth.isPro()) this.portfolioStore.load();
     }
   }
 
   setSection(s: Section) {
     this.activeSection.set(s);
     if (s === 'jobs') this.loadJobs();
-    if (s === 'portfolio' && !this.career.portfolio()) this.career.loadPortfolio();
+    if (s === 'portfolio' && !this.portfolioStore.portfolio()) this.portfolioStore.load();
   }
 
   activeSectionLabel() { return this.navItems.find(n => n.id === this.activeSection())?.label ?? 'Dashboard'; }
+  portfolioDisplayName() { const p = this.portfolioStore.portfolio(); return p ? getDisplayName(p) : ''; }
+  portfolioTagline()     { const p = this.portfolioStore.portfolio(); return p ? getTagline(p) : ''; }
   initials() { return (this.auth.user()?.name ?? 'U').split(' ').map((n: string) => n[0]).join('').substring(0, 2).toUpperCase(); }
   firstName() { return (this.auth.user()?.name ?? 'there').split(' ')[0]; }
   planLabel() { const p = this.auth.currentPlan(); return p === 'monthly' ? 'Pro Monthly' : p === 'yearly' ? 'Pro Yearly' : 'Free'; }

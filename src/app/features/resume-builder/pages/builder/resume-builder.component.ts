@@ -10,10 +10,11 @@ import { ResumeStoreService } from '../../services/resume-store.service';
 import { ResumePdfService } from '../../services/resume-pdf.service';
 import { ResumeAuthGateService } from '../../services/resume-auth-gate.service';
 import { AtsScoreService } from '../../services/ats-score.service';
+import { ShareService } from '../../services/share.service';
 import { AuthService } from '../../../../core/services/auth.service';
 import { ThemeService } from '../../../../core/services/theme.service';
 import { createSampleResume } from '../../data/resume-defaults';
-import { RESUME_TEMPLATES, PREMIUM_TEMPLATE_IDS, TemplateCategory, TEMPLATE_CATEGORIES } from '../../data/resume-templates.data';
+import { RESUME_TEMPLATES, PREMIUM_TEMPLATE_IDS, TemplateCategory, TEMPLATE_CATEGORIES, ResumeTemplateMeta, getTemplateMeta, getTemplatesByCategory } from '../../data/resume-templates.data';
 import { DEFAULT_DESIGN, DesignSettings, SectionRef, TemplateId } from '../../models/resume.model';
 
 // Section editors
@@ -96,13 +97,15 @@ export class ResumeBuilderComponent implements OnInit, OnDestroy {
   private readonly authGate  = inject(ResumeAuthGateService);
   private readonly atsSvc    = inject(AtsScoreService);
   readonly auth              = inject(AuthService);
-  private readonly _theme    = inject(ThemeService);
+  readonly theme             = inject(ThemeService);
   private readonly route     = inject(ActivatedRoute);
   private readonly router    = inject(Router);
   private readonly jsonLd    = inject(JsonLdService);
   private readonly notify    = inject(NotificationService);
+  private readonly shareSvc  = inject(ShareService);
 
-  private _wasDark = false;
+  // ── Sidebar section search ──────────────────────────────────────────────
+  readonly sectionQuery = signal('');
 
   // ── Data ──────────────────────────────────────────────────────────────────
   readonly resume    = computed(() => this.store.activeResume());
@@ -150,13 +153,30 @@ export class ResumeBuilderComponent implements OnInit, OnDestroy {
     this.atsResult().checks.filter(c => !c.passed).length
   );
 
+  readonly atsLabel = computed(() => {
+    const color = this.atsScoreColor();
+    return color === 'emerald' ? 'Excellent' : color === 'amber' ? 'Good' : 'Needs Work';
+  });
+
+  // ── Right panel: Template tab ────────────────────────────────────────────
+  readonly activeTemplateMeta = computed<ResumeTemplateMeta>(() =>
+    getTemplateMeta(this.resume()?.templateId ?? 'ats-professional')
+  );
+  readonly rightPanelTemplates = computed<ResumeTemplateMeta[]>(() =>
+    getTemplatesByCategory(this.activeTemplateMeta().category).slice(0, 6)
+  );
+
   readonly wordCount = computed(() => {
     const r = this.resume();
     if (!r) return 0;
     return this.atsSvc.extractAllText(r).split(/\s+/).filter(Boolean).length;
   });
 
-  // ── Reorder mode ─────────────────────────────────────────────────────────
+  // ── Reorder mode (mobile quick-access; desktop reorders inline in the
+  //    always-visible section list) ────────────────────────────────────────
+  readonly showSectionsPanel = signal(false);
+  private _savedReorderOrder: SectionRef[] | null = null;
+
   openReorderPanel(): void {
     const r = this.resume();
     if (r) this._savedReorderOrder = [...r.sectionOrder];
@@ -181,17 +201,42 @@ export class ResumeBuilderComponent implements OnInit, OnDestroy {
   prevStep(): void { if (this.activeStep() > 1) this.activeStep.update(s => s - 1); }
 
   // ── Panels / modals ───────────────────────────────────────────────────────
-  readonly showTemplateDrawer   = signal(false);
   readonly showTemplateGallery  = signal(false);
   readonly showAiPanel          = signal(false);
-  readonly showAtsPanel       = signal(false);
   readonly showPreviewModal   = signal(false);
-  readonly showDesignPanel    = signal(false);
-  readonly showSectionsPanel  = signal(false);
-  private _savedReorderOrder: SectionRef[] | null = null;
   readonly showUpgrade        = signal(false);
   readonly upgradeTemplateId  = signal<string | null>(null);
-  readonly showProfileMenu    = signal(false);
+
+  // ── New dashboard shell: icon rail + right-panel tabs ───────────────────
+  /** Which view the 320px left panel shows. */
+  readonly railView       = signal<'sections' | 'settings'>('sections');
+  /** Which tab the right panel (Template / Theme / Layout / Typography / ATS / Export) shows. */
+  readonly activeRightTab = signal<'template' | 'theme' | 'layout' | 'typography' | 'ats' | 'export'>('template');
+  /** Which AI Assistant tab to open — set by the bottom AI dock buttons. */
+  readonly aiInitialTab     = signal<'summary' | 'bullet' | 'suggest' | 'tools'>('summary');
+  /** Which Tools-tab mode to preselect — set by the AI dock's per-tool buttons. */
+  readonly aiInitialToolMode = signal<'grammar' | 'deepcheck' | 'professional' | 'executive' | 'shorten' | 'expand' | 'translate'>('grammar');
+  /** Whether the bottom AI dock's "more tools" flyout is open. */
+  readonly aiDockExpanded = signal(false);
+
+  /** Single dispatcher for every bottom AI dock button — every tool is real: Writer/Improve
+   *  open the Summary/Rewrite tabs, Keywords/ATS Match jump to the ATS tab, and everything
+   *  else (grammar/tone/length/translate) opens the AI Assistant's Tools tab pre-set to the
+   *  matching mode, backed by the `ai/resume/transform` endpoint. */
+  runAiTool(id: string): void {
+    switch (id) {
+      case 'writer':  this.aiInitialTab.set('summary'); this.showAiPanel.set(true); break;
+      case 'improve': this.aiInitialTab.set('bullet');  this.showAiPanel.set(true); break;
+      case 'keywords':
+      case 'atsmatch': this.activeRightTab.set('ats'); break;
+      case 'grammar': case 'deepcheck': case 'professional':
+      case 'executive': case 'shorten': case 'expand': case 'translate':
+        this.aiInitialToolMode.set(id);
+        this.aiInitialTab.set('tools');
+        this.showAiPanel.set(true);
+        break;
+    }
+  }
 
   // ── Mobile ────────────────────────────────────────────────────────────────
   readonly mobileTab = signal<'editor' | 'preview' | 'templates' | 'ai'>('editor');
@@ -241,6 +286,8 @@ export class ResumeBuilderComponent implements OnInit, OnDestroy {
   readonly saveStatus   = signal<'saved' | 'saving'>('saved');
   readonly downloading  = signal(false);
   readonly downloadDone = signal(false);
+  readonly downloadingDocx = signal(false);
+  readonly downloadDocxDone = signal(false);
 
   private saveTimer?: ReturnType<typeof setTimeout>;
   private readonly _trackSave = effect(() => {
@@ -295,6 +342,29 @@ export class ResumeBuilderComponent implements OnInit, OnDestroy {
     if (id) { this.store.duplicateResume(id); this.notify.success('Duplicated', 'Resume copy created.'); }
   }
 
+  // ── Share ─────────────────────────────────────────────────────────────────
+  readonly shareUrl  = signal('');
+  readonly showShare = signal(false);
+  readonly sharing   = this.shareSvc.publishing;
+
+  async share(): Promise<void> {
+    const r = this.resume();
+    if (!r) return;
+    this.showShare.set(true);
+    if (r.publicSlug) { this.shareUrl.set(this.shareSvc.publicUrl(r.publicSlug)); return; }
+    const result = await this.shareSvc.publish(r);
+    if (result?.slug) {
+      this.shareUrl.set(this.shareSvc.publicUrl(result.slug));
+      this.store.setPublicSlug(r.id, result.slug);
+    } else {
+      this.notify.error('Share failed', 'Could not publish resume. Please try again.');
+    }
+  }
+
+  copyShareLink(): void {
+    navigator.clipboard.writeText(this.shareUrl()).then(() => this.notify.success('Link copied!'));
+  }
+
   /** Free-tier limit: 2 resumes. Shows upgrade modal if at limit, otherwise creates a new resume. */
   createResumeOrUpgrade(): void {
     const FREE_LIMIT = 2;
@@ -305,12 +375,18 @@ export class ResumeBuilderComponent implements OnInit, OnDestroy {
     this.store.createResume();
   }
 
-  switchToFreeTemplateAndDownload(): void {
+  async switchToFreeTemplateAndDownload(): Promise<void> {
     this.showUpgrade.set(false);
     this.upgradeTemplateId.set(null);
     this.store.setTemplate('minimal' as TemplateId);
-    // Small delay so the template switch renders before download
-    setTimeout(() => this.download(), 100);
+    // Wait for the template switch to actually render before downloading —
+    // two animation frames guarantee Angular has run change detection and the
+    // browser has committed a real layout + paint, unlike a fixed-length
+    // timeout which can fire before or long after the new template settles.
+    await new Promise<void>(resolve => {
+      requestAnimationFrame(() => requestAnimationFrame(() => resolve()));
+    });
+    await this.download();
   }
 
   async download(): Promise<void> {
@@ -336,10 +412,34 @@ export class ResumeBuilderComponent implements OnInit, OnDestroy {
     } finally { this.downloading.set(false); }
   }
 
-  logout(): void   { this.showProfileMenu.set(false); this.auth.logout(); }
+  /** Downloads a plain, ATS-friendly Word (.docx) copy — a separate flow from the
+   *  Puppeteer PDF path (no live DOM capture needed, just the resume's data). */
+  async downloadWord(): Promise<void> {
+    const r = this.resume();
+    if (!r || this.downloadingDocx()) return;
+    if (!this.authGate.canDownload()) return;
+    if (PREMIUM_TEMPLATE_IDS.includes(r.templateId as TemplateId)
+        && !this.auth.isPro() && !this.auth.hasPurchasedTemplate(r.templateId)) {
+      this.upgradeTemplateId.set(r.templateId);
+      this.showUpgrade.set(true);
+      return;
+    }
+    this.downloadingDocx.set(true);
+    this.downloadDocxDone.set(false);
+    try {
+      await this.pdf.downloadDocx(r);
+      this.downloadDocxDone.set(true);
+      setTimeout(() => this.downloadDocxDone.set(false), 3500);
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : 'Something went wrong. Please try again.';
+      this.notify.error('Download failed', msg);
+    } finally { this.downloadingDocx.set(false); }
+  }
+
+  logout(): void   { this.auth.logout(); }
   private readonly location = inject(Location);
 
-  goTo(p: string): void { this.showProfileMenu.set(false); this.router.navigate([p]); }
+  goTo(p: string): void { this.router.navigate([p]); }
 
   goBack(): void {
     if (window.history.length > 1) {
@@ -350,27 +450,24 @@ export class ResumeBuilderComponent implements OnInit, OnDestroy {
   }
   printResume(): void { window.print(); }
 
+  /** The toolbar's B/I/U icons are decorative — editing is form-based, not contenteditable. */
+  explainFormatting(): void {
+    this.notify.info('Editing your text', 'Formatting applies per-section — open a section on the left to edit its content.');
+  }
+
   // ── Escape to close panels ────────────────────────────────────────────────
   @HostListener('document:keydown.escape')
   onEsc(): void {
-    if (this.showProfileMenu())    { this.showProfileMenu.set(false);    return; }
+    if (this.showShare())          { this.showShare.set(false);          return; }
     if (this.showPreviewModal())   { this.showPreviewModal.set(false);   return; }
     if (this.showTemplateGallery()){ this.showTemplateGallery.set(false); return; }
-    if (this.showTemplateDrawer()) { this.showTemplateDrawer.set(false); return; }
     if (this.showSectionsPanel())  { this.saveReorder();                  return; }
     if (this.showAiPanel())        { this.showAiPanel.set(false);        return; }
-    if (this.showAtsPanel())       { this.showAtsPanel.set(false);       return; }
-    if (this.showDesignPanel())    { this.showDesignPanel.set(false);    return; }
     if (this.showUpgrade())        { this.showUpgrade.set(false);        return; }
   }
 
   // ── Lifecycle ─────────────────────────────────────────────────────────────
   ngOnInit(): void {
-    if (typeof document !== 'undefined') {
-      this._wasDark = document.documentElement.classList.contains('dark');
-      document.documentElement.classList.remove('dark');
-    }
-
     this.applyQueryParams();
     if (this.authGate.consumePendingDownload()) this.download();
 
@@ -393,8 +490,6 @@ export class ResumeBuilderComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    if (this._wasDark && typeof document !== 'undefined')
-      document.documentElement.classList.add('dark');
     this.jsonLd.removeJsonLd('rb-app');
   }
 

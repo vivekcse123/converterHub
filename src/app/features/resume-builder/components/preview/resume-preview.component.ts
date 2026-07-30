@@ -37,11 +37,22 @@ const SPACING_MAP: Record<DesignSettings['lineHeight'], string> = {
   spacious:  '1.75',
 };
 
+/** Page dimensions in mm per paper size — must match the `pageSize`/`contentWidthMm`
+ *  math in the backend's `renderHtml` controller (`resume.controller.js`) exactly,
+ *  since that's the other half of what has to stay in visual sync with this. */
+export const PAGE_SIZE_MM: Record<DesignSettings['paperSize'], { width: number; height: number }> = {
+  a4:     { width: 210, height: 297 },
+  letter: { width: 216, height: 279 },
+};
+
 /**
  * Computes the inline CSS string that sets all template design tokens
- * (`--r-accent`, `--r-font`, `--r-size`, `--r-spacing`, etc.) from a partial
- * design object.  Exported so thumbnails outside `ResumePreviewComponent` can
- * apply the same tokens without duplicating the logic.
+ * (`--r-accent`, `--r-font`, `--r-size`, `--r-spacing`, `--r-page-width`,
+ * `--r-page-height`, etc.) from a partial design object.  Exported so
+ * thumbnails outside `ResumePreviewComponent`, and the PDF export service's
+ * off-screen render path, can apply the same tokens without duplicating
+ * this logic — a previous duplicate copy of this math in the PDF service
+ * is exactly how the paper-size preview/export mismatch happened.
  */
 export function computeDesignVarsCss(design?: Partial<DesignSettings>): string {
   const d: DesignSettings = { ...DEFAULT_DESIGN, ...(design ?? {}) };
@@ -53,6 +64,7 @@ export function computeDesignVarsCss(design?: Partial<DesignSettings>): string {
     ? d.baseFontPt
     : (LEGACY_SIZE_SCALES[d.fontSize ?? 'medium'] ?? BASE_PT);
   const sizeScale = (basePt / BASE_PT).toFixed(4);
+  const page      = PAGE_SIZE_MM[d.paperSize ?? 'a4'] ?? PAGE_SIZE_MM.a4;
   return [
     `--r-accent:${d.accentColor}`,
     `--r-accent-12:rgba(${r},${g},${b},0.12)`,
@@ -60,11 +72,10 @@ export function computeDesignVarsCss(design?: Partial<DesignSettings>): string {
     `--r-font:${FONT_FAMILIES[d.fontFamily] ?? FONT_FAMILIES['inter']}`,
     `--r-size:${sizeScale}`,
     `--r-spacing:${SPACING_MAP[d.lineHeight ?? 'standard']}`,
+    `--r-page-width:${page.width}mm`,
+    `--r-page-height:${page.height}mm`,
   ].join(';');
 }
-
-const A4_HEIGHT_MM = 297;
-const A4_WIDTH_MM = 210;
 
 @Component({
   selector: 'app-resume-preview',
@@ -153,15 +164,61 @@ export class ResumePreviewComponent implements AfterViewInit, OnDestroy {
     this.zoom.set(Math.round(fit * 100) / 100);
   }
 
+  /** Sums `offsetTop` from `node` up through its `offsetParent` chain until it
+   *  reaches `ancestor`, giving node's top position relative to that ancestor.
+   *  Unlike `getBoundingClientRect()`, this is unaffected by the CSS `transform:
+   *  scale(zoom)` applied to an ancestor of `pageHost` for on-screen zooming —
+   *  `offsetTop` is a pure layout value, so no un-scaling is needed to match it
+   *  against `pageHeightPx` below (also computed from unscaled layout values). */
+  private static offsetTopWithin(node: HTMLElement, ancestor: HTMLElement): number {
+    let top = 0;
+    let current: HTMLElement | null = node;
+    while (current && current !== ancestor) {
+      top += current.offsetTop;
+      current = current.offsetParent as HTMLElement | null;
+    }
+    return current === ancestor ? top : node.offsetTop;
+  }
+
   private recalculatePages(): void {
     const el = this.pageHost?.nativeElement;
     if (!el || !el.offsetWidth) return;
-    const pxPerMm = el.offsetWidth / A4_WIDTH_MM;
-    const pageHeightPx = A4_HEIGHT_MM * pxPerMm;
+    const page = PAGE_SIZE_MM[this.resume().design?.paperSize ?? 'a4'] ?? PAGE_SIZE_MM.a4;
+    const pxPerMm = el.offsetWidth / page.width;
+    const pageHeightPx = page.height * pxPerMm;
     const contentHeightPx = el.scrollHeight;
+
+    // Break-atomic units mirroring `break-inside: avoid` in print.css
+    // (`.resume-section` / `.resume-entry`). Only innermost matches are kept,
+    // so an entry nested inside a section is the atom (finer-grained, more
+    // accurate fit) — a section with no entries (e.g. a plain summary block)
+    // is used as-is since it has no nested match.
+    const allAtoms = Array.from(el.querySelectorAll<HTMLElement>('.resume-section, .resume-entry'));
+    const atoms = allAtoms.filter(node => !node.querySelector('.resume-section, .resume-entry'));
+
     const breaks: number[] = [];
-    for (let y = pageHeightPx; y < contentHeightPx - 1; y += pageHeightPx) {
-      breaks.push(y);
+    if (atoms.length) {
+      // Real pagination packs atoms onto the current page until one doesn't
+      // fit, then moves that whole atom — never splitting it — to a new
+      // page. Mirroring that here means the guide line lands where
+      // Puppeteer's page.pdf() will actually cut, instead of at a naive
+      // height multiple that can fall in the middle of a section.
+      let pageStart = 0;
+      for (const atom of atoms) {
+        const top    = ResumePreviewComponent.offsetTopWithin(atom, el);
+        const bottom = top + atom.offsetHeight;
+        if (bottom - pageStart > pageHeightPx && top > pageStart) {
+          breaks.push(top);
+          pageStart = top;
+        }
+      }
+    } else {
+      // Template doesn't use the shared break-atom classes — fall back to
+      // the previous naive height-multiple estimate rather than showing no
+      // guide lines at all.
+      for (let y = pageHeightPx; y < contentHeightPx - 1; y += pageHeightPx) {
+        breaks.push(y);
+      }
     }
     this.pageBreaks.set(breaks);
   }

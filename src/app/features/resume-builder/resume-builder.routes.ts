@@ -34,11 +34,10 @@ export const resumeBuilderRoutes: Routes = [
     data: { description: 'Generate a professional, tailored cover letter from your resume data in seconds. AI-powered, free for Pro users.' },
   },
   {
+    // Portfolio Builder was promoted to a standalone top-level feature at /portfolio.
     path: 'portfolio',
-    loadComponent: () => import('./pages/portfolio/portfolio.component').then(m => m.PortfolioComponent),
-    canActivate: [proGuard],
-    title: 'Professional Portfolio Builder Online | ApnaConverter',
-    data: { description: 'Build a shareable public portfolio page with your bio, skills, projects, and pinned resume. Get a unique live URL instantly.' },
+    redirectTo: '/portfolio',
+    pathMatch: 'full',
   },
   {
     path: 'dashboard',

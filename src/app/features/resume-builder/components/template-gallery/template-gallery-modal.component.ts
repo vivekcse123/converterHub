@@ -39,10 +39,10 @@ const FILTERS: { id: FilterId; label: string }[] = [
   imports: [CommonModule, NgComponentOutlet, ResumePreviewComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <div class="fixed inset-0 z-[60] flex flex-col bg-white" style="overflow:hidden">
+    <div class="fixed inset-0 z-[60] flex flex-col bg-white dark:bg-slate-900" style="overflow:hidden">
 
       <!-- ══ Header ══ -->
-      <header class="shrink-0 h-14 border-b border-slate-100 px-5 flex items-center gap-4 bg-white">
+      <header class="shrink-0 h-14 border-b border-hairline dark:border-slate-800 px-5 flex items-center gap-4 bg-white dark:bg-slate-900">
 
         <!-- Title -->
         <div class="flex items-center gap-3 shrink-0">
@@ -55,8 +55,8 @@ const FILTERS: { id: FilterId; label: string }[] = [
             </svg>
           </div>
           <div>
-            <h2 class="text-sm font-bold text-slate-900 leading-tight">Browse Templates</h2>
-            <p class="text-[10px] text-slate-400 leading-tight">
+            <h2 class="text-sm font-bold text-slate-900 dark:text-white leading-tight">Browse Templates</h2>
+            <p class="text-[10px] text-slate-400 dark:text-slate-500 leading-tight">
               {{ filteredTemplates().length }} of {{ allTemplates.length }} · All ATS-friendly
             </p>
           </div>
@@ -64,7 +64,7 @@ const FILTERS: { id: FilterId; label: string }[] = [
 
         <!-- Search -->
         <div class="relative flex-1 max-w-xs">
-          <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-slate-400 pointer-events-none"
+          <svg class="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-slate-400 dark:text-slate-500 pointer-events-none"
                fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                   d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
@@ -74,9 +74,10 @@ const FILTERS: { id: FilterId; label: string }[] = [
             placeholder="Search templates…"
             [value]="searchQuery()"
             (input)="onSearch($event)"
-            class="w-full pl-9 pr-4 py-2 text-xs bg-slate-50 border border-slate-200 rounded-xl
-                   outline-none focus:border-primary-400 focus:ring-2 focus:ring-primary-100
-                   transition-all placeholder:text-slate-400"
+            class="w-full pl-9 pr-4 py-2.5 text-xs bg-canvas dark:bg-slate-800 border border-hairline dark:border-slate-700 rounded-full
+                   text-gray-700 dark:text-slate-200
+                   outline-none focus:border-primary-400 focus:ring-2 focus:ring-primary-100 dark:focus:ring-primary-900/40
+                   transition-all duration-[250ms] placeholder:text-gray-400 dark:placeholder:text-slate-500"
           />
         </div>
 
@@ -85,7 +86,7 @@ const FILTERS: { id: FilterId; label: string }[] = [
         <!-- Close -->
         <button type="button" (click)="close.emit()"
                 class="w-8 h-8 flex items-center justify-center rounded-xl
-                       hover:bg-slate-100 text-slate-400 hover:text-slate-700 transition-colors shrink-0">
+                       hover:bg-slate-100 dark:hover:bg-slate-800 text-slate-400 dark:text-slate-500 hover:text-slate-700 dark:hover:text-slate-200 transition-colors shrink-0">
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
           </svg>
@@ -93,7 +94,7 @@ const FILTERS: { id: FilterId; label: string }[] = [
       </header>
 
       <!-- ══ Filter tabs ══ -->
-      <div class="shrink-0 border-b border-slate-100 bg-white px-5 py-2.5 flex items-center gap-2 overflow-x-auto"
+      <div class="shrink-0 border-b border-hairline dark:border-slate-800 bg-white dark:bg-slate-900 px-5 py-2.5 flex items-center gap-2 overflow-x-auto"
            style="scrollbar-width:none">
         @for (f of filters; track f.id) {
           <button type="button"
@@ -101,7 +102,7 @@ const FILTERS: { id: FilterId; label: string }[] = [
                   class="shrink-0 px-3 py-1.5 rounded-full text-xs font-semibold transition-all whitespace-nowrap"
                   [class]="activeFilter() === f.id
                     ? 'bg-primary-600 text-white shadow-sm'
-                    : 'bg-slate-100 text-slate-600 hover:bg-slate-200'">
+                    : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700'">
             {{ f.label }}
           </button>
         }
@@ -116,14 +117,14 @@ const FILTERS: { id: FilterId; label: string }[] = [
           @if (filteredTemplates().length === 0) {
             <!-- Empty state -->
             <div class="flex flex-col items-center justify-center min-h-full py-20 text-center">
-              <div class="w-14 h-14 bg-slate-100 rounded-2xl flex items-center justify-center mb-3">
-                <svg class="w-6 h-6 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <div class="w-14 h-14 bg-slate-100 dark:bg-slate-800 rounded-2xl flex items-center justify-center mb-3">
+                <svg class="w-6 h-6 text-slate-400 dark:text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
                         d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
                 </svg>
               </div>
-              <p class="text-sm font-semibold text-slate-700">No templates found</p>
-              <p class="text-xs text-slate-400 mt-1">Try a different search or filter</p>
+              <p class="text-sm font-semibold text-slate-700 dark:text-slate-200">No templates found</p>
+              <p class="text-xs text-slate-400 dark:text-slate-500 mt-1">Try a different search or filter</p>
               <button type="button"
                       (click)="searchQuery.set(''); activeFilter.set('all')"
                       class="mt-3 text-xs font-semibold text-primary-600 hover:underline">
@@ -138,8 +139,8 @@ const FILTERS: { id: FilterId; label: string }[] = [
                 <div class="group cursor-pointer" (click)="select(tpl.id)">
                   <div class="rounded-2xl border-2 overflow-hidden transition-all duration-150 will-change-transform"
                        [class]="selectedId() === tpl.id
-                         ? 'border-primary-500 shadow-xl shadow-primary-100/60 ring-2 ring-primary-200'
-                         : 'border-slate-200 hover:border-primary-300 hover:shadow-xl hover:-translate-y-0.5'">
+                         ? 'border-primary-500 shadow-xl shadow-primary-100/60 dark:shadow-primary-950/40 ring-2 ring-primary-200 dark:ring-primary-900/40'
+                         : 'border-hairline dark:border-slate-700 hover:border-primary-300 dark:hover:border-primary-600 hover:shadow-xl hover:-translate-y-0.5'">
 
                     <!-- Thumbnail (A4 ratio ≈ 160 × 226 px) -->
                     <div class="relative bg-white overflow-hidden" style="height:226px">
@@ -190,9 +191,9 @@ const FILTERS: { id: FilterId; label: string }[] = [
                     </div><!-- /thumbnail -->
 
                     <!-- Card footer -->
-                    <div class="px-3 py-2.5 bg-white border-t border-slate-100">
-                      <p class="text-xs font-bold text-slate-800 truncate">{{ tpl.name }}</p>
-                      <p class="text-[10px] text-slate-400 mt-0.5 truncate leading-tight">{{ tpl.category }}</p>
+                    <div class="px-3 py-2.5 bg-white dark:bg-slate-800 border-t border-slate-100 dark:border-slate-700">
+                      <p class="text-xs font-bold text-slate-800 dark:text-slate-100 truncate">{{ tpl.name }}</p>
+                      <p class="text-[10px] text-slate-400 dark:text-slate-500 mt-0.5 truncate leading-tight">{{ tpl.category }}</p>
                     </div>
 
                   </div>
@@ -204,12 +205,12 @@ const FILTERS: { id: FilterId; label: string }[] = [
         </div>
 
         <!-- ─ Preview panel (desktop only) ─ -->
-        <aside class="shrink-0 hidden lg:flex w-[360px] xl:w-[400px] flex-col border-l border-slate-100 bg-slate-50/50">
+        <aside class="shrink-0 hidden lg:flex w-[360px] xl:w-[400px] flex-col border-l border-hairline dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/30">
 
           @if (selectedTemplate(); as tpl) {
 
             <!-- Template info bar -->
-            <div class="shrink-0 px-5 py-4 bg-white border-b border-slate-100">
+            <div class="shrink-0 px-5 py-4 bg-white dark:bg-slate-900 border-b border-hairline dark:border-slate-800">
               <div class="flex items-start gap-3">
                 <!-- Color chip -->
                 <div class="w-10 h-10 rounded-xl flex items-center justify-center shrink-0 shadow-sm"
@@ -218,19 +219,19 @@ const FILTERS: { id: FilterId; label: string }[] = [
                 </div>
                 <div class="flex-1 min-w-0">
                   <div class="flex items-center gap-2 flex-wrap">
-                    <h3 class="text-sm font-bold text-slate-900">{{ tpl.name }}</h3>
+                    <h3 class="text-sm font-bold text-slate-900 dark:text-white">{{ tpl.name }}</h3>
                     @if (tpl.isPremium) {
-                      <span class="text-[10px] font-bold px-1.5 py-0.5 rounded-full bg-amber-100 text-amber-700">Pro</span>
+                      <span class="text-[10px] font-bold px-1.5 py-0.5 rounded-full bg-amber-100 dark:bg-amber-900/40 text-amber-700 dark:text-amber-300">Pro</span>
                     } @else {
-                      <span class="text-[10px] font-bold px-1.5 py-0.5 rounded-full bg-emerald-100 text-emerald-700">Free</span>
+                      <span class="text-[10px] font-bold px-1.5 py-0.5 rounded-full bg-emerald-100 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-300">Free</span>
                     }
                   </div>
                   <div class="flex items-center gap-2 mt-1 text-[11px] flex-wrap">
-                    <span class="font-semibold text-emerald-600">{{ tpl.atsScore }}% ATS</span>
-                    <span class="text-slate-300">·</span>
-                    <span class="text-slate-500">{{ tpl.category }}</span>
+                    <span class="font-semibold text-emerald-600 dark:text-emerald-400">{{ tpl.atsScore }}% ATS</span>
+                    <span class="text-slate-300 dark:text-slate-600">·</span>
+                    <span class="text-slate-500 dark:text-slate-400">{{ tpl.category }}</span>
                   </div>
-                  <p class="text-[11px] text-slate-400 mt-1.5 leading-relaxed line-clamp-2">{{ tpl.bestFor }}</p>
+                  <p class="text-[11px] text-slate-400 dark:text-slate-500 mt-1.5 leading-relaxed line-clamp-2">{{ tpl.bestFor }}</p>
                 </div>
               </div>
             </div>
@@ -243,7 +244,7 @@ const FILTERS: { id: FilterId; label: string }[] = [
             </div>
 
             <!-- CTA -->
-            <div class="shrink-0 px-5 py-4 bg-white border-t border-slate-100 space-y-2">
+            <div class="shrink-0 px-5 py-4 bg-white dark:bg-slate-900 border-t border-hairline dark:border-slate-800 space-y-2">
               @if (tpl.isPremium && !subs.isPro()) {
                 <button type="button" (click)="apply()"
                         class="w-full py-3 bg-gradient-to-r from-amber-500 to-amber-600
@@ -251,7 +252,7 @@ const FILTERS: { id: FilterId; label: string }[] = [
                                text-white text-sm font-bold rounded-xl transition-all shadow-sm active:scale-[0.98]">
                   Use Template — Upgrade to Download
                 </button>
-                <p class="text-[10px] text-slate-400 text-center">
+                <p class="text-[10px] text-slate-400 dark:text-slate-500 text-center">
                   Preview free · Pro required to download without watermark
                 </p>
               } @else {
@@ -266,16 +267,16 @@ const FILTERS: { id: FilterId; label: string }[] = [
           } @else {
             <!-- No template selected: placeholder -->
             <div class="flex-1 flex flex-col items-center justify-center text-center px-8">
-              <div class="w-16 h-16 bg-slate-200 rounded-2xl flex items-center justify-center mb-4">
-                <svg class="w-8 h-8 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <div class="w-16 h-16 bg-slate-200 dark:bg-slate-700 rounded-2xl flex items-center justify-center mb-4">
+                <svg class="w-8 h-8 text-slate-400 dark:text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
                         d="M4 5a1 1 0 011-1h14a1 1 0 011 1v2a1 1 0 01-1 1H5a1 1 0 01-1-1V5z
                            M4 13a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H5a1 1 0 01-1-1v-6z
                            M16 13a1 1 0 011-1h2a1 1 0 011 1v6a1 1 0 01-1 1h-2a1 1 0 01-1-1v-6z"/>
                 </svg>
               </div>
-              <p class="text-sm font-bold text-slate-700 mb-2">Click a template to preview</p>
-              <p class="text-xs text-slate-400 leading-relaxed max-w-[200px]">
+              <p class="text-sm font-bold text-slate-700 dark:text-slate-200 mb-2">Click a template to preview</p>
+              <p class="text-xs text-slate-400 dark:text-slate-500 leading-relaxed max-w-[200px]">
                 See a live preview built from your actual resume data
               </p>
             </div>
@@ -287,10 +288,10 @@ const FILTERS: { id: FilterId; label: string }[] = [
 
       <!-- Mobile apply bar (shows when a template is selected) -->
       @if (selectedId()) {
-        <div class="lg:hidden shrink-0 border-t border-slate-200 bg-white px-4 py-3 flex items-center gap-3">
+        <div class="lg:hidden shrink-0 border-t border-hairline dark:border-slate-700 bg-white dark:bg-slate-900 px-4 py-3 flex items-center gap-3">
           <div class="flex-1 min-w-0">
-            <p class="text-sm font-bold text-slate-900 truncate">{{ selectedTemplate()?.name }}</p>
-            <p class="text-[11px] text-slate-400">{{ selectedTemplate()?.atsScore }}% ATS</p>
+            <p class="text-sm font-bold text-slate-900 dark:text-white truncate">{{ selectedTemplate()?.name }}</p>
+            <p class="text-[11px] text-slate-400 dark:text-slate-500">{{ selectedTemplate()?.atsScore }}% ATS</p>
           </div>
           <button type="button" (click)="apply()"
                   class="shrink-0 px-5 py-2.5 bg-primary-600 hover:bg-primary-700

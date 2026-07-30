@@ -21,7 +21,7 @@ import { BOLD_BTN_CLASS, applyBoldToggle, inputValue } from '../editor-utils';
           ></textarea>
           <div class="flex flex-col items-center gap-1.5 pt-0.5">
             <button type="button" [class]="boldBtnClass" (click)="toggleBold($index, itemEl)" title="Bold selected text">B</button>
-            <button type="button" class="text-slate-400 hover:text-red-500 transition-colors" (click)="store.removeAchievement($index)" aria-label="Remove achievement">✕</button>
+            <button type="button" class="text-slate-400 dark:text-slate-500 hover:text-red-500 dark:hover:text-red-400 transition-colors" (click)="store.removeAchievement($index)" aria-label="Remove achievement">✕</button>
           </div>
         </div>
       }

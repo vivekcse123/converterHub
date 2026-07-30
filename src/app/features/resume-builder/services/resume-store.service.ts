@@ -38,6 +38,57 @@ export class ResumeStoreService {
   private readonly isBrowser = isPlatformBrowser(this.platformId);
   private saveTimer: ReturnType<typeof setTimeout> | null = null;
 
+  // ── Undo / redo history (per-resume) ─────────────────────────────────────
+  private readonly HISTORY_LIMIT = 50;
+  private readonly HISTORY_DEBOUNCE_MS = 800;
+  private history = new Map<string, { undo: ResumeData[]; redo: ResumeData[] }>();
+  private lastHistoryPush = new Map<string, number>();
+  private readonly historyVersion = signal(0);
+
+  private historyFor(id: string): { undo: ResumeData[]; redo: ResumeData[] } {
+    let h = this.history.get(id);
+    if (!h) { h = { undo: [], redo: [] }; this.history.set(id, h); }
+    return h;
+  }
+
+  readonly canUndo = computed(() => {
+    this.historyVersion();
+    const id = this.activeId();
+    return !!id && this.historyFor(id).undo.length > 0;
+  });
+
+  readonly canRedo = computed(() => {
+    this.historyVersion();
+    const id = this.activeId();
+    return !!id && this.historyFor(id).redo.length > 0;
+  });
+
+  undo(id?: string): void {
+    const targetId = id ?? this.activeId();
+    if (!targetId) return;
+    const h = this.historyFor(targetId);
+    const prev = h.undo.pop();
+    if (!prev) return;
+    const current = this.resumes().find(r => r.id === targetId);
+    if (current) h.redo.push(structuredCloneSafe(current));
+    this.resumes.update(list => list.map(r => (r.id === targetId ? prev : r)));
+    this.lastHistoryPush.set(targetId, 0);
+    this.historyVersion.update(v => v + 1);
+  }
+
+  redo(id?: string): void {
+    const targetId = id ?? this.activeId();
+    if (!targetId) return;
+    const h = this.historyFor(targetId);
+    const next = h.redo.pop();
+    if (!next) return;
+    const current = this.resumes().find(r => r.id === targetId);
+    if (current) h.undo.push(structuredCloneSafe(current));
+    this.resumes.update(list => list.map(r => (r.id === targetId ? next : r)));
+    this.lastHistoryPush.set(targetId, 0);
+    this.historyVersion.update(v => v + 1);
+  }
+
   readonly resumes = signal<ResumeData[]>([]);
   readonly activeId = signal<string | null>(null);
 
@@ -121,6 +172,8 @@ export class ResumeStoreService {
     if (list.length <= 1) return; // always keep at least one resume
     const remaining = list.filter(r => r.id !== id);
     this.resumes.set(remaining);
+    this.history.delete(id);
+    this.lastHistoryPush.delete(id);
     if (this.activeId() === id) {
       this.activeId.set(remaining[0].id);
     }
@@ -155,6 +208,21 @@ export class ResumeStoreService {
   private patchActive(updater: (r: ResumeData) => ResumeData, id?: string): void {
     const targetId = id ?? this.activeId();
     if (!targetId) return;
+
+    const before = this.resumes().find(r => r.id === targetId);
+    if (before) {
+      const now = Date.now();
+      const last = this.lastHistoryPush.get(targetId) ?? 0;
+      if (now - last > this.HISTORY_DEBOUNCE_MS) {
+        const h = this.historyFor(targetId);
+        h.undo.push(structuredCloneSafe(before));
+        if (h.undo.length > this.HISTORY_LIMIT) h.undo.shift();
+        h.redo = [];
+        this.historyVersion.update(v => v + 1);
+      }
+      this.lastHistoryPush.set(targetId, now);
+    }
+
     this.resumes.update(list =>
       list.map(r => (r.id === targetId ? { ...updater(r), updatedAt: Date.now() } : r))
     );

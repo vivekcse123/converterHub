@@ -1,8 +1,8 @@
 /* Shared print/A4 styles for resume templates. Imported by every template component. */
 
 .resume-page {
-  width: 210mm;
-  min-height: 297mm;
+  width: var(--r-page-width, 210mm);
+  min-height: var(--r-page-height, 297mm);
   padding: 14mm 16mm;
   box-sizing: border-box;
   background: #ffffff;

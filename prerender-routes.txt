@@ -12,6 +12,8 @@
 /pdf-editor
 /image-editor
 /compress
+/resume-builder
+/biodata-maker
 /text-to-pdf
 /pdf-to-jpg
 /watermark-pdf

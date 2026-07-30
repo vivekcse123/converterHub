@@ -24,24 +24,6 @@ export interface JobApplication {
   updatedAt:    string;
 }
 
-export interface Portfolio {
-  _id?:         string;
-  username:     string;
-  displayName?: string;
-  tagline?:     string;
-  about?:       string;
-  photoUrl?:    string;
-  location?:    string;
-  email?:       string;
-  phone?:       string;
-  social?: { linkedin?: string; github?: string; twitter?: string; website?: string; youtube?: string };
-  skills?: { name: string; level: string }[];
-  projects?: { title: string; description: string; url?: string; githubUrl?: string; tags?: string[]; featured?: boolean }[];
-  pinnedResumeId?: string;
-  isPublic:     boolean;
-  views?:       number;
-}
-
 export const JOB_STATUS_CONFIG: Record<JobStatus, { label: string; color: string; icon: string }> = {
   saved:        { label: 'Saved',        color: 'bg-slate-100 text-slate-600 dark:bg-slate-700 dark:text-slate-300',       icon: '🔖' },
   applied:      { label: 'Applied',      color: 'bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300',          icon: '📤' },
@@ -58,7 +40,6 @@ export class CareerService {
 
   readonly jobs      = signal<JobApplication[]>([]);
   readonly jobStats  = signal<Record<string, number>>({});
-  readonly portfolio = signal<Portfolio | null>(null);
   readonly loading   = signal(false);
 
   async loadJobs(status?: string): Promise<void> {
@@ -99,30 +80,6 @@ export class CareerService {
   async deleteJob(id: string): Promise<void> {
     await firstValueFrom(this.api.delete<any>(`career/jobs/${id}`));
     this.jobs.update(j => j.filter(x => x._id !== id));
-  }
-
-  async loadPortfolio(): Promise<void> {
-    if (!this.auth.isLoggedIn()) return;
-    try {
-      const res = await firstValueFrom(this.api.get<any>('career/portfolio'));
-      this.portfolio.set(res.data?.portfolio ?? null);
-    } catch { }
-  }
-
-  async savePortfolio(data: Partial<Portfolio>): Promise<Portfolio | null> {
-    try {
-      const res = await firstValueFrom(this.api.put<any>('career/portfolio', data));
-      const p = res.data?.portfolio;
-      if (p) this.portfolio.set(p);
-      return p ?? null;
-    } catch { return null; }
-  }
-
-  async checkUsername(username: string): Promise<boolean> {
-    try {
-      const res = await firstValueFrom(this.api.get<any>(`career/portfolio/check-username/${username}`));
-      return res.data?.available ?? false;
-    } catch { return false; }
   }
 
   totalJobs(): number { return Object.values(this.jobStats()).reduce((a: number, b: number) => a + (b as number), 0); }

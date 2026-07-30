@@ -7,9 +7,11 @@
   <!-- Resume Builder -->
   <url><loc>https://www.apnaconverter.com/resume-builder</loc><lastmod>2026-06-21</lastmod><changefreq>weekly</changefreq><priority>0.9</priority></url>
   <url><loc>https://www.apnaconverter.com/resume-builder/pricing</loc><lastmod>2026-06-21</lastmod><changefreq>weekly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://www.apnaconverter.com/resume-builder/cover-letter</loc><lastmod>2026-06-21</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://www.apnaconverter.com/resume-builder/portfolio</loc><lastmod>2026-06-21</lastmod><changefreq>monthly</changefreq><priority>0.8</priority></url>
-  <url><loc>https://www.apnaconverter.com/resume-builder/job-tracker</loc><lastmod>2026-06-21</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>
+  <!-- cover-letter, portfolio, and job-tracker are intentionally NOT listed here:
+       all three are behind proGuard (Pro-only) and redirect logged-out/free
+       visitors to /login or /resume-builder/pricing, so a crawler following
+       these URLs would hit a redirect instead of content — wasted crawl
+       budget on pages that can never be indexed as listed. -->
 
   <!-- Resume Builder role landing pages -->
   <url><loc>https://www.apnaconverter.com/resume-builder/software-engineer</loc><lastmod>2026-06-21</lastmod><changefreq>monthly</changefreq><priority>0.7</priority></url>

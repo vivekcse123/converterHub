@@ -20,7 +20,7 @@
     </div>
     <!-- Right: passport photo box -->
     <div style="flex-shrink:0">
-      @if (resume().personal.photoUrl) {
+      @if (resume().personal.photoUrl && (resume().design?.showPhoto ?? true)) {
         <img [src]="resume().personal.photoUrl" alt="Passport Photo"
              style="width:52pt;height:62pt;object-fit:cover;border:1.5pt solid #000;display:block" />
       } @else {

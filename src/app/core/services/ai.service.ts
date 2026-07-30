@@ -75,4 +75,11 @@ export class AiService {
   }): Observable<ApiResponse<{ bullets: string[] }>> {
     return this.api.post<ApiResponse<{ bullets: string[] }>>('ai/resume/bullets', payload);
   }
+
+  transformText(payload: {
+    mode: 'grammar' | 'deepcheck' | 'professional' | 'executive' | 'shorten' | 'expand' | 'translate';
+    text: string; targetLanguage?: string;
+  }): Observable<ApiResponse<{ result: string }>> {
+    return this.api.post<ApiResponse<{ result: string }>>('ai/resume/transform', payload);
+  }
 }

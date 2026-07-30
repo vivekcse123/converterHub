@@ -34,6 +34,9 @@ export const routes: Routes = [
 
   // ── Resume Builder ──────────────────────────────────────────────────────────
   { path: 'resume-builder', loadChildren: () => import('./features/resume-builder/resume-builder.routes').then(m => m.resumeBuilderRoutes) },
+
+  // ── Portfolio Builder ───────────────────────────────────────────────────────
+  { path: 'portfolio', loadChildren: () => import('./features/portfolio-builder/portfolio-builder.routes').then(m => m.portfolioBuilderRoutes) },
   {
     path: 'resume-templates',
     loadComponent: () => import('./features/resume-builder/pages/templates-gallery/resume-templates.component').then(m => m.ResumeTemplatesComponent),
@@ -133,7 +136,7 @@ export const routes: Routes = [
   { path: 'r/:slug', loadComponent: () => import('./features/resume-builder/pages/public-resume/public-resume.component').then(m => m.PublicResumeComponent), title: 'Resume | ApnaConverter', data: { hideShell: true } },
 
   // ── Portfolio public page ─────────────────────────────────────────────────────
-  { path: 'p/:username', loadComponent: () => import('./features/resume-builder/pages/public-portfolio/public-portfolio.component').then(m => m.PublicPortfolioComponent), title: 'Portfolio | ApnaConverter', data: { hideShell: true } },
+  { path: 'p/:username', loadComponent: () => import('./features/portfolio-builder/pages/public/public-portfolio.component').then(m => m.PublicPortfolioComponent), title: 'Portfolio | ApnaConverter', data: { hideShell: true } },
 
   // ── 404 ──────────────────────────────────────────────────────────────────────
   { path: '**', loadComponent: () => import('./features/not-found/not-found.component').then(m => m.NotFoundComponent), title: 'Page Not Found | ApnaConverter' },

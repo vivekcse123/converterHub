@@ -40,6 +40,7 @@ export interface DesignSettings {
   baseFontPt?: number;  // precise pt override; if set, takes priority over fontSize
   lineHeight:  'compact' | 'standard' | 'spacious';
   paperSize:   'a4' | 'letter';
+  showPhoto?:  boolean;  // when false, hides personal.photoUrl on templates that render a photo
 }
 
 export const DEFAULT_DESIGN: DesignSettings = {
@@ -49,6 +50,7 @@ export const DEFAULT_DESIGN: DesignSettings = {
   baseFontPt:  10.5,
   lineHeight:  'standard',
   paperSize:   'a4',
+  showPhoto:   true,
 };
 
 export interface PersonalInfo {

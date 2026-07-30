@@ -23,7 +23,7 @@
     </div>
     <!-- Right: circular photo -->
     <div style="flex-shrink:0">
-      @if (resume().personal.photoUrl) {
+      @if (resume().personal.photoUrl && (resume().design?.showPhoto ?? true)) {
         <img [src]="resume().personal.photoUrl" alt="Profile"
              style="width:68pt;height:68pt;border-radius:50%;object-fit:cover;border:3pt solid rgba(255,255,255,0.4)" />
       } @else {

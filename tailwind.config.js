@@ -24,6 +24,7 @@ module.exports = {
         sans:    ["Inter", "system-ui", "sans-serif"],
         roboto:  ["Roboto", "system-ui", "sans-serif"],
         georgia: ["Georgia", "Times New Roman", "serif"],
+        builder: ["Poppins", "system-ui", "sans-serif"],
       },
       colors: {
         primary: {
@@ -43,6 +44,11 @@ module.exports = {
           light: "#f8fafc",
           dark:  "#0f172a",
         },
+        // Resume Builder reference design system — distinct, intentionally
+        // neutral (not blue-tinted like the sitewide `slate` scale) tokens.
+        canvas:   "#FAFAFC",
+        hairline: "#ECECEC",
+        lavender: "#F4F0FF",
       },
       animation: {
         "fade-in": "fadeIn 0.4s ease-out both",

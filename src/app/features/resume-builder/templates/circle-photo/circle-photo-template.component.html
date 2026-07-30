@@ -1,7 +1,7 @@
 <article class="resume-page cp-tpl">
   <!-- Header: circular photo centered at top, then name -->
   <header class="cp-header">
-    @if (resume().personal.photoUrl) {
+    @if (resume().personal.photoUrl && (resume().design?.showPhoto ?? true)) {
       <div class="cp-photo-wrap">
         <img class="cp-photo" [src]="resume().personal.photoUrl" alt="Profile photo" />
       </div>

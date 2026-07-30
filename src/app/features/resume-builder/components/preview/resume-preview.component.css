@@ -1,5 +1,8 @@
 :host {
-  display: block;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: 0;
 }
 
 .preview-zoom-wrap {
@@ -9,7 +12,7 @@
 
 .preview-page-host {
   position: relative;
-  width: 210mm;
+  width: var(--r-page-width, 210mm);
   /* Match the color-scheme Puppeteer uses when generating the PDF so the preview
      never renders with system dark-mode colours that the PDF wouldn't have. */
   color-scheme: light;

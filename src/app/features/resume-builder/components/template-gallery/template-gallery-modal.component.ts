@@ -250,7 +250,7 @@ const FILTERS: { id: FilterId; label: string }[] = [
                         class="w-full py-3 bg-gradient-to-r from-amber-500 to-amber-600
                                hover:from-amber-600 hover:to-amber-700
                                text-white text-sm font-bold rounded-xl transition-all shadow-sm active:scale-[0.98]">
-                  Use Template — Upgrade to Download
+                  Use Template - Upgrade to Download
                 </button>
                 <p class="text-[10px] text-slate-400 dark:text-slate-500 text-center">
                   Preview free · Pro required to download without watermark

@@ -15,9 +15,22 @@ type PanelView = 'score' | 'jd';
   template: `
     <div class="flex flex-col">
 
-      <!-- ── ATS SCORE ── -->
-      <div class="px-5 pt-5 pb-4 border-b border-hairline dark:border-slate-800">
-        <p class="text-[10px] font-bold uppercase tracking-widest text-gray-400 dark:text-slate-500 mb-3.5">ATS Score</p>
+      <!-- ── AI Deep Analysis CTA ── -->
+      <div class="px-5 pt-5">
+        <button type="button" (click)="analyzeAts.emit()"
+                class="w-full flex items-center gap-3 p-3.5 rounded-2xl bg-gradient-to-r from-indigo-600 to-primary-600 text-white hover:opacity-90 transition-all duration-[250ms] hover:-translate-y-0.5 shadow-sm">
+          <svg class="w-4 h-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg>
+          <div class="flex-1 min-w-0 text-left">
+            <p class="text-xs font-bold">Analyze with AI</p>
+            <p class="text-[10px] text-white/70 mt-0.5">Full AI-powered ATS audit with fix-it suggestions</p>
+          </div>
+          <svg class="w-3.5 h-3.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+        </button>
+      </div>
+
+      <!-- ── ATS SCORE (free, instant heuristic check) ── -->
+      <div class="px-5 pt-4 pb-4 border-b border-hairline dark:border-slate-800">
+        <p class="text-[10px] font-bold uppercase tracking-widest text-gray-400 dark:text-slate-500 mb-3.5">Quick ATS Check</p>
 
         <!-- Score ring -->
         <div class="flex items-center gap-4 mb-4" role="status" aria-live="polite" [attr.aria-label]="'ATS score: ' + result().score + ' out of 100'">
@@ -283,6 +296,10 @@ export class AtsScorePanelComponent {
    *  the parent opens it via the existing `showAiPanel`/`aiInitialTab` signals so
    *  there's a single source of truth instead of a second, local, fake generator. */
   readonly openAiAssistant = output<'summary' | 'bullet'>();
+
+  /** Emitted when the user clicks "Analyze with AI" — the parent opens the
+   *  real Gemini-backed deep-analysis modal (`AiAtsAnalysisModalComponent`). */
+  readonly analyzeAts = output<void>();
 
   readonly circumference = 2 * Math.PI * 15.5;
   readonly view = signal<PanelView>('score');

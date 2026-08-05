@@ -138,7 +138,7 @@ import { PLAN_PRICES, FEATURE_TABLE, FREE_PLAN_BULLETS, PRO_FULL_LIST, YEARLY_EX
             } @else if (auth.currentPlan() === 'monthly') {
               <button class="w-full py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white font-bold text-xs transition shadow"
                       [disabled]="loading() === 'yearly'" (click)="subscribe('yearly')">
-                {{ loading() === 'yearly' ? 'Opening...' : 'Upgrade to Yearly — Save ₹489' }}
+                {{ loading() === 'yearly' ? 'Opening...' : 'Upgrade to Yearly - Save ₹489' }}
               </button>
             } @else {
               <button class="w-full py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white font-bold text-xs transition shadow"
@@ -258,7 +258,7 @@ import { PLAN_PRICES, FEATURE_TABLE, FREE_PLAN_BULLETS, PRO_FULL_LIST, YEARLY_EX
           <div class="flex flex-col sm:flex-row gap-3 justify-center">
             <button class="px-7 py-3 rounded-xl bg-white text-primary-700 font-bold text-sm hover:bg-primary-50 transition shadow-lg"
                     (click)="subscribe('yearly')">
-              Get Pro Yearly — ₹699/yr
+              Get Pro Yearly - ₹699/yr
             </button>
             <a routerLink="/resume-builder" class="px-7 py-3 rounded-xl bg-white/10 border border-white/20 text-white font-semibold text-sm hover:bg-white/20 transition">
               Start Free →

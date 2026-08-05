@@ -1,0 +1,16 @@
+.ml-tpl {
+  font-family: var(--r-font, 'Inter', Arial, sans-serif);
+}
+
+.ml-body {
+  border-left: 1.5px solid var(--r-accent, #374151);
+}
+
+.ml-heading {
+  font-size: 0.85em;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--r-accent, #374151);
+  margin-bottom: 5pt;
+}

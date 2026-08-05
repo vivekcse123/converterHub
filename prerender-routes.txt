@@ -11,6 +11,7 @@
 /word-to-pdf
 /pdf-editor
 /image-editor
+/background-remover
 /compress
 /resume-builder
 /biodata-maker

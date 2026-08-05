@@ -24,6 +24,7 @@
     "@angular/platform-server": "^17.3.12",
     "@angular/router": "^17.3.12",
     "@angular/ssr": "^17.3.17",
+    "@imgly/background-removal": "^1.7.0",
     "@types/express": "^4.17.25",
     "express": "^4.22.1",
     "mammoth": "^1.12.0",

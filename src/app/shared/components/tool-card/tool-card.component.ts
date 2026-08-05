@@ -1,11 +1,13 @@
 import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { Tool } from '../../../core/models/tool.model';
+import { BadgeComponent } from '../badge/badge.component';
+import { IconComponent } from '../icon/icon.component';
 
 @Component({
   selector: 'app-tool-card',
   standalone: true,
-  imports: [RouterLink],
+  imports: [RouterLink, BadgeComponent, IconComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: { class: 'flex' },
   template: `
@@ -19,9 +21,7 @@ import { Tool } from '../../../core/models/tool.model';
 
       <!-- Badge -->
       @if (tool.badge) {
-      <span class="inline-block mb-2 badge bg-primary-100 dark:bg-primary-900 text-primary-700 dark:text-primary-300 w-fit">
-        {{ tool.badge }}
-      </span>
+      <app-badge variant="primary" class="mb-2 w-fit">{{ tool.badge }}</app-badge>
       }
 
       <h3 class="font-semibold text-slate-800 dark:text-white text-base mb-1.5 group-hover:text-primary-600 transition-colors">
@@ -35,9 +35,7 @@ import { Tool } from '../../../core/models/tool.model';
       <!-- Arrow -->
       <div class="mt-4 flex items-center gap-1 text-xs font-medium text-primary-600 dark:text-primary-400 opacity-0 group-hover:opacity-100 transition-opacity">
         <span>Use tool</span>
-        <svg class="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
-        </svg>
+        <app-icon name="arrow-right" [size]="14" class="group-hover:translate-x-0.5 transition-transform inline-block" />
       </div>
 
     </a>

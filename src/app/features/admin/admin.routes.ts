@@ -4,7 +4,7 @@ import { adminGuard } from '../../core/guards/admin.guard';
 export const adminRoutes: Routes = [
   {
     path: '',
-    loadComponent: () => import('./admin-layout/admin-layout.component').then(m => m.AdminLayoutComponent),
+    loadComponent: () => import('./admin-shell/admin-shell.component').then(m => m.AdminShellComponent),
     canActivate: [adminGuard],
     children: [
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
@@ -16,17 +16,32 @@ export const adminRoutes: Routes = [
       {
         path: 'users',
         loadComponent: () => import('./users/users-list.component').then(m => m.UsersListComponent),
-        title: 'Manage Users - Admin',
+        title: 'Users - Admin',
+      },
+      {
+        path: 'portfolios',
+        loadComponent: () => import('./portfolios/portfolios-list.component').then(m => m.PortfoliosListComponent),
+        title: 'Portfolios - Admin',
+      },
+      {
+        path: 'conversions',
+        loadComponent: () => import('./conversions/conversions-list.component').then(m => m.ConversionsListComponent),
+        title: 'File Conversions - Admin',
+      },
+      {
+        path: 'subscriptions',
+        loadComponent: () => import('./subscriptions/subscriptions-overview.component').then(m => m.SubscriptionsOverviewComponent),
+        title: 'Subscriptions & Payments - Admin',
       },
       {
         path: 'analytics',
-        loadComponent: () => import('./analytics/analytics.component').then(m => m.AnalyticsComponent),
-        title: 'Analytics - Admin',
+        loadComponent: () => import('./analytics/analytics-dashboard.component').then(m => m.AnalyticsDashboardComponent),
+        title: 'Analytics & Revenue - Admin',
       },
       {
-        path: 'jobs',
-        loadComponent: () => import('./jobs/jobs-monitor.component').then(m => m.JobsMonitorComponent),
-        title: 'Job Monitor - Admin',
+        path: 'activity',
+        loadComponent: () => import('./activity-logs/activity-logs.component').then(m => m.ActivityLogsComponent),
+        title: 'Activity Logs - Admin',
       },
       {
         path: 'settings',

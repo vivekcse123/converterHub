@@ -9,7 +9,7 @@ export const portfolioBuilderRoutes: Routes = [
     title: 'Portfolio Builder | ApnaConverter',
     data: {
       hideShell: true,
-      description: 'Build a stunning, shareable portfolio website with drag-and-drop sections, premium templates, and live customization — no code required.',
+      description: 'Build a stunning, shareable portfolio website with drag-and-drop sections, premium templates, and live customization, no code required.',
     },
   },
 ];

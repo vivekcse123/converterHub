@@ -1,0 +1,51 @@
+.as-tpl {
+  font-family: Georgia, 'Times New Roman', serif;
+}
+
+.as-smallcaps {
+  font-variant: small-caps;
+  letter-spacing: 0.06em;
+  color: var(--r-accent, #1e3a5f);
+}
+
+/* Left-aligned, single short rule — distinct from centered-cv's
+   flanking-rule headings and academic-cv's dotted-underline headings. */
+.as-heading {
+  font-size: 0.95em;
+  font-weight: 700;
+  font-variant: small-caps;
+  letter-spacing: 0.04em;
+  color: var(--r-accent, #1e3a5f);
+  margin-bottom: 5pt;
+}
+
+.as-heading::after {
+  content: '';
+  display: block;
+  width: 28px;
+  height: 2px;
+  background: var(--r-accent, #1e3a5f);
+  margin-top: 2pt;
+}
+
+.as-footnotes {
+  list-style: none;
+  counter-reset: footnote;
+  padding-left: 0;
+}
+
+.as-footnotes li {
+  counter-increment: footnote;
+  padding-left: 14pt;
+  position: relative;
+}
+
+.as-footnotes li::before {
+  content: counter(footnote);
+  position: absolute;
+  left: 0;
+  top: 1pt;
+  font-size: 0.75em;
+  font-weight: 700;
+  color: var(--r-accent, #1e3a5f);
+}

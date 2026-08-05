@@ -23,7 +23,7 @@ function showRateLimitToast(isPro: boolean) {
   msg.style.flex = '1';
 
   if (isPro) {
-    msg.textContent = 'You\'ve hit the rate limit — please wait a moment and try again.';
+    msg.textContent = 'You\'ve hit the rate limit - please wait a moment and try again.';
     el.appendChild(msg);
   } else {
     msg.innerHTML = '⚡ <strong>Limit reached.</strong> Upgrade to Pro for higher limits.';

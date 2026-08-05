@@ -13,6 +13,7 @@ import { AtsScoreService } from '../../services/ats-score.service';
 import { ShareService } from '../../services/share.service';
 import { AuthService } from '../../../../core/services/auth.service';
 import { ThemeService } from '../../../../core/services/theme.service';
+import { BadgeComponent } from '../../../../shared/components/badge/badge.component';
 import { createSampleResume } from '../../data/resume-defaults';
 import { RESUME_TEMPLATES, PREMIUM_TEMPLATE_IDS, TemplateCategory, TEMPLATE_CATEGORIES, ResumeTemplateMeta, getTemplateMeta, getTemplatesByCategory } from '../../data/resume-templates.data';
 import { DEFAULT_DESIGN, DesignSettings, SectionRef, TemplateId } from '../../models/resume.model';
@@ -40,6 +41,8 @@ import { ResumeAuthPromptComponent } from '../../components/auth-prompt/resume-a
 import { UpgradeModalComponent } from '../../components/upgrade-modal/upgrade-modal.component';
 import { SectionListComponent } from '../../components/editor/section-list/section-list.component';
 import { TemplateGalleryModalComponent } from '../../components/template-gallery/template-gallery-modal.component';
+import { ProfileEditorModalComponent } from '../../components/profile-editor/profile-editor-modal.component';
+import { AiAtsAnalysisModalComponent } from '../../components/ats-panel/ai-ats-analysis-modal.component';
 
 const ROLE_TITLES: Record<string, string> = {
   'software-engineer': 'Software Engineer',
@@ -85,6 +88,8 @@ export const BUILDER_STEPS: BuilderStep[] = [
     ResumeAuthPromptComponent, UpgradeModalComponent,
     TemplateGalleryModalComponent,
     SectionListComponent,
+    ProfileEditorModalComponent, AiAtsAnalysisModalComponent,
+    BadgeComponent,
   ],
   templateUrl: './resume-builder.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -206,6 +211,10 @@ export class ResumeBuilderComponent implements OnInit, OnDestroy {
   readonly showPreviewModal   = signal(false);
   readonly showUpgrade        = signal(false);
   readonly upgradeTemplateId  = signal<string | null>(null);
+  readonly showProfileEditor  = signal(false);
+  readonly showAiAtsModal     = signal(false);
+  /** Simple view-only dropdown (name/email/plan/dashboard link) opened from the header avatar. */
+  readonly showProfileMenu    = signal(false);
 
   // ── New dashboard shell: icon rail + right-panel tabs ───────────────────
   /** Which view the 320px left panel shows. */
@@ -350,6 +359,7 @@ export class ResumeBuilderComponent implements OnInit, OnDestroy {
   async share(): Promise<void> {
     const r = this.resume();
     if (!r) return;
+    if (!this.authGate.canProceed('share')) return;
     this.showShare.set(true);
     if (r.publicSlug) { this.shareUrl.set(this.shareSvc.publicUrl(r.publicSlug)); return; }
     const result = await this.shareSvc.publish(r);
@@ -392,7 +402,7 @@ export class ResumeBuilderComponent implements OnInit, OnDestroy {
   async download(): Promise<void> {
     const r = this.resume();
     if (!r || this.downloading()) return;
-    if (!this.authGate.canDownload()) return;
+    if (!this.authGate.canProceed('pdf')) return;
     if (PREMIUM_TEMPLATE_IDS.includes(r.templateId as TemplateId)
         && !this.auth.isPro() && !this.auth.hasPurchasedTemplate(r.templateId)) {
       this.upgradeTemplateId.set(r.templateId);
@@ -417,7 +427,7 @@ export class ResumeBuilderComponent implements OnInit, OnDestroy {
   async downloadWord(): Promise<void> {
     const r = this.resume();
     if (!r || this.downloadingDocx()) return;
-    if (!this.authGate.canDownload()) return;
+    if (!this.authGate.canProceed('docx')) return;
     if (PREMIUM_TEMPLATE_IDS.includes(r.templateId as TemplateId)
         && !this.auth.isPro() && !this.auth.hasPurchasedTemplate(r.templateId)) {
       this.upgradeTemplateId.set(r.templateId);
@@ -452,7 +462,7 @@ export class ResumeBuilderComponent implements OnInit, OnDestroy {
 
   /** The toolbar's B/I/U icons are decorative — editing is form-based, not contenteditable. */
   explainFormatting(): void {
-    this.notify.info('Editing your text', 'Formatting applies per-section — open a section on the left to edit its content.');
+    this.notify.info('Editing your text', 'Formatting applies per-section. Open a section on the left to edit its content.');
   }
 
   // ── Escape to close panels ────────────────────────────────────────────────
@@ -464,12 +474,32 @@ export class ResumeBuilderComponent implements OnInit, OnDestroy {
     if (this.showSectionsPanel())  { this.saveReorder();                  return; }
     if (this.showAiPanel())        { this.showAiPanel.set(false);        return; }
     if (this.showUpgrade())        { this.showUpgrade.set(false);        return; }
+    if (this.showProfileEditor())  { this.showProfileEditor.set(false);  return; }
+    if (this.showAiAtsModal())     { this.showAiAtsModal.set(false);     return; }
+    if (this.showProfileMenu())    { this.showProfileMenu.set(false);    return; }
+  }
+
+  @HostListener('document:click', ['$event'])
+  onDocClick(event: MouseEvent): void {
+    if (!this.showProfileMenu()) return;
+    const target = event.target as HTMLElement;
+    if (!target.closest('.profile-menu-root')) this.showProfileMenu.set(false);
   }
 
   // ── Lifecycle ─────────────────────────────────────────────────────────────
   ngOnInit(): void {
     this.applyQueryParams();
-    if (this.authGate.consumePendingDownload()) this.download();
+    switch (this.authGate.consumePendingAction()) {
+      case 'pdf':   this.download();     break;
+      case 'docx':  this.downloadWord(); break;
+      case 'share': this.share();        break;
+    }
+
+    // Deep-link support for the homepage's "AI Resume Writer" / "AI Resume
+    // Improve" cards (?ai=writer / ?ai=improve) — opens the AI panel on the
+    // matching tab via the same runAiTool() the in-app AI dock already uses.
+    const aiParam = this.route.snapshot.queryParamMap.get('ai');
+    if (aiParam === 'writer' || aiParam === 'improve') this.runAiTool(aiParam);
 
     try {
       const visited    = localStorage.getItem('ch_rb_visited');

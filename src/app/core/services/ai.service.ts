@@ -29,6 +29,44 @@ export interface AIFormResult {
   tokensUsed:  number;
 }
 
+export interface AtsAiApply {
+  type: 'summary' | 'bullet' | 'skills';
+  scope?: 'experience' | 'project';
+  index?: number;
+  bulletIndex?: number;
+  value?: string;
+  skillItems?: string[];
+}
+
+export interface AtsAiSuggestion {
+  id: string;
+  category: string;
+  severity: 'critical' | 'warning' | 'info';
+  title: string;
+  detail: string;
+  apply?: AtsAiApply;
+}
+
+export interface AtsAiBreakdown {
+  formatting: number;
+  keywords: number;
+  experience: number;
+  education: number;
+  skills: number;
+  readability: number;
+  atsCompatibility: number;
+}
+
+export interface AtsAiResult {
+  score: number;
+  breakdown: AtsAiBreakdown;
+  strengths: string[];
+  weaknesses: string[];
+  criticalIssues: string[];
+  suggestions: AtsAiSuggestion[];
+  suggestedSkills: string[];
+}
+
 @Injectable({ providedIn: 'root' })
 export class AiService {
   constructor(private api: ApiService) {}
@@ -81,5 +119,9 @@ export class AiService {
     text: string; targetLanguage?: string;
   }): Observable<ApiResponse<{ result: string }>> {
     return this.api.post<ApiResponse<{ result: string }>>('ai/resume/transform', payload);
+  }
+
+  analyzeResumeAts(resume: unknown): Observable<ApiResponse<AtsAiResult>> {
+    return this.api.post<ApiResponse<AtsAiResult>>('ai/resume/ats-analyze', { resume });
   }
 }

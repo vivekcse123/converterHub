@@ -1,3 +1,6 @@
+/* ─── Design Tokens ─────────────────────────────── */
+@import "./app/styles/tokens.css";
+
 /* ─── Tailwind Directives ───────────────────────── */
 @tailwind base;
 @tailwind components;
@@ -84,6 +87,21 @@
            focus-visible:outline-none;
   }
 
+  .card-elevated {
+    @apply bg-elevated rounded-[var(--radius-xl)] shadow-card-hover border border-border
+           transition-all duration-200;
+  }
+
+  .card-bordered {
+    @apply bg-elevated rounded-[var(--radius-xl)] border border-border-strong
+           transition-all duration-200;
+  }
+
+  .card-gradient {
+    @apply rounded-[var(--radius-xl)] border border-border text-white transition-all duration-200;
+    background-image: var(--gradient-brand);
+  }
+
   /* Inputs */
   .input {
     @apply w-full px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-600
@@ -120,6 +138,14 @@
 
   .badge-pro {
     @apply badge bg-amber-100 dark:bg-amber-900/40 text-amber-700 dark:text-amber-400;
+  }
+
+  .badge-info {
+    @apply badge bg-sky-100 dark:bg-sky-900/40 text-sky-700 dark:text-sky-300;
+  }
+
+  .badge-danger {
+    @apply badge bg-red-100 dark:bg-red-900/40 text-red-700 dark:text-red-300;
   }
 
   /* Section container */
@@ -165,6 +191,97 @@
   .pro-blur::after {
     content: '';
     @apply absolute inset-0 backdrop-blur-sm bg-white/50 dark:bg-slate-900/50 z-10 rounded-inherit;
+  }
+
+  /* ─── Landing page design system (2026 redesign) ──────────────── */
+
+  /* Consistent section vertical rhythm — used by every landing section
+     so spacing reads as one system instead of each section improvising. */
+  .lp-section { @apply py-12 sm:py-16; }
+
+  /* Small uppercase eyebrow label above section headings. */
+  .lp-eyebrow {
+    @apply inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider
+           text-primary-600 dark:text-primary-400;
+  }
+
+  /* Section heading pair — eyebrow + h2 + optional subtitle share this rhythm. */
+  .lp-heading {
+    @apply text-3xl sm:text-4xl lg:text-[2.75rem] font-bold text-slate-900 dark:text-white
+           leading-[1.15] tracking-tight;
+  }
+
+  /* Neutral bordered surface card used across product/feature/tool grids. */
+  .lp-card {
+    @apply bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800
+           rounded-2xl transition-all duration-slow ease-standard;
+  }
+
+  .lp-card-hover {
+    @apply lp-card hover:border-primary-300 dark:hover:border-primary-700
+           hover:shadow-card-hover hover:-translate-y-1;
+  }
+
+  /* Frosted-glass surface — used sparingly, over gradients/mockups only. */
+  .lp-glass {
+    @apply bg-white/70 dark:bg-slate-900/60 backdrop-blur-xl
+           border border-white/60 dark:border-slate-700/60;
+  }
+
+  /* ─── Dashboard design system (Phase 1) ─────────────────────────
+     Shell chrome (sidebar/topbar/nav) and small dashboard-only
+     primitives. Content areas use the card-* classes above. */
+
+  .dash-shell {
+    @apply min-h-screen bg-[rgb(var(--color-bg-canvas))] text-content-primary;
+  }
+
+  .dash-sidebar {
+    @apply bg-surface-light border-r border-border
+           flex flex-col transition-[width] duration-slow ease-standard;
+  }
+
+  .dash-nav-item {
+    @apply flex items-center gap-3 px-3 py-2 rounded-[var(--radius-md)] text-sm font-medium
+           text-content-secondary transition-colors duration-fast
+           hover:bg-elevated hover:text-content-primary;
+  }
+
+  .dash-nav-item-active {
+    @apply dash-nav-item bg-primary-50 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300
+           hover:bg-primary-50 dark:hover:bg-primary-900/30 hover:text-primary-700 dark:hover:text-primary-300;
+  }
+
+  .dash-nav-group-label {
+    @apply px-3 pt-4 pb-1.5 text-[11px] font-semibold uppercase tracking-wider text-content-muted;
+  }
+
+  .dash-topbar {
+    @apply sticky top-0 z-30 flex items-center gap-3 h-16 px-4 sm:px-6
+           bg-surface-light/90 backdrop-blur-md
+           border-b border-border;
+  }
+
+  .dash-kbd {
+    @apply inline-flex items-center justify-center min-w-[1.25rem] h-5 px-1.5 rounded
+           border border-border-strong bg-elevated text-[11px] font-medium text-content-muted;
+  }
+
+  .dash-scrim {
+    @apply fixed inset-0 z-40 bg-slate-900/40 backdrop-blur-[2px] animate-fade-in;
+  }
+
+  /* Dropdown menu item — app-menu panel content, and command palette rows. */
+  .menu-item {
+    @apply w-full flex items-center gap-2.5 px-3 py-2 rounded-[var(--radius-md)] text-sm
+           text-content-secondary text-left transition-colors duration-fast cursor-pointer
+           hover:bg-elevated hover:text-content-primary
+           focus-visible:outline-none focus-visible:bg-elevated focus-visible:text-content-primary;
+  }
+
+  .menu-item-danger {
+    @apply menu-item text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20
+           hover:text-red-700 dark:hover:text-red-300;
   }
 }
 
@@ -213,3 +330,62 @@ router-outlet + * {
 @media print {
   .no-print { display: none !important; }
 }
+
+/* ─── Portfolio theme scroll-reveal (shared by all theme components,
+       driven by ScrollRevealDirective's IntersectionObserver) ────── */
+.reveal-init {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1), transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.reveal-visible {
+  opacity: 1;
+  transform: none;
+}
+.reveal-init.reveal-left { transform: translateX(-28px); }
+.reveal-init.reveal-right { transform: translateX(28px); }
+.reveal-init.reveal-scale { transform: scale(0.94); }
+@media (prefers-reduced-motion: reduce) {
+  .reveal-init, .reveal-init.reveal-left, .reveal-init.reveal-right, .reveal-init.reveal-scale {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
+/* ─── Animated gradient mesh (Pulse portfolio theme) ─────────────── */
+@keyframes portfolio-drift-1 {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(6%, 8%) scale(1.1); }
+}
+@keyframes portfolio-drift-2 {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(-8%, -6%) scale(1.15); }
+}
+.portfolio-blob-1 { animation: portfolio-drift-1 16s ease-in-out infinite; }
+.portfolio-blob-2 { animation: portfolio-drift-2 20s ease-in-out infinite; }
+@media (prefers-reduced-motion: reduce) {
+  .portfolio-blob-1, .portfolio-blob-2 { animation: none; }
+}
+
+/* ─── Animated skill-level meter (Pulse portfolio theme) ─────────── */
+.skill-meter-fill {
+  width: 0;
+  transition: width 1s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.reveal-visible .skill-meter-fill { width: var(--meter-target, 100%); }
+
+/* ─── Animated draw-in vertical timeline rule (Folio portfolio theme) */
+.timeline-rule {
+  transform: scaleY(0);
+  transform-origin: top;
+  transition: transform 1s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.reveal-visible .timeline-rule { transform: scaleY(1); }
+
+/* ─── Animated draw-in underline (Lumen / Folio portfolio themes) ── */
+.underline-draw {
+  width: 0;
+  transition: width 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.reveal-visible .underline-draw { width: var(--underline-target, 4rem); }

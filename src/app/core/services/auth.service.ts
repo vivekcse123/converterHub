@@ -19,7 +19,10 @@ export class AuthService {
   readonly user        = this._user.asReadonly();
   readonly token       = this._token.asReadonly();
   readonly isLoggedIn  = computed(() => !!this._token());
-  readonly isAdmin     = computed(() => ['admin','superadmin'].includes(this._user()?.role ?? ''));
+  // Any admin-panel-capable role, not just admin/superadmin — editor/support/moderator
+  // are restricted-permission panel roles (see admin-permission.service.ts), but they
+  // still need the "Admin" entry points shown in the main site header/sidebar.
+  readonly isAdmin     = computed(() => ['admin','superadmin','editor','support','moderator'].includes(this._user()?.role ?? ''));
   readonly isPro       = computed(() => {
     if (['admin','superadmin'].includes(this._user()?.role ?? '')) return true;
     const sub = this._user()?.subscription;
@@ -42,6 +45,12 @@ export class AuthService {
 
   login(email: string, password: string): Observable<AuthResponse> {
     return this.api.post<AuthResponse>('auth/login', { email, password }).pipe(
+      tap((res: any) => this.persistSession(res)));
+  }
+
+  /** @param googleAccessToken OAuth2 access token from GoogleAuthService.signIn() */
+  loginWithGoogle(googleAccessToken: string): Observable<AuthResponse> {
+    return this.api.post<AuthResponse>('auth/google', { accessToken: googleAccessToken }).pipe(
       tap((res: any) => this.persistSession(res)));
   }
 
@@ -96,6 +105,19 @@ export class AuthService {
 
   resetPassword(token: string, password: string): Observable<any> {
     return this.api.post<any>(`auth/reset-password/${token}`, { password });
+  }
+
+  changePassword(currentPassword: string, newPassword: string): Observable<any> {
+    return this.api.patch<any>('auth/change-password', { currentPassword, newPassword });
+  }
+
+  logoutAllDevices(): Observable<any> {
+    return this.api.post<any>('auth/logout-all', {}).pipe(
+      tap(() => {
+        this.clearSession();
+        this.router.navigate(['/']);
+      })
+    );
   }
 
   updateProfile(data: { name?: string; timezone?: string }): Observable<any> {

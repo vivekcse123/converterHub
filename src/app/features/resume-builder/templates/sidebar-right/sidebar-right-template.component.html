@@ -66,7 +66,7 @@
                 <h2 class="sr-heading">Projects</h2>
                 @for (proj of resume().projects; track proj.id) {
                   <div class="sr-entry">
-                    <p class="sr-role">{{ proj.name }}@if (proj.techStack) { <span class="sr-loc"> — {{ proj.techStack }}</span>}</p>
+                    <p class="sr-role">{{ proj.name }}@if (proj.techStack) { <span class="sr-loc"> - {{ proj.techStack }}</span>}</p>
                     @if (proj.link) { <p class="sr-loc">{{ proj.link }}</p> }
                     @if (proj.bullets.length) {
                       <ul class="sr-bullets">

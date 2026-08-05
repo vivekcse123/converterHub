@@ -1,0 +1,43 @@
+.pr-tpl {
+  font-family: var(--r-font, 'Inter', Arial, sans-serif);
+}
+
+.pr-title {
+  color: var(--r-accent, #0f766e);
+}
+
+.pr-roadmap {
+  background: var(--r-accent-12, #f0fdfa);
+  border-radius: 6px;
+  padding: 6pt 4pt;
+}
+
+.pr-dot {
+  width: 7pt;
+  height: 7pt;
+  border-radius: 50%;
+  background: var(--r-accent, #0f766e);
+}
+
+.pr-connector {
+  flex-shrink: 0;
+  width: 12pt;
+  height: 1.5px;
+  background: var(--r-accent-25, #99f6e4);
+  margin: 0 -2pt;
+  align-self: flex-start;
+  margin-top: 4.5pt;
+}
+
+.pr-heading {
+  display: inline-block;
+  font-size: 0.82em;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  color: var(--r-accent, #0f766e);
+  background: var(--r-accent-12, #f0fdfa);
+  border-radius: 3px;
+  padding: 1.5pt 7pt;
+  margin-bottom: 4pt;
+}

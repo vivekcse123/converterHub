@@ -159,7 +159,7 @@ import { PREMIUM_TEMPLATE_IDS } from '../../data/resume-templates.data';
                   <p class="text-xs font-bold text-amber-800 dark:text-amber-300">Just want THIS template?</p>
                 </div>
                 <p class="text-[11px] text-amber-700 dark:text-amber-400 mb-3">
-                  Buy only this template once for ₹29 — no subscription needed. Download it anytime.
+                  Buy only this template once for ₹29, no subscription needed. Download it anytime.
                 </p>
                 @if (auth.hasPurchasedTemplate(triggeredBy!)) {
                   <div class="text-center text-xs py-2 rounded-lg bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-300 font-semibold">
@@ -170,7 +170,7 @@ import { PREMIUM_TEMPLATE_IDS } from '../../data/resume-templates.data';
                     class="w-full py-2.5 rounded-lg bg-amber-500 hover:bg-amber-600 text-white font-bold transition text-sm"
                     [disabled]="loadingTemplate()"
                     (click)="purchaseTemplate()">
-                    {{ loadingTemplate() ? 'Opening payment...' : 'Buy This Template — ₹29 One-Time' }}
+                    {{ loadingTemplate() ? 'Opening payment...' : 'Buy This Template - ₹29 One-Time' }}
                   </button>
                 }
               </div>
@@ -199,7 +199,7 @@ import { PREMIUM_TEMPLATE_IDS } from '../../data/resume-templates.data';
             <div class="px-5 pb-3 text-center">
               <button class="text-xs text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 underline-offset-2 hover:underline transition"
                       (click)="useFreeTemplate.emit(); close.emit()">
-                Use a Free Template Instead — Keep All My Data
+                Use a Free Template Instead - Keep All My Data
               </button>
             </div>
           }

@@ -1,9 +1,9 @@
-<header class="sticky top-0 z-50 bg-white/90 dark:bg-slate-900/90 backdrop-blur-md border-b border-slate-200 dark:border-slate-700 shadow-sm" role="banner">
+<header class="sticky top-0 z-50 bg-white/85 dark:bg-slate-950/85 backdrop-blur-xl border-b border-slate-200/70 dark:border-slate-800/70" role="banner">
   <div class="container-app">
 
     <!-- Search overlay row (desktop) -->
     @if (searchOpen()) {
-    <div class="hidden md:flex items-center gap-3 h-16 animate-slide-down">
+    <div class="search-overlay-root hidden md:flex items-center gap-3 h-16 animate-slide-down">
       <button (click)="closeSearch()" aria-label="Close search"
         class="p-2 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors text-slate-500 dark:text-slate-400 shrink-0">
         <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -15,91 +15,95 @@
     }
 
     <!-- Main header row -->
-    <div class="flex items-center justify-between h-16" [class.hidden]="searchOpen()" [class.md:hidden]="searchOpen()">
+    <div class="flex items-center justify-between h-16 gap-4" [class.hidden]="searchOpen()" [class.md:hidden]="searchOpen()">
 
       <!-- Logo -->
-      <a routerLink="/" class="flex items-center gap-2.5 group" (click)="closeMobile()">
+      <a routerLink="/" class="flex items-center gap-2.5 group shrink-0" (click)="closeMobile()">
         <img src="assets/web-app-manifest-192x192.png" alt="ApnaConverter logo"
-             class="w-10 h-10 object-contain group-hover:scale-105 transition-transform duration-200"
-             width="40" height="40">
-        <span class="font-bold text-xl text-slate-900 dark:text-white tracking-tight">
+             class="w-9 h-9 object-contain group-hover:scale-105 transition-transform duration-fast"
+             width="36" height="36">
+        <span class="font-bold text-lg text-slate-900 dark:text-white tracking-tight">
           Apna<span class="text-primary-600">Converter</span>
         </span>
       </a>
 
       <!-- Desktop Nav -->
-      <nav class="hidden md:flex items-center gap-0.5" aria-label="Main navigation">
+      <nav class="hidden lg:flex items-center gap-0.5" aria-label="Main navigation">
 
-        <!-- Templates mega menu -->
-        <div class="relative templates-menu-root">
-          <button (click)="toggleTemplates()" type="button"
-            class="flex items-center gap-1 px-3 py-2 rounded-lg text-sm font-medium transition-colors"
-            [attr.aria-expanded]="templatesOpen()"
+        <!-- Products mega menu -->
+        <div class="relative products-menu-root">
+          <button (click)="toggleProducts()" type="button"
+            class="flex items-center gap-1 px-3.5 py-2 rounded-lg text-sm font-medium transition-colors"
+            [attr.aria-expanded]="productsOpen()"
             aria-haspopup="true"
-            [class]="templatesOpen() ? 'bg-primary-50 dark:bg-primary-950 text-primary-600' : 'text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800'">
-            Templates
-            <svg class="w-3.5 h-3.5 transition-transform duration-200" [class.rotate-180]="templatesOpen()" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            [class]="productsOpen() ? 'bg-primary-50 dark:bg-primary-950/60 text-primary-600' : 'text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800'">
+            Products
+            <svg class="w-3.5 h-3.5 transition-transform duration-fast" [class.rotate-180]="productsOpen()" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"/>
             </svg>
           </button>
 
-          @if (templatesOpen()) {
-          <div class="absolute top-full left-0 mt-2 w-72 bg-white dark:bg-slate-800 rounded-2xl shadow-2xl border border-slate-200 dark:border-slate-700 z-50 overflow-hidden animate-slide-down p-2">
-            <a routerLink="/resume-templates" (click)="closeTemplates()" class="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-primary-50 dark:hover:bg-primary-900/30 transition group">
-              <span class="w-8 h-8 rounded-lg bg-primary-100 dark:bg-primary-900/40 flex items-center justify-center text-sm shrink-0">📄</span>
-              <div><p class="text-sm font-semibold text-slate-800 dark:text-white group-hover:text-primary-700 dark:group-hover:text-primary-300">Resume Templates</p><p class="text-xs text-slate-400">30+ professional designs</p></div>
+          @if (productsOpen()) {
+          <div class="absolute top-full left-0 mt-2 w-[38rem] p-3 grid grid-cols-2 gap-1 lp-card shadow-popover z-50 animate-slide-down">
+            <a routerLink="/resume-builder" (click)="closeProducts()" class="flex items-start gap-3 px-3 py-2.5 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800/60 transition group">
+              <span class="w-9 h-9 rounded-lg bg-primary-50 dark:bg-primary-900/30 flex items-center justify-center shrink-0"><svg class="w-4 h-4 text-primary-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg></span>
+              <span><span class="block text-sm font-semibold text-slate-800 dark:text-white">Resume Builder</span><span class="block text-xs text-slate-400">ATS-optimized, 30+ templates</span></span>
             </a>
-            <a routerLink="/biodata-maker" (click)="closeTemplates()" class="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-rose-50 dark:hover:bg-rose-900/30 transition group">
-              <span class="w-8 h-8 rounded-lg bg-rose-100 dark:bg-rose-900/40 flex items-center justify-center text-sm shrink-0">💍</span>
-              <div><p class="text-sm font-semibold text-slate-800 dark:text-white group-hover:text-rose-700 dark:group-hover:text-rose-300">Biodata Templates</p><p class="text-xs text-slate-400">Marriage & personal biodata</p></div>
+            <a routerLink="/ats-resume-checker" (click)="closeProducts()" class="flex items-start gap-3 px-3 py-2.5 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800/60 transition group">
+              <span class="w-9 h-9 rounded-lg bg-amber-50 dark:bg-amber-900/30 flex items-center justify-center shrink-0"><svg class="w-4 h-4 text-amber-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4 M4 6a2 2 0 012-2h7l5 5v9a2 2 0 01-2 2H6a2 2 0 01-2-2V6z M13 4v5h5"/></svg></span>
+              <span><span class="block text-sm font-semibold text-slate-800 dark:text-white">ATS Checker</span><span class="block text-xs text-slate-400">Score your resume against ATS</span></span>
             </a>
-            <a routerLink="/resume-builder/cover-letter" (click)="closeTemplates()" class="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-emerald-50 dark:hover:bg-emerald-900/30 transition group">
-              <span class="w-8 h-8 rounded-lg bg-emerald-100 dark:bg-emerald-900/40 flex items-center justify-center text-sm shrink-0">✉️</span>
-              <div><p class="text-sm font-semibold text-slate-800 dark:text-white group-hover:text-emerald-700 dark:group-hover:text-emerald-300">Cover Letter Templates</p><p class="text-xs text-slate-400">Professional & tailored</p></div>
+            <a routerLink="/portfolio" (click)="closeProducts()" class="flex items-start gap-3 px-3 py-2.5 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800/60 transition group">
+              <span class="w-9 h-9 rounded-lg bg-indigo-50 dark:bg-indigo-900/30 flex items-center justify-center shrink-0"><svg class="w-4 h-4 text-indigo-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path stroke-linecap="round" stroke-linejoin="round" d="M12 21c4.97 0 9-4.03 9-9s-4.03-9-9-9-9 4.03-9 9 4.03 9 9 9zM3 12h18M12 3c2.2 2.6 2.2 15.4 0 18M12 3c-2.2 2.6-2.2 15.4 0 18"/></svg></span>
+              <span><span class="block text-sm font-semibold text-slate-800 dark:text-white">Portfolio Builder</span><span class="block text-xs text-slate-400">Live, shareable portfolio page</span></span>
             </a>
-            <a routerLink="/portfolio" (click)="closeTemplates()" class="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-indigo-50 dark:hover:bg-indigo-900/30 transition group">
-              <span class="w-8 h-8 rounded-lg bg-indigo-100 dark:bg-indigo-900/40 flex items-center justify-center text-sm shrink-0">🌐</span>
-              <div><p class="text-sm font-semibold text-slate-800 dark:text-white group-hover:text-indigo-700 dark:group-hover:text-indigo-300">Portfolio Templates</p><p class="text-xs text-slate-400">Shareable online portfolios</p></div>
+            <a routerLink="/biodata-maker" (click)="closeProducts()" class="flex items-start gap-3 px-3 py-2.5 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800/60 transition group">
+              <span class="w-9 h-9 rounded-lg bg-rose-50 dark:bg-rose-900/30 flex items-center justify-center shrink-0"><svg class="w-4 h-4 text-rose-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path stroke-linecap="round" stroke-linejoin="round" d="M3 7a2 2 0 012-2h4l2 2h6a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2V7z"/></svg></span>
+              <span><span class="block text-sm font-semibold text-slate-800 dark:text-white">Biodata Maker</span><span class="block text-xs text-slate-400">Marriage & professional biodata</span></span>
             </a>
-            <a routerLink="/government-resume-builder" (click)="closeTemplates()" class="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-orange-50 dark:hover:bg-orange-900/30 transition group">
-              <span class="w-8 h-8 rounded-lg bg-orange-100 dark:bg-orange-900/40 flex items-center justify-center text-sm shrink-0">🏛️</span>
-              <div><p class="text-sm font-semibold text-slate-800 dark:text-white group-hover:text-orange-700 dark:group-hover:text-orange-300">Government Resume</p><p class="text-xs text-slate-400">With declaration & photo</p></div>
+            <a routerLink="/resume-builder/cover-letter" (click)="closeProducts()" class="flex items-start gap-3 px-3 py-2.5 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800/60 transition group">
+              <span class="w-9 h-9 rounded-lg bg-emerald-50 dark:bg-emerald-900/30 flex items-center justify-center shrink-0"><svg class="w-4 h-4 text-emerald-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path stroke-linecap="round" stroke-linejoin="round" d="M4 4h16v16H4z M4 6l8 6 8-6"/></svg></span>
+              <span><span class="block text-sm font-semibold text-slate-800 dark:text-white">Cover Letter Builder</span><span class="block text-xs text-slate-400">AI-drafted, tailored letters</span></span>
             </a>
-            <a routerLink="/fresher-resume-builder" (click)="closeTemplates()" class="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-teal-50 dark:hover:bg-teal-900/30 transition group">
-              <span class="w-8 h-8 rounded-lg bg-teal-100 dark:bg-teal-900/40 flex items-center justify-center text-sm shrink-0">🎓</span>
-              <div><p class="text-sm font-semibold text-slate-800 dark:text-white group-hover:text-teal-700 dark:group-hover:text-teal-300">Fresher Resume</p><p class="text-xs text-slate-400">First job templates for graduates</p></div>
+            <a routerLink="/tools" [queryParams]="{category:'pdf'}" (click)="closeProducts()" class="flex items-start gap-3 px-3 py-2.5 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800/60 transition group">
+              <span class="w-9 h-9 rounded-lg bg-red-50 dark:bg-red-900/30 flex items-center justify-center shrink-0"><svg class="w-4 h-4 text-red-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path stroke-linecap="round" stroke-linejoin="round" d="M4 6a2 2 0 012-2h7l5 5v9a2 2 0 01-2 2H6a2 2 0 01-2-2V6z M13 4v5h5"/></svg></span>
+              <span><span class="block text-sm font-semibold text-slate-800 dark:text-white">PDF Tools</span><span class="block text-xs text-slate-400">Merge, split, compress & more</span></span>
             </a>
-            <a routerLink="/ats-resume-checker" (click)="closeTemplates()" class="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-blue-50 dark:hover:bg-blue-900/30 transition group">
-              <span class="w-8 h-8 rounded-lg bg-blue-100 dark:bg-blue-900/40 flex items-center justify-center text-sm shrink-0">🎯</span>
-              <div><p class="text-sm font-semibold text-slate-800 dark:text-white group-hover:text-blue-700 dark:group-hover:text-blue-300">ATS Resume Templates</p><p class="text-xs text-slate-400">Guaranteed ATS-friendly</p></div>
+            <a routerLink="/tools" [queryParams]="{category:'image'}" (click)="closeProducts()" class="flex items-start gap-3 px-3 py-2.5 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800/60 transition group">
+              <span class="w-9 h-9 rounded-lg bg-cyan-50 dark:bg-cyan-900/30 flex items-center justify-center shrink-0"><svg class="w-4 h-4 text-cyan-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path stroke-linecap="round" stroke-linejoin="round" d="M3 5a2 2 0 012-2h14a2 2 0 012 2v14a2 2 0 01-2 2H5a2 2 0 01-2-2V5z M8.5 9.5a1.5 1.5 0 100-3 1.5 1.5 0 000 3z M21 15l-5-5-9 9"/></svg></span>
+              <span><span class="block text-sm font-semibold text-slate-800 dark:text-white">Image Tools</span><span class="block text-xs text-slate-400">Convert, resize, compress</span></span>
+            </a>
+            <a routerLink="/background-remover" (click)="closeProducts()" class="flex items-start gap-3 px-3 py-2.5 rounded-xl hover:bg-slate-50 dark:hover:bg-slate-800/60 transition group">
+              <span class="w-9 h-9 rounded-lg bg-violet-50 dark:bg-violet-900/30 flex items-center justify-center shrink-0"><svg class="w-4 h-4 text-violet-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.5l2 2 4-4.5M12 3l7 3v5c0 4.5-3 8.5-7 10-4-1.5-7-5.5-7-10V6l7-3z"/></svg></span>
+              <span><span class="block text-sm font-semibold text-slate-800 dark:text-white">Background Remover</span><span class="block text-xs text-slate-400">Remove & replace photo backgrounds</span></span>
+            </a>
+            <a routerLink="/resume-templates" (click)="closeProducts()" class="flex items-center justify-between px-3 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-800/60 hover:bg-primary-50 dark:hover:bg-primary-950/40 transition group mt-1">
+              <span class="text-sm font-semibold text-slate-700 dark:text-slate-200 group-hover:text-primary-700 dark:group-hover:text-primary-300">Browse all 30+ templates</span>
+              <svg class="w-4 h-4 text-slate-400 group-hover:text-primary-600 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14M13 6l6 6-6 6"/></svg>
+            </a>
+            <a routerLink="/tools" (click)="closeProducts()" class="flex items-center justify-between px-3 py-2.5 rounded-xl bg-slate-50 dark:bg-slate-800/60 hover:bg-primary-50 dark:hover:bg-primary-950/40 transition group mt-1">
+              <span class="text-sm font-semibold text-slate-700 dark:text-slate-200 group-hover:text-primary-700 dark:group-hover:text-primary-300">Browse all 40+ tools</span>
+              <svg class="w-4 h-4 text-slate-400 group-hover:text-primary-600 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14M13 6l6 6-6 6"/></svg>
             </a>
           </div>
           }
         </div>
 
-        <a routerLink="/resume-builder" routerLinkActive="bg-primary-50 dark:bg-primary-950 text-primary-600" [routerLinkActiveOptions]="{exact:true}" ariaCurrentWhenActive="page"
-           class="px-3 py-2 rounded-lg text-sm font-medium text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
-          Resume Builder
-        </a>
-        <a routerLink="/ats-resume-checker" routerLinkActive="bg-primary-50 dark:bg-primary-950 text-primary-600" ariaCurrentWhenActive="page"
-           class="px-3 py-2 rounded-lg text-sm font-medium text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
-          ATS Checker
-        </a>
-        <a routerLink="/biodata-maker" routerLinkActive="bg-primary-50 dark:bg-primary-950 text-primary-600" ariaCurrentWhenActive="page"
-           class="px-3 py-2 rounded-lg text-sm font-medium text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
-          Biodata
-        </a>
-        <a routerLink="/resume-builder/cover-letter" routerLinkActive="bg-primary-50 dark:bg-primary-950 text-primary-600" ariaCurrentWhenActive="page"
-           class="px-3 py-2 rounded-lg text-sm font-medium text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
-          Cover Letter
-        </a>
-        <a routerLink="/resume-builder/pricing" routerLinkActive="bg-primary-50 dark:bg-primary-950 text-primary-600" ariaCurrentWhenActive="page"
-           class="px-3 py-2 rounded-lg text-sm font-medium text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
+        <a routerLink="/resume-builder/pricing" routerLinkActive="bg-primary-50 dark:bg-primary-950/60 text-primary-600" ariaCurrentWhenActive="page"
+           class="px-3.5 py-2 rounded-lg text-sm font-medium text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
           Pricing
         </a>
-        <a routerLink="/tools" routerLinkActive="bg-primary-50 dark:bg-primary-950 text-primary-600" ariaCurrentWhenActive="page"
-           class="px-3 py-2 rounded-lg text-sm font-medium text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
-          Tools
+        <a routerLink="/resume-templates" routerLinkActive="bg-primary-50 dark:bg-primary-950/60 text-primary-600" ariaCurrentWhenActive="page"
+           class="px-3.5 py-2 rounded-lg text-sm font-medium text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
+          Templates
+        </a>
+        <a routerLink="/resume-builder" routerLinkActive="bg-primary-50 dark:bg-primary-950/60 text-primary-600" [routerLinkActiveOptions]="{exact:true}" ariaCurrentWhenActive="page"
+           class="px-3.5 py-2 rounded-lg text-sm font-medium text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
+          Resume Builder
+        </a>
+        <a routerLink="/portfolio" routerLinkActive="bg-primary-50 dark:bg-primary-950/60 text-primary-600" ariaCurrentWhenActive="page"
+           class="px-3.5 py-2 rounded-lg text-sm font-medium text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
+          Portfolio Builder
         </a>
       </nav>
 
@@ -108,7 +112,7 @@
 
         <!-- Search Icon (desktop) -->
         <button (click)="openSearch()" aria-label="Search tools"
-          class="hidden md:flex p-2 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors text-slate-600 dark:text-slate-300">
+          class="search-overlay-root hidden md:flex p-2 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors text-slate-600 dark:text-slate-300">
           <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
               d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
@@ -118,29 +122,33 @@
         <!-- Dark Mode Toggle -->
         <button (click)="theme.toggle()" aria-label="Toggle dark mode"
           class="p-2 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors text-slate-600 dark:text-slate-300">
-          @if (!theme.isDark()) {
-          <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <!--
+            Both icons always live in the DOM and toggle via [class.hidden] rather
+            than @if. An @if pair driven by theme.isDark() flips value between the
+            server's default ('light') and the client's resolved preference the
+            instant initTheme() runs post-hydration - Angular occasionally fails to
+            reconcile that structural swap cleanly, leaving both icons on screen.
+            A property-binding toggle on stable nodes has no such hydration hazard.
+          -->
+          <svg class="w-5 h-5" [class.hidden]="theme.isDark()" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
               d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"/>
           </svg>
-          }
-          @if (theme.isDark()) {
-          <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <svg class="w-5 h-5" [class.hidden]="!theme.isDark()" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
               d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"/>
           </svg>
-          }
         </button>
 
         <!-- Auth Buttons -->
         @if (!auth.isLoggedIn()) {
-          <a routerLink="/login" class="hidden md:inline-flex btn btn-secondary btn-sm">Login</a>
-          <a routerLink="/resume-builder" class="hidden md:inline-flex btn btn-primary btn-sm">Create Resume →</a>
-          <a routerLink="/register" class="md:hidden btn btn-primary btn-sm">Sign up free</a>
+          <a routerLink="/login" class="hidden lg:inline-flex btn btn-secondary btn-sm">Login</a>
+          <a routerLink="/register" class="hidden lg:inline-flex btn btn-primary btn-sm">Sign Up</a>
+          <a routerLink="/register" class="lg:hidden btn btn-primary btn-sm">Sign up</a>
         }
         @else {
           <!-- User Avatar Dropdown (desktop) -->
-          <div class="relative hidden md:block profile-dropdown-root">
+          <div class="relative hidden lg:block profile-dropdown-root">
             <button (click)="toggleProfile()"
               class="flex items-center gap-2 px-3 py-1.5 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
               <span class="w-7 h-7 bg-primary-600 rounded-full text-white text-xs flex items-center justify-center font-bold shrink-0">
@@ -149,21 +157,47 @@
               <span class="text-sm font-medium text-slate-700 dark:text-slate-200 max-w-[110px] truncate">
                 {{ auth.user()?.name }}
               </span>
-              <svg class="w-4 h-4 text-slate-400 transition-transform duration-200" [class.rotate-180]="profileOpen()"
+              <svg class="w-4 h-4 text-slate-400 transition-transform duration-fast" [class.rotate-180]="profileOpen()"
                    fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
               </svg>
             </button>
 
             @if (profileOpen()) {
-              <div class="absolute right-0 top-full mt-2 w-52 bg-white dark:bg-slate-800 rounded-xl shadow-xl border border-slate-200 dark:border-slate-700 z-20 overflow-hidden animate-slide-down">
-                <div class="px-4 py-3 border-b border-slate-100 dark:border-slate-700">
-                  <p class="text-sm font-semibold text-slate-800 dark:text-white truncate">{{ auth.user()?.name }}</p>
-                  <p class="text-xs text-slate-500 dark:text-slate-400 truncate mt-0.5">{{ auth.user()?.email }}</p>
+              <div class="absolute right-0 top-full mt-2 w-72 rounded-2xl border border-slate-200 dark:border-slate-800 shadow-popover z-20 overflow-hidden animate-slide-down bg-white dark:bg-slate-900">
+                <div class="px-4 py-4 bg-gradient-to-br from-primary-600 to-indigo-600">
+                  <div class="flex items-center gap-3">
+                    <div class="w-11 h-11 rounded-full bg-white/20 border border-white/30 text-white flex items-center justify-center text-sm font-bold shrink-0">
+                      {{ auth.user()?.name?.charAt(0)?.toUpperCase() }}
+                    </div>
+                    <div class="min-w-0 flex-1">
+                      <p class="text-sm font-semibold text-white truncate">{{ auth.user()?.name }}</p>
+                      <p class="text-xs text-white/75 truncate mt-0.5">{{ auth.user()?.email }}</p>
+                    </div>
+                  </div>
                 </div>
+
+                <div class="px-4 py-3 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between">
+                  <div>
+                    <p class="text-[10px] font-bold uppercase tracking-wide text-slate-400">Plan</p>
+                    <span class="inline-block mt-1 px-2 py-0.5 rounded-full text-[11px] font-bold"
+                          [class]="auth.isPro() ? 'bg-amber-100 dark:bg-amber-900/40 text-amber-700 dark:text-amber-400' : 'bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400'">
+                      {{ auth.currentPlan() === 'free' ? 'Free' : (auth.currentPlan() | titlecase) }}
+                    </span>
+                  </div>
+                  @if (auth.isPro() && auth.subscriptionEnd()) {
+                    <div class="text-right">
+                      <p class="text-[10px] font-bold uppercase tracking-wide text-slate-400">
+                        {{ auth.user()?.subscription?.cancelAtPeriodEnd ? 'Ends' : 'Renews' }}
+                      </p>
+                      <p class="text-xs font-semibold text-slate-700 dark:text-slate-200 mt-1">{{ auth.subscriptionEnd() | date: 'mediumDate' }}</p>
+                    </div>
+                  }
+                </div>
+
                 <div class="py-1.5">
                   <a routerLink="/dashboard" (click)="closeProfile()"
-                    class="flex items-center gap-2.5 px-4 py-2.5 text-sm text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors">
+                    class="flex items-center gap-2.5 px-4 py-2.5 text-sm text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">
                     <svg class="w-4 h-4 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>
                     </svg>
@@ -178,7 +212,14 @@
                       Admin Panel
                     </a>
                   }
-                  <hr class="my-1 border-slate-100 dark:border-slate-700">
+                  @if (!auth.isPro()) {
+                    <a routerLink="/resume-builder/pricing" (click)="closeProfile()"
+                      class="flex items-center gap-2.5 px-4 py-2.5 text-sm font-semibold text-amber-600 dark:text-amber-400 hover:bg-amber-50 dark:hover:bg-amber-900/20 transition-colors">
+                      <svg class="w-4 h-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+                      Upgrade to Pro
+                    </a>
+                  }
+                  <hr class="my-1 border-slate-100 dark:border-slate-800">
                   <button (click)="auth.logout(); closeProfile()"
                     class="w-full flex items-center gap-2.5 px-4 py-2.5 text-sm text-red-500 hover:bg-red-50 dark:hover:bg-red-950/20 transition-colors">
                     <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -190,10 +231,15 @@
               </div>
             }
           </div>
+
+          <!-- Profile avatar (mobile) -->
+          <a routerLink="/dashboard" class="lg:hidden w-8 h-8 bg-primary-600 rounded-full text-white text-xs flex items-center justify-center font-bold shrink-0" aria-label="Go to dashboard">
+            {{ auth.user()?.name?.charAt(0)?.toUpperCase() }}
+          </a>
         }
 
         <!-- Mobile hamburger -->
-        <button (click)="toggleMobile()" class="md:hidden p-2 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+        <button (click)="toggleMobile()" class="lg:hidden p-2 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
           [attr.aria-label]="mobileOpen() ? 'Close menu' : 'Open menu'"
           [attr.aria-expanded]="mobileOpen()"
           aria-controls="mobile-nav">
@@ -212,30 +258,30 @@
 
     <!-- Mobile Nav -->
     @if (mobileOpen()) {
-    <div id="mobile-nav" class="md:hidden pb-4 animate-slide-down border-t border-slate-100 dark:border-slate-800 mt-1" role="navigation" aria-label="Mobile navigation">
+    <div id="mobile-nav" class="lg:hidden pb-4 animate-slide-down border-t border-slate-100 dark:border-slate-800 mt-1" role="navigation" aria-label="Mobile navigation">
       <!-- Mobile Search -->
       <div class="px-4 pt-3 pb-2">
         <app-global-search />
       </div>
       <nav class="flex flex-col gap-1 pt-2">
-        <a routerLink="/resume-builder"              routerLinkActive="bg-primary-50 dark:bg-primary-950 !text-primary-600" ariaCurrentWhenActive="page" [routerLinkActiveOptions]="{exact:true}" (click)="closeMobile()" class="px-4 py-2.5 rounded-xl text-sm font-medium text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">Resume Builder</a>
-        <a routerLink="/ats-resume-checker"          routerLinkActive="bg-primary-50 dark:bg-primary-950 !text-primary-600" ariaCurrentWhenActive="page" (click)="closeMobile()" class="px-4 py-2.5 rounded-xl text-sm font-medium text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">ATS Checker</a>
-        <a routerLink="/resume-templates"            routerLinkActive="bg-primary-50 dark:bg-primary-950 !text-primary-600" ariaCurrentWhenActive="page" (click)="closeMobile()" class="px-4 py-2.5 rounded-xl text-sm font-medium text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">Resume Templates</a>
-        <a routerLink="/biodata-maker"               routerLinkActive="bg-primary-50 dark:bg-primary-950 !text-primary-600" ariaCurrentWhenActive="page" (click)="closeMobile()" class="px-4 py-2.5 rounded-xl text-sm font-medium text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">Biodata Maker</a>
-        <a routerLink="/resume-builder/cover-letter" routerLinkActive="bg-primary-50 dark:bg-primary-950 !text-primary-600" ariaCurrentWhenActive="page" (click)="closeMobile()" class="px-4 py-2.5 rounded-xl text-sm font-medium text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">Cover Letter</a>
-        <a routerLink="/government-resume-builder"   routerLinkActive="bg-primary-50 dark:bg-primary-950 !text-primary-600" ariaCurrentWhenActive="page" (click)="closeMobile()" class="px-4 py-2.5 rounded-xl text-sm font-medium text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">Govt Resume</a>
-        <a routerLink="/fresher-resume-builder"      routerLinkActive="bg-primary-50 dark:bg-primary-950 !text-primary-600" ariaCurrentWhenActive="page" (click)="closeMobile()" class="px-4 py-2.5 rounded-xl text-sm font-medium text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">Fresher Resume</a>
-        <a routerLink="/resume-builder/pricing"      routerLinkActive="bg-primary-50 dark:bg-primary-950 !text-primary-600" ariaCurrentWhenActive="page" (click)="closeMobile()" class="px-4 py-2.5 rounded-xl text-sm font-medium text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">Pricing</a>
-        <a routerLink="/tools"                       routerLinkActive="bg-primary-50 dark:bg-primary-950 !text-primary-600" ariaCurrentWhenActive="page" (click)="closeMobile()" class="px-4 py-2.5 rounded-xl text-sm font-medium text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">All Tools</a>
+        <a routerLink="/resume-builder"              routerLinkActive="bg-primary-50 dark:bg-primary-950/60 !text-primary-600" ariaCurrentWhenActive="page" [routerLinkActiveOptions]="{exact:true}" (click)="closeMobile()" class="px-4 py-2.5 rounded-xl text-sm font-medium text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">Resume Builder</a>
+        <a routerLink="/ats-resume-checker"          routerLinkActive="bg-primary-50 dark:bg-primary-950/60 !text-primary-600" ariaCurrentWhenActive="page" (click)="closeMobile()" class="px-4 py-2.5 rounded-xl text-sm font-medium text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">ATS Checker</a>
+        <a routerLink="/portfolio"                   routerLinkActive="bg-primary-50 dark:bg-primary-950/60 !text-primary-600" ariaCurrentWhenActive="page" (click)="closeMobile()" class="px-4 py-2.5 rounded-xl text-sm font-medium text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">Portfolio Builder</a>
+        <a routerLink="/biodata-maker"               routerLinkActive="bg-primary-50 dark:bg-primary-950/60 !text-primary-600" ariaCurrentWhenActive="page" (click)="closeMobile()" class="px-4 py-2.5 rounded-xl text-sm font-medium text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">Biodata Maker</a>
+        <a routerLink="/resume-builder/cover-letter" routerLinkActive="bg-primary-50 dark:bg-primary-950/60 !text-primary-600" ariaCurrentWhenActive="page" (click)="closeMobile()" class="px-4 py-2.5 rounded-xl text-sm font-medium text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">Cover Letter</a>
+        <a routerLink="/background-remover"          routerLinkActive="bg-primary-50 dark:bg-primary-950/60 !text-primary-600" ariaCurrentWhenActive="page" (click)="closeMobile()" class="px-4 py-2.5 rounded-xl text-sm font-medium text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">Background Remover</a>
+        <a routerLink="/tools"                       routerLinkActive="bg-primary-50 dark:bg-primary-950/60 !text-primary-600" ariaCurrentWhenActive="page" (click)="closeMobile()" class="px-4 py-2.5 rounded-xl text-sm font-medium text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">All Tools</a>
+        <a routerLink="/resume-builder/pricing"      routerLinkActive="bg-primary-50 dark:bg-primary-950/60 !text-primary-600" ariaCurrentWhenActive="page" (click)="closeMobile()" class="px-4 py-2.5 rounded-xl text-sm font-medium text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">Pricing</a>
+        <a routerLink="/resume-templates" routerLinkActive="bg-primary-50 dark:bg-primary-950/60 !text-primary-600" ariaCurrentWhenActive="page" (click)="closeMobile()" class="px-4 py-2.5 rounded-xl text-sm font-medium text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">Templates</a>
         <hr class="my-1 border-slate-200 dark:border-slate-700">
         @if (!auth.isLoggedIn()) {
           <a routerLink="/login"    (click)="closeMobile()" class="px-4 py-2.5 rounded-xl text-sm font-medium text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">Login</a>
-          <a routerLink="/register" (click)="closeMobile()" class="px-4 py-2.5 rounded-xl text-sm font-medium text-primary-600 hover:bg-primary-50 dark:hover:bg-primary-950 transition-colors">Sign up free</a>
+          <a routerLink="/register" (click)="closeMobile()" class="px-4 py-2.5 rounded-xl text-sm font-medium text-primary-600 hover:bg-primary-50 dark:hover:bg-primary-950/40 transition-colors">Sign up free</a>
         } @else {
           @if (auth.isAdmin()) {
             <a routerLink="/admin" (click)="closeMobile()" class="px-4 py-2.5 rounded-xl text-sm font-medium text-rose-600 dark:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/20 transition-colors">Admin Panel</a>
           }
-          <a routerLink="/dashboard" routerLinkActive="bg-primary-50 dark:bg-primary-950 !text-primary-600" ariaCurrentWhenActive="page" (click)="closeMobile()" class="px-4 py-2.5 rounded-xl text-sm font-medium text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">Dashboard</a>
+          <a routerLink="/dashboard" routerLinkActive="bg-primary-50 dark:bg-primary-950/60 !text-primary-600" ariaCurrentWhenActive="page" (click)="closeMobile()" class="px-4 py-2.5 rounded-xl text-sm font-medium text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors">Dashboard</a>
           <button (click)="auth.logout(); closeMobile()" class="text-left px-4 py-2.5 rounded-xl text-sm font-medium text-red-500 hover:bg-red-50 dark:hover:bg-red-950/20 transition-colors">Logout</button>
         }
       </nav>

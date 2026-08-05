@@ -1,0 +1,17 @@
+/* Swiss-minimal — no accent color anywhere, hierarchy from type weight/size
+   and hairline rules only. Distinct from pure-minimal, which uses a single
+   rule under the name and nothing else. */
+.gf-tpl {
+  font-family: var(--r-font, 'Inter', Arial, sans-serif);
+}
+
+.gf-heading {
+  font-size: 0.85em;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #0f172a;
+  border-bottom: 1px solid #cbd5e1;
+  padding-bottom: 3pt;
+  margin-bottom: 6pt;
+}

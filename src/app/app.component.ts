@@ -3,7 +3,7 @@ import { isPlatformBrowser, CommonModule } from '@angular/common';
 import { RouterOutlet, Router, NavigationEnd } from '@angular/router';
 import { HeaderComponent } from './shared/components/header/header.component';
 import { FooterComponent } from './shared/components/footer/footer.component';
-import { NotificationComponent } from './shared/components/notification/notification.component';
+import { ToastContainerComponent } from './shared/components/toast/toast-container.component';
 import { ConfirmDialogComponent } from './shared/components/confirm-dialog/confirm-dialog.component';
 import { ThemeService } from './core/services/theme.service';
 import { SeoService } from './core/services/seo.service';
@@ -14,7 +14,7 @@ import { filter } from 'rxjs/operators';
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [CommonModule, RouterOutlet, HeaderComponent, FooterComponent, NotificationComponent, ConfirmDialogComponent],
+  imports: [CommonModule, RouterOutlet, HeaderComponent, FooterComponent, ToastContainerComponent, ConfirmDialogComponent],
   template: `
     <a href="#main-content"
        class="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-[9999] focus:rounded-lg focus:bg-primary-600 focus:px-4 focus:py-2 focus:text-sm focus:font-semibold focus:text-white focus:shadow-lg">
@@ -26,7 +26,7 @@ import { filter } from 'rxjs/operators';
         <router-outlet />
       </main>
       @if (!hideShell()) { <app-footer /> }
-      <app-notification />
+      <app-toast-container />
       <app-confirm-dialog />
 
       <!-- Global stuck-conversion notice: appears when any conversion takes > 15 s -->
@@ -70,14 +70,17 @@ export class AppComponent implements OnInit {
       fetch(pingUrl, { method: 'GET', cache: 'no-store' }).catch(() => {});
     }
 
-    this.router.events.pipe(filter(e => e instanceof NavigationEnd)).subscribe(() => {
-      let route = this.router.routerState.snapshot.root;
-      let hide = false;
-      while (route) {
-        if (route.data['hideShell']) { hide = true; break; }
-        route = route.firstChild!;
-      }
-      this.hideShell.set(hide);
-    });
+    this.updateHideShell();
+    this.router.events.pipe(filter(e => e instanceof NavigationEnd)).subscribe(() => this.updateHideShell());
+  }
+
+  private updateHideShell(): void {
+    let route = this.router.routerState.snapshot.root;
+    let hide = false;
+    while (route) {
+      if (route.data['hideShell']) { hide = true; break; }
+      route = route.firstChild!;
+    }
+    this.hideShell.set(hide);
   }
 }

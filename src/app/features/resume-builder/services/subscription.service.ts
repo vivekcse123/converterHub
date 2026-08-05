@@ -167,7 +167,7 @@ export class SubscriptionService {
         amount:   opts.amount,
         currency: opts.currency,
         name:     'ApnaConverter',
-        description: `Resume Template — ₹29 One-Time`,
+        description: `Resume Template - ₹29 One-Time`,
         image:    'https://www.apnaconverter.com/favicon.ico',
         prefill: {
           name:  this.auth.user()?.name  ?? '',

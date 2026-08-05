@@ -2,7 +2,7 @@
   _id:         string;
   name:        string;
   email:       string;
-  role:        'user' | 'premium' | 'admin' | 'superadmin';
+  role:        'user' | 'premium' | 'admin' | 'superadmin' | 'editor' | 'support' | 'moderator';
   isActive:    boolean;
   isBanned:    boolean;
   isSuspended: boolean;
@@ -25,8 +25,10 @@
     aiRequestsToday:    number;
     totalConversions:   number;
     totalFilesUploaded: number;
+    totalStorageUsed?:  number;
   };
   templatePurchases?: { templateId: string; purchasedAt: string }[];
+  timezone?:     string;
   lastLoginAt?:  string;
   loginCount?:   number;
   adminNotes?:   string;

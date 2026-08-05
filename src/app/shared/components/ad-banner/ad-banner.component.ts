@@ -32,6 +32,10 @@ const AD_SLOTS = {
 } as const;
 
 export type AdSlot = keyof typeof AD_SLOTS;
+type AdStatus = 'pending' | 'filled' | 'unfilled';
+
+/** How long we show the loading skeleton before treating a still-pending slot as unfilled (avoids an indefinite reserved gap if AdSense never responds). */
+const PENDING_TIMEOUT_MS = 4000;
 
 @Component({
   selector: 'app-ad-banner',
@@ -42,21 +46,42 @@ export type AdSlot = keyof typeof AD_SLOTS;
   // on the client lets AdSense take full ownership of the element.
   host: { ngSkipHydration: 'true' },
   template: `
-    @if (!unfilled()) {
-      <div class="ad-wrapper overflow-hidden text-center" [class]="wrapperClass">
-        <ins #insEl class="adsbygoogle"
-             style="display:block"
-             [attr.data-ad-client]="adClient"
-             [attr.data-ad-slot]="slotId"
-             [attr.data-ad-format]="adFormat"
-             data-full-width-responsive="true">
-        </ins>
-      </div>
-    }
+    <div
+      class="ad-wrapper overflow-hidden text-center"
+      [class]="wrapperClass"
+      [class.ad-hidden]="status() !== 'filled'"
+    >
+      <ins #insEl class="adsbygoogle"
+           style="display:block"
+           [attr.data-ad-client]="adClient"
+           [attr.data-ad-slot]="slotId"
+           [attr.data-ad-format]="adFormat"
+           data-full-width-responsive="true">
+      </ins>
+    </div>
   `,
   styles: [`
     :host { display: block; min-height: 0; }
-    .ad-wrapper { min-height: 0; }
+    .ad-wrapper {
+      min-height: 0;
+      max-height: 500px;
+      opacity: 1;
+      transition: opacity 250ms ease;
+    }
+    /* Nothing is reserved or shown until AdSense confirms a real creative filled
+       this slot - no loading skeleton, no placeholder box, so there is never a
+       "blank box that then disappears". It only ever goes from nothing to ad. */
+    .ad-hidden {
+      max-height: 0 !important;
+      min-height: 0 !important;
+      opacity: 0;
+      margin: 0 !important;
+      padding: 0 !important;
+      border: 0 !important;
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .ad-wrapper { transition: none; }
+    }
   `],
 })
 export class AdBannerComponent implements AfterViewInit, OnDestroy {
@@ -67,9 +92,10 @@ export class AdBannerComponent implements AfterViewInit, OnDestroy {
   private readonly isBrowser = isPlatformBrowser(inject(PLATFORM_ID));
   private readonly host = inject(ElementRef<HTMLElement>);
 
-  /** Set when AdSense marks this slot as unfilled - collapses the wrapper to avoid blank gaps. */
-  readonly unfilled = signal(false);
+  /** Loading -> filled (AdSense rendered a creative) or unfilled (collapse, no gap). */
+  readonly status = signal<AdStatus>('pending');
   private observer?: MutationObserver;
+  private pendingTimer?: ReturnType<typeof setTimeout>;
 
   get slotId()      { return AD_SLOTS[this.slot]; }
   get adFormat()    { return this.slot === 'rectangle' ? 'rectangle' : 'auto'; }
@@ -79,19 +105,34 @@ export class AdBannerComponent implements AfterViewInit, OnDestroy {
     if (!this.isBrowser) return;
     const ins = this.host.nativeElement.querySelector('ins.adsbygoogle');
     if (ins) {
-      this.observer = new MutationObserver(() => {
-        if (ins.getAttribute('data-ad-status') === 'unfilled') {
-          this.unfilled.set(true);
+      const readStatus = () => {
+        const attr = ins.getAttribute('data-ad-status');
+        if (attr === 'filled' || attr === 'unfilled') {
+          this.status.set(attr);
+          this.clearPendingTimer();
         }
-      });
+      };
+      this.observer = new MutationObserver(readStatus);
       this.observer.observe(ins, { attributes: true, attributeFilter: ['data-ad-status'] });
+      readStatus();
     }
     try {
       (window.adsbygoogle = window.adsbygoogle || []).push({});
     } catch { /* AdSense not loaded yet - safe to ignore */ }
+
+    // If AdSense never resolves data-ad-status (blocked script, ad blocker, slow network),
+    // don't leave the skeleton reserved forever - collapse it like an unfilled slot.
+    this.pendingTimer = setTimeout(() => {
+      if (this.status() === 'pending') this.status.set('unfilled');
+    }, PENDING_TIMEOUT_MS);
   }
 
   ngOnDestroy(): void {
     this.observer?.disconnect();
+    this.clearPendingTimer();
+  }
+
+  private clearPendingTimer(): void {
+    if (this.pendingTimer) { clearTimeout(this.pendingTimer); this.pendingTimer = undefined; }
   }
 }

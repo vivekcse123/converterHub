@@ -1,0 +1,30 @@
+.is-tpl {
+  font-family: var(--r-font, 'Inter', Arial, sans-serif);
+}
+
+.is-chip {
+  display: inline-block;
+  background: var(--r-accent, #2563eb);
+  color: #fff;
+  border-radius: 999px;
+  padding: 2pt 10pt;
+  font-size: 0.82em;
+  font-weight: 600;
+}
+
+.is-heading {
+  font-size: 0.95em;
+  font-weight: 700;
+  color: var(--r-accent, #1d4ed8);
+  margin-bottom: 5pt;
+}
+
+.is-skill {
+  background: var(--r-accent-12, #eff6ff);
+  border: 1px solid var(--r-accent-25, #bfdbfe);
+  color: #0f172a;
+  border-radius: 6px;
+  padding: 2pt 8pt;
+  font-size: 0.85em;
+  font-weight: 600;
+}

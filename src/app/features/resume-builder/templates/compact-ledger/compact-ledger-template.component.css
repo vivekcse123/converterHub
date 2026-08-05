@@ -1,0 +1,46 @@
+.cl2-tpl {
+  font-family: var(--r-font, 'Inter', Arial, sans-serif);
+}
+
+.cl2-header {
+  padding: 10mm 10mm 4mm;
+  border-bottom: 2px solid var(--r-accent, #1e293b);
+}
+
+.cl2-body {
+  display: flex;
+  gap: 0;
+}
+
+/* True 50/50 split — denser than two-col-balanced. */
+.cl2-main {
+  flex: 0 0 50%;
+  padding: 4mm 5mm 8mm 10mm;
+}
+
+.cl2-main-2 {
+  padding: 4mm 10mm 8mm 5mm;
+  border-left: 1px solid #e2e8f0;
+}
+
+.cl2-heading {
+  font-size: 0.75em;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--r-accent, #1e293b);
+  margin-bottom: 3pt;
+}
+
+.cl2-mono {
+  font-family: 'Courier New', monospace;
+}
+
+.cl2-tag {
+  background: var(--r-accent-12, #eff6ff);
+  color: var(--r-accent, #1e293b);
+  border-radius: 3px;
+  padding: 1.5pt 6pt;
+  font-size: 0.72em;
+  font-weight: 600;
+}

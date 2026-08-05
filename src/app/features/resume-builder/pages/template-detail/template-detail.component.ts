@@ -13,8 +13,10 @@ import {
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { JsonLdService } from '../../../../core/services/json-ld.service';
+import { SeoService } from '../../../../core/services/seo.service';
 import { BreadcrumbComponent, BreadcrumbItem } from '../../../../shared/components/breadcrumb/breadcrumb.component';
 import { ResumePreviewComponent } from '../../components/preview/resume-preview.component';
+import { TemplatePreviewModalComponent } from '../../components/template-preview-modal/template-preview-modal.component';
 import { UpgradeModalComponent } from '../../components/upgrade-modal/upgrade-modal.component';
 import { ResumeAuthPromptComponent } from '../../components/auth-prompt/resume-auth-prompt.component';
 import {
@@ -28,7 +30,6 @@ import {
   SamplePersona,
 } from '../../data/resume-defaults';
 import { ResumeData } from '../../models/resume.model';
-import { AuthService } from '../../../../core/services/auth.service';
 import { ResumeAuthGateService } from '../../services/resume-auth-gate.service';
 
 const SITE_URL = 'https://www.apnaconverter.com';
@@ -42,7 +43,7 @@ const SITE_URL = 'https://www.apnaconverter.com';
   // Without the animation the component's host has no stacking context,
   // so the fixed-position full-screen modal correctly sits above the header.
   host: { style: 'animation: none' },
-  imports: [CommonModule, RouterLink, BreadcrumbComponent, ResumePreviewComponent, UpgradeModalComponent, ResumeAuthPromptComponent],
+  imports: [CommonModule, RouterLink, BreadcrumbComponent, ResumePreviewComponent, TemplatePreviewModalComponent, UpgradeModalComponent, ResumeAuthPromptComponent],
   templateUrl: './template-detail.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -50,9 +51,9 @@ export class TemplateDetailComponent implements OnInit, OnDestroy {
   private readonly route      = inject(ActivatedRoute);
   private readonly router     = inject(Router);
   private readonly jsonLd     = inject(JsonLdService);
+  private readonly seo        = inject(SeoService);
   private readonly destroyRef = inject(DestroyRef);
   private readonly platformId  = inject(PLATFORM_ID);
-  readonly auth               = inject(AuthService);
   readonly authGate           = inject(ResumeAuthGateService);
 
   readonly template      = signal<ResumeTemplateMeta | null>(null);
@@ -60,6 +61,8 @@ export class TemplateDetailComponent implements OnInit, OnDestroy {
   readonly fullPreviewOpen = signal(false);
 
   readonly personas = SAMPLE_PERSONAS;
+  /** Full catalog — passed to the shared preview modal so next/prev cycles every template. */
+  readonly allTemplates = RESUME_TEMPLATES;
 
   readonly sampleResume = computed<ResumeData | null>(() => {
     const t = this.template();
@@ -84,26 +87,19 @@ export class TemplateDetailComponent implements OnInit, OnDestroy {
     ];
   });
 
+  // Body-scroll locking while the modal is open is handled by
+  // TemplatePreviewModalComponent itself (see its ngOnInit/ngOnDestroy).
   openFullPreview(): void {
     this.fullPreviewOpen.set(true);
-    document.body.style.overflow = 'hidden';
   }
 
   closeFullPreview(): void {
     this.fullPreviewOpen.set(false);
-    document.body.style.overflow = '';
   }
 
   useTemplate(): void {
     const t = this.template();
     if (!t) return;
-
-    if (!this.auth.isLoggedIn()) {
-      this.router.navigate(['/login'], {
-        queryParams: { returnUrl: `/resume-builder?template=${t.id}` },
-      });
-      return;
-    }
 
     this.router.navigate(['/resume-builder'], { queryParams: { template: t.id } });
   }
@@ -132,6 +128,15 @@ export class TemplateDetailComponent implements OnInit, OnDestroy {
     }
 
     this.template.set(meta);
+
+    // Per-template <title>/meta description — previously every template detail
+    // page shared the one generic route-level string in app.routes.ts, even
+    // though the JSON-LD below was already dynamic per template.
+    this.seo.setPage({
+      title: `${meta.name} Resume Template - Free & ATS-Optimized (${meta.atsScore}/100) | ApnaConverter`,
+      description: `${meta.description} ATS score ${meta.atsScore}/100. ${meta.isPremium ? 'Premium' : 'Free'} ${meta.category} template, preview and use it instantly.`,
+      keywords: `${meta.name} resume template, ${meta.category} resume template, ${meta.industries.join(', ')}`,
+    });
 
     this.jsonLd.setJsonLd('template-detail-product', {
       '@context': 'https://schema.org',

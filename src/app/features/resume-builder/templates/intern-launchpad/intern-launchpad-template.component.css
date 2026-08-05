@@ -1,0 +1,26 @@
+.il-tpl {
+  font-family: var(--r-font, 'Inter', Arial, sans-serif);
+}
+
+.il-seeking {
+  color: var(--r-accent, #f97316);
+}
+
+.il-heading {
+  font-size: 0.98em;
+  font-weight: 800;
+  color: #0f172a;
+  border-bottom: 2px solid var(--r-accent, #f97316);
+  display: inline-block;
+  padding-bottom: 1pt;
+  margin-bottom: 6pt;
+}
+
+.il-skill {
+  background: var(--r-accent, #f97316);
+  color: #fff;
+  border-radius: 999px;
+  padding: 2pt 9pt;
+  font-size: 0.82em;
+  font-weight: 700;
+}

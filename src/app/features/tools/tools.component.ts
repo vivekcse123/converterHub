@@ -1,5 +1,5 @@
-import { Component, computed, signal, ChangeDetectionStrategy } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { Component, OnInit, computed, signal, ChangeDetectionStrategy, inject } from '@angular/core';
+import { RouterLink, ActivatedRoute } from '@angular/router';
 import { TOOLS, ToolCategory } from '../../core/models/tool.model';
 import { ToolCardComponent } from '../../shared/components/tool-card/tool-card.component';
 import { AdBannerComponent } from '../../shared/components/ad-banner/ad-banner.component';
@@ -85,10 +85,19 @@ const CATEGORIES: { id: ToolCategory | 'all'; label: string }[] = [
     </div>
   `,
 })
-export class ToolsComponent {
+export class ToolsComponent implements OnInit {
+  private readonly route = inject(ActivatedRoute);
+
   readonly categories = CATEGORIES;
   readonly query = signal('');
   readonly activeCategory = signal<ToolCategory | 'all'>('all');
+
+  ngOnInit(): void {
+    // Deep-link support for homepage cards like "PDF Tools" (?category=pdf)
+    // so they land pre-filtered instead of on the unfiltered "All Tools" view.
+    const category = this.route.snapshot.queryParamMap.get('category') as ToolCategory | null;
+    if (category && CATEGORIES.some(c => c.id === category)) this.activeCategory.set(category);
+  }
 
   readonly filteredTools = computed(() => {
     const q = this.query().toLowerCase().trim();

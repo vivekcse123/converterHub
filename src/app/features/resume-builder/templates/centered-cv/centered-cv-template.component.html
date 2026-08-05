@@ -77,7 +77,7 @@
             <div class="cc-rule-head"><h2 class="cc-heading">Projects</h2></div>
             @for (proj of resume().projects; track proj.id) {
               <div class="cc-entry">
-                <p class="cc-role">{{ proj.name }}@if (proj.techStack) { <span class="cc-meta"> — {{ proj.techStack }}</span>}</p>
+                <p class="cc-role">{{ proj.name }}@if (proj.techStack) { <span class="cc-meta"> - {{ proj.techStack }}</span>}</p>
                 @if (proj.link) { <p class="cc-meta">{{ proj.link }}</p> }
                 @if (proj.bullets.length) {
                   <ul class="cc-bullets">

@@ -27,23 +27,40 @@ module.exports = {
         builder: ["Poppins", "system-ui", "sans-serif"],
       },
       colors: {
+        // `rgb(var(--x) / <alpha-value>)` (not a bare var()) is required so
+        // Tailwind can still synthesize opacity-modifier utilities like
+        // `bg-primary-900/40` — it can't compute an alpha variant for a color
+        // it can't resolve at build time, so a plain var() string makes
+        // Tailwind treat e.g. `hover:bg-primary-50/50` as a nonexistent class.
         primary: {
-          50:  "#f5f3ff",
-          100: "#ede9fe",
-          200: "#ddd6fe",
-          300: "#c4b5fd",
-          400: "#a78bfa",
-          500: "#8b5cf6",
-          600: "#7c3aed",
-          700: "#6d28d9",
-          800: "#5b21b6",
-          900: "#4c1d95",
-          950: "#2e1065",
+          50:  "rgb(var(--color-primary-50) / <alpha-value>)",
+          100: "rgb(var(--color-primary-100) / <alpha-value>)",
+          200: "rgb(var(--color-primary-200) / <alpha-value>)",
+          300: "rgb(var(--color-primary-300) / <alpha-value>)",
+          400: "rgb(var(--color-primary-400) / <alpha-value>)",
+          500: "rgb(var(--color-primary-500) / <alpha-value>)",
+          600: "rgb(var(--color-primary-600) / <alpha-value>)",
+          700: "rgb(var(--color-primary-700) / <alpha-value>)",
+          800: "rgb(var(--color-primary-800) / <alpha-value>)",
+          900: "rgb(var(--color-primary-900) / <alpha-value>)",
+          950: "rgb(var(--color-primary-950) / <alpha-value>)",
         },
         surface: {
-          light: "#f8fafc",
-          dark:  "#0f172a",
+          light: "rgb(var(--color-bg-surface) / <alpha-value>)",
+          dark:  "rgb(var(--color-bg-canvas) / <alpha-value>)",
         },
+        // Semantic tokens layered on top of the primitives above — new,
+        // used by the design-system component primitives.
+        content: {
+          primary:   "rgb(var(--color-text-primary) / <alpha-value>)",
+          secondary: "rgb(var(--color-text-secondary) / <alpha-value>)",
+          muted:     "rgb(var(--color-text-muted) / <alpha-value>)",
+        },
+        border: {
+          DEFAULT: "rgb(var(--color-border-default) / <alpha-value>)",
+          strong:  "rgb(var(--color-border-strong) / <alpha-value>)",
+        },
+        elevated: "rgb(var(--color-bg-elevated) / <alpha-value>)",
         // Resume Builder reference design system — distinct, intentionally
         // neutral (not blue-tinted like the sitewide `slate` scale) tokens.
         canvas:   "#FAFAFC",
@@ -87,10 +104,28 @@ module.exports = {
         },
       },
       boxShadow: {
-        card: "0 1px 3px rgba(0,0,0,0.08), 0 4px 12px rgba(0,0,0,0.05)",
-        "card-hover":
-          "0 4px 6px rgba(0,0,0,0.07), 0 12px 28px rgba(0,0,0,0.10)",
-        glow: "0 0 20px rgba(124,58,237,0.35)",
+        card: "var(--shadow-card)",
+        "card-hover": "var(--shadow-card-hover)",
+        glow: "var(--shadow-glow)",
+        popover: "var(--shadow-popover)",
+      },
+      // NOTE: borderRadius intentionally NOT extended here. Tailwind's stock
+      // sm/md/lg/xl/2xl keys already have different pixel values than the new
+      // --radius-* tokens, and are used unqualified across ~50 untouched
+      // feature modules — overriding them would silently resize every
+      // rounded corner sitewide. New primitives consume --radius-* tokens
+      // directly via arbitrary-value classes (e.g. `rounded-[var(--radius-lg)]`)
+      // instead.
+      transitionDuration: {
+        // DEFAULT intentionally left at Tailwind's stock 150ms (87 files use
+        // bare `transition-*` utilities relying on it) — only new, uniquely
+        // named keys are added here.
+        fast: "var(--duration-fast)",
+        slow: "var(--duration-slow)",
+        slower: "var(--duration-slower)",
+      },
+      transitionTimingFunction: {
+        standard: "var(--ease-standard)",
       },
     },
   },

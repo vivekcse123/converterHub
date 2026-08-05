@@ -82,7 +82,7 @@
               <h2 class="dm-heading">Projects</h2>
               @for (proj of resume().projects; track proj.id) {
                 <div class="dm-entry">
-                  <p class="dm-role">{{ proj.name }}@if (proj.techStack) { <span class="dm-company"> — {{ proj.techStack }}</span>}</p>
+                  <p class="dm-role">{{ proj.name }}@if (proj.techStack) { <span class="dm-company"> - {{ proj.techStack }}</span>}</p>
                   @if (proj.link) { <p class="dm-sub">{{ proj.link }}</p> }
                   @if (proj.bullets.length) {
                     <ul class="dm-bullets">

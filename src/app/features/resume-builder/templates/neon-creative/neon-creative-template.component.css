@@ -1,0 +1,33 @@
+.nc-tpl {
+  font-family: var(--r-font, 'Inter', Arial, sans-serif);
+}
+
+.nc-ribbon {
+  background: var(--r-accent, #10b981);
+  color: #fff;
+  padding: 2pt 9pt;
+  border-radius: 3px 3px 3px 0;
+  box-shadow: 2pt 2pt 0 var(--r-accent-25, #a7f3d0);
+}
+
+.nc-heading {
+  font-size: 0.98em;
+  font-weight: 800;
+  color: #0f172a;
+  border-bottom: 3px solid var(--r-accent, #10b981);
+  display: inline-block;
+  padding-bottom: 1pt;
+  margin-bottom: 6pt;
+}
+
+.nc-skill {
+  border-radius: 4px;
+  padding: 2pt 9pt;
+  font-size: 0.82em;
+  font-weight: 700;
+  color: #fff;
+}
+
+.nc-skill-0 { background: var(--r-accent, #10b981); }
+.nc-skill-1 { background: #0f172a; }
+.nc-skill-2 { background: var(--r-accent, #10b981); opacity: 0.6; }

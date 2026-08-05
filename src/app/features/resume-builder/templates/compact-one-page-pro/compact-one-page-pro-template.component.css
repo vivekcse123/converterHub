@@ -1,0 +1,18 @@
+.co-tpl {
+  font-family: var(--r-font, 'Inter', Arial, sans-serif);
+}
+
+.co-rule {
+  height: 1.5px;
+  background: var(--r-accent, #0f172a);
+}
+
+.co-heading {
+  font-size: 0.82em;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--r-accent, #0f172a);
+  border-bottom: 1px solid #e2e8f0;
+  margin-bottom: 2pt;
+}

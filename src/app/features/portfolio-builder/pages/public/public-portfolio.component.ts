@@ -6,7 +6,7 @@ import { ApiService } from '../../../../core/services/api.service';
 import { SeoService } from '../../../../core/services/seo.service';
 import { JsonLdService } from '../../../../core/services/json-ld.service';
 import { PortfolioData, getDisplayName, mapServerPortfolio } from '../../models/portfolio.model';
-import { getPortfolioTemplateMeta } from '../../data/portfolio-templates.data';
+import { getPortfolioThemeMeta } from '../../data/portfolio-themes.data';
 
 const SITE_URL = 'https://www.apnaconverter.com';
 
@@ -25,14 +25,16 @@ const SITE_URL = 'https://www.apnaconverter.com';
     } @else if (!portfolio()) {
       <div class="min-h-screen bg-slate-950 flex items-center justify-center p-6">
         <div class="text-center">
-          <p class="text-7xl mb-6">👤</p>
+          <div class="w-16 h-16 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center mx-auto mb-6">
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" class="text-slate-500"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 4-6 8-6s8 2 8 6"/></svg>
+          </div>
           <h1 class="text-2xl font-bold text-white mb-2">Portfolio Not Found</h1>
           <p class="text-slate-400 text-sm mb-8">This portfolio doesn't exist or has been made private.</p>
           <a routerLink="/" class="inline-block px-6 py-3 rounded-xl bg-gradient-to-r from-primary-600 to-indigo-600 text-white text-sm font-bold hover:opacity-90 transition">Go Home</a>
         </div>
       </div>
     } @else {
-      <ng-container *ngComponentOutlet="templateComponent(); inputs: { portfolio: portfolio() }" />
+      <ng-container *ngComponentOutlet="templateComponent(); inputs: { portfolio: portfolio(), editable: false }" />
 
       <footer class="py-6 px-4 text-center" [class]="portfolio()!.theme.mode === 'light' ? 'bg-white' : 'bg-slate-950'">
         <p class="text-xs opacity-50">
@@ -41,7 +43,7 @@ const SITE_URL = 'https://www.apnaconverter.com';
         </p>
         <a routerLink="/portfolio"
            class="mt-3 inline-block text-xs font-bold px-5 py-2.5 rounded-xl bg-gradient-to-r from-primary-600 to-indigo-600 text-white hover:opacity-90 transition">
-          Create Your Portfolio — Free
+          Create Your Portfolio - Free
         </a>
       </footer>
     }
@@ -55,7 +57,7 @@ export class PublicPortfolioComponent implements OnInit, OnDestroy {
 
   readonly loading   = signal(true);
   readonly portfolio = signal<PortfolioData | null>(null);
-  readonly templateComponent = computed(() => getPortfolioTemplateMeta(this.portfolio()?.theme.templateId).component);
+  readonly templateComponent = computed(() => getPortfolioThemeMeta(this.portfolio()?.theme.templateId ?? 'aurora').component);
 
   async ngOnInit(): Promise<void> {
     const username = this.route.snapshot.paramMap.get('username') ?? '';

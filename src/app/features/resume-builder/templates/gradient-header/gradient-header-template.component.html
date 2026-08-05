@@ -84,7 +84,7 @@
               <h2 class="gh-heading"><span class="gh-head-line"></span>Projects<span class="gh-head-line"></span></h2>
               @for (proj of resume().projects; track proj.id) {
                 <div class="gh-entry resume-entry">
-                  <p class="gh-role">{{ proj.name }}@if (proj.techStack) {<span class="gh-company"> — {{ proj.techStack }}</span>}</p>
+                  <p class="gh-role">{{ proj.name }}@if (proj.techStack) {<span class="gh-company"> - {{ proj.techStack }}</span>}</p>
                   @if (proj.link) { <p class="gh-sub">{{ proj.link }}</p> }
                   @if (proj.bullets.length) {
                     <ul class="gh-bullets">
@@ -102,7 +102,7 @@
             @if (resume().certifications.length) {
               <h2 class="gh-heading"><span class="gh-head-line"></span>Certifications<span class="gh-head-line"></span></h2>
               @for (cert of resume().certifications; track cert.id) {
-                <p class="gh-text"><strong>{{ cert.name }}</strong>@if (cert.issuer) { — {{ cert.issuer }}}@if (cert.date) { ({{ monthYear(cert.date) }})}</p>
+                <p class="gh-text"><strong>{{ cert.name }}</strong>@if (cert.issuer) { - {{ cert.issuer }}}@if (cert.date) { ({{ monthYear(cert.date) }})}</p>
               }
             }
           }

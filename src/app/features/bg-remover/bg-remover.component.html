@@ -1,0 +1,157 @@
+<div class="bg-gradient-to-r from-violet-600 to-fuchsia-500 text-white py-14">
+  <div class="container-app text-center">
+    <div class="w-16 h-16 mx-auto mb-5 bg-white/20 rounded-2xl flex items-center justify-center text-3xl">✂️</div>
+    <h1 class="text-3xl md:text-4xl font-extrabold mb-3">Background Remover</h1>
+    <p class="text-violet-100 text-lg max-w-md mx-auto">
+      Remove the background from any photo, then swap in a color, gradient, or your own image — all in your browser.
+    </p>
+  </div>
+</div>
+
+<div class="container-app py-12 max-w-2xl">
+
+  <div class="card p-6 md:p-8">
+    <!-- Upload -->
+    <app-file-upload
+      accept="image/jpeg,image/png,image/webp,image/bmp,image/gif"
+      [multiple]="false" [maxSizeMB]="30"
+      label="Drop a photo here"
+      sublabel="JPG, PNG, WebP or GIF — processed entirely on your device, never uploaded"
+      (filesSelected)="onFile($event)" />
+
+    @if (originalFile() && !cutout()) {
+    <div class="mt-6 space-y-4 animate-fade-in">
+      @if (originalPreview()) {
+      <img [src]="originalPreview()" alt="Selected photo" class="max-h-72 mx-auto rounded-xl border border-slate-100 dark:border-slate-700 object-contain" />
+      }
+
+      <button (click)="removeBg()" [disabled]="isProcessing()" class="btn btn-primary btn-lg w-full mt-2">
+        @if (!isProcessing()) { <span>✂️ Remove Background</span> } @else { <span>Removing…</span> }
+      </button>
+
+      @if (isProcessing()) {
+      <div>
+        <div class="flex justify-between text-xs text-slate-500 mb-1">
+          <span>{{ progress() > 0 ? 'Processing image…' : 'Loading AI model (first time only)…' }}</span>
+          <span>{{ progress() }}%</span>
+        </div>
+        <div class="w-full bg-slate-100 dark:bg-slate-700 rounded-full h-2">
+          <div class="bg-violet-500 h-2 rounded-full transition-all" [style.width.%]="progress()"></div>
+        </div>
+      </div>
+      }
+    </div>
+    }
+  </div>
+
+  <!-- Result -->
+  @if (cutout()) {
+  <div class="card p-6 md:p-8 mt-6 animate-bounce-in space-y-6">
+
+    <!-- Live preview -->
+    <div class="flex items-center justify-center">
+      <div class="relative inline-block checker rounded-xl border border-slate-200 dark:border-slate-700 overflow-hidden">
+        <canvas #canvasEl class="block max-w-full max-h-[26rem] h-auto rounded-lg"></canvas>
+
+        @if (cropMode()) {
+        <div class="absolute cursor-move touch-none"
+             style="box-shadow: 0 0 0 9999px rgba(15, 23, 42, 0.55);"
+             [style.left.%]="crop().x * 100" [style.top.%]="crop().y * 100"
+             [style.width.%]="crop().w * 100" [style.height.%]="crop().h * 100"
+             (pointerdown)="startDrag('move', $event)">
+          <div class="absolute inset-0 border-2 border-white"></div>
+          <div class="absolute -left-1.5 -top-1.5 w-3.5 h-3.5 bg-white border-2 border-violet-500 rounded-full cursor-nwse-resize" (pointerdown)="startDrag('nw', $event)"></div>
+          <div class="absolute -right-1.5 -top-1.5 w-3.5 h-3.5 bg-white border-2 border-violet-500 rounded-full cursor-nesw-resize" (pointerdown)="startDrag('ne', $event)"></div>
+          <div class="absolute -left-1.5 -bottom-1.5 w-3.5 h-3.5 bg-white border-2 border-violet-500 rounded-full cursor-nesw-resize" (pointerdown)="startDrag('sw', $event)"></div>
+          <div class="absolute -right-1.5 -bottom-1.5 w-3.5 h-3.5 bg-white border-2 border-violet-500 rounded-full cursor-nwse-resize" (pointerdown)="startDrag('se', $event)"></div>
+        </div>
+        }
+      </div>
+    </div>
+
+    @if (cropMode()) {
+    <!-- Crop controls -->
+    <div class="animate-fade-in">
+      <h2 class="text-sm font-semibold text-slate-700 dark:text-slate-200 mb-3">Crop</h2>
+      <div class="flex flex-wrap gap-2 mb-4">
+        @for (p of cropPresets; track p.id) {
+        <button type="button" (click)="applyCropPreset(p.ratio)"
+          class="px-3 py-1.5 rounded-lg text-sm font-medium bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-600">
+          {{ p.label }}
+        </button>
+        }
+      </div>
+      <div class="flex gap-3">
+        <button (click)="applyCrop()" class="btn btn-primary flex-1">✅ Apply Crop</button>
+        <button (click)="cancelCrop()" class="btn btn-secondary">Cancel</button>
+      </div>
+    </div>
+    } @else {
+    <!-- Background options -->
+    <div>
+      <h2 class="text-sm font-semibold text-slate-700 dark:text-slate-200 mb-3">Change background</h2>
+
+      <div class="flex flex-wrap gap-2 mb-4">
+        <button type="button" (click)="setMode('transparent')"
+          [class]="mode() === 'transparent'
+            ? 'px-3 py-1.5 rounded-lg text-sm font-medium bg-violet-600 text-white'
+            : 'px-3 py-1.5 rounded-lg text-sm font-medium bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300'">
+          Transparent
+        </button>
+        <button type="button" (click)="setMode('color')"
+          [class]="mode() === 'color'
+            ? 'px-3 py-1.5 rounded-lg text-sm font-medium bg-violet-600 text-white'
+            : 'px-3 py-1.5 rounded-lg text-sm font-medium bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300'">
+          Color
+        </button>
+        <button type="button" (click)="setMode('gradient')"
+          [class]="mode() === 'gradient'
+            ? 'px-3 py-1.5 rounded-lg text-sm font-medium bg-violet-600 text-white'
+            : 'px-3 py-1.5 rounded-lg text-sm font-medium bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300'">
+          Gradient
+        </button>
+        <button type="button" (click)="bgFileInput.click()"
+          [class]="mode() === 'image'
+            ? 'px-3 py-1.5 rounded-lg text-sm font-medium bg-violet-600 text-white'
+            : 'px-3 py-1.5 rounded-lg text-sm font-medium bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300'">
+          🖼️ Upload Image
+        </button>
+        <input #bgFileInput type="file" accept="image/*" class="hidden" (change)="onBgImageFile($event)" />
+      </div>
+
+      @if (mode() === 'color') {
+      <div class="flex flex-wrap items-center gap-2 animate-fade-in">
+        @for (c of colorSwatches; track c) {
+        <button type="button" (click)="setColor(c)" [style.background]="c"
+          [class]="'w-8 h-8 rounded-full border-2 transition-transform hover:scale-110 ' + (color() === c && mode() === 'color' ? 'border-violet-500' : 'border-slate-200 dark:border-slate-600')">
+        </button>
+        }
+        <input type="color" [value]="color()" (input)="setColor($any($event.target).value)"
+          class="w-8 h-8 rounded-full border-2 border-slate-200 dark:border-slate-600 cursor-pointer bg-transparent" title="Custom color" />
+      </div>
+      }
+
+      @if (mode() === 'gradient') {
+      <div class="flex flex-wrap gap-2 animate-fade-in">
+        @for (g of gradients; track g.id) {
+        <button type="button" (click)="setGradient(g.id)"
+          [style.background]="'linear-gradient(135deg, ' + g.from + ', ' + g.to + ')'"
+          [class]="'w-14 h-9 rounded-lg border-2 transition-transform hover:scale-105 ' + (gradientId() === g.id && mode() === 'gradient' ? 'border-violet-500' : 'border-transparent')"
+          [title]="g.label">
+        </button>
+        }
+      </div>
+      }
+    </div>
+
+    <div class="flex gap-3">
+      <button (click)="toggleCrop()" class="btn btn-secondary">✂️ Crop</button>
+      <button (click)="download()" class="btn btn-primary flex-1">⬇️ Download PNG</button>
+      <button (click)="reset()" class="btn btn-secondary">🔄 New</button>
+    </div>
+    }
+  </div>
+  <app-ad-banner slot="rectangle" />
+  }
+</div>
+<app-tool-info-section toolId="bg-remover" />

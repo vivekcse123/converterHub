@@ -1,0 +1,172 @@
+<div class="resume-page cs-tpl">
+  <!-- Header: name-forward, thin accent underline, plain contact row -->
+  <header class="mb-4">
+    <h1 class="text-[21pt] font-bold leading-tight">{{ resume().personal.fullName || 'Your Name' }}</h1>
+    @if (resume().personal.jobTitle) {
+      <p class="cs-title text-[11pt] font-semibold mt-0.5">{{ resume().personal.jobTitle }}</p>
+    }
+    <div class="cs-rule mt-2 mb-2"></div>
+    @if (contactParts().length) {
+      <p class="text-[9pt] text-slate-600 flex flex-wrap gap-x-2">
+        @for (part of contactParts(); track $index; let last = $last) {
+          <span>{{ part }}</span>
+          @if (!last) { <span class="text-slate-300">•</span> }
+        }
+      </p>
+    }
+  </header>
+
+  @for (section of visibleSections(); track section) {
+    <section class="resume-section mb-3">
+      @switch (sectionKind(section)) {
+
+        @case ('summary') {
+          @if (resume().summary) {
+            <h2 class="cs-heading">Profile</h2>
+            <p class="text-[10pt] leading-snug"><app-rich-text [text]="resume().summary" /></p>
+          }
+        }
+
+        @case ('education') {
+          @if (resume().education.length) {
+            <h2 class="cs-heading">Education</h2>
+            @for (edu of resume().education; track edu.id) {
+              <div class="resume-entry cs-edu-card mb-2">
+                <div class="flex justify-between items-baseline gap-2">
+                  <p class="font-bold text-[10.5pt]">{{ edu.degree }}@if (edu.field) {, {{ edu.field }}}</p>
+                  <p class="text-[9pt] whitespace-nowrap text-slate-600">{{ dateRange(edu.startDate, edu.endDate, edu.current) }}</p>
+                </div>
+                <div class="flex justify-between items-baseline gap-2">
+                  <p class="text-[9pt] text-slate-600 italic">{{ edu.institution }}</p>
+                  @if (edu.gpa) { <p class="cs-gpa text-[9pt] font-bold">GPA {{ edu.gpa }}</p> }
+                </div>
+                @if (edu.description) {
+                  <p class="text-[10pt] leading-snug mt-0.5"><app-rich-text [text]="edu.description" /></p>
+                }
+              </div>
+            }
+          }
+        }
+
+        @case ('projects') {
+          @if (resume().projects.length) {
+            <h2 class="cs-heading">Projects</h2>
+            @for (proj of resume().projects; track proj.id; let i = $index) {
+              <div class="resume-entry mb-2 flex gap-2">
+                <span class="cs-num">{{ i + 1 }}</span>
+                <div class="min-w-0 flex-1">
+                  <p class="font-bold text-[10.5pt]">
+                    {{ proj.name }}@if (proj.techStack) { <span class="font-normal text-slate-600"> - {{ proj.techStack }}</span> }
+                  </p>
+                  @if (proj.link) { <p class="text-[9pt] text-slate-600">{{ proj.link }}</p> }
+                  @if (proj.bullets.length) {
+                    <ul class="list-disc pl-4 mt-0.5 space-y-0.5">
+                      @for (bullet of proj.bullets; track $index) {
+                        @if (bullet) { <li class="text-[10pt] leading-snug"><app-rich-text [text]="bullet" /></li> }
+                      }
+                    </ul>
+                  }
+                </div>
+              </div>
+            }
+          }
+        }
+
+        @case ('experience') {
+          @if (resume().experience.length) {
+            <h2 class="cs-heading">Experience</h2>
+            @for (exp of resume().experience; track exp.id) {
+              <div class="resume-entry mb-2">
+                <div class="flex justify-between items-baseline gap-2">
+                  <p class="font-bold text-[10.5pt]">{{ exp.role }}@if (exp.company) {, {{ exp.company }}}</p>
+                  <p class="text-[9pt] whitespace-nowrap text-slate-600">{{ dateRange(exp.startDate, exp.endDate, exp.current) }}</p>
+                </div>
+                @if (exp.location) { <p class="text-[9pt] text-slate-600 italic">{{ exp.location }}</p> }
+                @if (exp.bullets.length) {
+                  <ul class="list-disc pl-4 mt-0.5 space-y-0.5">
+                    @for (bullet of exp.bullets; track $index) {
+                      @if (bullet) { <li class="text-[10pt] leading-snug"><app-rich-text [text]="bullet" /></li> }
+                    }
+                  </ul>
+                }
+              </div>
+            }
+          }
+        }
+
+        @case ('skills') {
+          @if (resume().skills.length) {
+            <h2 class="cs-heading">Skills</h2>
+            <div class="flex flex-wrap gap-1.5">
+              @for (group of resume().skills; track group.id) {
+                @for (item of group.items; track item) {
+                  <span class="cs-skill">{{ item }}</span>
+                }
+              }
+            </div>
+          }
+        }
+
+        @case ('certifications') {
+          @if (resume().certifications.length) {
+            <h2 class="cs-heading">Certifications</h2>
+            @for (cert of resume().certifications; track cert.id) {
+              <p class="text-[10pt] leading-snug">
+                <span class="font-semibold">{{ cert.name }}</span>
+                @if (cert.issuer) { - {{ cert.issuer }} }
+                @if (cert.date) { <span class="text-slate-600"> ({{ monthYear(cert.date) }})</span> }
+              </p>
+            }
+          }
+        }
+
+        @case ('achievements') {
+          @if (resume().achievements.length) {
+            <h2 class="cs-heading">Achievements</h2>
+            <ul class="list-disc pl-4 space-y-0.5">
+              @for (item of resume().achievements; track $index) {
+                @if (item) { <li class="text-[10pt] leading-snug"><app-rich-text [text]="item" /></li> }
+              }
+            </ul>
+          }
+        }
+
+        @case ('languages') {
+          @if (resume().languages.length) {
+            <h2 class="cs-heading">Languages</h2>
+            <p class="text-[10pt] leading-snug">
+              @for (lang of resume().languages; track lang.id; let last = $last) {
+                {{ lang.name }} ({{ lang.proficiency }})@if (!last) {, }
+              }
+            </p>
+          }
+        }
+
+        @case ('interests') {
+          @if (resume().interests.length) {
+            <h2 class="cs-heading">Interests</h2>
+            <p class="text-[10pt] leading-snug">{{ resume().interests.join(', ') }}</p>
+          }
+        }
+
+        @case ('custom') {
+          @if (customSection(section); as custom) {
+            @if (custom.entries.length) {
+              <h2 class="cs-heading">{{ custom.title }}</h2>
+              @for (entry of custom.entries; track entry.id) {
+                <div class="resume-entry mb-2">
+                  <div class="flex justify-between items-baseline gap-2">
+                    @if (entry.heading) { <p class="font-bold text-[10.5pt]">{{ entry.heading }}</p> }
+                    @if (entry.date) { <p class="text-[9pt] whitespace-nowrap text-slate-600">{{ entry.date }}</p> }
+                  </div>
+                  @if (entry.subheading) { <p class="text-[9pt] text-slate-600 italic">{{ entry.subheading }}</p> }
+                  @if (entry.description) { <p class="text-[10pt] leading-snug mt-0.5"><app-rich-text [text]="entry.description" /></p> }
+                </div>
+              }
+            }
+          }
+        }
+      }
+    </section>
+  }
+</div>

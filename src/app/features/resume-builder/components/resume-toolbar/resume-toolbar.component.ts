@@ -134,6 +134,7 @@ export class ResumeToolbarComponent {
   async share(): Promise<void> {
     const r = this.resume();
     if (!r) return;
+    if (!this.authGate.canProceed('share')) return;
     const result = await this.shareSvc.publish(r);
     if (result?.slug) {
       const url = this.shareSvc.publicUrl(result.slug);

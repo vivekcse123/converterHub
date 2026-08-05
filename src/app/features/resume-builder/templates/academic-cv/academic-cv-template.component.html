@@ -133,7 +133,7 @@
             @for (cert of resume().certifications; track cert.id) {
               <p class="acad-body">
                 <span class="acad-cert-name">{{ cert.name }}</span>
-                @if (cert.issuer) { <span class="acad-light"> — {{ cert.issuer }}</span> }
+                @if (cert.issuer) { <span class="acad-light"> - {{ cert.issuer }}</span> }
                 @if (cert.date) { <span class="acad-light"> ({{ monthYear(cert.date) }})</span> }
               </p>
             }

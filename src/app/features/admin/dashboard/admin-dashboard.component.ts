@@ -1,131 +1,159 @@
-import { Component, OnInit, signal } from '@angular/core';
+import { Component, ChangeDetectionStrategy, OnInit, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { AdminService }  from '../../../core/services/admin.service';
-import { AdminStats, ToolStat, QueueStats } from '../../../core/models/admin.model';
+import { DatePipe } from '@angular/common';
+import { forkJoin, of } from 'rxjs';
+import { AdminService } from '../../../core/services/admin.service';
+import { AdminPermissionService } from '../../../core/services/admin-permission.service';
+import { AdminStatTileComponent } from '../../../shared/components/admin/admin-stat-tile.component';
+import { IconComponent } from '../../../shared/components/icon/icon.component';
+import { AdminStats, QueueStats, TrendingTool, ActivityLogEntry } from '../../../core/models/admin.model';
+
+interface RevenueSummary {
+  today: string; thisMonth: string; thisYear: string; total: string; totalPayments: number;
+}
 
 @Component({
   selector: 'app-admin-dashboard',
   standalone: true,
-  imports: [RouterLink],
+  imports: [RouterLink, DatePipe, AdminStatTileComponent, IconComponent],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <div>
-      <h1 class="text-2xl font-bold text-slate-800 dark:text-white mb-6">Dashboard Overview</h1>
-
-      <!-- Stats Cards -->
-      <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-        @for (card of statCards(); track $index) {
-        <div class="bg-white dark:bg-slate-800 rounded-xl p-5 shadow-sm border border-slate-100 dark:border-slate-700">
-          <div class="text-3xl mb-1">{{ card.icon }}</div>
-          <div class="text-2xl font-bold text-slate-800 dark:text-white">{{ card.value }}</div>
-          <div class="text-sm text-slate-500">{{ card.label }}</div>
-        </div>
-        }
+    <div class="max-w-7xl mx-auto space-y-6">
+      <div>
+        <h1 class="text-2xl font-bold text-content-primary">Dashboard</h1>
+        <p class="text-sm text-content-muted mt-1">Real-time platform overview.</p>
       </div>
 
-      <!-- Queue Status & Tool Stats -->
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <!-- Queue Stats -->
-        <div class="bg-white dark:bg-slate-800 rounded-xl p-5 shadow-sm border border-slate-100 dark:border-slate-700">
-          <h2 class="font-semibold text-slate-700 dark:text-slate-200 mb-4">Queue Status</h2>
-          @if (queueStats(); as q) {
-          <div class="space-y-3">
-            @for (item of queueItems(q); track $index) {
-            <div class="flex justify-between items-center">
-              <span class="text-sm text-slate-600 dark:text-slate-400">{{ item.label }}</span>
-              <span class="font-medium text-slate-800 dark:text-white">{{ item.value }}</span>
-            </div>
-            }
+      @if (loadError()) {
+        <div class="card-elevated p-6 flex items-center gap-3 border-red-200 dark:border-red-900">
+          <app-icon name="close" [size]="18" class="text-red-500 shrink-0" />
+          <div>
+            <p class="text-sm font-semibold text-content-primary">Couldn't load dashboard data</p>
+            <p class="text-xs text-content-muted">{{ loadError() }}</p>
           </div>
-          }
-          @if (!queueStats()) {
-          <div class="text-sm text-slate-400">Redis not available - running in sync mode</div>
-          }
+          <button type="button" class="btn-secondary btn-sm ml-auto" (click)="load()">Retry</button>
+        </div>
+      } @else {
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+          <app-admin-stat-tile label="Total Users" icon="users" [loading]="loading()" [value]="stats()?.users?.total ?? '—'" />
+          <app-admin-stat-tile label="New Users Today" icon="trending-up" [loading]="loading()" [value]="stats()?.users?.today ?? '—'" />
+          <app-admin-stat-tile label="Active Users (7d)" icon="activity" [loading]="loading()" [value]="stats()?.users?.active ?? '—'" />
+          <app-admin-stat-tile label="Active Subscriptions" icon="credit-card" [loading]="loading()" [value]="subStats()?.totalActive ?? '—'" />
+
+          <app-admin-stat-tile label="Portfolios Created" icon="globe" [loading]="loading()" [value]="portfoliosTotal() ?? '—'" />
+          <app-admin-stat-tile label="Published Websites" icon="globe" [loading]="loading()" [value]="publishedTotal() ?? '—'" />
+          <app-admin-stat-tile label="File Conversions" icon="file-text" [loading]="loading()" [value]="stats()?.conversions?.total ?? '—'" />
+          <app-admin-stat-tile label="Failed Conversions" icon="file-text" [loading]="loading()" [value]="stats()?.conversions?.failed ?? '—'" />
+
+          <app-admin-stat-tile label="Revenue Today" icon="credit-card" [loading]="loading()" [value]="'₹' + (revenue()?.today ?? '0')" />
+          <app-admin-stat-tile label="Revenue This Month" icon="credit-card" [loading]="loading()" [value]="'₹' + (revenue()?.thisMonth ?? '0')" />
+          <app-admin-stat-tile label="Queue: Waiting" icon="database" [loading]="loading()" [value]="queue()?.waiting ?? '—'" />
+          <app-admin-stat-tile label="Queue: Failed" icon="database" [loading]="loading()" [value]="queue()?.failed ?? '—'" />
         </div>
 
-        <!-- Top Tools -->
-        <div class="bg-white dark:bg-slate-800 rounded-xl p-5 shadow-sm border border-slate-100 dark:border-slate-700">
-          <h2 class="font-semibold text-slate-700 dark:text-slate-200 mb-4">Top Tools (30 days)</h2>
-          <div class="space-y-2">
-            @for (tool of topTools(); track $index) {
-            <div class="flex justify-between items-center">
-              <span class="text-sm font-mono text-indigo-600 dark:text-indigo-400">{{ tool._id }}</span>
-              <div class="flex gap-3 text-sm">
-                <span class="text-slate-700 dark:text-slate-200">{{ tool.count }}</span>
-                <span class="text-red-500">{{ tool.failed }} fail</span>
+        <div class="grid lg:grid-cols-2 gap-4">
+          <div class="card-elevated p-5">
+            <div class="flex items-center justify-between mb-4">
+              <h2 class="text-sm font-bold text-content-primary">Top tools (7 days)</h2>
+              <a routerLink="/admin/analytics" class="text-xs font-semibold text-primary-600 dark:text-primary-400 hover:underline">View analytics →</a>
+            </div>
+            @if (loading()) {
+              <div class="space-y-2">
+                @for (i of [1,2,3,4]; track i) { <div class="h-8 rounded-md bg-slate-100 dark:bg-slate-800 animate-pulse"></div> }
               </div>
+            } @else if (trending().length === 0) {
+              <p class="text-sm text-content-muted py-4">No tool usage recorded yet.</p>
+            } @else {
+              <div class="space-y-1">
+                @for (t of trending(); track t.tool) {
+                  <div class="flex items-center justify-between py-1.5 text-sm">
+                    <span class="text-content-secondary">{{ t.tool }}</span>
+                    <span class="font-semibold text-content-primary tabular-nums">{{ t.count }}</span>
+                  </div>
+                }
+              </div>
+            }
+          </div>
+
+          <div class="card-elevated p-5">
+            <div class="flex items-center justify-between mb-4">
+              <h2 class="text-sm font-bold text-content-primary">Recent activity</h2>
+              @if (perms.can('activity.view')) {
+                <a routerLink="/admin/activity" class="text-xs font-semibold text-primary-600 dark:text-primary-400 hover:underline">View all →</a>
+              }
             </div>
+            @if (!perms.can('activity.view')) {
+              <p class="text-sm text-content-muted py-4">You don't have permission to view activity logs.</p>
+            } @else if (loading()) {
+              <div class="space-y-2">
+                @for (i of [1,2,3]; track i) { <div class="h-10 rounded-md bg-slate-100 dark:bg-slate-800 animate-pulse"></div> }
+              </div>
+            } @else if (recentActivity().length === 0) {
+              <p class="text-sm text-content-muted py-4">No activity recorded yet — this log starts tracking from today.</p>
+            } @else {
+              <div class="divide-y divide-border">
+                @for (entry of recentActivity(); track entry._id) {
+                  <div class="py-2 text-sm">
+                    <p class="text-content-primary"><span class="font-medium">{{ entry.actorEmail }}</span> — {{ entry.action }}</p>
+                    <p class="text-xs text-content-muted">{{ entry.createdAt | date: 'short' }}</p>
+                  </div>
+                }
+              </div>
             }
           </div>
         </div>
-      </div>
-
-      <!-- Quick Actions -->
-      <div class="mt-6 grid grid-cols-2 md:grid-cols-4 gap-3">
-        <a routerLink="/admin/users" class="bg-indigo-50 dark:bg-indigo-900/20 hover:bg-indigo-100 dark:hover:bg-indigo-900/40 rounded-lg p-4 text-center transition-colors">
-          <div class="text-2xl mb-1">👥</div>
-          <div class="text-sm font-medium text-indigo-700 dark:text-indigo-300">Manage Users</div>
-        </a>
-        <a routerLink="/admin/analytics" class="bg-emerald-50 dark:bg-emerald-900/20 hover:bg-emerald-100 dark:hover:bg-emerald-900/40 rounded-lg p-4 text-center transition-colors">
-          <div class="text-2xl mb-1">📈</div>
-          <div class="text-sm font-medium text-emerald-700 dark:text-emerald-300">View Analytics</div>
-        </a>
-        <a routerLink="/admin/jobs" class="bg-amber-50 dark:bg-amber-900/20 hover:bg-amber-100 dark:hover:bg-amber-900/40 rounded-lg p-4 text-center transition-colors">
-          <div class="text-2xl mb-1">⚙️</div>
-          <div class="text-sm font-medium text-amber-700 dark:text-amber-300">Job Monitor</div>
-        </a>
-        <a routerLink="/admin/settings" class="bg-rose-50 dark:bg-rose-900/20 hover:bg-rose-100 dark:hover:bg-rose-900/40 rounded-lg p-4 text-center transition-colors">
-          <div class="text-2xl mb-1">🛠</div>
-          <div class="text-sm font-medium text-rose-700 dark:text-rose-300">Settings</div>
-        </a>
-      </div>
+      }
     </div>
   `,
 })
 export class AdminDashboardComponent implements OnInit {
-  readonly stats      = signal<AdminStats | null>(null);
-  readonly topTools   = signal<ToolStat[]>([]);
-  readonly queueStats = signal<QueueStats | null>(null);
+  private adminService = inject(AdminService);
+  readonly perms = inject(AdminPermissionService);
 
-  constructor(private adminService: AdminService) {}
+  readonly loading = signal(true);
+  readonly loadError = signal<string | null>(null);
+  readonly stats = signal<AdminStats | null>(null);
+  readonly revenue = signal<RevenueSummary | null>(null);
+  readonly subStats = signal<{ totalActive: number } | null>(null);
+  readonly queue = signal<QueueStats | null>(null);
+  readonly trending = signal<TrendingTool[]>([]);
+  readonly recentActivity = signal<ActivityLogEntry[]>([]);
+  readonly portfoliosTotal = signal<number | null>(null);
+  readonly publishedTotal = signal<number | null>(null);
 
   ngOnInit(): void {
-    this.adminService.getOverview().subscribe({ next: (r) => this.stats.set(r.data) });
-    this.adminService.getToolStats().subscribe({
-      next: (r) => {
-        const stats = (r.data as any)?.stats ?? [];
-        this.topTools.set(stats.slice(0, 8));
-      }
-    });
-    this.adminService.getQueueStats().subscribe({
-      next: (r) => {
-        const s = (r.data as any)?.stats ?? null;
-        this.queueStats.set(s);
-      }
-    });
+    this.load();
   }
 
-  statCards() {
-    const s = this.stats();
-    if (!s) return [];
-    return [
-      { icon: '👥', value: s.users.total,        label: 'Total Users'          },
-      { icon: '🆕', value: s.users.today,         label: 'New Users Today'      },
-      { icon: '🔄', value: s.conversions.today,   label: 'Conversions Today'    },
-      { icon: '⚡', value: s.users.active,         label: 'Active This Week'     },
-      { icon: '✅', value: s.conversions.total,   label: 'Total Conversions'    },
-      { icon: '❌', value: s.conversions.failed,  label: 'Failed Conversions'   },
-      { icon: '📅', value: s.conversions.month,   label: 'Conversions This Month'},
-      { icon: '👤', value: s.users.month,          label: 'New Users This Month' },
-    ];
-  }
+  load(): void {
+    this.loading.set(true);
+    this.loadError.set(null);
 
-  queueItems(q: QueueStats) {
-    return [
-      { label: 'Waiting',   value: q.waiting   },
-      { label: 'Active',    value: q.active     },
-      { label: 'Completed', value: q.completed  },
-      { label: 'Failed',    value: q.failed     },
-      { label: 'Delayed',   value: q.delayed    },
-    ];
+    forkJoin({
+      overview: this.adminService.getOverview(),
+      revenue: this.adminService.getRevenue(),
+      subStats: this.adminService.getDetailedSubscriptionStats(),
+      queue: this.adminService.getQueueStats(),
+      trending: this.adminService.getTrending(6, 7),
+      portfolios: this.adminService.getPortfolios({ limit: '1' }),
+      published: this.adminService.getPortfolios({ limit: '1', status: 'published' }),
+      activity: this.perms.can('activity.view') ? this.adminService.getActivityLogs({ limit: '6' }) : of(null),
+    }).subscribe({
+      next: (res) => {
+        this.stats.set(res.overview.data);
+        this.revenue.set(res.revenue.data);
+        this.subStats.set(res.subStats.data);
+        this.queue.set(res.queue.data.stats);
+        this.trending.set(res.trending.data.trending);
+        this.portfoliosTotal.set(res.portfolios.pagination.total);
+        this.publishedTotal.set(res.published.pagination.total);
+        if (res.activity) this.recentActivity.set(res.activity.data);
+        this.loading.set(false);
+      },
+      error: (err) => {
+        this.loadError.set(err?.error?.message || 'The backend may be unreachable.');
+        this.loading.set(false);
+      },
+    });
   }
 }

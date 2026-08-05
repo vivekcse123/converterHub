@@ -1,0 +1,237 @@
+<div class="max-w-7xl mx-auto space-y-6 sm:space-y-8">
+
+  <!-- Hero welcome -->
+  <section class="card-gradient p-6 sm:p-8 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+    <div>
+      <p class="text-sm text-white/80">{{ greeting() }}</p>
+      <h1 class="text-2xl sm:text-3xl font-bold mt-1">{{ auth.user()?.name }}</h1>
+      <div class="flex items-center gap-2 mt-3">
+        <span class="badge bg-white/15 text-white">{{ auth.currentPlan() | titlecase }} plan</span>
+        @if (auth.isPro()) {
+          <span class="badge bg-white/15 text-white inline-flex items-center gap-1">
+            <app-icon name="shield-check" [size]="12" /> Pro
+          </span>
+        }
+      </div>
+    </div>
+    @if (!auth.isPro()) {
+      <a routerLink="/resume-builder/pricing" class="btn bg-white text-primary-700 hover:bg-white/90 shrink-0">
+        <app-icon name="zap" [size]="16" />
+        Upgrade to Pro
+      </a>
+    }
+  </section>
+
+  <!-- Quick actions -->
+  <section>
+    <h2 class="text-sm font-semibold text-content-primary mb-3">Quick actions</h2>
+    <div class="flex flex-wrap gap-2.5">
+      @for (action of quickActions; track action.id) {
+        <a [routerLink]="action.route" [title]="action.description" class="card-interactive pl-2.5 pr-4 py-2.5 flex items-center gap-2.5">
+          <span class="w-7 h-7 rounded-[var(--radius-sm)] flex items-center justify-center bg-primary-50 dark:bg-primary-900/30 text-primary-600 dark:text-primary-400 shrink-0">
+            <app-icon [name]="action.icon" [size]="14" />
+          </span>
+          <span class="text-sm font-medium text-content-primary whitespace-nowrap">{{ action.label }}</span>
+        </a>
+      }
+    </div>
+  </section>
+
+  <!-- Usage summary -->
+  <section>
+    <h2 class="text-sm font-semibold text-content-primary mb-3">Usage summary</h2>
+    <div class="grid grid-cols-2 lg:grid-cols-4 gap-3">
+      <app-stat-tile label="Conversions Today" [value]="(auth.user()?.usage?.conversionsToday ?? 0).toString()" icon="refresh" />
+      <app-stat-tile label="Total Conversions" [value]="(auth.user()?.usage?.totalConversions ?? 0).toString()" icon="bar-chart-2" />
+      <app-stat-tile label="AI Requests Today" [value]="(auth.user()?.usage?.aiRequestsToday ?? 0).toString()" icon="sparkles" />
+      <app-stat-tile label="Storage Used" [value]="formatBytes(auth.user()?.usage?.totalStorageUsed)" icon="database" />
+    </div>
+  </section>
+
+  <div class="grid lg:grid-cols-3 gap-6">
+    <!-- Main column -->
+    <div class="lg:col-span-2 space-y-6">
+
+      <!-- Recent resumes -->
+      <section class="card-elevated p-5">
+        <div class="flex items-center justify-between mb-3">
+          <h2 class="text-sm font-semibold text-content-primary">Recent resumes</h2>
+          <a routerLink="/resume-builder" class="text-xs font-medium text-primary-600 dark:text-primary-400 hover:underline">Open builder</a>
+        </div>
+        @if (recentResumes().length === 0) {
+          <app-empty-state icon="file-text" title="No resumes yet" description="Create your first resume in minutes.">
+            <a routerLink="/resume-builder" class="btn-primary">New Resume</a>
+          </app-empty-state>
+        } @else {
+          <div class="divide-y divide-border">
+            @for (resume of recentResumes(); track resume.id) {
+              <div class="flex items-center gap-3 py-3">
+                <span class="w-9 h-9 rounded-[var(--radius-md)] bg-primary-50 dark:bg-primary-900/30 text-primary-600 dark:text-primary-400 flex items-center justify-center shrink-0">
+                  <app-icon name="file-text" [size]="16" />
+                </span>
+                <div class="min-w-0 flex-1">
+                  <p class="text-sm font-medium text-content-primary truncate">{{ resume.name || 'Untitled Resume' }}</p>
+                  <p class="text-xs text-content-muted">Updated {{ formatRelativeTime(resume.updatedAt) }}</p>
+                </div>
+                <button
+                  type="button"
+                  class="p-1.5 rounded-[var(--radius-sm)] hover:bg-elevated shrink-0"
+                  [class]="isResumePinned(resume.id) ? 'text-amber-500' : 'text-content-muted'"
+                  (click)="toggleResumePin(resume.id, resume.name)"
+                  [attr.aria-label]="isResumePinned(resume.id) ? 'Unpin resume' : 'Pin resume'"
+                >
+                  <app-icon name="pin" [size]="15" />
+                </button>
+                <a routerLink="/resume-builder" (click)="openResume(resume.id)" class="text-xs font-medium text-primary-600 dark:text-primary-400 hover:underline shrink-0">
+                  Continue
+                </a>
+              </div>
+            }
+          </div>
+        }
+      </section>
+
+      <!-- Recent conversions -->
+      <section class="card-elevated p-5">
+        <div class="flex items-center justify-between mb-3">
+          <h2 class="text-sm font-semibold text-content-primary">Recent conversions</h2>
+          <a routerLink="/tools" class="text-xs font-medium text-primary-600 dark:text-primary-400 hover:underline">Browse tools</a>
+        </div>
+        @if (historyLoading()) {
+          <div class="space-y-3">
+            @for (i of skeletonRows; track i) {
+              <app-skeleton height="2.5rem" />
+            }
+          </div>
+        } @else if (historyError() || recentHistory().length === 0) {
+          <app-empty-state icon="refresh" title="No conversions yet" description="Convert a file to see your history here.">
+            <a routerLink="/tools" class="btn-primary">Convert a file</a>
+          </app-empty-state>
+        } @else {
+          <div class="divide-y divide-border">
+            @for (item of recentHistory(); track item._id) {
+              <div class="flex items-center gap-3 py-3">
+                <span class="w-9 h-9 rounded-[var(--radius-md)] bg-slate-100 dark:bg-slate-800 text-content-secondary flex items-center justify-center shrink-0">
+                  <app-icon name="refresh" [size]="16" />
+                </span>
+                <div class="min-w-0 flex-1">
+                  <p class="text-sm font-medium text-content-primary truncate">{{ item.tool }}</p>
+                  <p class="text-xs text-content-muted">{{ formatRelativeTime(item.createdAt) }}</p>
+                </div>
+                <app-badge [variant]="statusVariant(item.status)" size="sm">{{ item.status }}</app-badge>
+                @if (item.status === 'completed' && item.outputFile?.url) {
+                  <a [href]="item.outputFile?.url" target="_blank" rel="noopener" class="p-1.5 rounded-[var(--radius-sm)] hover:bg-elevated text-content-muted shrink-0" aria-label="Download">
+                    <app-icon name="download" [size]="15" />
+                  </a>
+                }
+              </div>
+            }
+          </div>
+        }
+      </section>
+
+      <!-- Recent AI activity -->
+      <section class="card-elevated p-5">
+        <h2 class="text-sm font-semibold text-content-primary mb-3">Recent AI activity</h2>
+        <app-empty-state icon="sparkles" title="No AI activity yet" description="Get an instant ATS score and AI-written bullet points for your resume.">
+          <a routerLink="/resume-builder" class="btn-primary">Try AI Resume Review</a>
+        </app-empty-state>
+      </section>
+    </div>
+
+    <!-- Side column -->
+    <div class="space-y-6">
+
+      <!-- Subscription status -->
+      <section class="card-elevated p-5">
+        <div class="flex items-center justify-between mb-3">
+          <h2 class="text-sm font-semibold text-content-primary">Subscription</h2>
+          <a routerLink="/dashboard/billing" class="text-xs font-medium text-primary-600 dark:text-primary-400 hover:underline">Manage</a>
+        </div>
+        <div class="flex items-center justify-between">
+          <span class="text-sm text-content-secondary">Plan</span>
+          <app-badge [variant]="auth.isPro() ? 'pro' : 'neutral'">{{ auth.currentPlan() | titlecase }}</app-badge>
+        </div>
+        @if (auth.user()?.subscription?.currentPeriodEnd) {
+          <div class="flex items-center justify-between mt-2.5">
+            <span class="text-sm text-content-secondary">{{ auth.user()?.subscription?.cancelAtPeriodEnd ? 'Ends' : 'Renews' }}</span>
+            <span class="text-sm text-content-primary font-medium">{{ auth.user()?.subscription?.currentPeriodEnd | date: 'mediumDate' }}</span>
+          </div>
+        }
+        @if (!auth.isPro()) {
+          <a routerLink="/resume-builder/pricing" class="btn-primary w-full mt-4">Upgrade to Pro</a>
+        }
+      </section>
+
+      <!-- Portfolio status -->
+      <section class="card-elevated p-5">
+        <div class="flex items-center justify-between mb-3">
+          <h2 class="text-sm font-semibold text-content-primary">Portfolio</h2>
+          <a routerLink="/portfolio" class="text-xs font-medium text-primary-600 dark:text-primary-400 hover:underline">Edit</a>
+        </div>
+        @if (portfolioStore.loading()) {
+          <app-skeleton height="3rem" />
+        } @else if (!portfolioStore.portfolio() || portfolioStore.portfolio()?.status !== 'published' && !portfolioStore.portfolio()?.username) {
+          <app-empty-state icon="layout-grid" title="No portfolio yet" description="Build a personal site to showcase your work.">
+            <a routerLink="/portfolio" class="btn-primary">Create Portfolio</a>
+          </app-empty-state>
+        } @else {
+          <div class="flex items-center gap-3">
+            <span class="w-9 h-9 rounded-[var(--radius-md)] bg-primary-50 dark:bg-primary-900/30 text-primary-600 dark:text-primary-400 flex items-center justify-center shrink-0">
+              <app-icon name="layout-grid" [size]="16" />
+            </span>
+            <div class="min-w-0 flex-1">
+              <p class="text-sm font-medium text-content-primary truncate">{{ portfolioStore.portfolio()?.displayName || portfolioStore.portfolio()?.username }}</p>
+              <p class="text-xs text-content-muted">{{ (portfolioStore.portfolio()?.views ?? 0) }} views</p>
+            </div>
+            <app-badge [variant]="portfolioStore.portfolio()?.status === 'published' ? 'success' : 'neutral'" size="sm">
+              {{ portfolioStore.portfolio()?.status }}
+            </app-badge>
+          </div>
+        }
+      </section>
+
+      <!-- Pinned projects -->
+      <section class="card-elevated p-5">
+        <h2 class="text-sm font-semibold text-content-primary mb-3">Pinned projects</h2>
+        @if (projectsPin.pinned().length === 0) {
+          <app-empty-state icon="pin" title="Nothing pinned" description="Pin a resume above to keep it handy here." />
+        } @else {
+          <div class="space-y-1">
+            @for (item of projectsPin.pinned(); track item.type + item.id) {
+              <div class="flex items-center gap-2.5 group">
+                <a [routerLink]="item.route" class="dash-nav-item flex-1 !px-2">
+                  <app-icon [name]="item.icon" [size]="15" />
+                  <span class="truncate">{{ item.label }}</span>
+                </a>
+                <button type="button" class="p-1.5 text-content-muted hover:text-content-primary" (click)="unpin(item.type, item.id)" aria-label="Unpin">
+                  <app-icon name="close" [size]="13" />
+                </button>
+              </div>
+            }
+          </div>
+        }
+      </section>
+
+      <!-- Recent notifications -->
+      <section class="card-elevated p-5">
+        <h2 class="text-sm font-semibold text-content-primary mb-3">Recent notifications</h2>
+        @if (notifications.items().length === 0) {
+          <app-empty-state icon="bell" title="You're all caught up" description="New activity will show up here." />
+        } @else {
+          <div class="space-y-2.5">
+            @for (n of notifications.items().slice(0, 4); track n.id) {
+              <div class="flex items-start gap-2.5">
+                <span class="w-1.5 h-1.5 rounded-full mt-1.5 shrink-0" [class]="n.read ? 'bg-transparent' : 'bg-primary-500'"></span>
+                <div class="min-w-0">
+                  <p class="text-sm text-content-primary truncate">{{ n.title }}</p>
+                  <p class="text-xs text-content-muted">{{ formatRelativeTime(n.createdAt) }}</p>
+                </div>
+              </div>
+            }
+          </div>
+        }
+      </section>
+    </div>
+  </div>
+</div>

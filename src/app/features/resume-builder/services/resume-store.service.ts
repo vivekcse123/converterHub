@@ -371,6 +371,25 @@ export class ResumeStoreService {
     this.updateSkillGroup(id, { items });
   }
 
+  /** Appends de-duplicated (case-insensitive) skill names to the first existing
+   *  skill group, or creates an "Additional Skills" group if none exists yet.
+   *  Used by the AI ATS analysis "add missing skill" suggestions, which don't
+   *  target a specific group id. */
+  addSkillItemsToFirstGroupOrCreate(items: string[]): void {
+    const clean = items.map(s => s.trim()).filter(Boolean);
+    if (!clean.length) return;
+    this.patchActive(r => {
+      if (r.skills.length === 0) {
+        const group: SkillGroup = { id: uid(), category: 'Additional Skills', items: clean };
+        return { ...r, skills: [group] };
+      }
+      const [first, ...rest] = r.skills;
+      const existing = new Set(first.items.map(i => i.toLowerCase()));
+      const merged = [...first.items, ...clean.filter(i => !existing.has(i.toLowerCase()))];
+      return { ...r, skills: [{ ...first, items: merged }, ...rest] };
+    });
+  }
+
   // ── Certifications ─────────────────────────────────────────────────────────
 
   addCertification(): void {

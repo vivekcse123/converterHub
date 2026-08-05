@@ -91,7 +91,7 @@
               <h2 class="cp-heading">Projects</h2>
               @for (proj of resume().projects; track proj.id) {
                 <div class="cp-entry resume-entry">
-                  <p class="cp-role">{{ proj.name }}@if (proj.techStack) {<span class="cp-sub"> — {{ proj.techStack }}</span>}</p>
+                  <p class="cp-role">{{ proj.name }}@if (proj.techStack) {<span class="cp-sub"> - {{ proj.techStack }}</span>}</p>
                   @if (proj.link) { <p class="cp-sub">{{ proj.link }}</p> }
                   @if (proj.bullets.length) {
                     <ul class="cp-bullets">
@@ -109,7 +109,7 @@
             @if (resume().certifications.length) {
               <h2 class="cp-heading">Certifications</h2>
               @for (cert of resume().certifications; track cert.id) {
-                <p class="cp-text"><strong>{{ cert.name }}</strong>@if (cert.issuer) { — {{ cert.issuer }}}@if (cert.date) { ({{ monthYear(cert.date) }})}</p>
+                <p class="cp-text"><strong>{{ cert.name }}</strong>@if (cert.issuer) { - {{ cert.issuer }}}@if (cert.date) { ({{ monthYear(cert.date) }})}</p>
               }
             }
           }

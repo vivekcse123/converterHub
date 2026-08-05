@@ -1,0 +1,76 @@
+<div class="max-w-7xl space-y-6">
+  <h1 class="text-xl font-bold text-content-primary">Billing</h1>
+
+  <div class="grid lg:grid-cols-3 gap-6">
+    <!-- Current plan -->
+    <section class="lg:col-span-1 card-elevated p-5 sm:p-6">
+      <h2 class="text-sm font-semibold text-content-primary mb-4">Current plan</h2>
+      <div class="flex items-center justify-between">
+        <span class="text-sm text-content-secondary">Plan</span>
+        <app-badge [variant]="auth.isPro() ? 'pro' : 'neutral'">{{ auth.currentPlan() | titlecase }}</app-badge>
+      </div>
+      @if (auth.user()?.subscription?.status) {
+        <div class="flex items-center justify-between mt-2.5">
+          <span class="text-sm text-content-secondary">Status</span>
+          <span class="text-sm font-medium text-content-primary capitalize">{{ auth.user()?.subscription?.status }}</span>
+        </div>
+      }
+      @if (auth.user()?.subscription?.currentPeriodEnd) {
+        <div class="flex items-center justify-between mt-2.5">
+          <span class="text-sm text-content-secondary">{{ auth.user()?.subscription?.cancelAtPeriodEnd ? 'Access ends' : 'Renews' }}</span>
+          <span class="text-sm font-medium text-content-primary">{{ auth.user()?.subscription?.currentPeriodEnd | date: 'mediumDate' }}</span>
+        </div>
+      }
+
+      @if (!auth.isPro()) {
+        <a routerLink="/resume-builder/pricing" class="btn-primary w-full mt-4">
+          <app-icon name="zap" [size]="15" /> Upgrade to Pro
+        </a>
+      } @else if (!auth.user()?.subscription?.cancelAtPeriodEnd && auth.currentPlan() !== 'lifetime') {
+        <button type="button" class="btn-outline w-full mt-4" (click)="cancelSubscription()" [disabled]="cancelling()">
+          {{ cancelling() ? 'Cancelling...' : 'Cancel subscription' }}
+        </button>
+      }
+    </section>
+
+    <!-- Payment history -->
+    <section class="lg:col-span-2 card-elevated p-5 sm:p-6">
+      <h2 class="text-sm font-semibold text-content-primary mb-4">Payment history</h2>
+
+      @if (paymentsLoading()) {
+        <div class="space-y-3">
+          <app-skeleton height="2.5rem" />
+          <app-skeleton height="2.5rem" />
+          <app-skeleton height="2.5rem" />
+        </div>
+      } @else if (payments().length === 0) {
+        <app-empty-state icon="credit-card" title="No payments yet" description="Your invoices and receipts will appear here once you upgrade." />
+      } @else {
+        <div class="overflow-x-auto -mx-5 sm:-mx-6">
+          <table class="w-full text-sm">
+            <thead>
+              <tr class="text-left text-xs text-content-muted border-b border-border">
+                <th class="font-medium px-5 sm:px-6 py-2">Invoice</th>
+                <th class="font-medium px-3 py-2">Plan</th>
+                <th class="font-medium px-3 py-2">Amount</th>
+                <th class="font-medium px-3 py-2">Status</th>
+                <th class="font-medium px-5 sm:px-6 py-2 text-right">Date</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-border">
+              @for (payment of payments(); track payment._id) {
+                <tr>
+                  <td class="px-5 sm:px-6 py-3 font-mono text-xs text-content-secondary">{{ payment.invoiceNumber || '—' }}</td>
+                  <td class="px-3 py-3 capitalize text-content-primary">{{ payment.plan }}</td>
+                  <td class="px-3 py-3 text-content-primary">{{ formatAmount(payment.amount, payment.currency) }}</td>
+                  <td class="px-3 py-3"><app-badge [variant]="statusVariant(payment.status)" size="sm">{{ payment.status }}</app-badge></td>
+                  <td class="px-5 sm:px-6 py-3 text-content-muted text-right">{{ payment.createdAt | date: 'mediumDate' }}</td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      }
+    </section>
+  </div>
+</div>

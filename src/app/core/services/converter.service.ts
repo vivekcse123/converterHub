@@ -337,7 +337,7 @@ export class ConverterService {
     this.stuckTimer = setTimeout(() => {
       if (this.isConverting()) {
         this.isStuck.set(true);
-        this.progressLabel.set('Still processing — please wait…');
+        this.progressLabel.set('Still processing - please wait…');
       }
     }, STUCK_THRESHOLD_MS);
   }

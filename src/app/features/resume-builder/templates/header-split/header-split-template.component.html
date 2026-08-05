@@ -84,7 +84,7 @@
               <h2 class="hs-heading">Projects</h2>
               @for (proj of resume().projects; track proj.id) {
                 <div class="hs-entry resume-entry">
-                  <p class="hs-role">{{ proj.name }}@if (proj.techStack) { <span class="hs-sub"> — {{ proj.techStack }}</span>}</p>
+                  <p class="hs-role">{{ proj.name }}@if (proj.techStack) { <span class="hs-sub"> - {{ proj.techStack }}</span>}</p>
                   @if (proj.link) { <p class="hs-sub">{{ proj.link }}</p> }
                   @if (proj.bullets.length) {
                     <ul class="hs-bullets">
@@ -102,7 +102,7 @@
             @if (resume().certifications.length) {
               <h2 class="hs-heading">Certifications</h2>
               @for (cert of resume().certifications; track cert.id) {
-                <p class="hs-text"><strong>{{ cert.name }}</strong>@if (cert.issuer) { — {{ cert.issuer }}}@if (cert.date) { ({{ monthYear(cert.date) }})}</p>
+                <p class="hs-text"><strong>{{ cert.name }}</strong>@if (cert.issuer) { - {{ cert.issuer }}}@if (cert.date) { ({{ monthYear(cert.date) }})}</p>
               }
             }
           }

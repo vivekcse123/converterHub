@@ -61,7 +61,7 @@ export function getConversionError(err: unknown): ConversionError {
   if (status === 408 || /timed out|timeout/i.test(serverMsg)) {
     return {
       title: 'Conversion Timed Out',
-      detail: serverMsg || 'The conversion took too long. Your file may be too large or complex — please try a smaller file.',
+      detail: serverMsg || 'The conversion took too long. Your file may be too large or complex; please try a smaller file.',
       retryable: true,
     };
   }

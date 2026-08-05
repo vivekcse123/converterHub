@@ -91,7 +91,7 @@
                   <span class="tl-connector"></span>
                 </div>
                 <div class="tl-content-col">
-                  <p class="tl-role">{{ proj.name }}@if (proj.techStack) { <span class="tl-company"> — {{ proj.techStack }}</span>}</p>
+                  <p class="tl-role">{{ proj.name }}@if (proj.techStack) { <span class="tl-company"> - {{ proj.techStack }}</span>}</p>
                   @if (proj.link) { <p class="tl-company">{{ proj.link }}</p> }
                   @if (proj.bullets.length) {
                     <ul class="tl-bullets">
@@ -127,7 +127,7 @@
             <h2 class="tl-heading">Certifications</h2>
             <div class="tl-plain">
               @for (cert of resume().certifications; track cert.id) {
-                <p class="tl-text"><strong>{{ cert.name }}</strong>@if (cert.issuer) { — {{ cert.issuer }}}@if (cert.date) { ({{ monthYear(cert.date) }})}</p>
+                <p class="tl-text"><strong>{{ cert.name }}</strong>@if (cert.issuer) { - {{ cert.issuer }}}@if (cert.date) { ({{ monthYear(cert.date) }})}</p>
               }
             </div>
           }

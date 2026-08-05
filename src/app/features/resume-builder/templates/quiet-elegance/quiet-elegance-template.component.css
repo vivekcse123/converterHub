@@ -1,0 +1,24 @@
+.qe-tpl {
+  font-family: Georgia, 'Times New Roman', serif;
+}
+
+.qe-title {
+  font-variant: small-caps;
+  letter-spacing: 0.1em;
+  color: var(--r-accent, #9d174d);
+}
+
+.qe-diamond {
+  color: var(--r-accent, #9d174d);
+  font-size: 0.7em;
+}
+
+.qe-heading {
+  font-size: 0.85em;
+  font-weight: 400;
+  font-variant: small-caps;
+  letter-spacing: 0.2em;
+  color: var(--r-accent, #9d174d);
+  text-align: center;
+  margin-bottom: 7pt;
+}

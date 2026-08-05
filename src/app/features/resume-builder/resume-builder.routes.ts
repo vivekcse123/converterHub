@@ -20,11 +20,11 @@ export const resumeBuilderRoutes: Routes = [
     data: { description: 'Upgrade to ApnaConverter Pro for unlimited resumes, all 30 premium templates, cover letters, portfolios, and job tracker. Plans from ₹99/month.' },
   },
   {
+    // Job Tracker now lives inside the dashboard shell so it doesn't drop
+    // users back into the marketing site header/footer mid-flow.
     path: 'job-tracker',
-    loadComponent: () => import('./pages/job-tracker/job-tracker.component').then(m => m.JobTrackerComponent),
-    canActivate: [proGuard],
-    title: 'Job Application Tracker | ApnaConverter',
-    data: { description: 'Track every job application, interview, and offer in one place. Pro feature.' },
+    redirectTo: '/dashboard/job-tracker',
+    pathMatch: 'full',
   },
   {
     path: 'cover-letter',

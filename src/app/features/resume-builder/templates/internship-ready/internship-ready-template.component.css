@@ -1,0 +1,31 @@
+.ir-tpl {
+  font-family: var(--r-font, 'Inter', Arial, sans-serif);
+}
+
+.ir-header {
+  border-bottom: 2px solid var(--r-accent, #2563eb);
+}
+
+.ir-title {
+  color: var(--r-accent, #2563eb);
+}
+
+.ir-heading {
+  font-size: 0.9em;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: #0f172a;
+  border-left: 3px solid var(--r-accent, #2563eb);
+  padding-left: 6pt;
+  margin-bottom: 3pt;
+}
+
+.ir-skill {
+  background: var(--r-accent-12, #eff6ff);
+  color: var(--r-accent, #1d4ed8);
+  border-radius: 3px;
+  padding: 1pt 6pt;
+  font-size: 0.78em;
+  font-weight: 600;
+}

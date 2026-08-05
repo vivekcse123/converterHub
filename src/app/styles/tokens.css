@@ -1,0 +1,92 @@
+/* ─── Design Tokens ──────────────────────────────────────────────────────
+   Single source of truth for color, spacing, radius, shadow, and motion.
+   Tailwind config reads these via var(--token-name) so runtime theme
+   switching (ThemeService toggling .dark on <html>) works without a
+   rebuild. Existing Tailwind keys keep their names — only the underlying
+   values move here — so no consumer class name changes as a result.
+   ────────────────────────────────────────────────────────────────────── */
+
+:root {
+  /* Color primitives — unchanged from the existing primary scale.
+     Stored as space-separated RGB channels (not hex) so Tailwind can still
+     synthesize opacity-modifier utilities (e.g. bg-primary-900/40) — Tailwind
+     can't compute alpha variants for a color it can't resolve at build time
+     (a bare `var(--x)` string), so every channel triple is consumed via
+     `rgb(var(--x) / <alpha-value>)` in tailwind.config.js. This is required:
+     40+ existing files use opacity-modified primary-* classes today. */
+  --color-primary-50: 245 243 255;
+  --color-primary-100: 237 233 254;
+  --color-primary-200: 221 214 254;
+  --color-primary-300: 196 181 253;
+  --color-primary-400: 167 139 250;
+  --color-primary-500: 139 92 246;
+  --color-primary-600: 124 58 237;
+  --color-primary-700: 109 40 217;
+  --color-primary-800: 91 33 182;
+  --color-primary-900: 76 29 149;
+  --color-primary-950: 46 16 101;
+
+  /* Semantic surface / text / border tokens — new, token-driven dark mode.
+     Same RGB-channel convention as above for opacity-modifier support. */
+  --color-bg-canvas: 255 255 255;
+  --color-bg-surface: 248 250 252;
+  --color-bg-elevated: 255 255 255;
+  --color-border-default: 241 245 249;
+  --color-border-strong: 226 232 240;
+  --color-text-primary: 15 23 42;
+  --color-text-secondary: 100 116 139;
+  --color-text-muted: 148 163 184;
+
+  /* Spacing — 8px grid */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-10: 40px;
+  --space-12: 48px;
+  --space-16: 64px;
+  --space-20: 80px;
+  --space-24: 96px;
+
+  /* Radius */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --radius-xl: 18px;
+  --radius-2xl: 24px;
+  --radius-full: 9999px;
+
+  /* Shadow — aliases today's values, adds one new tier for overlays */
+  --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.08), 0 4px 12px rgba(0, 0, 0, 0.05);
+  --shadow-card-hover: 0 4px 6px rgba(0, 0, 0, 0.07), 0 12px 28px rgba(0, 0, 0, 0.1);
+  --shadow-glow: 0 0 20px rgba(124, 58, 237, 0.35);
+  --shadow-popover: 0 8px 24px rgba(15, 23, 42, 0.12), 0 2px 6px rgba(15, 23, 42, 0.06);
+
+  /* Motion — formalizes the durations already used across keyframes */
+  --duration-fast: 150ms;
+  --duration-base: 200ms;
+  --duration-slow: 300ms;
+  --duration-slower: 400ms;
+  --ease-standard: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-out: cubic-bezier(0, 0, 0.2, 1);
+  --ease-bounce: cubic-bezier(0.36, 0.07, 0.19, 0.97);
+
+  /* Brand gradients — dashboard shell, used sparingly (hero band, upgrade CTA,
+     empty-state accents), never as a full-page background. */
+  --gradient-brand: linear-gradient(135deg, rgb(var(--color-primary-500)), rgb(var(--color-primary-700)));
+  --gradient-brand-soft: linear-gradient(135deg, rgb(var(--color-primary-500) / 0.12), rgb(var(--color-primary-700) / 0.12));
+}
+
+.dark {
+  --color-bg-canvas: 15 23 42;
+  --color-bg-surface: 15 23 42;
+  --color-bg-elevated: 30 41 59;
+  --color-border-default: 30 41 59;
+  --color-border-strong: 51 65 85;
+  --color-text-primary: 241 245 249;
+  --color-text-secondary: 148 163 184;
+  --color-text-muted: 100 116 139;
+}

@@ -86,7 +86,7 @@
             <h2 class="bx-heading">Projects</h2>
             @for (proj of resume().projects; track proj.id) {
               <div class="bx-entry resume-entry">
-                <p class="bx-role">{{ proj.name }}@if (proj.techStack) { <span class="bx-company"> — {{ proj.techStack }}</span>}</p>
+                <p class="bx-role">{{ proj.name }}@if (proj.techStack) { <span class="bx-company"> - {{ proj.techStack }}</span>}</p>
                 @if (proj.link) { <p class="bx-company">{{ proj.link }}</p> }
                 @if (proj.bullets.length) {
                   <ul class="bx-bullets">

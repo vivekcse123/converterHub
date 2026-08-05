@@ -56,7 +56,7 @@
               @if (resume().languages.length) {
                 <h3 class="ng-side-heading">Languages</h3>
                 @for (lang of resume().languages; track lang.id) {
-                  <p class="ng-side-item">{{ lang.name }} — {{ lang.proficiency }}</p>
+                  <p class="ng-side-item">{{ lang.name }} - {{ lang.proficiency }}</p>
                 }
               }
             }
@@ -130,7 +130,7 @@
                 <h2 class="ng-heading">Projects</h2>
                 @for (proj of resume().projects; track proj.id) {
                   <div class="ng-entry resume-entry">
-                    <p class="ng-role">{{ proj.name }}@if (proj.techStack) { <span class="ng-company"> — {{ proj.techStack }}</span>}</p>
+                    <p class="ng-role">{{ proj.name }}@if (proj.techStack) { <span class="ng-company"> - {{ proj.techStack }}</span>}</p>
                     @if (proj.link) { <p class="ng-company">{{ proj.link }}</p> }
                     @if (proj.bullets.length) {
                       <ul class="ng-bullets">

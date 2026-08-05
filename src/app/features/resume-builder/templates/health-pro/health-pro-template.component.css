@@ -1,0 +1,48 @@
+.hp-tpl {
+  font-family: var(--r-font, 'Inter', Arial, sans-serif);
+}
+
+.hp-header {
+  border-left: 4px solid var(--r-accent, #059669);
+}
+
+.hp-title {
+  color: var(--r-accent, #059669);
+}
+
+.hp-cert-badge {
+  background: var(--r-accent-12, #ecfdf5);
+  border: 1px solid var(--r-accent-25, #a7f3d0);
+  color: var(--r-accent, #047857);
+  border-radius: 999px;
+  padding: 1.5pt 8pt;
+  font-size: 0.78em;
+  font-weight: 600;
+}
+
+.hp-heading {
+  font-size: 0.98em;
+  font-weight: 700;
+  color: #0f172a;
+  border-left: 4px solid var(--r-accent, #059669);
+  padding-left: 6pt;
+  margin-bottom: 5pt;
+}
+
+.hp-list {
+  list-style: none;
+  padding-left: 0;
+}
+
+.hp-list li {
+  padding-left: 13pt;
+  position: relative;
+}
+
+.hp-list li::before {
+  content: '+';
+  position: absolute;
+  left: 0;
+  color: var(--r-accent, #059669);
+  font-weight: 700;
+}

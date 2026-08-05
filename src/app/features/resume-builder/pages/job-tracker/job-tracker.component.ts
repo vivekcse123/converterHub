@@ -1,7 +1,6 @@
 import { ChangeDetectionStrategy, Component, OnInit, computed, inject, signal } from '@angular/core';
 import { CommonModule, DatePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { RouterLink } from '@angular/router';
 import { CareerService, JobApplication, JobStatus, JOB_STATUS_CONFIG } from '../../services/career.service';
 import { AuthService } from '../../../../core/services/auth.service';
 import { UpgradeModalComponent } from '../../components/upgrade-modal/upgrade-modal.component';
@@ -24,7 +23,7 @@ const EMPTY_FORM = (): Partial<JobApplication> => ({
 @Component({
   selector: 'app-job-tracker',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterLink, DatePipe, UpgradeModalComponent],
+  imports: [CommonModule, FormsModule, DatePipe, UpgradeModalComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     @if (showUpgrade()) {
@@ -89,31 +88,23 @@ const EMPTY_FORM = (): Partial<JobApplication> => ({
       </div>
     }
 
-    <div class="min-h-screen bg-slate-50 dark:bg-slate-950">
+    <div>
+      <div class="container-app">
 
-      <!-- Header bar -->
-      <div class="bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 sticky top-0 z-20 shadow-sm">
-        <div class="container-app py-3 flex items-center justify-between gap-4">
-          <div class="flex items-center gap-3">
-            <a routerLink="/resume-builder/dashboard" class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 transition text-sm">← Dashboard</a>
-            <span class="text-slate-300 dark:text-slate-700">|</span>
-            <h1 class="font-bold text-slate-800 dark:text-white text-sm flex items-center gap-1.5">
-              <svg class="w-4 h-4 text-primary-600 dark:text-primary-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"/></svg>
-              Job Tracker
-              @if (auth.isPro()) {
-                <span class="text-[10px] bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-300 px-1.5 py-0.5 rounded font-bold">PRO</span>
-              }
-            </h1>
-          </div>
+        <!-- Header -->
+        <div class="flex items-center justify-between gap-4 mb-6">
+          <h1 class="text-xl font-bold text-content-primary flex items-center gap-2">
+            Job Tracker
+            @if (auth.isPro()) {
+              <span class="text-[10px] bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-300 px-1.5 py-0.5 rounded font-bold">PRO</span>
+            }
+          </h1>
           @if (auth.isPro()) {
             <button class="btn btn-primary btn-sm flex items-center gap-1.5" (click)="openAdd()">
               <span class="text-base leading-none">+</span> Add Application
             </button>
           }
         </div>
-      </div>
-
-      <div class="container-app py-8">
 
         @if (!auth.isPro()) {
           <!-- Pro gate -->

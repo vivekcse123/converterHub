@@ -10,7 +10,7 @@ export interface ToolContent {
 export const TOOL_CONTENT: Record<string, ToolContent> = {
 
   'image-to-pdf': {
-    intro: 'Need to share multiple images as a single, professional document? Our Image to PDF converter lets you upload JPG, PNG, WebP, or GIF files and instantly bundle them into one neatly formatted PDF. No messy email attachments — just a clean, portable file that opens perfectly on any device.',
+    intro: 'Need to share multiple images as a single, professional document? Our Image to PDF converter lets you upload JPG, PNG, WebP, or GIF files and instantly bundle them into one neatly formatted PDF. No messy email attachments, just a clean, portable file that opens perfectly on any device.',
     steps: [
       { icon: '📁', title: 'Upload Images',  desc: 'Select one or more JPG, PNG, WebP, or GIF files from your device or drag them in.' },
       { icon: '⚙️', title: 'Set Options',   desc: 'Choose page size, orientation, and margin to suit your layout.' },
@@ -34,7 +34,7 @@ export const TOOL_CONTENT: Record<string, ToolContent> = {
   },
 
   'pdf-to-word': {
-    intro: 'Converting a PDF back to an editable Word document is one of the most common document tasks. Our PDF to Word tool extracts text, tables, and formatting from any PDF and outputs a clean, editable .docx file — compatible with Microsoft Word, LibreOffice, and Google Docs — in seconds.',
+    intro: 'Converting a PDF back to an editable Word document is one of the most common document tasks. Our PDF to Word tool extracts text, tables, and formatting from any PDF and outputs a clean, editable .docx file, compatible with Microsoft Word, LibreOffice, and Google Docs, in seconds.',
     steps: [
       { icon: '📄', title: 'Upload PDF',        desc: 'Drop your PDF onto the upload area or click to browse.' },
       { icon: '⚡', title: 'Convert',            desc: 'Our engine extracts the text, tables, and layout from your PDF.' },
@@ -82,7 +82,7 @@ export const TOOL_CONTENT: Record<string, ToolContent> = {
   },
 
   'pdf-editor': {
-    intro: 'Managing PDFs should not require expensive desktop software. Our PDF Editor brings the three most-needed operations — merge, split, and compress — into a single browser-based tool. Combine reports into one file, extract specific pages, or shrink a large PDF down to an email-friendly size without installing anything.',
+    intro: 'Managing PDFs should not require expensive desktop software. Our PDF Editor brings the three most-needed operations (merge, split, and compress) into a single browser-based tool. Combine reports into one file, extract specific pages, or shrink a large PDF down to an email-friendly size without installing anything.',
     steps: [
       { icon: '📄', title: 'Upload PDF(s)',  desc: 'Upload one PDF to split or compress, or multiple PDFs to merge.' },
       { icon: '⚙️', title: 'Choose Action', desc: 'Select Merge, Split, or Compress from the action tabs.' },
@@ -106,7 +106,7 @@ export const TOOL_CONTENT: Record<string, ToolContent> = {
   },
 
   'image-editor': {
-    intro: 'Quick image editing tasks should not require Photoshop or Lightroom. Our Image Editor handles the everyday jobs: resizing a photo to exact pixel dimensions, compressing an image for web or email, and converting between JPG, PNG, and WebP formats — all in your browser with no installation needed.',
+    intro: 'Quick image editing tasks should not require Photoshop or Lightroom. Our Image Editor handles the everyday jobs: resizing a photo to exact pixel dimensions, compressing an image for web or email, and converting between JPG, PNG, and WebP formats, all in your browser with no installation needed.',
     steps: [
       { icon: '🎨', title: 'Upload Image', desc: 'Select a JPG, PNG, or WebP image from your device.' },
       { icon: '⚙️', title: 'Edit',         desc: 'Resize, compress, or convert your image using the action tabs.' },
@@ -129,8 +129,32 @@ export const TOOL_CONTENT: Record<string, ToolContent> = {
     ],
   },
 
+  'bg-remover': {
+    intro: 'Cutting a subject out of a photo used to mean Photoshop and a lot of patience with the lasso tool. Our Background Remover uses an in-browser AI model to detect the subject and erase the background automatically, then lets you drop in a new one: solid color, gradient, or any image of your own, so you get a polished result in seconds, not minutes.',
+    steps: [
+      { icon: '📷', title: 'Upload a Photo',     desc: 'Drop in any JPG, PNG, WebP, or GIF - a portrait, product shot, or logo.' },
+      { icon: '✂️', title: 'Remove Background', desc: 'Our AI detects the subject and cuts it out automatically, right in your browser.' },
+      { icon: '🎨', title: 'Replace & Download', desc: 'Keep it transparent or add a color, gradient, or custom background, then download the PNG.' },
+    ],
+    benefits: [
+      'AI background removal runs entirely on your device - your photo is never uploaded',
+      'Works on portraits, products, logos, and graphics alike',
+      'Replace the background with a solid color, gradient, or your own image',
+      'Download a high-resolution transparent PNG or fully composited image',
+      'No software installation, no account, and no watermark',
+      'Free to use with no limit on the number of photos',
+    ],
+    faqs: [
+      { q: 'Is my photo uploaded to a server?', a: 'No. Background removal runs fully in your browser using an in-browser AI model. Your photo never leaves your device, so there is nothing to upload or store.' },
+      { q: 'What image formats are supported?', a: 'You can upload JPG, PNG, WebP, or GIF files. The result always downloads as a transparent or composited PNG so edges stay crisp.' },
+      { q: 'Can I change the background instead of just removing it?', a: 'Yes. After the background is removed, choose a solid color, one of the built-in gradients, or upload your own photo to use as the new background.' },
+      { q: 'Why does the first removal take longer?', a: 'The first time you use the tool, your browser downloads the AI model (roughly 40-80 MB) and caches it. Every removal after that is much faster.' },
+      { q: 'Is the Background Remover free?', a: 'Yes, background removal and replacement are completely free on ApnaConverter, with no watermark and no sign-up required.' },
+    ],
+  },
+
   'compress': {
-    intro: 'Sending multiple files to a colleague or client as individual attachments is messy and slow. Our File Compressor bundles all your PDFs, images, and documents into a single ZIP archive that is easier to attach to emails and faster to download. No software installation needed — works in any browser on any device.',
+    intro: 'Sending multiple files to a colleague or client as individual attachments is messy and slow. Our File Compressor bundles all your PDFs, images, and documents into a single ZIP archive that is easier to attach to emails and faster to download. No software installation needed, works in any browser on any device.',
     steps: [
       { icon: '📁', title: 'Upload Files', desc: 'Select multiple files - PDFs, images, or documents.' },
       { icon: '🗜️', title: 'Bundle',       desc: 'Files are packaged into a compressed ZIP archive.' },
@@ -154,7 +178,7 @@ export const TOOL_CONTENT: Record<string, ToolContent> = {
   },
 
   'text-to-pdf': {
-    intro: 'Have meeting notes, a script, a log output, or plain text content that needs to become a shareable document? Our Text to PDF tool wraps any plain text in a clean, professional PDF with neat formatting — no Microsoft Word needed. Just paste your text or upload a .txt file and download the result instantly.',
+    intro: 'Have meeting notes, a script, a log output, or plain text content that needs to become a shareable document? Our Text to PDF tool wraps any plain text in a clean, professional PDF with neat formatting, no Microsoft Word needed. Just paste your text or upload a .txt file and download the result instantly.',
     steps: [
       { icon: '📄', title: 'Upload or Paste', desc: 'Upload a .txt file or paste your text directly into the editor.' },
       { icon: '⚡', title: 'Convert',          desc: 'Text is formatted and rendered into a clean PDF document.' },
@@ -178,7 +202,7 @@ export const TOOL_CONTENT: Record<string, ToolContent> = {
   },
 
   'pdf-to-jpg': {
-    intro: 'PDF pages are far easier to share on social media, embed in websites, or view in image galleries as JPGs. Our PDF to JPG converter extracts every page of your PDF as a crisp, high-quality image file at the DPI you choose — perfect for creating presentation thumbnails, social media previews, or printable page images.',
+    intro: 'PDF pages are far easier to share on social media, embed in websites, or view in image galleries as JPGs. Our PDF to JPG converter extracts every page of your PDF as a crisp, high-quality image file at the DPI you choose, perfect for creating presentation thumbnails, social media previews, or printable page images.',
     steps: [
       { icon: '📄', title: 'Upload PDF',      desc: 'Select or drag-and-drop your PDF file.' },
       { icon: '⚙️', title: 'Choose Quality', desc: 'Pick DPI (72-600) and output format (JPG, PNG, or WebP).' },
@@ -226,7 +250,7 @@ export const TOOL_CONTENT: Record<string, ToolContent> = {
   },
 
   'sign-pdf': {
-    intro: 'Printing a document just to sign it and scan it back is a thing of the past. Our PDF Signer lets you draw a freehand signature with your mouse or touchscreen, type your name in a handwriting style, or upload an existing signature image — then place it precisely anywhere on any page of your document.',
+    intro: 'Printing a document just to sign it and scan it back is a thing of the past. Our PDF Signer lets you draw a freehand signature with your mouse or touchscreen, type your name in a handwriting style, or upload an existing signature image, then place it precisely anywhere on any page of your document.',
     steps: [
       { icon: '📄', title: 'Upload PDF',            desc: 'Upload the PDF document you need to sign.' },
       { icon: '✍️', title: 'Add Signature',         desc: 'Draw, type, or upload your signature and place it on the page.' },
@@ -250,7 +274,7 @@ export const TOOL_CONTENT: Record<string, ToolContent> = {
   },
 
   'redact-pdf': {
-    intro: 'Sharing a document that contains sensitive information? Our PDF Redaction tool permanently removes selected regions so the underlying text is completely unrecoverable — not just visually hidden. Ideal for legal, HR, healthcare, and compliance teams handling NDA-sensitive, GDPR, or HIPAA-protected content.',
+    intro: 'Sharing a document that contains sensitive information? Our PDF Redaction tool permanently removes selected regions so the underlying text is completely unrecoverable, not just visually hidden. Ideal for legal, HR, healthcare, and compliance teams handling NDA-sensitive, GDPR, or HIPAA-protected content.',
     steps: [
       { icon: '📄', title: 'Upload PDF',             desc: 'Upload the PDF containing sensitive information.' },
       { icon: '🔲', title: 'Mark Areas',             desc: 'Draw over the text or regions you want to permanently remove.' },
@@ -274,7 +298,7 @@ export const TOOL_CONTENT: Record<string, ToolContent> = {
   },
 
   'page-numbers': {
-    intro: 'Professional documents need page numbers. Our Page Number tool adds them to any PDF in the position and format you choose — top or bottom, left, center, or right, in Arabic numerals or Roman numerals. You can also set a custom starting number for documents with front matter or appendices.',
+    intro: 'Professional documents need page numbers. Our Page Number tool adds them to any PDF in the position and format you choose: top or bottom, left, center, or right, in Arabic numerals or Roman numerals. You can also set a custom starting number for documents with front matter or appendices.',
     steps: [
       { icon: '📄', title: 'Upload PDF',  desc: 'Select the PDF where you want to add page numbers.' },
       { icon: '⚙️', title: 'Configure',  desc: 'Choose position (header/footer), starting number, and format.' },
@@ -322,7 +346,7 @@ export const TOOL_CONTENT: Record<string, ToolContent> = {
   },
 
   'compare-pdfs': {
-    intro: 'Spotting the differences between two versions of a contract, legal brief, or report by reading them side-by-side is slow and error-prone. Our PDF comparison tool highlights every change — added text, removed text, and modifications — so you can review revisions in seconds rather than spending hours on manual checks.',
+    intro: 'Spotting the differences between two versions of a contract, legal brief, or report by reading them side-by-side is slow and error-prone. Our PDF comparison tool highlights every change (added text, removed text, and modifications) so you can review revisions in seconds rather than spending hours on manual checks.',
     steps: [
       { icon: '📄', title: 'Upload Two PDFs', desc: 'Upload the original and the revised PDF for comparison.' },
       { icon: '🔍', title: 'Compare',          desc: 'Differences in text and layout are detected and highlighted.' },
@@ -370,7 +394,7 @@ export const TOOL_CONTENT: Record<string, ToolContent> = {
   },
 
   'pdf-to-txt': {
-    intro: 'When you need the raw text from a PDF — for data analysis, feeding into an AI tool, pasting into another application, or programmatic processing — our PDF to TXT extractor does the job instantly. It outputs clean, readable plain text from any PDF, including multi-column layouts and long multi-page documents.',
+    intro: 'When you need the raw text from a PDF, for data analysis, feeding into an AI tool, pasting into another application, or programmatic processing, our PDF to TXT extractor does the job instantly. It outputs clean, readable plain text from any PDF, including multi-column layouts and long multi-page documents.',
     steps: [
       { icon: '📄', title: 'Upload PDF',    desc: 'Select the PDF you want to extract text from.' },
       { icon: '⚡', title: 'Extract',        desc: 'All text content is extracted from the PDF pages.' },
@@ -394,7 +418,7 @@ export const TOOL_CONTENT: Record<string, ToolContent> = {
   },
 
   'pdf-to-markdown': {
-    intro: 'Markdown is the language of modern technical documentation, wikis, and notes. Our PDF to Markdown converter extracts text and maps headings, lists, bold, italic, and basic formatting to standard Markdown syntax — making PDF content immediately ready to import into Notion, Obsidian, GitHub wikis, or any static site generator.',
+    intro: 'Markdown is the language of modern technical documentation, wikis, and notes. Our PDF to Markdown converter extracts text and maps headings, lists, bold, italic, and basic formatting to standard Markdown syntax, making PDF content immediately ready to import into Notion, Obsidian, GitHub wikis, or any static site generator.',
     steps: [
       { icon: '📄', title: 'Upload PDF',       desc: 'Upload the PDF you want to convert to Markdown.' },
       { icon: '⚡', title: 'Convert',           desc: 'Text, headings, and lists are mapped to Markdown syntax.' },
@@ -418,7 +442,7 @@ export const TOOL_CONTENT: Record<string, ToolContent> = {
   },
 
   'pdf-to-json': {
-    intro: 'Developers and data engineers often need to extract structured content from PDFs for APIs, databases, or data pipelines. Our PDF to JSON converter outputs page text, document metadata, and content structure as clean, machine-readable JSON — compatible with any programming language or data processing tool, no manual parsing required.',
+    intro: 'Developers and data engineers often need to extract structured content from PDFs for APIs, databases, or data pipelines. Our PDF to JSON converter outputs page text, document metadata, and content structure as clean, machine-readable JSON, compatible with any programming language or data processing tool, no manual parsing required.',
     steps: [
       { icon: '📄', title: 'Upload PDF',      desc: 'Upload the PDF you want to extract structured data from.' },
       { icon: '⚡', title: 'Extract',          desc: 'Text, metadata, and structure are parsed into JSON format.' },
@@ -466,7 +490,7 @@ export const TOOL_CONTENT: Record<string, ToolContent> = {
   },
 
   'pdf-to-csv': {
-    intro: 'Tables trapped inside PDF reports are frustrating — you can see the data but you cannot work with it. Our PDF to CSV tool extracts tabular content and outputs it in comma-separated format that opens directly in Excel, Google Sheets, or any data analysis tool. No more tedious manual re-entry of numbers and figures.',
+    intro: 'Tables trapped inside PDF reports are frustrating; you can see the data but you cannot work with it. Our PDF to CSV tool extracts tabular content and outputs it in comma-separated format that opens directly in Excel, Google Sheets, or any data analysis tool. No more tedious manual re-entry of numbers and figures.',
     steps: [
       { icon: '📄', title: 'Upload PDF',    desc: 'Upload a PDF containing tables or tabular data.' },
       { icon: '⚡', title: 'Extract Tables', desc: 'Our engine detects and extracts tables from your PDF.' },
@@ -490,7 +514,7 @@ export const TOOL_CONTENT: Record<string, ToolContent> = {
   },
 
   'pdf-to-epub': {
-    intro: 'Long PDFs are hard to read on phones and e-readers because the text does not reflow to fit the screen. Converting to EPUB creates a flexible format where text adapts to any screen size, font size, or orientation — ideal for reading research papers, manuals, and long-form content on Kindle, Kobo, or Apple Books.',
+    intro: 'Long PDFs are hard to read on phones and e-readers because the text does not reflow to fit the screen. Converting to EPUB creates a flexible format where text adapts to any screen size, font size, or orientation, ideal for reading research papers, manuals, and long-form content on Kindle, Kobo, or Apple Books.',
     steps: [
       { icon: '📄', title: 'Upload PDF',      desc: 'Upload the PDF book or document you want to convert.' },
       { icon: '⚡', title: 'Convert',          desc: 'PDF content is reformatted into reflowable EPUB chapters.' },
@@ -514,7 +538,7 @@ export const TOOL_CONTENT: Record<string, ToolContent> = {
   },
 
   'pdf-to-pptx': {
-    intro: 'Repurposing a PDF report or research paper as a PowerPoint presentation used to mean starting from scratch. Our PDF to PowerPoint converter turns each PDF page into a separate editable slide in .pptx format — giving you a working starting point you can customize directly in Microsoft PowerPoint or Google Slides.',
+    intro: 'Repurposing a PDF report or research paper as a PowerPoint presentation used to mean starting from scratch. Our PDF to PowerPoint converter turns each PDF page into a separate editable slide in .pptx format, giving you a working starting point you can customize directly in Microsoft PowerPoint or Google Slides.',
     steps: [
       { icon: '📄', title: 'Upload PDF',          desc: 'Upload the PDF presentation or document.' },
       { icon: '⚡', title: 'Convert',              desc: 'PDF pages are converted to individual PowerPoint slides.' },
@@ -538,7 +562,7 @@ export const TOOL_CONTENT: Record<string, ToolContent> = {
   },
 
   'pdf-to-excel': {
-    intro: 'Financial reports, invoices, and data summaries exported as PDF are frustrating to analyze. Our PDF to Excel converter extracts tabular data and produces an editable .xlsx spreadsheet file — eliminating manual re-entry and letting you immediately sort, filter, chart, and analyze your numbers in Excel or Google Sheets.',
+    intro: 'Financial reports, invoices, and data summaries exported as PDF are frustrating to analyze. Our PDF to Excel converter extracts tabular data and produces an editable .xlsx spreadsheet file, eliminating manual re-entry and letting you immediately sort, filter, chart, and analyze your numbers in Excel or Google Sheets.',
     steps: [
       { icon: '📄', title: 'Upload PDF',        desc: 'Upload a PDF containing tables, data, or financial information.' },
       { icon: '⚡', title: 'Extract Data',      desc: 'Tables and structured data are extracted from the PDF.' },
@@ -586,7 +610,7 @@ export const TOOL_CONTENT: Record<string, ToolContent> = {
   },
 
   'gif-to-pdf': {
-    intro: 'Archiving animated sequences, design mockups, or GIF-based tutorials in a more universally accessible format is easy with our GIF to PDF tool. Each frame of an animated GIF becomes a separate PDF page, or a static GIF is embedded as a single-page document — printable and viewable on any device without special software.',
+    intro: 'Archiving animated sequences, design mockups, or GIF-based tutorials in a more universally accessible format is easy with our GIF to PDF tool. Each frame of an animated GIF becomes a separate PDF page, or a static GIF is embedded as a single-page document, printable and viewable on any device without special software.',
     steps: [
       { icon: '🎞️', title: 'Upload GIF',    desc: 'Upload a static or animated GIF image.' },
       { icon: '⚡', title: 'Convert',         desc: 'GIF frames are rendered and embedded into a PDF.' },
@@ -610,7 +634,7 @@ export const TOOL_CONTENT: Record<string, ToolContent> = {
   },
 
   'markdown-to-pdf': {
-    intro: 'Markdown is great for writing, but PDF is the standard for sharing. Our Markdown to PDF converter processes your .md file and renders all syntax — headings, bold, italic, code blocks, tables, and lists — into a clean, professional PDF. Perfect for README files, technical documentation, and written reports.',
+    intro: 'Markdown is great for writing, but PDF is the standard for sharing. Our Markdown to PDF converter processes your .md file and renders all syntax (headings, bold, italic, code blocks, tables, and lists) into a clean, professional PDF. Perfect for README files, technical documentation, and written reports.',
     steps: [
       { icon: '📝', title: 'Upload Markdown', desc: 'Upload a .md or .markdown file.' },
       { icon: '⚡', title: 'Render',           desc: 'Markdown is rendered to a beautifully formatted PDF.' },
@@ -634,7 +658,7 @@ export const TOOL_CONTENT: Record<string, ToolContent> = {
   },
 
   'csv-to-pdf': {
-    intro: 'Need to share spreadsheet data with someone who does not use Excel or Google Sheets? Our CSV to PDF converter formats your comma-separated data into a neatly structured table in a PDF document that anyone can open, print, and read — no spreadsheet software needed on the recipient end.',
+    intro: 'Need to share spreadsheet data with someone who does not use Excel or Google Sheets? Our CSV to PDF converter formats your comma-separated data into a neatly structured table in a PDF document that anyone can open, print, and read, no spreadsheet software needed on the recipient end.',
     steps: [
       { icon: '📊', title: 'Upload CSV',    desc: 'Upload a .csv spreadsheet file.' },
       { icon: '⚡', title: 'Convert',        desc: 'CSV data is formatted into a clean PDF table.' },
@@ -658,7 +682,7 @@ export const TOOL_CONTENT: Record<string, ToolContent> = {
   },
 
   'html-to-pdf': {
-    intro: 'Archiving web pages, generating invoices from HTML templates, and converting browser-rendered reports to PDF is easy with our HTML to PDF tool. Upload an HTML file and get back a pixel-accurate PDF that preserves your layout, styles, and images — ready for sharing, printing, or long-term archiving.',
+    intro: 'Archiving web pages, generating invoices from HTML templates, and converting browser-rendered reports to PDF is easy with our HTML to PDF tool. Upload an HTML file and get back a pixel-accurate PDF that preserves your layout, styles, and images, ready for sharing, printing, or long-term archiving.',
     steps: [
       { icon: '🌐', title: 'Upload HTML',   desc: 'Upload an .html file or paste a URL.' },
       { icon: '⚡', title: 'Render',         desc: 'The HTML is rendered and converted to a PDF document.' },
@@ -682,7 +706,7 @@ export const TOOL_CONTENT: Record<string, ToolContent> = {
   },
 
   'svg-to-pdf': {
-    intro: 'SVG vector graphics are perfect for design but impractical for printing or embedding in shared documents. Our SVG to PDF converter produces a crisp, resolution-independent PDF where your artwork stays sharp at any print size — ideal for logos, icons, technical diagrams, and print-ready design assets.',
+    intro: 'SVG vector graphics are perfect for design but impractical for printing or embedding in shared documents. Our SVG to PDF converter produces a crisp, resolution-independent PDF where your artwork stays sharp at any print size, ideal for logos, icons, technical diagrams, and print-ready design assets.',
     steps: [
       { icon: '🎨', title: 'Upload SVG',    desc: 'Select your .svg vector file.' },
       { icon: '⚡', title: 'Convert',        desc: 'The SVG is rendered at full resolution into a PDF.' },
@@ -730,7 +754,7 @@ export const TOOL_CONTENT: Record<string, ToolContent> = {
   },
 
   'protect-pdf': {
-    intro: 'Sensitive contracts, financial reports, and personal documents deserve an extra layer of security before you share them. Our PDF Protector adds AES-256 password encryption to your file — preventing unauthorized viewing, printing, and copying — while remaining fully compatible with all PDF viewers on any device.',
+    intro: 'Sensitive contracts, financial reports, and personal documents deserve an extra layer of security before you share them. Our PDF Protector adds AES-256 password encryption to your file, preventing unauthorized viewing, printing, and copying, while remaining fully compatible with all PDF viewers on any device.',
     steps: [
       { icon: '📄', title: 'Upload PDF',                desc: 'Upload the PDF you want to password-protect.' },
       { icon: '🔑', title: 'Set Password',              desc: 'Enter the password you want to use for protection.' },
@@ -754,7 +778,7 @@ export const TOOL_CONTENT: Record<string, ToolContent> = {
   },
 
   'organize-pdf': {
-    intro: 'Scanned documents often come out in the wrong order, with rotated pages, or with blank pages scattered throughout. Our PDF Organizer gives you a visual drag-and-drop interface to reorder pages, delete unwanted ones, and correct page rotations — then download a clean, properly organized PDF in seconds.',
+    intro: 'Scanned documents often come out in the wrong order, with rotated pages, or with blank pages scattered throughout. Our PDF Organizer gives you a visual drag-and-drop interface to reorder pages, delete unwanted ones, and correct page rotations, then download a clean, properly organized PDF in seconds.',
     steps: [
       { icon: '📄', title: 'Upload PDF',              desc: 'Upload the multi-page PDF you want to reorganise.' },
       { icon: '↕️', title: 'Reorder Pages',           desc: 'Drag and drop pages into the order you want, or delete unwanted pages.' },
@@ -804,7 +828,7 @@ export const TOOL_CONTENT: Record<string, ToolContent> = {
 
 
   'biodata-maker': {
-    intro: 'Marriage biodata and professional biodata both need to look polished and cover the right information for their audience. Our Biodata Maker provides purpose-built templates that guide you through every section — personal details, family background, education, career, and preferences — so you present yourself confidently and professionally.',
+    intro: 'Marriage biodata and professional biodata both need to look polished and cover the right information for their audience. Our Biodata Maker provides purpose-built templates that guide you through every section (personal details, family background, education, career, and preferences) so you present yourself confidently and professionally.',
     steps: [
       { icon: '🎨', title: 'Choose a Template', desc: 'Pick from Classic Marriage, Professional, or Modern Card templates to match your style.' },
       { icon: '✍️', title: 'Fill in Your Details', desc: 'Enter personal info, education, professional details, family info, and upload your photo.' },

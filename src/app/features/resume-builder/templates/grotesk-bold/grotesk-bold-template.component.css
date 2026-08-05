@@ -1,0 +1,46 @@
+.gb-tpl {
+  font-family: var(--r-font, 'Inter', Arial, sans-serif);
+}
+
+.gb-name {
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+}
+
+.gb-badge {
+  background: var(--r-accent, #7c3aed);
+  color: #fff;
+  padding: 3pt 10pt;
+  border-radius: 3px;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.gb-heading {
+  font-size: 1.05em;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.01em;
+  color: #fff;
+  background: var(--r-accent, #7c3aed);
+  padding: 4pt 8pt;
+  margin-bottom: 6pt;
+}
+
+.gb-entry {
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.gb-entry:last-child {
+  border-bottom: none;
+}
+
+.gb-skill {
+  background: var(--r-accent-12, #f5f3ff);
+  color: var(--r-accent, #5b21b6);
+  font-weight: 700;
+  border-radius: 3px;
+  padding: 2pt 9pt;
+  font-size: 0.85em;
+}

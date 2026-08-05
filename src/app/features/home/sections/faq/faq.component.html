@@ -1,0 +1,33 @@
+<!-- ─── FAQ ───────────────────────────────────────────────────────── -->
+<section class="lp-section bg-slate-50 dark:bg-slate-900/40">
+  <div class="container-app max-w-3xl mx-auto">
+    <div class="text-center mb-10">
+      <p class="lp-eyebrow mb-3 justify-center">FAQ</p>
+      <h2 class="lp-heading mb-3">Frequently asked questions</h2>
+      <p class="section-subtitle">Everything you need to know about ApnaConverter.</p>
+    </div>
+    <div class="space-y-3">
+      @for (faq of faqs; track faq.q; let i = $index) {
+        <div class="lp-card overflow-hidden" [class]="openFaqIdx === i ? 'border-primary-200 dark:border-primary-800' : ''">
+          <button type="button"
+                  (click)="toggleFaq(i)"
+                  [attr.aria-expanded]="openFaqIdx === i"
+                  [attr.aria-controls]="'faq-panel-' + i"
+                  [id]="'faq-btn-' + i"
+                  class="w-full flex items-center justify-between gap-4 px-6 py-5 text-left hover:bg-slate-50 dark:hover:bg-slate-800/50 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-500 focus-visible:ring-inset">
+            <span class="font-semibold text-slate-800 dark:text-white text-sm">{{ faq.q }}</span>
+            <span class="w-7 h-7 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center shrink-0 transition-transform duration-slow" [class.rotate-180]="openFaqIdx === i">
+              <app-icon name="chevron-down" [size]="16" class="text-slate-500 dark:text-slate-400" />
+            </span>
+          </button>
+          @if (openFaqIdx === i) {
+            <div [id]="'faq-panel-' + i" [attr.aria-labelledby]="'faq-btn-' + i" role="region"
+                 class="px-6 pb-5 text-sm text-slate-500 dark:text-slate-400 leading-relaxed border-t border-slate-100 dark:border-slate-800 pt-4 animate-slide-down">
+              {{ faq.a }}
+            </div>
+          }
+        </div>
+      }
+    </div>
+  </div>
+</section>

@@ -60,7 +60,7 @@
               @if (resume().certifications.length) {
                 <h2 class="tcb-heading">Certifications</h2>
                 @for (cert of resume().certifications; track cert.id) {
-                  <p class="tcb-text"><strong>{{ cert.name }}</strong>@if (cert.issuer) { — {{ cert.issuer }}}@if (cert.date) { ({{ monthYear(cert.date) }})}</p>
+                  <p class="tcb-text"><strong>{{ cert.name }}</strong>@if (cert.issuer) { - {{ cert.issuer }}}@if (cert.date) { ({{ monthYear(cert.date) }})}</p>
                 }
               }
             }
@@ -69,7 +69,7 @@
               @if (resume().languages.length) {
                 <h2 class="tcb-heading">Languages</h2>
                 @for (lang of resume().languages; track lang.id) {
-                  <p class="tcb-text">{{ lang.name }} — {{ lang.proficiency }}</p>
+                  <p class="tcb-text">{{ lang.name }} - {{ lang.proficiency }}</p>
                 }
               }
             }
@@ -116,7 +116,7 @@
                 <h2 class="tcb-heading">Projects</h2>
                 @for (proj of resume().projects; track proj.id) {
                   <div class="tcb-entry resume-entry">
-                    <p class="tcb-role">{{ proj.name }}@if (proj.techStack) { <span class="tcb-sub"> — {{ proj.techStack }}</span>}</p>
+                    <p class="tcb-role">{{ proj.name }}@if (proj.techStack) { <span class="tcb-sub"> - {{ proj.techStack }}</span>}</p>
                     @if (proj.link) { <p class="tcb-sub">{{ proj.link }}</p> }
                     @if (proj.bullets.length) {
                       <ul class="tcb-bullets">

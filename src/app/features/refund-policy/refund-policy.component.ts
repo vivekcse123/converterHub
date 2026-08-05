@@ -93,7 +93,7 @@ import { RouterLink } from '@angular/router';
         <section>
           <h2 class="text-xl font-bold text-slate-900 dark:text-white mb-3">7. Chargebacks</h2>
           <p class="leading-relaxed">
-            If you initiate a chargeback with your bank or card provider without first contacting us, we reserve the right to suspend your account pending investigation. We encourage you to reach out to us directly first — we are happy to resolve any payment issues quickly and fairly.
+            If you initiate a chargeback with your bank or card provider without first contacting us, we reserve the right to suspend your account pending investigation. We encourage you to reach out to us directly first; we are happy to resolve any payment issues quickly and fairly.
           </p>
         </section>
 

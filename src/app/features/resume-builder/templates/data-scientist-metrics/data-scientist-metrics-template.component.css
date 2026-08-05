@@ -1,0 +1,41 @@
+.dm-tpl {
+  font-family: var(--r-font, 'Inter', Arial, sans-serif);
+}
+
+.dm-title {
+  color: var(--r-accent, #10b981);
+}
+
+.dm-stat-row {
+  background: var(--r-accent-12, #f0fdf4);
+  border-radius: 6px;
+  padding: 6pt 0;
+}
+
+.dm-stat-border {
+  border-right: 1px solid var(--r-accent-25, #bbf7d0);
+}
+
+.dm-stat-value {
+  color: var(--r-accent, #10b981);
+}
+
+.dm-heading {
+  font-size: 0.9em;
+  font-weight: 700;
+  color: #0f172a;
+  font-family: 'Courier New', monospace;
+  margin-bottom: 4pt;
+}
+
+.dm-heading::before {
+  content: '# ';
+  color: var(--r-accent, #10b981);
+}
+
+.dm-skill-card {
+  background: #f8fafc;
+  border-left: 2px solid var(--r-accent, #10b981);
+  border-radius: 2px;
+  padding: 4pt 7pt;
+}

@@ -100,7 +100,7 @@
             </div>
             @for (proj of resume().projects; track proj.id) {
               <div class="ms-entry resume-entry">
-                <p class="ms-role">{{ proj.name }}@if (proj.techStack) { <span class="ms-loc"> — {{ proj.techStack }}</span>}</p>
+                <p class="ms-role">{{ proj.name }}@if (proj.techStack) { <span class="ms-loc"> - {{ proj.techStack }}</span>}</p>
                 @if (proj.link) { <p class="ms-loc">{{ proj.link }}</p> }
                 @if (proj.bullets.length) {
                   <ul class="ms-bullets">
@@ -121,7 +121,7 @@
               <div class="ms-sec-rule"></div>
             </div>
             @for (cert of resume().certifications; track cert.id) {
-              <p class="ms-text"><strong>{{ cert.name }}</strong>@if (cert.issuer) { — {{ cert.issuer }}}@if (cert.date) { ({{ monthYear(cert.date) }})}</p>
+              <p class="ms-text"><strong>{{ cert.name }}</strong>@if (cert.issuer) { - {{ cert.issuer }}}@if (cert.date) { ({{ monthYear(cert.date) }})}</p>
             }
           }
         }

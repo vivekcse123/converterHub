@@ -20,13 +20,14 @@ export const routes: Routes = [
   },
 
   // ── Auth ────────────────────────────────────────────────────────────────────
-  { path: 'login',           loadComponent: () => import('./features/auth/login/login.component').then(m => m.LoginComponent),                           title: 'Login | ApnaConverter',             data: { description: 'Log in to your ApnaConverter account to access conversion history and premium features.' } },
-  { path: 'register',        loadComponent: () => import('./features/auth/register/register.component').then(m => m.RegisterComponent),                 title: 'Register | ApnaConverter',          data: { description: 'Create a free ApnaConverter account and track your file conversions.' } },
-  { path: 'forgot-password', loadComponent: () => import('./features/auth/forgot-password/forgot-password.component').then(m => m.ForgotPasswordComponent), title: 'Forgot Password | ApnaConverter',   data: { description: 'Reset your ApnaConverter password. Enter your email and we\'ll send you a reset link.' } },
-  { path: 'reset-password/:token', loadComponent: () => import('./features/auth/reset-password/reset-password.component').then(m => m.ResetPasswordComponent), title: 'Reset Password | ApnaConverter', data: { description: 'Set a new password for your ApnaConverter account.' } },
+  { path: 'login',           loadComponent: () => import('./features/auth/login/login.component').then(m => m.LoginComponent),                           title: 'Login | ApnaConverter',             data: { description: 'Log in to your ApnaConverter account to access conversion history and premium features.', hideShell: true } },
+  { path: 'register',        loadComponent: () => import('./features/auth/register/register.component').then(m => m.RegisterComponent),                 title: 'Register | ApnaConverter',          data: { description: 'Create a free ApnaConverter account and track your file conversions.', hideShell: true } },
+  { path: 'forgot-password', loadComponent: () => import('./features/auth/forgot-password/forgot-password.component').then(m => m.ForgotPasswordComponent), title: 'Forgot Password | ApnaConverter',   data: { description: 'Reset your ApnaConverter password. Enter your email and we\'ll send you a reset link.', hideShell: true } },
+  { path: 'reset-password/:token', loadComponent: () => import('./features/auth/reset-password/reset-password.component').then(m => m.ResetPasswordComponent), title: 'Reset Password | ApnaConverter', data: { description: 'Set a new password for your ApnaConverter account.', hideShell: true } },
+  { path: 'verify-email',    loadComponent: () => import('./features/auth/verify-email/verify-email.component').then(m => m.VerifyEmailComponent),       title: 'Verify Email | ApnaConverter',      data: { description: 'Verify your email address to secure your ApnaConverter account.', hideShell: true } },
 
   // ── Protected ───────────────────────────────────────────────────────────────
-  { path: 'dashboard', loadComponent: () => import('./features/dashboard/dashboard.component').then(m => m.DashboardComponent), canActivate: [authGuard], title: 'Dashboard | ApnaConverter', data: { description: 'View your conversion history and manage your ApnaConverter account.', hideShell: true } },
+  { path: 'dashboard', loadChildren: () => import('./features/dashboard/dashboard.routes').then(m => m.DASHBOARD_ROUTES) },
   { path: 'account',   redirectTo: 'dashboard', pathMatch: 'full' },
 
   // ── Admin (lazy) ────────────────────────────────────────────────────────────
@@ -91,6 +92,7 @@ export const routes: Routes = [
   { path: 'word-to-pdf',  loadComponent: () => import('./features/word-to-pdf/word-to-pdf.component').then(m => m.WordToPdfComponent),    title: 'Word to PDF | ApnaConverter',  data: { description: 'Convert Word (.doc, .docx) files to PDF online for free. Preserves formatting.' } },
   { path: 'pdf-editor',   loadComponent: () => import('./features/pdf-editor/pdf-editor.component').then(m => m.PdfEditorComponent),      title: 'PDF Editor | ApnaConverter',   data: { description: 'Merge, split, compress, and organise PDF files with our free online PDF editor.' } },
   { path: 'image-editor', loadComponent: () => import('./features/image-editor/image-editor.component').then(m => m.ImageEditorComponent), title: 'Image Editor | ApnaConverter', data: { description: 'Resize, compress and convert images online for free. Supports JPG, PNG, WebP and more.' } },
+  { path: 'background-remover', loadComponent: () => import('./features/bg-remover/bg-remover.component').then(m => m.BgRemoverComponent), title: 'Free Background Remover - Remove & Replace Image Background | ApnaConverter', data: { description: 'Remove the background from any photo in one click, then replace it with a color, gradient, or your own image. 100% free, runs in your browser - nothing is uploaded.' } },
   { path: 'compress',     loadComponent: () => import('./features/compress/compress.component').then(m => m.CompressComponent),            title: 'Compress Files | ApnaConverter', data: { description: 'Compress PDF and image files online. Reduce file size without losing quality.' } },
   { path: 'text-to-pdf',  loadComponent: () => import('./features/text-to-pdf/text-to-pdf.component').then(m => m.TextToPdfComponent),    title: 'Text to PDF | ApnaConverter',  data: { description: 'Convert plain text to a formatted PDF document instantly. Free online tool.' } },
 

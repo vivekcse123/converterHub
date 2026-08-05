@@ -1,0 +1,16 @@
+.wp-tpl {
+  font-family: var(--r-font, 'Inter', Arial, sans-serif);
+}
+
+.wp-initial {
+  color: var(--r-accent, #374151);
+}
+
+.wp-heading {
+  font-size: 0.8em;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #64748b;
+  margin-bottom: 6pt;
+}

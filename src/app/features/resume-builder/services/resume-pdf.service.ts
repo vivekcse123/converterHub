@@ -141,9 +141,29 @@ export class ResumePdfService {
       .map(v => `${v}: ${cs.getPropertyValue(v).trim()};`)
       .join(' ');
 
+    // "Self-margined" templates (full-bleed headers, two-column sidebars — see
+    // templates/TEMPLATE_AUTHORING.md) zero out .resume-page's own padding and
+    // re-implement the visual page margin themselves via mm-based padding on their
+    // own inner header/body elements, so a full-bleed header can reach the true
+    // page edge. The backend must then apply ZERO of its own page-level margin —
+    // otherwise the template's internal padding and the backend's margin stack,
+    // pushing the header inward from the edge and shrinking the content area
+    // relative to what the live preview shows. Detected by computed padding
+    // rather than a maintained template-id list so it never goes stale.
+    const resumePageEl = (pageHost.matches?.('.resume-page') ? pageHost : pageHost.querySelector<HTMLElement>('.resume-page')) ?? pageHost;
+    const selfMargined = parseFloat(window.getComputedStyle(resumePageEl).paddingLeft || '0') < 5;
+
     const clone = pageHost.cloneNode(true) as HTMLElement;
     CSS_VAR_NAMES.forEach(v => clone.style.setProperty(v, cs.getPropertyValue(v)));
-    (['position','top','left','right','bottom','z-index','opacity'] as const)
+    // `width` is stripped along with the positioning properties below: the
+    // off-screen render path (see `_downloadOffScreen`) sets an explicit inline
+    // `width: var(--r-page-width, ...)` on the wrapper purely so the freshly
+    // mounted template lays out at the right width *on screen* before capture.
+    // Forwarding that fixed width to the backend fights its own `contentWidthMm`
+    // sizing (which already accounts for whichever margin branch applies above),
+    // producing a wrapper wider than its printable area. Stripping it lets the
+    // wrapper size naturally to whatever width the backend's own CSS establishes.
+    (['position','top','left','right','bottom','z-index','opacity','width'] as const)
       .forEach(p => clone.style.removeProperty(p));
     clone.style.setProperty('box-shadow', 'none');
 
@@ -155,7 +175,7 @@ export class ResumePdfService {
           'Content-Type':  'application/json',
           'Authorization': `Bearer ${token}`,
         },
-        body: JSON.stringify({ html: clone.outerHTML, inlineStyles: allStyles, cssVarsCss, filename, templateId: this._downloadTemplateId, paperSize: this._downloadPaperSize }),
+        body: JSON.stringify({ html: clone.outerHTML, inlineStyles: allStyles, cssVarsCss, filename, templateId: this._downloadTemplateId, paperSize: this._downloadPaperSize, selfMargined }),
         signal: AbortSignal.timeout(90_000),
       });
     } catch {

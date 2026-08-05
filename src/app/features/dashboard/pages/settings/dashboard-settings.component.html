@@ -1,0 +1,108 @@
+<div class="max-w-7xl space-y-6">
+  <h1 class="text-xl font-bold text-content-primary">Settings</h1>
+
+  <div class="grid lg:grid-cols-3 gap-6">
+    <!-- Main column -->
+    <div class="lg:col-span-2 space-y-6">
+
+      <!-- Profile -->
+      <section class="card-elevated p-5 sm:p-6">
+        <h2 class="text-sm font-semibold text-content-primary mb-4">Profile</h2>
+        <form (ngSubmit)="saveProfile()" class="space-y-4">
+          <div class="grid sm:grid-cols-2 gap-4">
+            <div>
+              <label class="label" for="settings-name">Full name</label>
+              <input id="settings-name" type="text" class="input" [ngModel]="name()" (ngModelChange)="name.set($event)" name="name" required />
+            </div>
+            <div>
+              <label class="label" for="settings-timezone">Timezone</label>
+              <input id="settings-timezone" type="text" class="input" [ngModel]="timezone()" (ngModelChange)="timezone.set($event)" name="timezone" />
+            </div>
+          </div>
+          <div>
+            <label class="label" for="settings-email">Email</label>
+            <input id="settings-email" type="email" class="input opacity-60 cursor-not-allowed" [value]="auth.user()?.email" disabled />
+            <p class="text-xs text-content-muted mt-1.5">Contact support to change your email address.</p>
+          </div>
+          <button type="submit" class="btn-primary" [disabled]="savingProfile()">
+            {{ savingProfile() ? 'Saving...' : 'Save changes' }}
+          </button>
+        </form>
+      </section>
+
+      <!-- Security -->
+      <section class="card-elevated p-5 sm:p-6">
+        <h2 class="text-sm font-semibold text-content-primary mb-4">Change password</h2>
+        <form (ngSubmit)="changePassword()" class="space-y-4">
+          <app-password-field
+            label="Current password"
+            name="currentPassword"
+            placeholder="Current password"
+            autocomplete="current-password"
+            [value]="currentPassword()"
+            (valueChange)="currentPassword.set($event)"
+          />
+          <div class="grid sm:grid-cols-2 gap-4">
+            <app-password-field
+              label="New password"
+              name="newPassword"
+              placeholder="New password"
+              autocomplete="new-password"
+              [minlength]="8"
+              [value]="newPassword()"
+              (valueChange)="newPassword.set($event)"
+            />
+            <app-password-field
+              label="Confirm new password"
+              name="confirmPassword"
+              placeholder="Confirm password"
+              autocomplete="new-password"
+              [value]="confirmPassword()"
+              (valueChange)="confirmPassword.set($event)"
+            />
+          </div>
+          <p class="text-xs text-content-muted">New password must be at least 8 characters.</p>
+          <button type="submit" class="btn-primary" [disabled]="savingPassword()">
+            {{ savingPassword() ? 'Updating...' : 'Update password' }}
+          </button>
+        </form>
+      </section>
+    </div>
+
+    <!-- Side column -->
+    <div class="space-y-6">
+
+      <!-- Appearance -->
+      <section class="card-elevated p-5 sm:p-6">
+        <h2 class="text-sm font-semibold text-content-primary mb-4">Appearance</h2>
+        <div class="flex gap-3">
+          <button
+            type="button"
+            class="flex-1 flex items-center justify-center gap-2 py-3 rounded-[var(--radius-md)] border text-sm font-medium transition-colors"
+            [class]="theme.theme() === 'light' ? 'border-primary-500 bg-primary-50 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300' : 'border-border text-content-secondary hover:bg-elevated'"
+            (click)="setTheme('light')"
+          >
+            <app-icon name="sun" [size]="16" /> Light
+          </button>
+          <button
+            type="button"
+            class="flex-1 flex items-center justify-center gap-2 py-3 rounded-[var(--radius-md)] border text-sm font-medium transition-colors"
+            [class]="theme.theme() === 'dark' ? 'border-primary-500 bg-primary-50 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300' : 'border-border text-content-secondary hover:bg-elevated'"
+            (click)="setTheme('dark')"
+          >
+            <app-icon name="moon" [size]="16" /> Dark
+          </button>
+        </div>
+      </section>
+
+      <!-- Danger zone -->
+      <section class="card-bordered p-5 sm:p-6 border-red-200 dark:border-red-900/50">
+        <h2 class="text-sm font-semibold text-content-primary mb-1">Danger zone</h2>
+        <p class="text-sm text-content-secondary mb-4">Sign out of ApnaConverter on every device where you're currently logged in.</p>
+        <button type="button" class="btn-danger w-full" (click)="signOutAllDevices()" [disabled]="signingOutAll()">
+          {{ signingOutAll() ? 'Signing out...' : 'Log out of all devices' }}
+        </button>
+      </section>
+    </div>
+  </div>
+</div>

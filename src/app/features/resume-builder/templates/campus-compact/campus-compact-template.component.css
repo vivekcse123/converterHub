@@ -1,0 +1,27 @@
+.cc-tpl {
+  font-family: var(--r-font, 'Inter', Arial, sans-serif);
+}
+
+.cc-title {
+  color: var(--r-accent, #2563eb);
+}
+
+.cc-chip {
+  background: var(--r-accent-12, #eff6ff);
+  border: 1px solid var(--r-accent-25, #bfdbfe);
+  color: var(--r-accent, #1d4ed8);
+  border-radius: 4px;
+  padding: 1.5pt 7pt;
+  font-size: 0.78em;
+  font-weight: 600;
+}
+
+.cc-heading {
+  font-size: 0.85em;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: #0f172a;
+  border-bottom: 1px solid #e2e8f0;
+  margin-bottom: 3pt;
+}

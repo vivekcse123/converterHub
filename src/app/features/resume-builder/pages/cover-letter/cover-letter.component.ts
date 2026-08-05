@@ -159,7 +159,7 @@ ${candidateName || 'Your Name'}`;
                     Generating with AI…
                   } @else if (!auth.isPro()) {
                     <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
-                    Generate with AI — Pro Only
+                    Generate with AI - Pro Only
                   } @else {
                     <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"/></svg>
                     Generate with AI
@@ -226,7 +226,7 @@ Dear Hiring Manager,
 
 I am writing to express my strong interest in the Senior Software Engineer position at TechCorp India. With 5+ years of experience as a Full Stack Developer and expertise in React, Node.js, and cloud infrastructure, I am well-positioned to contribute meaningfully to your organisation.
 
-Throughout my career at InnoSoft Solutions, I consistently delivered results — reducing API response times by 40%, leading a team of 4 engineers, and shipping 3 major product features ahead of schedule.
+Throughout my career at InnoSoft Solutions, I consistently delivered results: reducing API response times by 40%, leading a team of 4 engineers, and shipping 3 major product features ahead of schedule.
 
 I would welcome the opportunity to discuss how my background aligns with your team's needs. Thank you for your time and consideration.
 

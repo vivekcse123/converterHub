@@ -1,108 +1,55 @@
-import { Component, signal } from '@angular/core';
+import { Component, signal, computed } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../../core/services/auth.service';
+import { GoogleAuthService } from '../../../core/services/google-auth.service';
 import { NotificationService } from '../../../core/services/notification.service';
+import { AuthLayoutComponent } from '../shared/auth-layout/auth-layout.component';
+import { PasswordFieldComponent } from '../shared/password-field/password-field.component';
+import { PasswordStrengthComponent } from '../shared/password-strength/password-strength.component';
+import { SocialButtonsComponent } from '../shared/social-buttons/social-buttons.component';
+import { IconComponent } from '../../../shared/components/icon/icon.component';
 
 @Component({
   selector: 'app-register',
   standalone: true,
-  imports: [FormsModule, RouterLink],
-  template: `
-    <div class="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-50 via-violet-50/30 to-indigo-50/50 dark:from-slate-900 dark:via-slate-900 dark:to-slate-800 px-4 py-12">
-      <div class="w-full max-w-md">
-        <div class="card p-8 animate-slide-up">
-
-          <div class="text-center mb-8">
-            <a routerLink="/" aria-label="ApnaConverter home" class="inline-block">
-              <div class="w-14 h-14 bg-gradient-to-br from-primary-500 to-primary-700 rounded-2xl mx-auto mb-4 flex items-center justify-center shadow-md shadow-primary-200 dark:shadow-primary-900/30">
-                <span class="text-white font-extrabold text-xl tracking-tight">A</span>
-              </div>
-            </a>
-            <h1 class="text-2xl font-bold text-slate-900 dark:text-white">Create your free account</h1>
-            <p class="text-slate-500 dark:text-slate-400 text-sm mt-1">No credit card needed. Free forever.</p>
-          </div>
-
-          <form (ngSubmit)="onSubmit()" #regForm="ngForm" class="space-y-4">
-
-            <div>
-              <label for="reg-name" class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">Full name</label>
-              <input id="reg-name" type="text" [(ngModel)]="name" name="name" required minlength="2"
-                placeholder="Jane Smith" class="input" autocomplete="name">
-            </div>
-
-            <div>
-              <label for="reg-email" class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">Email address</label>
-              <input id="reg-email" type="email" [(ngModel)]="email" name="email" required
-                placeholder="you@example.com" class="input" autocomplete="email">
-            </div>
-
-            <div>
-              <label for="reg-password" class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">Password</label>
-              <div class="relative">
-                <input id="reg-password" [type]="showPassword() ? 'text' : 'password'" [(ngModel)]="password" name="password" required minlength="8"
-                  placeholder="At least 8 characters" class="input pr-10" autocomplete="new-password">
-                <button type="button" (click)="showPassword.set(!showPassword())"
-                  class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-300 transition-colors"
-                  [attr.aria-label]="showPassword() ? 'Hide password' : 'Show password'">
-                  @if (showPassword()) {
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21"/>
-                    </svg>
-                  } @else {
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
-                    </svg>
-                  }
-                </button>
-              </div>
-            </div>
-
-            <button type="submit" [disabled]="loading() || regForm.invalid" [attr.aria-busy]="loading()"
-              class="btn btn-primary w-full py-3 text-base font-semibold mt-2">
-              @if (loading()) {
-              <svg class="w-5 h-5 animate-spin" fill="none" viewBox="0 0 24 24" aria-hidden="true">
-                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"/>
-                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z"/>
-              </svg>
-              <span class="sr-only">Creating your account, please wait</span>
-              }
-              <span [class.sr-only]="loading()">Create account</span>
-            </button>
-
-          </form>
-
-          <p class="text-center text-sm text-slate-500 dark:text-slate-400 mt-6">
-            Already have an account?
-            <a routerLink="/login" class="text-primary-600 font-medium hover:underline ml-1">Sign in</a>
-          </p>
-
-        </div>
-      </div>
-    </div>
-  `,
+  imports: [FormsModule, RouterLink, AuthLayoutComponent, PasswordFieldComponent, PasswordStrengthComponent, SocialButtonsComponent, IconComponent],
+  templateUrl: './register.component.html',
 })
 export class RegisterComponent {
-  name     = '';
-  email    = '';
-  password = '';
-  readonly loading      = signal(false);
-  readonly showPassword = signal(false);
+  firstName = '';
+  lastName  = '';
+  email     = '';
+  password  = '';
+  confirmPassword = '';
+  agreedToTerms = false;
+
+  readonly loading = signal(false);
+  readonly googleLoading = signal(false);
+
+  readonly passwordsMismatch = computed(() =>
+    this.confirmPassword.length > 0 && this.password !== this.confirmPassword);
 
   constructor(
     private auth:   AuthService,
+    private googleAuth: GoogleAuthService,
     private notify: NotificationService,
     private router: Router,
     private route:  ActivatedRoute,
   ) {}
 
   onSubmit(): void {
+    if (this.loading()) return;
+    if (this.password !== this.confirmPassword) return;
+    if (!this.agreedToTerms) {
+      this.notify.warning('Accept our terms', 'Please agree to the Terms of Service and Privacy Policy to continue.');
+      return;
+    }
+
+    const name = `${this.firstName} ${this.lastName}`.trim();
     this.loading.set(true);
-    this.auth.register(this.name, this.email, this.password).subscribe({
+
+    this.auth.register(name, this.email, this.password).subscribe({
       next: () => {
         this.notify.success('Account created!', 'Welcome to ApnaConverter.');
         const returnUrl = this.route.snapshot.queryParams['returnUrl'];
@@ -113,5 +60,34 @@ export class RegisterComponent {
         this.loading.set(false);
       },
     });
+  }
+
+  async onSocial(provider: 'Google'): Promise<void> {
+    if (this.googleLoading()) return;
+    if (!this.agreedToTerms) {
+      this.notify.warning('Accept our terms', 'Please agree to the Terms of Service and Privacy Policy to continue.');
+      return;
+    }
+    this.googleLoading.set(true);
+    try {
+      const accessToken = await this.googleAuth.signIn();
+      this.auth.loginWithGoogle(accessToken).subscribe({
+        next: () => {
+          this.notify.success('Welcome to ApnaConverter!');
+          const returnUrl = this.route.snapshot.queryParams['returnUrl'];
+          this.router.navigateByUrl(returnUrl || '/dashboard');
+          this.googleLoading.set(false);
+        },
+        error: (e) => {
+          this.notify.error('Google sign-up failed', e.error?.message ?? 'Please try again.');
+          this.googleLoading.set(false);
+        },
+      });
+    } catch (e: any) {
+      this.googleLoading.set(false);
+      if (e?.message && !/cancelled|closed/i.test(e.message)) {
+        this.notify.error('Google sign-up failed', e.message);
+      }
+    }
   }
 }

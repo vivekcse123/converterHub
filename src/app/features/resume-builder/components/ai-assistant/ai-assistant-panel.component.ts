@@ -46,7 +46,7 @@ const TOOL_MODES: { id: ToolMode; label: string }[] = [
             <svg class="w-6 h-6 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
           </div>
           <p class="text-sm font-semibold text-gray-700 dark:text-slate-200">AI Assistant is a Pro feature</p>
-          <p class="text-xs text-gray-400 leading-relaxed">Generate professional summaries, rewrite weak bullets with Gemini AI, and get fresh bullet suggestions — upgrade to unlock.</p>
+          <p class="text-xs text-gray-400 leading-relaxed">Generate professional summaries, rewrite weak bullets with Gemini AI, and get fresh bullet suggestions, upgrade to unlock.</p>
         </div>
       } @else {
 
@@ -93,7 +93,7 @@ const TOOL_MODES: { id: ToolMode; label: string }[] = [
         <!-- ── BULLET REWRITE TAB ── -->
         @if (tab() === 'bullet') {
           <div class="space-y-3">
-            <p class="text-xs text-slate-500 dark:text-slate-400">Paste a weak bullet — AI rewrites it with action verbs and metrics.</p>
+            <p class="text-xs text-slate-500 dark:text-slate-400">Paste a weak bullet, AI rewrites it with action verbs and metrics.</p>
             <textarea [(ngModel)]="bulletInput" rows="2"
                       placeholder='e.g. "worked on reporting feature" or "helped with testing"'
                       class="w-full text-xs px-3 py-2.5 rounded-2xl border border-hairline dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-200 resize-none focus:outline-none focus:ring-2 focus:ring-indigo-500"></textarea>
@@ -251,7 +251,7 @@ export class AiAssistantPanelComponent {
 
   toolModeHint(): string {
     switch (this.toolMode()) {
-      case 'grammar':      return 'Fixes grammar, spelling, and punctuation — keeps the meaning the same.';
+      case 'grammar':      return 'Fixes grammar, spelling, and punctuation, keeps the meaning the same.';
       case 'deepcheck':    return 'A deeper pass: grammar, clarity, weak verbs, and ATS-friendliness.';
       case 'professional': return 'Rewrites in a polished, professional tone.';
       case 'executive':    return 'Rewrites in a confident, leadership-oriented tone for senior roles.';
@@ -289,7 +289,7 @@ export class AiAssistantPanelComponent {
         return sentences.slice(1, 4).join(' ').replace(/^(I am|I'm)\s/, '').trim();
       }).filter(Boolean);
 
-      this.summaryVariants.set(variants.length ? variants : ['Could not generate — check your AI key and try again.']);
+      this.summaryVariants.set(variants.length ? variants : ['Could not generate. Check your AI key and try again.']);
     } catch {
       this.notify.error('AI request failed. Please try again.');
     } finally {
@@ -318,7 +318,7 @@ export class AiAssistantPanelComponent {
         })
       );
       const bullets = res.data?.bullets ?? [];
-      this.bulletVariants.set(bullets.length ? bullets : ['Could not rewrite — try a more descriptive bullet.']);
+      this.bulletVariants.set(bullets.length ? bullets : ['Could not rewrite. Try a more descriptive bullet.']);
     } catch {
       this.notify.error('AI request failed. Please try again.');
     } finally {
@@ -340,7 +340,7 @@ export class AiAssistantPanelComponent {
         })
       );
       const bullets = res.data?.bullets ?? [];
-      this.suggestedBullets.set(bullets.length ? bullets : ['No suggestions generated — try a different job title.']);
+      this.suggestedBullets.set(bullets.length ? bullets : ['No suggestions generated. Try a different job title.']);
     } catch {
       this.notify.error('AI request failed. Please try again.');
     } finally {
@@ -361,7 +361,7 @@ export class AiAssistantPanelComponent {
           targetLanguage: this.toolMode() === 'translate' ? (this.targetLanguage || 'Hindi') : undefined,
         })
       );
-      this.toolResult.set(res.data?.result || 'Could not transform — please try again.');
+      this.toolResult.set(res.data?.result || 'Could not transform. Please try again.');
     } catch {
       this.notify.error('AI request failed. Please try again.');
     } finally {

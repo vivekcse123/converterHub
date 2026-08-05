@@ -1,0 +1,42 @@
+.bg-tpl {
+  font-family: var(--r-font, 'Inter', Arial, sans-serif);
+}
+
+.bg-title {
+  color: var(--r-accent, #7c3aed);
+}
+
+.bg-heading {
+  font-size: 0.98em;
+  font-weight: 800;
+  text-transform: uppercase;
+  color: #0f172a;
+  margin-bottom: 6pt;
+}
+
+.bg-masonry {
+  column-count: 2;
+  column-gap: 8pt;
+}
+
+.bg-card {
+  break-inside: avoid;
+  border-radius: 6px;
+  padding: 8pt;
+  margin-bottom: 8pt;
+  display: inline-block;
+  width: 100%;
+}
+
+.bg-card-0 { background: var(--r-accent, #7c3aed); color: #fff; }
+.bg-card-1 { background: var(--r-accent-12, #f5f3ff); color: #0f172a; }
+.bg-card-2 { background: #0f172a; color: #fff; }
+
+.bg-pill {
+  background: var(--r-accent-12, #f5f3ff);
+  color: var(--r-accent, #6d28d9);
+  border-radius: 4px;
+  padding: 2pt 9pt;
+  font-size: 0.82em;
+  font-weight: 700;
+}

@@ -1,6 +1,19 @@
+import { environment } from 'src/environments/environment';
+
 export type PortfolioSectionType =
   | 'hero' | 'about' | 'skills' | 'experience' | 'projects'
   | 'education' | 'testimonials' | 'contact';
+
+/** The image-upload endpoint returns a host-relative path (`/portfolio-media/...`).
+ *  In dev the frontend (4200) and backend (3000) are different origins, so that
+ *  path must be resolved against the API's origin, not the current page's. */
+const BACKEND_ORIGIN = environment.apiUrl.replace(/\/api\/?$/, '');
+
+export function resolveMediaUrl(url: string | undefined | null): string {
+  if (!url) return '';
+  if (/^(https?:)?\/\//.test(url) || url.startsWith('data:')) return url;
+  return `${BACKEND_ORIGIN}${url.startsWith('/') ? '' : '/'}${url}`;
+}
 
 /** Section types the user can freely add another instance of (hero is locked, singular). */
 export const ADDABLE_SECTION_TYPES: PortfolioSectionType[] = [
@@ -68,29 +81,45 @@ export type PortfolioSectionConfig =
   | HeroConfig | AboutConfig | SkillsConfig | ExperienceConfig
   | ProjectsConfig | EducationConfig | TestimonialsConfig | ContactConfig;
 
+/** Per-block visual overrides set from the property panel. All optional — an
+ *  unset property means "use the active theme's default for this block type." */
+export interface PortfolioBlockStyle {
+  padding?: 'compact' | 'cozy' | 'spacious';
+  radius?: 'none' | 'md' | 'lg' | 'full';
+  shadow?: 'none' | 'soft' | 'strong';
+  align?: 'left' | 'center' | 'right';
+  background?: 'none' | 'surface' | 'accent-tint' | 'gradient';
+  animation?: 'none' | 'fade-up' | 'fade-in' | 'slide-in';
+}
+
 export interface PortfolioSection<T = PortfolioSectionConfig> {
   id: string;
   type: PortfolioSectionType;
   enabled: boolean;
   config: T;
+  style: PortfolioBlockStyle;
 }
 
 export interface PortfolioTheme {
   templateId: string;
   accentColor: string;
+  secondaryColor?: string;
   fontFamily: 'inter' | 'poppins' | 'georgia' | 'jetbrains-mono';
   mode: 'light' | 'dark';
   layoutWidth: 'narrow' | 'wide';
   radius: 'sharp' | 'rounded' | 'pill';
+  glassEffect: boolean;
 }
 
 export const DEFAULT_THEME: PortfolioTheme = {
-  templateId: 'minimal',
+  templateId: 'aurora',
   accentColor: '#4f46e5',
+  secondaryColor: '#0ea5e9',
   fontFamily: 'inter',
   mode: 'dark',
   layoutWidth: 'wide',
   radius: 'rounded',
+  glassEffect: false,
 };
 
 export interface PortfolioSocial {
@@ -127,23 +156,24 @@ export function uid(prefix = 'sec'): string {
 
 export function createDefaultSection(type: PortfolioSectionType): PortfolioSection {
   const id = uid(type);
+  const style: PortfolioBlockStyle = {};
   switch (type) {
     case 'hero':
-      return { id, type, enabled: true, config: { headline: '', subheadline: '', photoUrl: '', ctaLabel: '', ctaUrl: '', resumeCtaEnabled: false } as HeroConfig };
+      return { id, type, enabled: true, style, config: { headline: '', subheadline: '', photoUrl: '', ctaLabel: '', ctaUrl: '', resumeCtaEnabled: false } as HeroConfig };
     case 'about':
-      return { id, type, enabled: true, config: { body: '', highlights: [] } as AboutConfig };
+      return { id, type, enabled: true, style, config: { body: '', highlights: [] } as AboutConfig };
     case 'skills':
-      return { id, type, enabled: true, config: { groups: [{ id: uid('grp'), label: 'Skills', items: [] }] } as SkillsConfig };
+      return { id, type, enabled: true, style, config: { groups: [{ id: uid('grp'), label: 'Skills', items: [] }] } as SkillsConfig };
     case 'experience':
-      return { id, type, enabled: true, config: { items: [] } as ExperienceConfig };
+      return { id, type, enabled: true, style, config: { items: [] } as ExperienceConfig };
     case 'projects':
-      return { id, type, enabled: true, config: { items: [] } as ProjectsConfig };
+      return { id, type, enabled: true, style, config: { items: [] } as ProjectsConfig };
     case 'education':
-      return { id, type, enabled: true, config: { items: [] } as EducationConfig };
+      return { id, type, enabled: true, style, config: { items: [] } as EducationConfig };
     case 'testimonials':
-      return { id, type, enabled: true, config: { items: [] } as TestimonialsConfig };
+      return { id, type, enabled: true, style, config: { items: [] } as TestimonialsConfig };
     case 'contact':
-      return { id, type, enabled: true, config: { showEmail: true, showPhone: false, showSocial: true, ctaLabel: 'Get in touch' } as ContactConfig };
+      return { id, type, enabled: true, style, config: { showEmail: true, showPhone: false, showSocial: true, ctaLabel: 'Get in touch' } as ContactConfig };
   }
 }
 
@@ -158,6 +188,15 @@ export function getDisplayName(p: PortfolioData): string {
 
 export function getTagline(p: PortfolioData): string {
   return getHeroConfig(p)?.subheadline || p.tagline || '';
+}
+
+/** Fills in fields Phase 1 added (`style`, `theme.glassEffect`) for documents saved before they existed. */
+function normalizeSections(raw: any[]): PortfolioSection[] {
+  return (raw ?? []).map((s: any) => ({ ...s, style: s.style ?? {} }));
+}
+
+function normalizeTheme(raw: any): PortfolioTheme {
+  return { ...DEFAULT_THEME, ...(raw ?? {}) };
 }
 
 /** Maps a raw API portfolio document to the frontend PortfolioData shape, reading either the `draft` or `published` snapshot. */
@@ -179,8 +218,8 @@ export function mapServerPortfolio(doc: any, blobKey: 'draft' | 'published' = 'd
     pinnedResumeId: blob.pinnedResumeId ?? doc.pinnedResumeId,
     metaTitle: blob.metaTitle ?? doc.metaTitle,
     metaDescription: blob.metaDescription ?? doc.metaDescription,
-    sections: (blob.sections ?? doc.sections ?? []) as PortfolioSection[],
-    theme: (blob.theme ?? doc.theme ?? { ...DEFAULT_THEME }) as PortfolioTheme,
+    sections: normalizeSections(blob.sections ?? doc.sections ?? []),
+    theme: normalizeTheme(blob.theme ?? doc.theme),
     views: doc.views,
     publishedAt: doc.publishedAt,
   };
@@ -189,7 +228,10 @@ export function mapServerPortfolio(doc: any, blobKey: 'draft' | 'published' = 'd
 export function createBlankPortfolio(): PortfolioData {
   return {
     username: '',
-    isPublic: false,
+    // Matches the backend schema default — the "Publish" button only ever
+    // copies draft → published, it doesn't separately flip this flag, so it
+    // must already be true or a freshly published portfolio stays invisible.
+    isPublic: true,
     status: 'draft',
     social: {},
     sections: [createDefaultSection('hero'), createDefaultSection('contact')],

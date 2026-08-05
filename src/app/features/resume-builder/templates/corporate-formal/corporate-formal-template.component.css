@@ -1,0 +1,22 @@
+.cf-tpl {
+  font-family: var(--r-font, 'Inter', Arial, sans-serif);
+}
+
+.cf-double-rule {
+  height: 3px;
+  border-top: 1.5px solid var(--r-accent, #1e293b);
+  border-bottom: 1.5px solid var(--r-accent, #1e293b);
+  width: 100%;
+}
+
+.cf-heading {
+  font-size: 0.95em;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+  color: #fff;
+  background: var(--r-accent, #1e293b);
+  padding: 3pt 8pt;
+  margin-bottom: 6pt;
+  border-radius: 2px;
+}

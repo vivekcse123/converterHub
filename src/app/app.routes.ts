@@ -31,7 +31,7 @@ export const routes: Routes = [
   { path: 'account',   redirectTo: 'dashboard', pathMatch: 'full' },
 
   // ── Admin (lazy) ────────────────────────────────────────────────────────────
-  { path: 'admin', loadChildren: () => import('./features/admin/admin.routes').then(m => m.adminRoutes), canActivate: [adminGuard], data: { hideShell: true } },
+  { path: 'admin', loadChildren: () => import('./features/admin/admin.routes').then(m => m.adminRoutes), canActivate: [adminGuard], data: { hideShell: true, noPreload: true } },
 
   // ── Resume Builder ──────────────────────────────────────────────────────────
   { path: 'resume-builder', loadChildren: () => import('./features/resume-builder/resume-builder.routes').then(m => m.resumeBuilderRoutes) },
